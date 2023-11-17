@@ -178,6 +178,7 @@ def load(state_dict: StateDict) -> SRModelDescriptor[SwinIR]:
         num_feat=num_feat,
         num_in_ch=num_in_ch,
         num_out_ch=num_out_ch,
+        start_unshuffle=start_unshuffle,
     )
 
     head_length = len(depths)  # type: ignore

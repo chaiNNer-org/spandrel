@@ -53,6 +53,7 @@ jobs:
                   python-version: '3.9'
                   cache: 'pip'
             - run: pip install .[typecheck]
+            - run: pip install .[test]
             - run: pyright src/
             - run: pyright tests/
             - run: pyright scripts/

@@ -37,7 +37,7 @@ dynamic = ["version"]
 build = ["setuptools>=46.4.0", "wheel", "build", "twine"]
 lint = ["ruff==0.1.4"]
 typecheck = ["pyright==1.1.335"]
-test = ["pytest==7.4.0", "syrupy==4.6.0"]
+test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
 
 # [tool.setuptools.dynamic]
 # version = { attr = "spandrel.VERSION" }
@@ -73,4 +73,4 @@ ignore = [
 "**/tests/**/*" = ["N802"]
 
 [tool.pytest.ini_options]
-filterwarnings = ["ignore::DeprecationWarning"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
