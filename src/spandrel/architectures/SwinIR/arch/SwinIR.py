@@ -835,9 +835,11 @@ class SwinIR(nn.Module):
         img_range=1.0,
         upsampler="",
         resi_connection="1conv",
+        start_unshuffle=1,
         **kwargs,
     ):
         super().__init__()
+        self.start_unshuffle = start_unshuffle
         num_in_ch = in_chans
         num_out_ch = in_chans
         num_feat = 64
