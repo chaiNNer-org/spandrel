@@ -30,8 +30,28 @@ class SizeRequirements:
     def none(self) -> bool:
         """
         Returns True if no size requirements are specified.
+
+        If True, then `check` is guaranteed to always return True.
         """
         return self.minimum is None and self.multiple_of is None and not self.square
+
+    def check(self, width: int, height: int) -> bool:
+        """
+        Checks if the given width and height satisfy the size requirements.
+        """
+        if self.minimum is not None:
+            if width < self.minimum or height < self.minimum:
+                return False
+
+        if self.multiple_of is not None:
+            if width % self.multiple_of != 0 or height % self.multiple_of != 0:
+                return False
+
+        if self.square:
+            if width != height:
+                return False
+
+        return True
 
 
 class ModelBase(ABC, Generic[T]):
