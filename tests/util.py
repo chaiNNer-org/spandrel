@@ -114,6 +114,7 @@ class TestImage(Enum):
     SR_16 = "16x16.png"
     SR_32 = "32x32.png"
     SR_64 = "64x64.png"
+    JPEG_15 = "jpeg-15.jpg"
 
 
 def assert_image_inference(
