@@ -46,7 +46,7 @@ class ModelBase(ABC, Generic[T]):
         scale: int,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         self.model: T = model
         self.state_dict: StateDict = state_dict
@@ -59,7 +59,9 @@ class ModelBase(ABC, Generic[T]):
         self.input_channels: int = input_channels
         self.output_channels: int = output_channels
 
-        self.size: SizeRequirements = size or SizeRequirements()
+        self.size_requirements: SizeRequirements = (
+            size_requirements or SizeRequirements()
+        )
 
         self.model.load_state_dict(state_dict)  # type: ignore
 
@@ -87,7 +89,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
         supports_bfloat16: bool,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         super().__init__(
             model,
@@ -99,7 +101,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
             scale=1,
             input_channels=input_channels,
             output_channels=output_channels,
-            size=size,
+            size_requirements=size_requirements,
         )
 
 
@@ -114,7 +116,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
         supports_bfloat16: bool,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         super().__init__(
             model,
@@ -126,7 +128,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
             scale=1,
             input_channels=input_channels,
             output_channels=output_channels,
-            size=size,
+            size_requirements=size_requirements,
         )
 
 
