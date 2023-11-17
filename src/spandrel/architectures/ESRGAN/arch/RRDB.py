@@ -45,6 +45,7 @@ class RRDBNet(nn.Module):
         super().__init__()
 
         self.shuffle_factor = shuffle_factor
+        self.scale = scale
 
         upsample_block = {
             "upconv": B.upconv_block,

@@ -1,7 +1,7 @@
 from spandrel import ModelLoader
 from spandrel.architectures.OmniSR import OmniSR
 
-from .util import ModelFile, disallowed_props
+from .util import ModelFile, compare_images_to_results, disallowed_props
 
 
 def test_OmniSR_community1(snapshot):
@@ -11,6 +11,7 @@ def test_OmniSR_community1(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, OmniSR)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_OmniSR_community2(snapshot):
@@ -20,3 +21,4 @@ def test_OmniSR_community2(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, OmniSR)
+    assert compare_images_to_results(file.name, model.model)

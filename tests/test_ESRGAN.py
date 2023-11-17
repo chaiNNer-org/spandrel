@@ -1,7 +1,7 @@
 from spandrel import ModelLoader
 from spandrel.architectures.ESRGAN import RRDBNet
 
-from .util import ModelFile, disallowed_props
+from .util import ModelFile, compare_images_to_results, disallowed_props
 
 
 def test_ESRGAN_community(snapshot):
@@ -11,6 +11,7 @@ def test_ESRGAN_community(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_BSRGAN(snapshot):
@@ -20,6 +21,7 @@ def test_BSRGAN(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_BSRGAN_2x(snapshot):
@@ -29,6 +31,7 @@ def test_BSRGAN_2x(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealSR_DPED(snapshot):
@@ -38,6 +41,7 @@ def test_RealSR_DPED(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealSR_JPEG(snapshot):
@@ -47,6 +51,7 @@ def test_RealSR_JPEG(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealESRGAN_x4plus(snapshot):
@@ -56,6 +61,7 @@ def test_RealESRGAN_x4plus(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealESRGAN_x2plus(snapshot):
@@ -65,6 +71,7 @@ def test_RealESRGAN_x2plus(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealESRGAN_x4plus_anime_6B(snapshot):
@@ -74,6 +81,7 @@ def test_RealESRGAN_x4plus_anime_6B(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)
 
 
 def test_RealESRNet_x4plus(snapshot):
@@ -83,3 +91,4 @@ def test_RealESRNet_x4plus(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert compare_images_to_results(file.name, model.model)

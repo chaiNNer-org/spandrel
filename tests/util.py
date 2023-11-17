@@ -1,14 +1,19 @@
 from __future__ import annotations
 
+import os
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 from urllib.request import urlretrieve
 
+import cv2
+import numpy as np
+import torch
 from syrupy.filters import props  # type: ignore
 
 MODEL_DIR = Path("./tests/models/")
+IMAGE_DIR = Path("./tests/images/")
 
 
 def download_model(url: str, name: str | None = None) -> str:
@@ -56,3 +61,62 @@ def expect_error(snapshot):
 
     if not did_error:
         raise AssertionError("Expected an error, but none was raised")
+
+
+def read_image(path: str | Path) -> np.ndarray:
+    image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+    return image
+
+
+def image_to_tensor(img: np.ndarray) -> torch.Tensor:
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = img.astype(np.float32) / 255.0
+    img = np.transpose(img, (2, 0, 1))
+    tensor = torch.from_numpy(img)
+    return tensor.unsqueeze(0)
+
+
+def tensor_to_image(tensor: torch.Tensor) -> np.ndarray:
+    image = tensor.cpu().squeeze().numpy()
+    image = np.transpose(image, (1, 2, 0))
+    image = np.clip((image * 255.0).round(), 0, 255)
+    image = image.astype(np.uint8)
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    return image
+
+
+def simple_image_inference(
+    model: torch.nn.Module, tensor: torch.Tensor
+) -> torch.Tensor:
+    model.eval()
+    with torch.no_grad():
+        return model(tensor)
+
+
+def simple_infer_from_image_path(
+    model: torch.nn.Module, path: str | Path
+) -> np.ndarray:
+    tensor = image_to_tensor(read_image(path))
+    return tensor_to_image(simple_image_inference(model, tensor))
+
+
+def compare_images_to_results(model_name: str, model: torch.nn.Module) -> bool:
+    image_paths = sorted((IMAGE_DIR / "sources").glob("*.png"))
+    for path in image_paths:
+        print(f"Comparing {path.name}...")
+        result = simple_infer_from_image_path(model, path)
+        image_name = path.name
+        basename, _ = os.path.splitext(image_name)
+        base_model_name, _ = os.path.splitext(model_name)
+        gt_path = IMAGE_DIR / "ground_truths" / basename / f"{base_model_name}.png"
+        gt = read_image(gt_path)
+
+        # Assert that the images are the same
+        # This would be the ideal check, but we actually get a slightly different result
+        # if not np.array_equal(result, gt):
+        #     return False
+
+        # Assert that the images are the same within a certain tolerance
+        if not np.allclose(result, gt, atol=1):
+            return False
+    return True
