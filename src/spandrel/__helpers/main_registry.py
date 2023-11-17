@@ -5,6 +5,7 @@ from typing import Callable
 from ..architectures import (
     DAT,
     ESRGAN,
+    FBCNN,
     GFPGAN,
     HAT,
     MAT,
@@ -152,6 +153,18 @@ MAIN_REGISTRY.add(
         id="SCUNet",
         detect=_has_keys("m_head.0.weight", "m_tail.0.weight"),
         load=SCUNet.load,
+    ),
+    ArchSupport(
+        id="FBCNN",
+        detect=_has_keys(
+            "m_head.weight",
+            "m_down1.0.res.0.weight",
+            "m_down2.0.res.0.weight",
+            "m_body_encoder.0.res.0.weight",
+            "m_tail.weight",
+            "qf_pred.0.res.0.weight",
+        ),
+        load=FBCNN.load,
     ),
     ArchSupport(
         id="DAT",

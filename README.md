@@ -109,6 +109,10 @@ This has only been tested with the models that are linked here, and any unoffici
 
 - [SCUNet](https://github.com/cszn/SCUNet) | [GAN Model](https://github.com/cszn/KAIR/releases/download/v1.0/scunet_color_real_gan.pth) | [PSNR Model](https://github.com/cszn/KAIR/releases/download/v1.0/scunet_color_real_psnr.pth)
 
+#### DeJPEG
+
+- [FBCNN](https://github.com/jiaxi-jiang/FBCNN) | [Models](https://github.com/jiaxi-jiang/FBCNN/releases/tag/v1.0)
+
 
 ## Contributing
 
