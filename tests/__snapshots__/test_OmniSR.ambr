@@ -1,0 +1,33 @@
+# serializer version: 1
+# name: test_OmniSR_community1
+  SRModelDescriptor(
+    architecture='OmniSR',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      'w8',
+      '5nr',
+    ]),
+  )
+# ---
+# name: test_OmniSR_community2
+  SRModelDescriptor(
+    architecture='OmniSR',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      'w8',
+      '5nr',
+    ]),
+  )
+# ---

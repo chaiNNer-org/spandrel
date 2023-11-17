@@ -1,0 +1,53 @@
+# serializer version: 1
+# name: test_SCUNet_color_25
+  RestorationModelDescriptor(
+    architecture='SCUNet',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_SCUNet_color_GAN
+  RestorationModelDescriptor(
+    architecture='SCUNet',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_SCUNet_color_RSNR
+  RestorationModelDescriptor(
+    architecture='SCUNet',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_SCUNet_gray_25
+  RestorationModelDescriptor(
+    architecture='SCUNet',
+    input_channels=1,
+    output_channels=1,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---

@@ -1,0 +1,32 @@
+# serializer version: 1
+# name: test_registry_add_invalid
+  ValueError('Duplicate architecture ID: b')
+# ---
+# name: test_registry_add_invalid.1
+  ValueError('Duplicate architecture ID: test')
+# ---
+# name: test_registry_add_invalid.2
+  ValueError('Circular dependency in architecture detection: 1 -> 2 -> 1')
+# ---
+# name: test_registry_order
+  list([
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'test',
+  ])
+# ---
+# name: test_registry_order.1
+  list([
+    'a',
+    'b',
+    'c',
+    'test',
+    'd',
+    'e',
+    'f',
+  ])
+# ---

@@ -1,0 +1,58 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Lint
+
+# Controls when the workflow will run
+on:
+    pull_request:
+        branches: ['*']
+        types:
+            - opened
+            - synchronize
+            - closed
+    push:
+        branches: [main]
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    formatting:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+                  cache: 'pip'
+            - run: pip install .[lint]
+            - run: ruff format src --check
+            - run: ruff format tests --check
+            - run: ruff format scripts --check
+
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+                  cache: 'pip'
+            - run: pip install .[lint]
+            - run: ruff check src
+            - run: ruff check tests
+            - run: ruff check scripts
+
+    pyright:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+                  cache: 'pip'
+            - run: pip install .[typecheck]
+            - run: pyright src/
+            - run: pyright tests/
+            - run: pyright scripts/

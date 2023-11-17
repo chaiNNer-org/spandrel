@@ -1,0 +1,46 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test
+
+# Controls when the workflow will run
+on:
+    pull_request:
+        branches: ['*']
+        types:
+            - opened
+            - synchronize
+            - closed
+        paths:
+            - 'src/**'
+            - 'tests/**'
+            - '.github/workflows/**'
+            - 'pyproject.toml'
+    push:
+        branches: [main]
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ['3.8', '3.9', '3.10', '3.11']
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
+                  cache: 'pip'
+            - run: pip install .
+            - run: pip install .[test]
+            - name: Cache models
+              id: cache-models
+              uses: actions/cache@v3
+              with:
+                  path: tests/models
+                  key: models
+            - run: pytest tests
+

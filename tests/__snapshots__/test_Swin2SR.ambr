@@ -1,0 +1,19 @@
+# serializer version: 1
+# name: test_Swin2SR_4x
+  SRModelDescriptor(
+    architecture='Swin2SR',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w8',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---

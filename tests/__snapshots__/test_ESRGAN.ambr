@@ -1,0 +1,136 @@
+# serializer version: 1
+# name: test_BSRGAN
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_BSRGAN_2x
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_ESRGAN_community
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_RealESRGAN_x2plus
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_RealESRGAN_x4plus
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_RealESRGAN_x4plus_anime_6B
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '6nb',
+    ]),
+  )
+# ---
+# name: test_RealESRNet_x4plus
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_RealSR_DPED
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_RealSR_JPEG
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---

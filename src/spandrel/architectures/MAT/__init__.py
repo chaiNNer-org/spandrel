@@ -1,0 +1,30 @@
+from ...__helpers.model_descriptor import (
+    InpaintModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
+from .arch.MAT import MAT
+
+
+def load(state_dict: StateDict) -> InpaintModelDescriptor[MAT]:
+    in_nc = 3
+    out_nc = 3
+
+    state = {
+        k.replace("synthesis", "model.synthesis").replace("mapping", "model.mapping"): v
+        for k, v in state_dict.items()
+    }
+
+    model = MAT()
+
+    return InpaintModelDescriptor(
+        model,
+        state,
+        architecture="MAT",
+        tags=[],
+        supports_half=False,
+        supports_bfloat16=True,
+        input_channels=in_nc,
+        output_channels=out_nc,
+        size=SizeRequirements(minimum=512, multiple_of=512, square=True),
+    )

@@ -1,0 +1,31 @@
+# serializer version: 1
+# name: test_SwiftSRGan_2x
+  SRModelDescriptor(
+    architecture='Swift-SRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '16nb',
+    ]),
+  )
+# ---
+# name: test_SwiftSRGan_4x
+  SRModelDescriptor(
+    architecture='Swift-SRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '16nb',
+    ]),
+  )
+# ---
