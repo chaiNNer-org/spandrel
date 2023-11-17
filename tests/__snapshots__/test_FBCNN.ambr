@@ -1,0 +1,27 @@
+# serializer version: 1
+# name: test_FBCNN_color
+  RestorationModelDescriptor(
+    architecture='FBCNN',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_FBCNN_gray
+  RestorationModelDescriptor(
+    architecture='FBCNN',
+    input_channels=1,
+    output_channels=1,
+    scale=1,
+    size=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
