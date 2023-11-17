@@ -145,6 +145,8 @@ class ArchRegistry:
     def load(self, state_dict: StateDict) -> ModelDescriptor:
         """
         Detects the architecture of the given state dict and loads it.
+
+        Throws an `UnsupportedModelError` if the model architecture is not supported.
         """
 
         if "params_ema" in state_dict:
