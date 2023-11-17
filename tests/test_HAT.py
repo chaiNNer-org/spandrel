@@ -1,7 +1,7 @@
 from spandrel import ModelLoader
 from spandrel.architectures.HAT import HAT
 
-from .util import ModelFile, compare_images_to_results, disallowed_props
+from .util import ImageTestNames, ModelFile, compare_images_to_results, disallowed_props
 
 
 def test_HAT_community1(snapshot):
@@ -11,7 +11,11 @@ def test_HAT_community1(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, HAT)
-    assert compare_images_to_results(file.name, model.model)
+    assert compare_images_to_results(
+        file.name,
+        model.model,
+        [ImageTestNames.SR_16, ImageTestNames.SR_32, ImageTestNames.SR_64],
+    )
 
 
 # TODO: We don't support HAT-S models yet

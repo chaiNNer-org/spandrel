@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from contextlib import contextmanager
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 from urllib.request import urlretrieve
@@ -100,23 +101,30 @@ def simple_infer_from_image_path(
     return tensor_to_image(simple_image_inference(model, tensor))
 
 
-def compare_images_to_results(model_name: str, model: torch.nn.Module) -> bool:
-    image_paths = sorted((IMAGE_DIR / "sources").glob("*.png"))
+class ImageTestNames(Enum):
+    SR_16 = "16x16.png"
+    SR_32 = "32x32.png"
+    SR_64 = "64x64.png"
+
+
+def compare_images_to_results(
+    model_name: str, model: torch.nn.Module, test_images: list[ImageTestNames]
+) -> bool:
+    image_paths = sorted((IMAGE_DIR / "inputs").glob("*.png"))
+    test_image_values = [image.value for image in test_images]
+    image_paths = [path for path in image_paths if path.name in test_image_values]
     for path in image_paths:
         print(f"Comparing {path.name}...")
         result = simple_infer_from_image_path(model, path)
         image_name = path.name
         basename, _ = os.path.splitext(image_name)
         base_model_name, _ = os.path.splitext(model_name)
-        gt_path = IMAGE_DIR / "ground_truths" / basename / f"{base_model_name}.png"
+        gt_path = IMAGE_DIR / "outputs" / basename / f"{base_model_name}.png"
         gt = read_image(gt_path)
 
-        # Assert that the images are the same
-        # This would be the ideal check, but we actually get a slightly different result
-        # if not np.array_equal(result, gt):
-        #     return False
-
         # Assert that the images are the same within a certain tolerance
+        # The CI for some reason has a bit of FP precision loss compared to my local machine
+        # Therefore, a tolerance of 1 is fine enough.
         if not np.allclose(result, gt, atol=1):
             return False
     return True
