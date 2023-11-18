@@ -124,12 +124,21 @@ class ModelBase(ABC, Generic[T]):
 
         self.model.load_state_dict(state_dict)  # type: ignore
 
-    def to(self, device: torch.device):
-        self.model.to(device)
+    def to(
+        self,
+        device: int | torch.device | None = torch.device("cpu"),
+        dtype: torch.dtype | str | None = None,
+        non_blocking: bool = False,
+    ):
+        self.model.to(device, dtype, non_blocking)
         return self
 
     def half(self):
         self.model.half()
+        return self
+
+    def float(self):
+        self.model.float()
         return self
 
     def cuda(self):
