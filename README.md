@@ -127,7 +127,7 @@ Spandrel mainly supports loading `.pth` files for all supported architectures. T
 
 ## Security
 
-As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This completely prevents ACE and makes loading untrusted files secure.
+As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This ideally prevents ACE and makes loading untrusted files more secure. Note that there still could be the possibility of ACE (though we don't expect this to be the case), so if you're still concerned about security, only load .safetensors models.
 
 ## Contributing
 
