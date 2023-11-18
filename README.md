@@ -124,7 +124,7 @@ This has only been tested with the models that are linked here, and any unoffici
 
 ## File type support
 
-Spandrel mainly supports loading .pth files for its supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (.pt) by extracting the weights out of them, as well as loading certain types of .ckpt files, as well as any supported model that has been saved as or converted to a .safetensors file.
+Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, as well as any supported model that has been saved as or converted to a `.safetensors` file.
 
 ## Security
 
