@@ -11,7 +11,7 @@ def test_FBCNN_color(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, FBCNN)
-    assert_image_inference(file, model, [TestImage.JPEG_15])
+    assert_image_inference(file, model, [TestImage.JPEG_15, TestImage.SR_8])
 
 
 def test_FBCNN_gray(snapshot):

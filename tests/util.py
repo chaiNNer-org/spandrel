@@ -111,6 +111,7 @@ def get_h_w_c(image: np.ndarray) -> tuple[int, int, int]:
 
 
 class TestImage(Enum):
+    SR_8 = "8x8.png"
     SR_16 = "16x16.png"
     SR_32 = "32x32.png"
     SR_64 = "64x64.png"
