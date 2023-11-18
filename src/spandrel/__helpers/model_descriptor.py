@@ -67,6 +67,7 @@ class ModelBase(ABC, Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        device: torch.device | None = None,
     ):
         self.model: T = model
         """
@@ -122,10 +123,16 @@ class ModelBase(ABC, Generic[T]):
         Size requirements for the input image. E.g. minimum size.
         """
 
+        self.device: torch.device = device or torch.device("cpu")
+        """
+        The torch device the model is on.
+        """
+
         self.model.load_state_dict(state_dict)  # type: ignore
 
     def to(self, device: torch.device):
         self.model.to(device)
+        self.device = device
         return self
 
 
@@ -149,6 +156,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        device: torch.device | None = None,
     ):
         super().__init__(
             model,
@@ -161,6 +169,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
             input_channels=input_channels,
             output_channels=output_channels,
             size_requirements=size_requirements,
+            device=device,
         )
 
 
@@ -176,6 +185,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        device: torch.device | None = None,
     ):
         super().__init__(
             model,
@@ -188,6 +198,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
             input_channels=input_channels,
             output_channels=output_channels,
             size_requirements=size_requirements,
+            device=device,
         )
 
 
