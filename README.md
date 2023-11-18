@@ -1,6 +1,13 @@
 # Spandrel
 
-[![PyPI package](https://img.shields.io/badge/pip%20install-spandrel-brightgreen)](https://pypi.org/project/spandrel/) [![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases) [![Actions Status](https://github.com/chaiNNer-org/spandrel/workflows/Test/badge.svg)](https://github.com/chaiNNer-org/spandrel/actions) [![License](https://img.shields.io/github/license/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/blob/main/LICENSE)
+[![PyPI package](https://img.shields.io/badge/pip%20install-spandrel-brightgreen)](https://pypi.org/project/spandrel/)
+[![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases)
+![PyPi Downloads](https://img.shields.io/pypi/dw/spandrel)
+![PyPi Wheel](https://img.shields.io/pypi/wheel/spandrel)
+![Python Version](https://img.shields.io/pypi/pyversions/spandrel)
+
+[![Actions Status](https://github.com/chaiNNer-org/spandrel/workflows/Test/badge.svg)](https://github.com/chaiNNer-org/spandrel/actions)
+[![License](https://img.shields.io/github/license/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/blob/main/LICENSE)
 
 This package ports [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s PyTorch architecture support and model loading functionality into its own package, and wraps it into an easy-to-use API.
 
