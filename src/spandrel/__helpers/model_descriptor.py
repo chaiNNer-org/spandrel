@@ -149,6 +149,10 @@ class ModelBase(ABC, Generic[T]):
         self.model.cpu()
         return self
 
+    def eval(self):
+        self.model.eval()
+        return self
+
     def __call__(self, *args, **kwargs):  # noqa: ANN002
         return self.model(*args, **kwargs)
 
