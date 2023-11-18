@@ -123,11 +123,11 @@ This has only been tested with the models that are linked here, and any unoffici
 
 ## File type support
 
-Spandrel mainly supports loading .pth files for its supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (.pt) by extracting the weights out of them, as well as loading certain types of .ckpt files, as well as any supported model that has been saved as or converted to a .safetensors file.
+Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, as well as any supported model that has been saved as or converted to a `.safetensors` file.
 
 ## Security
 
-As you may or may not know, loading .pth files usually poses a security risk due to python's pickle module being unsafe and vulnerable to arbitrary code execution. Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file, meaning that ACE is not an issue.
+As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This completely prevents ACE and makes loading untrusted files secure.
 
 ## Contributing
 
