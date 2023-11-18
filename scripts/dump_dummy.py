@@ -35,12 +35,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../s
 
 from dump_state_dict import dump
 
-from spandrel.architectures import KBCNN
+from spandrel.architectures import SCUNet
 
 
 def create_dummy() -> torch.nn.Module:
     """Edit this function"""
-    return KBCNN.KBNet_l()
+    return SCUNet.SCUNet()
 
 
 if __name__ == "__main__":
