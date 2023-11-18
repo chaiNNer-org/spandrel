@@ -38,7 +38,7 @@ class ModelLoader:
         """
 
         state_dict = self.load_state_dict_from_file(path)
-        return self.registry.load(state_dict).to(self.device)
+        return self.load_from_state_dict(state_dict)
 
     def load_state_dict_from_file(self, path: str | Path) -> StateDict:
         """
@@ -64,6 +64,15 @@ class ModelLoader:
             raise ValueError(
                 f"Unsupported model file extension {extension}. Please try a supported model type."
             )
+
+    def load_from_state_dict(self, state_dict: StateDict) -> ModelDescriptor:
+        """
+        Load a model from the given state dict.
+
+        Throws an `UnsupportedModelError` if the model architecture is not supported.
+        """
+
+        return self.registry.load(state_dict).to(self.device)
 
     def _load_pth(self, path: str | Path) -> StateDict:
         return torch.load(
