@@ -67,7 +67,7 @@ loaded_model.output_channels
 
 # A SizeRequirements object describing the image size requirements of the model
 # i.e the minimum size, the multiple of size, and whether the model requires a square input
-loaded_model.size
+loaded_model.size_requirements
 ```
 
 You can also just use this helper class for inference the same way you would with the `model` directly, so for example you could do `result = loaded_model(img)` and it will automatically call the forward method of the model. It also supports moving it to other devices, so you can call `.to` on it just like you would the direct model.
