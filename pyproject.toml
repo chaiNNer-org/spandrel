@@ -72,7 +72,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "**/arch/**/*" = ["N", "ANN"]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
-"**/tests/**/*" = ["N802"]
+"**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
