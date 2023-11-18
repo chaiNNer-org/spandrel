@@ -44,11 +44,11 @@ from __future__ import annotations
 import os
 import sys
 from dataclasses import dataclass
-from typing import Dict, Generic, Iterable, TypeVar
+from typing import Any, Dict, Generic, Iterable, TypeVar
 
 from torch import Tensor
 
-# I fucking hate python. This hack is necessary to make our module import
+# This hack is necessary to make our module import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 from spandrel import ModelLoader  # noqa: E402
@@ -181,12 +181,18 @@ def dump_lines(state: State) -> list[str]:
     return lines
 
 
-file = sys.argv[1]
-print(f"Input file: {file}")
-state = load_state(file)
+def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
+    with open(file, "w") as f:
+        comment = "\n".join("# " + s for s in comment.splitlines())
+        f.write(f"{comment}\n")
+        f.write("\n".join(dump_lines(state)))
 
-with open("dump.yml", "w") as f:
-    f.write(f"# {file}\n")
-    f.write("\n".join(dump_lines(state)))
+    print(f"Dumped {len(state)} keys to {file}")
 
-print(f"Dumped {len(state)} keys to dump.yml")
+
+if __name__ == "__main__":
+    file = sys.argv[1]
+    print(f"Input file: {file}")
+    state = load_state(file)
+
+    dump(state, file)
