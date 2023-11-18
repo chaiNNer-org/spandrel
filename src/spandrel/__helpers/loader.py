@@ -44,7 +44,8 @@ class ModelLoader:
         """
         Load the state dict of a model from the given file path.
 
-        State dicts are typically only useful to pass them into the `load` function of a specific architecture.
+        State dicts are typically only useful to pass them into the `load`
+        function of a specific architecture.
 
         Throws a `ValueError` if the file extension is not supported.
         """
