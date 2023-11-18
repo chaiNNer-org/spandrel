@@ -69,7 +69,7 @@ def load_state(file: str) -> State:
     return state_dict
 
 
-def indent(lines: list[str], indentation="  "):
+def indent(lines: list[str], indentation: str = "  "):
     def do(line: str) -> str:
         return "\n".join(indentation + s for s in line.splitlines())
 

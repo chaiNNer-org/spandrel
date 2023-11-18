@@ -35,7 +35,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 build = ["setuptools>=46.4.0", "wheel", "build", "twine"]
-lint = ["ruff==0.1.4"]
+lint = ["ruff==0.1.6"]
 typecheck = ["pyright==1.1.335"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
 
@@ -53,13 +53,15 @@ src = ["src"]
 # extend-exclude = ["src/architectures/**"]
 
 extend-select = [
-    "UP", # pyupgrade
-    "E",  # pycodestyle
-    "W",  # pycodestyle
-    # "F", # pyflakes
-    "I",  # isort
-    "FA", # flake8-future-annotations
-    "N",  # pep8-naming
+    "UP",     # pyupgrade
+    "E",      # pycodestyle
+    "W",      # pycodestyle
+    "F",      # pyflakes
+    "I",      # isort
+    "FA",     # flake8-future-annotations
+    "N",      # pep8-naming
+    "ANN001",
+    "ANN002",
 ]
 ignore = [
     "E501", # Line too long
@@ -68,9 +70,9 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/arch/**/*" = ["N"]
-"**/__arch_helpers/**/*" = ["N"]
-"**/tests/**/*" = ["N802"]
+"**/arch/**/*" = ["N", "ANN"]
+"**/__arch_helpers/**/*" = ["N", "ANN"]
+"**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
