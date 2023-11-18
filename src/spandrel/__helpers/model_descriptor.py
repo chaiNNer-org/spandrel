@@ -128,13 +128,35 @@ class ModelBase(ABC, Generic[T]):
         self.model.to(device)
         return self
 
+    def half(self):
+        self.model.half()
+        return self
+
+    def cuda(self):
+        self.model.cuda()
+        return self
+
+    def cpu(self):
+        self.model.cpu()
+        return self
+
+    def __call__(self, *args, **kwargs):  # noqa: ANN002
+        return self.model(*args, **kwargs)
+
 
 class SRModelDescriptor(ModelBase[T], Generic[T]):
-    pass
+    def __call__(self, image: torch.Tensor) -> torch.Tensor:
+        """
+        Upscale the given image by the scale factor of the model.
+        """
+        return self.model(image)
 
 
 class FaceSRModelDescriptor(ModelBase[T], Generic[T]):
-    pass
+    def __call__(
+        self, image: torch.Tensor, return_rgb: bool = False, weight: float = 0.5
+    ) -> torch.Tensor:
+        return self.model(image, return_rgb=return_rgb, weight=weight)
 
 
 class InpaintModelDescriptor(ModelBase[T], Generic[T]):
@@ -163,6 +185,12 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
             size_requirements=size_requirements,
         )
 
+    def __call__(self, image: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        """
+        Inpaints the given input image in the masked areas.
+        """
+        return self.model(image, mask)
+
 
 class RestorationModelDescriptor(ModelBase[T], Generic[T]):
     def __init__(
@@ -189,6 +217,12 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
             output_channels=output_channels,
             size_requirements=size_requirements,
         )
+
+    def __call__(self, image: torch.Tensor) -> torch.Tensor:
+        """
+        Runs the restoration model on the given input image.
+        """
+        return self.model(image)
 
 
 ModelDescriptor = Union[
