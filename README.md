@@ -114,6 +114,14 @@ This has only been tested with the models that are linked here, and any unoffici
 - [FBCNN](https://github.com/jiaxi-jiang/FBCNN) | [Models](https://github.com/jiaxi-jiang/FBCNN/releases/tag/v1.0)
 
 
+## File type support
+
+Spandrel mainly supports loading .pth files for its supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (.pt) by extracting the weights out of them, as well as loading certain types of .ckpt files, as well as any supported model that has been saved as or converted to a .safetensors file.
+
+## Security
+
+As you may or may not know, loading .pth files usually poses a security risk due to python's pickle module being unsafe and vulnerable to arbitrary code execution. Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file, meaning that ACE is not an issue.
+
 ## Contributing
 
 Feel free to contribute more model architecture support. When I add model support, I usually dig through the .pth file (state dict) keys and weights to find a way to get all the parameters of a model. At some point, I will document that entire process here. For now, there are plenty of example to reference.
