@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 
 from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
@@ -8,15 +10,15 @@ def _get_num_conv(highest_num: int) -> int:
     return (highest_num - 2) // 2
 
 
-def _get_num_feats(state, weight_keys) -> int:
+def _get_num_feats(state: StateDict, weight_keys: list[str]) -> int:
     return state[weight_keys[0]].shape[0]
 
 
-def _get_in_nc(state, weight_keys) -> int:
+def _get_in_nc(state: StateDict, weight_keys: list[str]) -> int:
     return state[weight_keys[0]].shape[1]
 
 
-def _get_scale(pixelshuffle_shape, out_nc) -> int:
+def _get_scale(pixelshuffle_shape: int, out_nc: int) -> int:
     scale = math.sqrt(pixelshuffle_shape / out_nc)
     if scale - int(scale) > 0:
         print(

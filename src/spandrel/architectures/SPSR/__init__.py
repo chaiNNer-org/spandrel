@@ -2,7 +2,7 @@ from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
 from .arch.SPSR import SPSRNet as SPSR
 
 
-def get_scale(state, min_part: int = 4) -> int:
+def get_scale(state: StateDict, min_part: int = 4) -> int:
     n = 0
     for part in list(state):
         parts = part.split(".")
@@ -13,7 +13,7 @@ def get_scale(state, min_part: int = 4) -> int:
     return 2**n
 
 
-def get_num_blocks(state) -> int:
+def get_num_blocks(state: StateDict) -> int:
     nb = 0
     for part in list(state):
         parts = part.split(".")

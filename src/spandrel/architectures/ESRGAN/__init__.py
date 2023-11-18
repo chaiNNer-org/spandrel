@@ -7,7 +7,7 @@ from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
 from .arch.RRDB import RRDBNet
 
 
-def _new_to_old_arch(state, state_map, num_blocks):
+def _new_to_old_arch(state: StateDict, state_map: dict, num_blocks: int):
     """Convert a new-arch model state dictionary to an old-arch dictionary."""
     if "params_ema" in state:
         state = state["params_ema"]
@@ -56,7 +56,7 @@ def _new_to_old_arch(state, state_map, num_blocks):
             old_state[f"model.{max_upconv + 4}.bias"] = state[key]
 
     # Sort by first numeric value of each layer
-    def compare(item1, item2):
+    def compare(item1: str, item2: str):
         parts1 = item1.split(".")
         parts2 = item2.split(".")
         int1 = int(parts1[1])
@@ -71,7 +71,7 @@ def _new_to_old_arch(state, state_map, num_blocks):
     return out_dict
 
 
-def _get_scale(state, min_part: int = 6) -> int:
+def _get_scale(state: StateDict, min_part: int = 6) -> int:
     n = 0
     for part in list(state):
         parts = part.split(".")[1:]
@@ -82,7 +82,7 @@ def _get_scale(state, min_part: int = 6) -> int:
     return 2**n
 
 
-def _get_num_blocks(state, state_map) -> int:
+def _get_num_blocks(state: StateDict, state_map: dict) -> int:
     nbs = []
     state_keys = state_map[r"model.1.sub.\1.RDB\2.conv\3.0.\4"] + (
         r"model\.\d+\.sub\.(\d+)\.RDB(\d+)\.conv(\d+)\.0\.(weight|bias)",
