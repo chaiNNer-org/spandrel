@@ -77,7 +77,7 @@ loaded_model.output_channels
 loaded_model.size_requirements
 ```
 
-You can also just use this helper class for inference the same way you would with the `model` directly, so for example you could do `result = loaded_model(img)` and it will automatically call the forward method of the model. It also supports moving it to other devices, so you can call `.to` on it just like you would the direct model.
+ModelDescriptors also support moving the model to other devices directly, so you can call `.to` on it just like you would the direct model, for convenience.
 
 ## Model Architecture Support
 
