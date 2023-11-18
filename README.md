@@ -1,6 +1,13 @@
 # Spandrel
 
-[![PyPI package](https://img.shields.io/badge/pip%20install-spandrel-brightgreen)](https://pypi.org/project/spandrel/) [![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases) [![Actions Status](https://github.com/chaiNNer-org/spandrel/workflows/Test/badge.svg)](https://github.com/chaiNNer-org/spandrel/actions) [![License](https://img.shields.io/github/license/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/blob/main/LICENSE)
+[![PyPI package](https://img.shields.io/badge/pip%20install-spandrel-brightgreen)](https://pypi.org/project/spandrel/)
+[![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases)
+[![PyPi Downloads](https://img.shields.io/pypi/dw/spandrel)](https://pypi.org/project/spandrel/#files)
+[![Python Version](https://img.shields.io/pypi/pyversions/spandrel)](https://pypi.org/project/spandrel/#files:~:text=Requires%3A%20Python%20%3C3.12%2C%20%3E%3D3.8)
+
+[![Actions Status](https://github.com/chaiNNer-org/spandrel/workflows/Test/badge.svg)](https://github.com/chaiNNer-org/spandrel/actions)
+[![License](https://img.shields.io/github/license/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/blob/main/LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/graphs/contributors)
 
 This package ports [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s PyTorch architecture support and model loading functionality into its own package, and wraps it into an easy-to-use API.
 
@@ -113,6 +120,14 @@ This has only been tested with the models that are linked here, and any unoffici
 
 - [FBCNN](https://github.com/jiaxi-jiang/FBCNN) | [Models](https://github.com/jiaxi-jiang/FBCNN/releases/tag/v1.0)
 
+
+## File type support
+
+Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, as well as any supported model that has been saved as or converted to a `.safetensors` file.
+
+## Security
+
+As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This completely prevents ACE and makes loading untrusted files secure.
 
 ## Contributing
 
