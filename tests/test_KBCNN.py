@@ -1,7 +1,6 @@
-from spandrel import ModelLoader
 from spandrel.architectures.KBCNN import KBNet_l, KBNet_s, load
 
-from .util import ModelFile, assert_loads_correctly, disallowed_props
+from .util import assert_loads_correctly
 
 
 def test_KBCNN_load():
@@ -25,18 +24,3 @@ def test_KBCNN_load():
         lambda: KBNet_s(width=32, enc_blk_nums=[1, 2, 3, 4], dec_blk_nums=[1, 2, 3, 4]),
         lambda: KBNet_s(width=32, ffn_scale=3),
     )
-
-
-def test_KBCNN_deblur(snapshot):
-    file = ModelFile.from_url("https://TODO.com/kbcnn_defocus.pth")
-    model = ModelLoader().load_from_file(file.path)
-    assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, KBNet_l)
-    # assert_image_inference(file, model, [TestImage.JPEG_15])
-
-
-def test_KBCNN_derain(snapshot):
-    file = ModelFile.from_url("https://TODO.com/kbcnn_derain.pth")
-    model = ModelLoader().load_from_file(file.path)
-    assert model == snapshot(exclude=disallowed_props)
-    # assert isinstance(model.model, KBNet_l)
