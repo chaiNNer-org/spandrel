@@ -26,5 +26,5 @@ def load(state_dict: StateDict) -> InpaintModelDescriptor[MAT]:
         supports_bfloat16=True,
         input_channels=in_nc,
         output_channels=out_nc,
-        size=SizeRequirements(minimum=512, multiple_of=512, square=True),
+        size_requirements=SizeRequirements(minimum=512, multiple_of=512, square=True),
     )

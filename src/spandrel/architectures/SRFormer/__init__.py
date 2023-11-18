@@ -194,5 +194,5 @@ def load(state_dict: StateDict) -> SRModelDescriptor[SRFormer]:
         scale=scale,
         input_channels=in_nc,
         output_channels=out_nc,
-        size=SizeRequirements(minimum=16),
+        size_requirements=SizeRequirements(minimum=16),
     )

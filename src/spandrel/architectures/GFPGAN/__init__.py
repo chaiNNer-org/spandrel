@@ -45,5 +45,5 @@ def load(state_dict: StateDict) -> FaceSRModelDescriptor[GFPGANv1Clean]:
         scale=8,
         input_channels=3,
         output_channels=3,
-        size=SizeRequirements(minimum=512),
+        size_requirements=SizeRequirements(minimum=512),
     )

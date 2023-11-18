@@ -47,5 +47,5 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[FBCNN]:
         supports_bfloat16=True,  # TODO
         input_channels=in_nc,
         output_channels=out_nc,
-        size=SizeRequirements(minimum=16),  # TODO
+        size_requirements=SizeRequirements(minimum=16),  # TODO
     )

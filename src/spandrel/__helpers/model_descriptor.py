@@ -66,7 +66,7 @@ class ModelBase(ABC, Generic[T]):
         scale: int,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         self.model: T = model
         """
@@ -115,7 +115,9 @@ class ModelBase(ABC, Generic[T]):
         The number of output image channels of the model. E.g. 3 for RGB, 1 for grayscale.
         """
 
-        self.size: SizeRequirements = size or SizeRequirements()
+        self.size_requirements: SizeRequirements = (
+            size_requirements or SizeRequirements()
+        )
         """
         Size requirements for the input image. E.g. minimum size.
         """
@@ -146,7 +148,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
         supports_bfloat16: bool,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         super().__init__(
             model,
@@ -158,7 +160,7 @@ class InpaintModelDescriptor(ModelBase[T], Generic[T]):
             scale=1,
             input_channels=input_channels,
             output_channels=output_channels,
-            size=size,
+            size_requirements=size_requirements,
         )
 
 
@@ -173,7 +175,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
         supports_bfloat16: bool,
         input_channels: int,
         output_channels: int,
-        size: SizeRequirements | None = None,
+        size_requirements: SizeRequirements | None = None,
     ):
         super().__init__(
             model,
@@ -185,7 +187,7 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
             scale=1,
             input_channels=input_channels,
             output_channels=output_channels,
-            size=size,
+            size_requirements=size_requirements,
         )
 
 

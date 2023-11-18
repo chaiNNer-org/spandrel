@@ -197,5 +197,5 @@ def load(state_dict: StateDict) -> SRModelDescriptor[Swin2SR]:
         scale=scale,
         input_channels=in_nc,
         output_channels=out_nc,
-        size=SizeRequirements(minimum=16),
+        size_requirements=SizeRequirements(minimum=16),
     )
