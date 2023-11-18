@@ -8,6 +8,7 @@ from ..architectures import (
     FBCNN,
     GFPGAN,
     HAT,
+    KBCNN,
     MAT,
     SPSR,
     CodeFormer,
@@ -170,6 +171,27 @@ MAIN_REGISTRY.add(
         id="DAT",
         detect=_has_keys("layers.0.blocks.2.attn.attn_mask_0", "conv_first.weight"),
         load=DAT.load,
+    ),
+    ArchSupport(
+        id="KBCNN",
+        detect=lambda state: (
+            # KBNet_s
+            _has_keys(
+                "intro.weight",
+                "encoders.0.0.attgamma",
+                "middle_blks.0.w",
+                "decoders.0.0.attgamma",
+                "ending.weight",
+            )(state)
+            # KBNet_l
+            or _has_keys(
+                "patch_embed.proj.weight",
+                "encoder_level3.0.ffn.project_out.weight",
+                "latent.0.ffn.qkv.weight",
+                "refinement.0.attn.dwconv.0.weight",
+            )(state)
+        ),
+        load=KBCNN.load,
     ),
     ArchSupport(
         id="ESRGAN",

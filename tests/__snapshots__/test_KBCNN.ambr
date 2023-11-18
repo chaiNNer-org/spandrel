@@ -1,0 +1,27 @@
+# serializer version: 1
+# name: test_KBCNN_deblur
+  RestorationModelDescriptor(
+    architecture='KBCNN',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size_requirements=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_KBCNN_derain
+  RestorationModelDescriptor(
+    architecture='KBCNN',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size_requirements=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
