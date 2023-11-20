@@ -74,8 +74,8 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
         state_dict,
         architecture="KBCNN",
         tags=["L"],
-        supports_half=True,  # TODO
-        supports_bfloat16=True,  # TODO
+        supports_half=True,
+        supports_bfloat16=True,
         input_channels=in_nc,
         output_channels=out_nc,
         size_requirements=SizeRequirements(multiple_of=16),
@@ -83,6 +83,10 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
 
 
 def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
+    # remove module. prefix
+    if "module.intro.weight" in state_dict:
+        state_dict = {k.replace("module.", "", 1): v for k, v in state_dict.items()}
+
     img_channel = 3
     width = 64
     middle_blk_num = 12
@@ -111,6 +115,10 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
     temp_ffn_ch = state_dict["middle_blks.0.conv4.weight"].shape[0]
     ffn_scale = temp_ffn_ch / temp_c
 
+    # kernel size is 3 for lightweight and 5 otherwise
+    kernel_size = state_dict["encoders.0.0.conv11.1.weight"].shape[2]
+    lightweight = kernel_size == 3
+
     model = KBNet_s(
         img_channel=img_channel,
         width=width,
@@ -126,8 +134,8 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
         state_dict,
         architecture="KBCNN",
         tags=["S"],
-        supports_half=True,  # TODO
-        supports_bfloat16=True,  # TODO
+        supports_half=True,
+        supports_bfloat16=True,
         input_channels=img_channel,
         output_channels=img_channel,
     )

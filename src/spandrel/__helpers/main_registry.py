@@ -55,9 +55,7 @@ MAIN_REGISTRY.add(
     ),
     ArchSupport(
         id="SwiftSRGAN",
-        detect=lambda state: (
-            "model" in state and "initial.cnn.depthwise.weight" in state["model"].keys()
-        ),
+        detect=_has_keys("initial.cnn.depthwise.weight", "final_conv.pointwise.weight"),
         load=SwiftSRGAN.load,
     ),
     ArchSupport(
@@ -182,6 +180,14 @@ MAIN_REGISTRY.add(
                 "middle_blks.0.w",
                 "decoders.0.0.attgamma",
                 "ending.weight",
+            )(state)
+            # some KBNet_s models are prefixed with "module." for some reason
+            or _has_keys(
+                "module.intro.weight",
+                "module.encoders.0.0.attgamma",
+                "module.middle_blks.0.w",
+                "module.decoders.0.0.attgamma",
+                "module.ending.weight",
             )(state)
             # KBNet_l
             or _has_keys(
