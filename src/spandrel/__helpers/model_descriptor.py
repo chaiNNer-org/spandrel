@@ -74,10 +74,6 @@ class ModelBase(ABC, Generic[T]):
 
         The specific subclass of `torch.nn.Module` depends on the model architecture.
         """
-        self.state_dict: StateDict = state_dict
-        """
-        The state dict of the model (weights and biases).
-        """
         self.architecture: str = architecture
         """
         The name of the model architecture. E.g. "ESRGAN".
