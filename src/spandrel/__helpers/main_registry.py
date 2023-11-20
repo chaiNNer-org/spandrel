@@ -177,8 +177,6 @@ MAIN_REGISTRY.add(
             _has_keys(
                 "model.0.weight",
                 "model.1.sub.0.RDB1.conv1.0.weight",
-                "model.2.weight",
-                "model.4.weight",
             )(state)
             or _has_keys(
                 "conv_first.weight",

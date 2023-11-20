@@ -44,6 +44,51 @@
     ]),
   )
 # ---
+# name: test_ESRGAN_community_2x
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_ESRGAN_community_4x
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '32nf',
+      '12nb',
+    ]),
+  )
+# ---
+# name: test_ESRGAN_community_8x
+  SRModelDescriptor(
+    architecture='ESRGAN',
+    input_channels=3,
+    output_channels=3,
+    scale=8,
+    size_requirements=SizeRequirements(minimum=None, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
 # name: test_RealESRGAN_x2plus
   SRModelDescriptor(
     architecture='ESRGAN',
