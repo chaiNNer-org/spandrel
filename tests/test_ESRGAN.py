@@ -25,6 +25,11 @@ def test_ESRGAN_community_2x(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_8, TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_ESRGAN_community_4x(snapshot):
@@ -34,6 +39,11 @@ def test_ESRGAN_community_4x(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_8, TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_ESRGAN_community_8x(snapshot):
@@ -43,6 +53,11 @@ def test_ESRGAN_community_8x(snapshot):
     model = ModelLoader().load_from_file(file.path)
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RRDBNet)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_8, TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_BSRGAN(snapshot):
