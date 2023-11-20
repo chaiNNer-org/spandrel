@@ -23,4 +23,5 @@ def test_KBCNN_load():
         lambda: KBNet_s(width=32, middle_blk_num=3),
         lambda: KBNet_s(width=32, enc_blk_nums=[1, 2, 3, 4], dec_blk_nums=[1, 2, 3, 4]),
         lambda: KBNet_s(width=32, ffn_scale=3),
+        lambda: KBNet_s(width=32, lightweight=True),
     )
