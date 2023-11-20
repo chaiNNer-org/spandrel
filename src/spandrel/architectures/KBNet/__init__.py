@@ -73,7 +73,7 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
         model,
         state_dict,
         architecture="KBCNN",
-        tags=[],
+        tags=["L"],
         supports_half=True,  # TODO
         supports_bfloat16=True,  # TODO
         input_channels=in_nc,
@@ -125,7 +125,7 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
         model,
         state_dict,
         architecture="KBCNN",
-        tags=[],
+        tags=["S"],
         supports_half=True,  # TODO
         supports_bfloat16=True,  # TODO
         input_channels=img_channel,

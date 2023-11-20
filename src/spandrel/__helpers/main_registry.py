@@ -8,11 +8,11 @@ from ..architectures import (
     FBCNN,
     GFPGAN,
     HAT,
-    KBCNN,
     MAT,
     SPSR,
     CodeFormer,
     Compact,
+    KBNet,
     LaMa,
     OmniSR,
     RestoreFormer,
@@ -173,7 +173,7 @@ MAIN_REGISTRY.add(
         load=DAT.load,
     ),
     ArchSupport(
-        id="KBCNN",
+        id="KBNet",
         detect=lambda state: (
             # KBNet_s
             _has_keys(
@@ -191,7 +191,7 @@ MAIN_REGISTRY.add(
                 "refinement.0.attn.dwconv.0.weight",
             )(state)
         ),
-        load=KBCNN.load,
+        load=KBNet.load,
     ),
     ArchSupport(
         id="ESRGAN",

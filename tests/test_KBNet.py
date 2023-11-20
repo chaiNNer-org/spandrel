@@ -1,4 +1,4 @@
-from spandrel.architectures.KBCNN import KBNet_l, KBNet_s, load
+from spandrel.architectures.KBNet import KBNet_l, KBNet_s, load
 
 from .util import assert_loads_correctly
 
