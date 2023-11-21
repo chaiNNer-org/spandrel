@@ -4,7 +4,9 @@ import sys
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
+from inspect import getsource
 from pathlib import Path
+from typing import Callable
 from urllib.parse import unquote, urlparse
 from urllib.request import urlretrieve
 
@@ -13,7 +15,7 @@ import numpy as np
 import torch
 from syrupy.filters import props
 
-from spandrel.__helpers.model_descriptor import ModelDescriptor
+from spandrel.__helpers.model_descriptor import ModelDescriptor, StateDict
 
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
@@ -168,3 +170,17 @@ def assert_image_inference(
             continue
 
         assert close_enough, f"Failed on {test_image.value}"
+
+
+def assert_loads_correctly(
+    load: Callable[[StateDict], ModelDescriptor],
+    *models: Callable[[], torch.nn.Module],
+):
+    for model_fn in models:
+        try:
+            model = model_fn()
+            state_dict = model.state_dict()
+            loaded = load(state_dict)
+            assert type(loaded.model) == type(model)
+        except Exception as e:
+            raise AssertionError(f"Failed on {getsource( model_fn)}") from e

@@ -2,11 +2,7 @@ from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
 from .arch.SwiftSRGAN import Generator as SwiftSRGAN
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
-    state = state_dict
-    if "model" in state:
-        state = state["model"]
-
+def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
     in_nc: int = state["initial.cnn.depthwise.weight"].shape[0]
     out_nc: int = state["final_conv.pointwise.weight"].shape[0]
     num_filters: int = state["initial.cnn.pointwise.weight"].shape[0]

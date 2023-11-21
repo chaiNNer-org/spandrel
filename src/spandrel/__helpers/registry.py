@@ -149,12 +149,11 @@ class ArchRegistry:
         Throws an `UnsupportedModelError` if the model architecture is not supported.
         """
 
-        if "params_ema" in state_dict:
-            state_dict = state_dict["params_ema"]
-        elif "params-ema" in state_dict:
-            state_dict = state_dict["params-ema"]
-        elif "params" in state_dict:
-            state_dict = state_dict["params"]
+        unwrap_keys = ["params_ema", "params-ema", "params", "model", "net"]
+        for unwrap_key in unwrap_keys:
+            if unwrap_key in state_dict and isinstance(state_dict[unwrap_key], dict):
+                state_dict = state_dict[unwrap_key]
+                break
 
         for arch in self._ordered:
             if arch.detect(state_dict):
