@@ -2,6 +2,7 @@ from ...__helpers.model_descriptor import (
     RestorationModelDescriptor,
     StateDict,
 )
+from ..__arch_helpers.state import get_seq_len
 from .arch.FBCNN import FBCNN
 
 
@@ -17,10 +18,7 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[FBCNN]:
     in_nc = state_dict["m_head.weight"].shape[1]
     out_nc = state_dict["m_tail.weight"].shape[0]
 
-    for i in range(0, 20):
-        if f"m_down1.{i}.weight" in state_dict:
-            nb = i
-            break
+    nb = get_seq_len(state_dict, "m_body_encoder")
 
     nc[0] = state_dict["m_head.weight"].shape[0]
     nc[1] = state_dict[f"m_down1.{nb}.weight"].shape[0]
