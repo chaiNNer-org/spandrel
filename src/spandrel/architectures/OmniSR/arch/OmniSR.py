@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# type: ignore
 #############################################################
 # File: OmniSR.py
 # Created Date: Tuesday April 28th 2022
@@ -25,7 +24,6 @@ class OmniSR(nn.Module):
         num_out_ch=3,
         num_feat=64,
         block_num=1,
-        ffn_bias=True,
         pe=True,
         window_size=8,
         res_num=1,
@@ -45,7 +43,6 @@ class OmniSR(nn.Module):
                 channel_num=num_feat,
                 bias=bias,
                 block_num=block_num,
-                ffn_bias=ffn_bias,
                 window_size=self.window_size,
                 pe=pe,
             )
