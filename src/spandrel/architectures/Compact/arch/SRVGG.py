@@ -6,8 +6,10 @@ import torch.nn.functional as F
 
 class SRVGGNetCompact(nn.Module):
     """A compact VGG-style network structure for super-resolution.
+
     It is a compact network structure, which performs upsampling in the last layer and no convolution is
     conducted on the HR feature space.
+
     Args:
         num_in_ch (int): Channel number of inputs. Default: 3.
         num_out_ch (int): Channel number of outputs. Default: 3.
@@ -24,10 +26,15 @@ class SRVGGNetCompact(nn.Module):
         num_feat=64,
         num_conv=16,
         upscale=4,
-        pixelshuffle_shape=4 * 4 * 3,
         act_type="prelu",
     ):
         super().__init__()
+        self.num_in_ch = num_in_ch
+        self.num_out_ch = num_out_ch
+        self.num_feat = num_feat
+        self.num_conv = num_conv
+        self.upscale = upscale
+        self.act_type = act_type
 
         self.body = nn.ModuleList()
         # the first conv
@@ -54,11 +61,9 @@ class SRVGGNetCompact(nn.Module):
             self.body.append(activation)  # type: ignore
 
         # the last conv
-        self.body.append(nn.Conv2d(num_feat, pixelshuffle_shape, 3, 1, 1))  # type: ignore
+        self.body.append(nn.Conv2d(num_feat, num_out_ch * upscale * upscale, 3, 1, 1))
         # upsample
         self.upsampler = nn.PixelShuffle(upscale)
-
-        self.scale = upscale
 
     def forward(self, x):
         out = x
@@ -67,6 +72,6 @@ class SRVGGNetCompact(nn.Module):
 
         out = self.upsampler(out)
         # add the nearest upsampled image, so that the network learns the residual
-        base = F.interpolate(x, scale_factor=self.scale, mode="nearest")
+        base = F.interpolate(x, scale_factor=self.upscale, mode="nearest")
         out += base
         return out

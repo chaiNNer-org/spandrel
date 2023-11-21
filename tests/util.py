@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from enum import Enum
 from inspect import getsource
 from pathlib import Path
-from typing import Callable
+from typing import Callable, TypeVar
 from urllib.parse import unquote, urlparse
 from urllib.request import urlretrieve
 
@@ -172,9 +172,13 @@ def assert_image_inference(
         assert close_enough, f"Failed on {test_image.value}"
 
 
+T = TypeVar("T", bound=torch.nn.Module)
+
+
 def assert_loads_correctly(
     load: Callable[[StateDict], ModelDescriptor],
-    *models: Callable[[], torch.nn.Module],
+    *models: Callable[[], T],
+    condition: Callable[[T, T], bool] = lambda _a, _b: True,
 ):
     for model_fn in models:
         try:
@@ -182,5 +186,6 @@ def assert_loads_correctly(
             state_dict = model.state_dict()
             loaded = load(state_dict)
             assert type(loaded.model) == type(model)
+            assert condition(model, loaded.model)
         except Exception as e:
             raise AssertionError(f"Failed on {getsource( model_fn)}") from e
