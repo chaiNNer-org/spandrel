@@ -28,7 +28,8 @@ def _get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, in
             return int(math.sqrt(x // c)), c
 
     raise AssertionError(
-        f"Expected output channels to be either 1, 3, or 4. Could not find a a pair (s, o) such that s*s*o = {x}"
+        f"Expected output channels to be either 1, 3, or 4."
+        f" Could not find a pair (s, o) such that s*s*o = {x}"
     )
 
 
