@@ -1,0 +1,948 @@
+# SCUNet.SCUNet()
+m_head
+  m_head.0.weight: Tensor float32 Size([64, 3, 3, 3])
+m_down1
+  0
+    trans_block
+      ln1
+        m_down1.0.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_down1.0.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_down1.0.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_down1.0.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_down1.0.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_down1.0.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_down1.0.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_down1.0.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_down1.0.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_down1.0.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_down1.0.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_down1.0.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_down1.0.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_down1.0.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.0.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_down1.0.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.0.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_down1.0.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_down1.0.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  1
+    trans_block
+      ln1
+        m_down1.1.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_down1.1.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_down1.1.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_down1.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_down1.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_down1.1.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_down1.1.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_down1.1.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_down1.1.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_down1.1.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_down1.1.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_down1.1.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_down1.1.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_down1.1.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.1.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_down1.1.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.1.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_down1.1.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_down1.1.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  2
+    trans_block
+      ln1
+        m_down1.2.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_down1.2.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_down1.2.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_down1.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_down1.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_down1.2.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_down1.2.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_down1.2.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_down1.2.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_down1.2.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_down1.2.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_down1.2.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_down1.2.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_down1.2.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.2.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_down1.2.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.2.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_down1.2.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_down1.2.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  3
+    trans_block
+      ln1
+        m_down1.3.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_down1.3.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_down1.3.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_down1.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_down1.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_down1.3.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_down1.3.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_down1.3.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_down1.3.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_down1.3.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_down1.3.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_down1.3.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_down1.3.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_down1.3.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.3.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_down1.3.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_down1.3.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_down1.3.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_down1.3.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  4
+    m_down1.4.weight: Tensor float32 Size([128, 64, 2, 2])
+m_down2
+  0
+    trans_block
+      ln1
+        m_down2.0.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_down2.0.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_down2.0.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_down2.0.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_down2.0.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_down2.0.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_down2.0.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_down2.0.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_down2.0.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_down2.0.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_down2.0.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_down2.0.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_down2.0.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_down2.0.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.0.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_down2.0.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.0.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_down2.0.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_down2.0.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  1
+    trans_block
+      ln1
+        m_down2.1.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_down2.1.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_down2.1.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_down2.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_down2.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_down2.1.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_down2.1.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_down2.1.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_down2.1.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_down2.1.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_down2.1.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_down2.1.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_down2.1.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_down2.1.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.1.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_down2.1.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.1.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_down2.1.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_down2.1.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  2
+    trans_block
+      ln1
+        m_down2.2.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_down2.2.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_down2.2.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_down2.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_down2.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_down2.2.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_down2.2.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_down2.2.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_down2.2.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_down2.2.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_down2.2.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_down2.2.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_down2.2.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_down2.2.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.2.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_down2.2.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.2.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_down2.2.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_down2.2.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  3
+    trans_block
+      ln1
+        m_down2.3.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_down2.3.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_down2.3.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_down2.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_down2.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_down2.3.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_down2.3.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_down2.3.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_down2.3.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_down2.3.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_down2.3.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_down2.3.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_down2.3.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_down2.3.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.3.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_down2.3.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_down2.3.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_down2.3.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_down2.3.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  4
+    m_down2.4.weight: Tensor float32 Size([256, 128, 2, 2])
+m_down3
+  0
+    trans_block
+      ln1
+        m_down3.0.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_down3.0.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_down3.0.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_down3.0.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_down3.0.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_down3.0.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_down3.0.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_down3.0.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_down3.0.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_down3.0.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_down3.0.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_down3.0.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_down3.0.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_down3.0.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.0.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_down3.0.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.0.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_down3.0.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_down3.0.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  1
+    trans_block
+      ln1
+        m_down3.1.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_down3.1.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_down3.1.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_down3.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_down3.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_down3.1.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_down3.1.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_down3.1.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_down3.1.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_down3.1.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_down3.1.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_down3.1.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_down3.1.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_down3.1.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.1.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_down3.1.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.1.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_down3.1.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_down3.1.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  2
+    trans_block
+      ln1
+        m_down3.2.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_down3.2.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_down3.2.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_down3.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_down3.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_down3.2.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_down3.2.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_down3.2.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_down3.2.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_down3.2.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_down3.2.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_down3.2.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_down3.2.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_down3.2.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.2.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_down3.2.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.2.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_down3.2.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_down3.2.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  3
+    trans_block
+      ln1
+        m_down3.3.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_down3.3.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_down3.3.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_down3.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_down3.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_down3.3.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_down3.3.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_down3.3.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_down3.3.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_down3.3.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_down3.3.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_down3.3.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_down3.3.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_down3.3.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.3.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_down3.3.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_down3.3.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_down3.3.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_down3.3.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  4
+    m_down3.4.weight: Tensor float32 Size([512, 256, 2, 2])
+m_body
+  0
+    trans_block
+      ln1
+        m_body.0.trans_block.ln1.weight: Tensor float32 Size([256])
+        m_body.0.trans_block.ln1.bias:   Tensor float32 Size([256])
+      msa
+        relative_position_params
+          m_body.0.trans_block.msa.relative_position_params: Tensor float32 Size([8, 15, 15])
+        embedding_layer
+          m_body.0.trans_block.msa.embedding_layer.weight: Tensor float32 Size([768, 256])
+          m_body.0.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([768])
+        linear
+          m_body.0.trans_block.msa.linear.weight: Tensor float32 Size([256, 256])
+          m_body.0.trans_block.msa.linear.bias:   Tensor float32 Size([256])
+      ln2
+        m_body.0.trans_block.ln2.weight: Tensor float32 Size([256])
+        m_body.0.trans_block.ln2.bias:   Tensor float32 Size([256])
+      mlp
+        0
+          m_body.0.trans_block.mlp.0.weight: Tensor float32 Size([1024, 256])
+          m_body.0.trans_block.mlp.0.bias:   Tensor float32 Size([1024])
+        2
+          m_body.0.trans_block.mlp.2.weight: Tensor float32 Size([256, 1024])
+          m_body.0.trans_block.mlp.2.bias:   Tensor float32 Size([256])
+    conv1_1
+      m_body.0.conv1_1.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.0.conv1_1.bias:   Tensor float32 Size([512])
+    conv1_2
+      m_body.0.conv1_2.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.0.conv1_2.bias:   Tensor float32 Size([512])
+    conv_block
+      m_body.0.conv_block.0.weight: Tensor float32 Size([256, 256, 3, 3])
+      m_body.0.conv_block.2.weight: Tensor float32 Size([256, 256, 3, 3])
+  1
+    trans_block
+      ln1
+        m_body.1.trans_block.ln1.weight: Tensor float32 Size([256])
+        m_body.1.trans_block.ln1.bias:   Tensor float32 Size([256])
+      msa
+        relative_position_params
+          m_body.1.trans_block.msa.relative_position_params: Tensor float32 Size([8, 15, 15])
+        embedding_layer
+          m_body.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([768, 256])
+          m_body.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([768])
+        linear
+          m_body.1.trans_block.msa.linear.weight: Tensor float32 Size([256, 256])
+          m_body.1.trans_block.msa.linear.bias:   Tensor float32 Size([256])
+      ln2
+        m_body.1.trans_block.ln2.weight: Tensor float32 Size([256])
+        m_body.1.trans_block.ln2.bias:   Tensor float32 Size([256])
+      mlp
+        0
+          m_body.1.trans_block.mlp.0.weight: Tensor float32 Size([1024, 256])
+          m_body.1.trans_block.mlp.0.bias:   Tensor float32 Size([1024])
+        2
+          m_body.1.trans_block.mlp.2.weight: Tensor float32 Size([256, 1024])
+          m_body.1.trans_block.mlp.2.bias:   Tensor float32 Size([256])
+    conv1_1
+      m_body.1.conv1_1.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.1.conv1_1.bias:   Tensor float32 Size([512])
+    conv1_2
+      m_body.1.conv1_2.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.1.conv1_2.bias:   Tensor float32 Size([512])
+    conv_block
+      m_body.1.conv_block.0.weight: Tensor float32 Size([256, 256, 3, 3])
+      m_body.1.conv_block.2.weight: Tensor float32 Size([256, 256, 3, 3])
+  2
+    trans_block
+      ln1
+        m_body.2.trans_block.ln1.weight: Tensor float32 Size([256])
+        m_body.2.trans_block.ln1.bias:   Tensor float32 Size([256])
+      msa
+        relative_position_params
+          m_body.2.trans_block.msa.relative_position_params: Tensor float32 Size([8, 15, 15])
+        embedding_layer
+          m_body.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([768, 256])
+          m_body.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([768])
+        linear
+          m_body.2.trans_block.msa.linear.weight: Tensor float32 Size([256, 256])
+          m_body.2.trans_block.msa.linear.bias:   Tensor float32 Size([256])
+      ln2
+        m_body.2.trans_block.ln2.weight: Tensor float32 Size([256])
+        m_body.2.trans_block.ln2.bias:   Tensor float32 Size([256])
+      mlp
+        0
+          m_body.2.trans_block.mlp.0.weight: Tensor float32 Size([1024, 256])
+          m_body.2.trans_block.mlp.0.bias:   Tensor float32 Size([1024])
+        2
+          m_body.2.trans_block.mlp.2.weight: Tensor float32 Size([256, 1024])
+          m_body.2.trans_block.mlp.2.bias:   Tensor float32 Size([256])
+    conv1_1
+      m_body.2.conv1_1.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.2.conv1_1.bias:   Tensor float32 Size([512])
+    conv1_2
+      m_body.2.conv1_2.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.2.conv1_2.bias:   Tensor float32 Size([512])
+    conv_block
+      m_body.2.conv_block.0.weight: Tensor float32 Size([256, 256, 3, 3])
+      m_body.2.conv_block.2.weight: Tensor float32 Size([256, 256, 3, 3])
+  3
+    trans_block
+      ln1
+        m_body.3.trans_block.ln1.weight: Tensor float32 Size([256])
+        m_body.3.trans_block.ln1.bias:   Tensor float32 Size([256])
+      msa
+        relative_position_params
+          m_body.3.trans_block.msa.relative_position_params: Tensor float32 Size([8, 15, 15])
+        embedding_layer
+          m_body.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([768, 256])
+          m_body.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([768])
+        linear
+          m_body.3.trans_block.msa.linear.weight: Tensor float32 Size([256, 256])
+          m_body.3.trans_block.msa.linear.bias:   Tensor float32 Size([256])
+      ln2
+        m_body.3.trans_block.ln2.weight: Tensor float32 Size([256])
+        m_body.3.trans_block.ln2.bias:   Tensor float32 Size([256])
+      mlp
+        0
+          m_body.3.trans_block.mlp.0.weight: Tensor float32 Size([1024, 256])
+          m_body.3.trans_block.mlp.0.bias:   Tensor float32 Size([1024])
+        2
+          m_body.3.trans_block.mlp.2.weight: Tensor float32 Size([256, 1024])
+          m_body.3.trans_block.mlp.2.bias:   Tensor float32 Size([256])
+    conv1_1
+      m_body.3.conv1_1.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.3.conv1_1.bias:   Tensor float32 Size([512])
+    conv1_2
+      m_body.3.conv1_2.weight: Tensor float32 Size([512, 512, 1, 1])
+      m_body.3.conv1_2.bias:   Tensor float32 Size([512])
+    conv_block
+      m_body.3.conv_block.0.weight: Tensor float32 Size([256, 256, 3, 3])
+      m_body.3.conv_block.2.weight: Tensor float32 Size([256, 256, 3, 3])
+m_up3
+  0
+    m_up3.0.weight: Tensor float32 Size([512, 256, 2, 2])
+  1
+    trans_block
+      ln1
+        m_up3.1.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_up3.1.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_up3.1.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_up3.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_up3.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_up3.1.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_up3.1.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_up3.1.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_up3.1.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_up3.1.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_up3.1.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_up3.1.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_up3.1.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_up3.1.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.1.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_up3.1.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.1.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_up3.1.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_up3.1.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  2
+    trans_block
+      ln1
+        m_up3.2.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_up3.2.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_up3.2.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_up3.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_up3.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_up3.2.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_up3.2.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_up3.2.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_up3.2.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_up3.2.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_up3.2.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_up3.2.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_up3.2.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_up3.2.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.2.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_up3.2.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.2.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_up3.2.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_up3.2.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  3
+    trans_block
+      ln1
+        m_up3.3.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_up3.3.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_up3.3.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_up3.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_up3.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_up3.3.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_up3.3.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_up3.3.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_up3.3.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_up3.3.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_up3.3.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_up3.3.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_up3.3.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_up3.3.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.3.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_up3.3.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.3.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_up3.3.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_up3.3.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+  4
+    trans_block
+      ln1
+        m_up3.4.trans_block.ln1.weight: Tensor float32 Size([128])
+        m_up3.4.trans_block.ln1.bias:   Tensor float32 Size([128])
+      msa
+        relative_position_params
+          m_up3.4.trans_block.msa.relative_position_params: Tensor float32 Size([4, 15, 15])
+        embedding_layer
+          m_up3.4.trans_block.msa.embedding_layer.weight: Tensor float32 Size([384, 128])
+          m_up3.4.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([384])
+        linear
+          m_up3.4.trans_block.msa.linear.weight: Tensor float32 Size([128, 128])
+          m_up3.4.trans_block.msa.linear.bias:   Tensor float32 Size([128])
+      ln2
+        m_up3.4.trans_block.ln2.weight: Tensor float32 Size([128])
+        m_up3.4.trans_block.ln2.bias:   Tensor float32 Size([128])
+      mlp
+        0
+          m_up3.4.trans_block.mlp.0.weight: Tensor float32 Size([512, 128])
+          m_up3.4.trans_block.mlp.0.bias:   Tensor float32 Size([512])
+        2
+          m_up3.4.trans_block.mlp.2.weight: Tensor float32 Size([128, 512])
+          m_up3.4.trans_block.mlp.2.bias:   Tensor float32 Size([128])
+    conv1_1
+      m_up3.4.conv1_1.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.4.conv1_1.bias:   Tensor float32 Size([256])
+    conv1_2
+      m_up3.4.conv1_2.weight: Tensor float32 Size([256, 256, 1, 1])
+      m_up3.4.conv1_2.bias:   Tensor float32 Size([256])
+    conv_block
+      m_up3.4.conv_block.0.weight: Tensor float32 Size([128, 128, 3, 3])
+      m_up3.4.conv_block.2.weight: Tensor float32 Size([128, 128, 3, 3])
+m_up2
+  0
+    m_up2.0.weight: Tensor float32 Size([256, 128, 2, 2])
+  1
+    trans_block
+      ln1
+        m_up2.1.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_up2.1.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_up2.1.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_up2.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_up2.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_up2.1.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_up2.1.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_up2.1.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_up2.1.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_up2.1.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_up2.1.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_up2.1.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_up2.1.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_up2.1.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.1.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_up2.1.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.1.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_up2.1.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_up2.1.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  2
+    trans_block
+      ln1
+        m_up2.2.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_up2.2.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_up2.2.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_up2.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_up2.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_up2.2.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_up2.2.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_up2.2.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_up2.2.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_up2.2.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_up2.2.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_up2.2.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_up2.2.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_up2.2.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.2.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_up2.2.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.2.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_up2.2.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_up2.2.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  3
+    trans_block
+      ln1
+        m_up2.3.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_up2.3.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_up2.3.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_up2.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_up2.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_up2.3.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_up2.3.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_up2.3.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_up2.3.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_up2.3.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_up2.3.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_up2.3.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_up2.3.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_up2.3.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.3.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_up2.3.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.3.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_up2.3.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_up2.3.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+  4
+    trans_block
+      ln1
+        m_up2.4.trans_block.ln1.weight: Tensor float32 Size([64])
+        m_up2.4.trans_block.ln1.bias:   Tensor float32 Size([64])
+      msa
+        relative_position_params
+          m_up2.4.trans_block.msa.relative_position_params: Tensor float32 Size([2, 15, 15])
+        embedding_layer
+          m_up2.4.trans_block.msa.embedding_layer.weight: Tensor float32 Size([192, 64])
+          m_up2.4.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([192])
+        linear
+          m_up2.4.trans_block.msa.linear.weight: Tensor float32 Size([64, 64])
+          m_up2.4.trans_block.msa.linear.bias:   Tensor float32 Size([64])
+      ln2
+        m_up2.4.trans_block.ln2.weight: Tensor float32 Size([64])
+        m_up2.4.trans_block.ln2.bias:   Tensor float32 Size([64])
+      mlp
+        0
+          m_up2.4.trans_block.mlp.0.weight: Tensor float32 Size([256, 64])
+          m_up2.4.trans_block.mlp.0.bias:   Tensor float32 Size([256])
+        2
+          m_up2.4.trans_block.mlp.2.weight: Tensor float32 Size([64, 256])
+          m_up2.4.trans_block.mlp.2.bias:   Tensor float32 Size([64])
+    conv1_1
+      m_up2.4.conv1_1.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.4.conv1_1.bias:   Tensor float32 Size([128])
+    conv1_2
+      m_up2.4.conv1_2.weight: Tensor float32 Size([128, 128, 1, 1])
+      m_up2.4.conv1_2.bias:   Tensor float32 Size([128])
+    conv_block
+      m_up2.4.conv_block.0.weight: Tensor float32 Size([64, 64, 3, 3])
+      m_up2.4.conv_block.2.weight: Tensor float32 Size([64, 64, 3, 3])
+m_up1
+  0
+    m_up1.0.weight: Tensor float32 Size([128, 64, 2, 2])
+  1
+    trans_block
+      ln1
+        m_up1.1.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_up1.1.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_up1.1.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_up1.1.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_up1.1.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_up1.1.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_up1.1.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_up1.1.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_up1.1.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_up1.1.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_up1.1.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_up1.1.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_up1.1.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_up1.1.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.1.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_up1.1.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.1.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_up1.1.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_up1.1.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  2
+    trans_block
+      ln1
+        m_up1.2.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_up1.2.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_up1.2.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_up1.2.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_up1.2.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_up1.2.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_up1.2.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_up1.2.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_up1.2.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_up1.2.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_up1.2.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_up1.2.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_up1.2.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_up1.2.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.2.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_up1.2.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.2.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_up1.2.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_up1.2.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  3
+    trans_block
+      ln1
+        m_up1.3.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_up1.3.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_up1.3.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_up1.3.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_up1.3.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_up1.3.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_up1.3.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_up1.3.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_up1.3.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_up1.3.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_up1.3.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_up1.3.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_up1.3.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_up1.3.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.3.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_up1.3.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.3.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_up1.3.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_up1.3.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+  4
+    trans_block
+      ln1
+        m_up1.4.trans_block.ln1.weight: Tensor float32 Size([32])
+        m_up1.4.trans_block.ln1.bias:   Tensor float32 Size([32])
+      msa
+        relative_position_params
+          m_up1.4.trans_block.msa.relative_position_params: Tensor float32 Size([1, 15, 15])
+        embedding_layer
+          m_up1.4.trans_block.msa.embedding_layer.weight: Tensor float32 Size([96, 32])
+          m_up1.4.trans_block.msa.embedding_layer.bias:   Tensor float32 Size([96])
+        linear
+          m_up1.4.trans_block.msa.linear.weight: Tensor float32 Size([32, 32])
+          m_up1.4.trans_block.msa.linear.bias:   Tensor float32 Size([32])
+      ln2
+        m_up1.4.trans_block.ln2.weight: Tensor float32 Size([32])
+        m_up1.4.trans_block.ln2.bias:   Tensor float32 Size([32])
+      mlp
+        0
+          m_up1.4.trans_block.mlp.0.weight: Tensor float32 Size([128, 32])
+          m_up1.4.trans_block.mlp.0.bias:   Tensor float32 Size([128])
+        2
+          m_up1.4.trans_block.mlp.2.weight: Tensor float32 Size([32, 128])
+          m_up1.4.trans_block.mlp.2.bias:   Tensor float32 Size([32])
+    conv1_1
+      m_up1.4.conv1_1.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.4.conv1_1.bias:   Tensor float32 Size([64])
+    conv1_2
+      m_up1.4.conv1_2.weight: Tensor float32 Size([64, 64, 1, 1])
+      m_up1.4.conv1_2.bias:   Tensor float32 Size([64])
+    conv_block
+      m_up1.4.conv_block.0.weight: Tensor float32 Size([32, 32, 3, 3])
+      m_up1.4.conv_block.2.weight: Tensor float32 Size([32, 32, 3, 3])
+m_tail
+  m_tail.0.weight: Tensor float32 Size([3, 64, 3, 3])

@@ -1,7 +1,20 @@
 from spandrel import ModelLoader
-from spandrel.architectures.SCUNet import SCUNet
+from spandrel.architectures.SCUNet import SCUNet, load
 
-from .util import ModelFile, disallowed_props
+from .util import ModelFile, assert_loads_correctly, disallowed_props
+
+
+def test_SCUNet_load():
+    assert_loads_correctly(
+        load,
+        lambda: SCUNet(),
+        lambda: SCUNet(in_nc=1),
+        lambda: SCUNet(in_nc=4),
+        lambda: SCUNet(dim=32),
+        lambda: SCUNet(dim=24),
+        lambda: SCUNet(config=[5, 3, 7, 2, 3, 1, 3]),
+        condition=lambda a, b: a.dim == b.dim and a.config == b.config,
+    )
 
 
 def test_SCUNet_color_GAN(snapshot):
