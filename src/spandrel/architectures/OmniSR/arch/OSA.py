@@ -498,8 +498,6 @@ class OSA_Block(nn.Module):
     def __init__(
         self,
         channel_num=64,
-        bias=True,
-        ffn_bias=True,
         window_size=8,
         with_pe=False,
         dropout=0.0,

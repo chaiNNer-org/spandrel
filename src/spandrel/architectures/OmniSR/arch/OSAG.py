@@ -22,7 +22,6 @@ class OSAG(nn.Module):
         channel_num=64,
         bias=True,
         block_num=4,
-        ffn_bias=False,
         window_size=0,
         pe=False,
     ):
@@ -42,8 +41,6 @@ class OSAG(nn.Module):
         for _ in range(block_num):
             temp_res = block_class(
                 channel_num,
-                bias,
-                ffn_bias=ffn_bias,
                 window_size=window_size,
                 with_pe=pe,
             )
