@@ -1,7 +1,34 @@
 from spandrel import ModelLoader
-from spandrel.architectures.Compact import SRVGGNetCompact
+from spandrel.architectures.Compact import SRVGGNetCompact, load
 
-from .util import ModelFile, TestImage, assert_image_inference, disallowed_props
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    disallowed_props,
+)
+
+
+def test_Compact_load():
+    assert_loads_correctly(
+        load,
+        lambda: SRVGGNetCompact(),
+        lambda: SRVGGNetCompact(num_in_ch=1, num_out_ch=1),
+        lambda: SRVGGNetCompact(num_in_ch=3, num_out_ch=3),
+        lambda: SRVGGNetCompact(num_in_ch=4, num_out_ch=4),
+        lambda: SRVGGNetCompact(num_in_ch=1, num_out_ch=3),
+        lambda: SRVGGNetCompact(num_feat=32),
+        lambda: SRVGGNetCompact(num_conv=5),
+        lambda: SRVGGNetCompact(upscale=3),
+        condition=lambda a, b: (
+            a.upscale == b.upscale
+            and a.num_in_ch == b.num_in_ch
+            and a.num_out_ch == b.num_out_ch
+            and a.num_feat == b.num_feat
+            and a.num_conv == b.num_conv
+        ),
+    )
 
 
 def test_Compact_realesr_general_x4v3(snapshot):
