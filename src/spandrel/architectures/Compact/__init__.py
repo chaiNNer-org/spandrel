@@ -29,7 +29,7 @@ def _get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, in
 
     raise AssertionError(
         f"Expected output channels to be either 1, 3, or 4."
-        f" Could not find a pair (s, o) such that s*s*o = {x}"
+        f" Could not find a pair (scale, out_nc) such that `scale**2 * out_nc = {x}`"
     )
 
 
