@@ -1,4 +1,4 @@
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 from .__helpers.loader import ModelLoader
 from .__helpers.main_registry import MAIN_REGISTRY
