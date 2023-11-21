@@ -48,9 +48,6 @@ And that's it. The model gets loaded into a helper class with various helpful bi
 # The model itself (a torch.nn.Module loaded with the weights)
 loaded_model.model
 
-# The state dict of the model (the weights)
-loaded_model.state_dict
-
 # The architecture of the model (e.g. "ESRGAN")
 loaded_model.architecture
 
