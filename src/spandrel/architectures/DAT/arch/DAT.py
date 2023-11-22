@@ -1,4 +1,4 @@
-# type: ignore
+from __future__ import annotations
 
 import math
 
@@ -55,7 +55,7 @@ class SpatialGate(nn.Module):
     def forward(self, x, H, W):
         # Split
         x1, x2 = x.chunk(2, dim=-1)
-        B, N, C = x.shape
+        B, _N, C = x.shape
         x2 = (
             self.conv(self.norm(x2).transpose(1, 2).contiguous().view(B, C // 2, H, W))
             .flatten(2)
@@ -225,7 +225,7 @@ class Spatial_Attention(nn.Module):
         self.attn_drop = nn.Dropout(attn_drop)
 
     def im2win(self, x, H, W):
-        B, N, C = x.shape
+        B, _N, C = x.shape
         x = x.transpose(-2, -1).contiguous().view(B, C, H, W)
         x = img2windows(x, self.H_sp, self.W_sp)
         x = (
@@ -805,7 +805,7 @@ class ResidualGroup(nn.Module):
                     qk_scale=qk_scale,
                     drop=drop,
                     attn_drop=attn_drop,
-                    drop_path=drop_paths[i],
+                    drop_path=drop_paths[i],  # type: ignore
                     act_layer=act_layer,
                     norm_layer=norm_layer,
                     rg_idx=rg_idx,
@@ -879,7 +879,7 @@ class UpsampleOneStep(nn.Sequential):
 
     """
 
-    def __init__(self, scale, num_feat, num_out_ch, input_resolution=None):
+    def __init__(self, scale, num_feat, num_out_ch, input_resolution):
         self.num_feat = num_feat
         self.input_resolution = input_resolution
         m = []
@@ -926,7 +926,7 @@ class DAT(nn.Module):
         num_heads=[2, 2, 2, 2],
         expansion_factor=4.0,
         qkv_bias=True,
-        qk_scale=None,
+        qk_scale: float | None = None,
         drop_rate=0.0,
         attn_drop_rate=0.0,
         drop_path_rate=0.1,
@@ -937,7 +937,6 @@ class DAT(nn.Module):
         img_range=1.0,
         resi_connection="1conv",
         upsampler="pixelshuffle",
-        **kwargs,
     ):
         super().__init__()
 
@@ -1028,7 +1027,7 @@ class DAT(nn.Module):
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
+            if isinstance(m, nn.Linear) and m.bias is not None:  # type: ignore
                 nn.init.constant_(m.bias, 0)
         elif isinstance(
             m, (nn.LayerNorm, nn.BatchNorm2d, nn.GroupNorm, nn.InstanceNorm2d)
