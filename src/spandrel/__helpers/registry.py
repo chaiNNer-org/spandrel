@@ -147,6 +147,8 @@ class ArchRegistry:
         """
         Detects the architecture of the given state dict and loads it.
 
+        This will canonicalize the state dict if it isn't already.
+
         Throws an `UnsupportedModelError` if the model architecture is not supported.
         """
 

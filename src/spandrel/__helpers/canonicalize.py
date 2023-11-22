@@ -6,8 +6,7 @@ def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
     Canonicalize a state dict.
 
     This function is used to canonicalize a state dict, so that it can be
-    compared to other state dicts. This is useful for testing, as it allows us
-    to compare the state dict of a model to a snapshot of the state dict.
+    used for architecture detection and loading.
 
     This function is not intended to be used in production code.
     """
@@ -20,8 +19,9 @@ def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
             break
 
     # remove known common prefixes
-    for prefix in ["module.", "netG."]:
-        if all(i.startswith(prefix) for i in state_dict.keys()):
-            state_dict = {k[len(prefix) :]: v for k, v in state_dict.items()}
+    if len(state_dict) > 0:
+        for prefix in ["module.", "netG."]:
+            if all(i.startswith(prefix) for i in state_dict.keys()):
+                state_dict = {k[len(prefix) :]: v for k, v in state_dict.items()}
 
     return state_dict
