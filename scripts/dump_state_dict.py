@@ -51,8 +51,7 @@ from torch import Tensor
 # This hack is necessary to make our module import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from spandrel import ModelLoader  # noqa: E402
-from spandrel.__helpers.canonicalize import canonicalize_state_dict  # noqa: E402
+from spandrel import ModelLoader, canonicalize_state_dict  # noqa: E402
 
 State = Dict[str, object]
 
