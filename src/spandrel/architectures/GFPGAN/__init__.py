@@ -18,10 +18,6 @@ def load(state_dict: StateDict) -> FaceSRModelDescriptor[GFPGANv1Clean]:
     narrow = 1
     sft_half = True
 
-    input_is_latent = input_is_latent
-    different_w = different_w
-    num_style_feat = num_style_feat
-
     model = GFPGANv1Clean(
         out_size=out_size,
         num_style_feat=num_style_feat,
