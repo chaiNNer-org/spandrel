@@ -304,7 +304,6 @@ class MultiHeadEncoder(nn.Module):
         double_z=True,
         enable_mid=True,
         head_size=1,
-        **ignore_kwargs,
     ):
         super().__init__()
         self.ch = ch
@@ -429,7 +428,6 @@ class MultiHeadDecoder(nn.Module):
         give_pre_end=False,
         enable_mid=True,
         head_size=1,
-        **ignorekwargs,
     ):
         super().__init__()
         self.ch = ch
@@ -556,7 +554,6 @@ class MultiHeadDecoderTransformer(nn.Module):
         give_pre_end=False,
         enable_mid=True,
         head_size=1,
-        **ignorekwargs,
     ):
         super().__init__()
         self.ch = ch
@@ -572,11 +569,11 @@ class MultiHeadDecoderTransformer(nn.Module):
         block_in = ch * ch_mult[self.num_resolutions - 1]
         curr_res = resolution // 2 ** (self.num_resolutions - 1)
         self.z_shape = (1, z_channels, curr_res, curr_res)
-        print(
-            "Working with z of shape {} = {} dimensions.".format(
-                self.z_shape, np.prod(self.z_shape)
-            )
-        )
+        # print(
+        #     "Working with z of shape {} = {} dimensions.".format(
+        #         self.z_shape, np.prod(self.z_shape)
+        #     )
+        # )
 
         # z to block_in
         self.conv_in = torch.nn.Conv2d(
