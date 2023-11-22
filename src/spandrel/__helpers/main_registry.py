@@ -21,6 +21,7 @@ from ..architectures import (
     SwiftSRGAN,
     Swin2SR,
     SwinIR,
+    Uformer,
 )
 from .model_descriptor import StateDict
 from .registry import ArchRegistry, ArchSupport
@@ -164,6 +165,19 @@ MAIN_REGISTRY.add(
             "qf_pred.0.res.0.weight",
         ),
         load=FBCNN.load,
+    ),
+    ArchSupport(
+        id="Uformer",
+        detect=_has_keys(
+            "input_proj.proj.0.weight",
+            "output_proj.proj.0.weight",
+            "encoderlayer_0.blocks.0.norm1.weight",
+            "encoderlayer_2.blocks.0.norm1.weight",
+            "conv.blocks.0.norm1.weight",
+            "decoderlayer_0.blocks.0.norm1.weight",
+            "decoderlayer_2.blocks.0.norm1.weight",
+        ),
+        load=Uformer.load,
     ),
     ArchSupport(
         id="DAT",
