@@ -25,6 +25,8 @@ def test_DAT_load():
         lambda: DAT(upsampler="pixelshuffledirect", upscale=8),
         lambda: DAT(resi_connection="3conv"),
         lambda: DAT(qkv_bias=False),
+        lambda: DAT(split_size=[4, 4]),
+        lambda: DAT(split_size=[2, 8]),
         condition=lambda a, b: (
             a.num_layers == b.num_layers
             and a.upscale == b.upscale

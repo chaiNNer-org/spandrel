@@ -10,7 +10,7 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
     img_size = 64  # cannot be deduced from state dict in general
     in_chans = 3
     embed_dim = 180
-    split_size = [2, 4]  # very complicated to deduce in general
+    split_size = [2, 4]
     depth = [2, 2, 2, 2]
     num_heads = [2, 2, 2, 2]
     expansion_factor = 4.0
@@ -56,7 +56,6 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
 
     qkv_bias = "layers.0.blocks.0.attn.qkv.bias" in state_dict
 
-    # old
     expansion_factor = float(
         state_dict["layers.0.blocks.0.ffn.fc1.weight"].shape[0] / embed_dim
     )
