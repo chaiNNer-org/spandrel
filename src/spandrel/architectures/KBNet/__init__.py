@@ -70,10 +70,6 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
 
 
 def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
-    # remove module. prefix
-    if "module.intro.weight" in state_dict:
-        state_dict = {k.replace("module.", "", 1): v for k, v in state_dict.items()}
-
     img_channel = 3
     width = 64
     middle_blk_num = 12

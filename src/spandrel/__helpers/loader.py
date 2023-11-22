@@ -90,19 +90,8 @@ class ModelLoader:
         return load_file(path, device=str(self.device))
 
     def _load_ckpt(self, path: str | Path) -> StateDict:
-        checkpoint = torch.load(
+        return torch.load(
             path,
             map_location=self.device,
             pickle_module=RestrictedUnpickle,  # type: ignore
         )
-        if "state_dict" in checkpoint:
-            checkpoint = checkpoint["state_dict"]
-        state_dict = {}
-        for i, j in checkpoint.items():
-            if "netG." in i:
-                key = i.replace("netG.", "")
-                state_dict[key] = j
-            elif "module." in i:
-                key = i.replace("module.", "")
-                state_dict[key] = j
-        return state_dict

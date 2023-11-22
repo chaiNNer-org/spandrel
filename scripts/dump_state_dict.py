@@ -52,20 +52,14 @@ from torch import Tensor
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 from spandrel import ModelLoader  # noqa: E402
+from spandrel.__helpers.canonicalize import canonicalize_state_dict  # noqa: E402
 
 State = Dict[str, object]
 
 
 def load_state(file: str) -> State:
     state_dict = ModelLoader().load_state_dict_from_file(file)
-
-    unwrap_keys = ["params_ema", "params-ema", "params", "model", "net"]
-    for unwrap_key in unwrap_keys:
-        if unwrap_key in state_dict and isinstance(state_dict[unwrap_key], dict):
-            state_dict = state_dict[unwrap_key]
-            break
-
-    return state_dict
+    return canonicalize_state_dict(state_dict)
 
 
 def indent(lines: list[str], indentation: str = "  "):

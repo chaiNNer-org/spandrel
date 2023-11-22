@@ -181,14 +181,6 @@ MAIN_REGISTRY.add(
                 "decoders.0.0.attgamma",
                 "ending.weight",
             )(state)
-            # some KBNet_s models are prefixed with "module." for some reason
-            or _has_keys(
-                "module.intro.weight",
-                "module.encoders.0.0.attgamma",
-                "module.middle_blks.0.w",
-                "module.decoders.0.0.attgamma",
-                "module.ending.weight",
-            )(state)
             # KBNet_l
             or _has_keys(
                 "patch_embed.proj.weight",
