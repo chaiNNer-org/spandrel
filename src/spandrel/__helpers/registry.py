@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Literal
 
+from .canonicalize import canonicalize_state_dict
 from .model_descriptor import ModelDescriptor, StateDict
 
 
@@ -146,14 +147,12 @@ class ArchRegistry:
         """
         Detects the architecture of the given state dict and loads it.
 
+        This will canonicalize the state dict if it isn't already.
+
         Throws an `UnsupportedModelError` if the model architecture is not supported.
         """
 
-        unwrap_keys = ["params_ema", "params-ema", "params", "model", "net"]
-        for unwrap_key in unwrap_keys:
-            if unwrap_key in state_dict and isinstance(state_dict[unwrap_key], dict):
-                state_dict = state_dict[unwrap_key]
-                break
+        state_dict = canonicalize_state_dict(state_dict)
 
         for arch in self._ordered:
             if arch.detect(state_dict):

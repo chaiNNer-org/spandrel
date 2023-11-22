@@ -57,15 +57,7 @@ State = Dict[str, object]
 
 
 def load_state(file: str) -> State:
-    state_dict = ModelLoader().load_state_dict_from_file(file)
-
-    unwrap_keys = ["params_ema", "params-ema", "params", "model", "net"]
-    for unwrap_key in unwrap_keys:
-        if unwrap_key in state_dict and isinstance(state_dict[unwrap_key], dict):
-            state_dict = state_dict[unwrap_key]
-            break
-
-    return state_dict
+    return ModelLoader().load_state_dict_from_file(file)
 
 
 def indent(lines: list[str], indentation: str = "  "):
