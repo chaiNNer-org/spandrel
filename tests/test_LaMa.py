@@ -1,7 +1,17 @@
 from spandrel import ModelLoader
-from spandrel.architectures.LaMa import LaMa
+from spandrel.architectures.LaMa import LaMa, load
 
-from .util import ModelFile, disallowed_props
+from .util import ModelFile, assert_loads_correctly, disallowed_props
+
+
+def test_LaMa_load():
+    assert_loads_correctly(
+        load,
+        lambda: LaMa(),
+        lambda: LaMa(in_nc=4),
+        lambda: LaMa(out_nc=1),
+        lambda: LaMa(in_nc=1, out_nc=1),
+    )
 
 
 def test_LaMa(snapshot):
