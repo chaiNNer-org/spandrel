@@ -6,6 +6,7 @@ from pathlib import Path
 import torch
 from safetensors.torch import load_file
 
+from .canonicalize import canonicalize_state_dict
 from .main_registry import MAIN_REGISTRY
 from .model_descriptor import ModelDescriptor, StateDict
 from .registry import ArchRegistry
@@ -52,18 +53,21 @@ class ModelLoader:
 
         extension = os.path.splitext(path)[1].lower()
 
+        state_dict: StateDict
         if extension == ".pt":
-            return self._load_torchscript(path)
+            state_dict = self._load_torchscript(path)
         elif extension == ".pth":
-            return self._load_pth(path)
+            state_dict = self._load_pth(path)
         elif extension == ".ckpt":
-            return self._load_ckpt(path)
+            state_dict = self._load_ckpt(path)
         elif extension == ".safetensors":
-            return self._load_safetensors(path)
+            state_dict = self._load_safetensors(path)
         else:
             raise ValueError(
                 f"Unsupported model file extension {extension}. Please try a supported model type."
             )
+
+        return canonicalize_state_dict(state_dict)
 
     def load_from_state_dict(self, state_dict: StateDict) -> ModelDescriptor:
         """

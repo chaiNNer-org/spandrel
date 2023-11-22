@@ -51,14 +51,13 @@ from torch import Tensor
 # This hack is necessary to make our module import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from spandrel import ModelLoader, canonicalize_state_dict  # noqa: E402
+from spandrel import ModelLoader  # noqa: E402
 
 State = Dict[str, object]
 
 
 def load_state(file: str) -> State:
-    state_dict = ModelLoader().load_state_dict_from_file(file)
-    return canonicalize_state_dict(state_dict)
+    return ModelLoader().load_state_dict_from_file(file)
 
 
 def indent(lines: list[str], indentation: str = "  "):
