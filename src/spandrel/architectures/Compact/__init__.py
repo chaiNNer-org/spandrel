@@ -1,12 +1,12 @@
 from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
-from ..__arch_helpers.state import get_max_seq_index, get_scale_and_output_channels
+from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
 from .arch.SRVGG import SRVGGNetCompact
 
 
 def load(state_dict: StateDict) -> SRModelDescriptor[SRVGGNetCompact]:
     state = state_dict
 
-    highest_num = get_max_seq_index(state, "body.{}.weight")
+    highest_num = get_seq_len(state, "body") - 1
 
     in_nc = state["body.0.weight"].shape[1]
     num_feat = state["body.0.weight"].shape[0]

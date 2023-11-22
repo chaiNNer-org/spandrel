@@ -5,7 +5,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from ..__arch_helpers.state import get_max_seq_index
+from ..__arch_helpers.state import get_seq_len
 from .arch.kbnet_l import KBNet_l
 from .arch.kbnet_s import KBNet_s
 
@@ -27,14 +27,12 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
 
     dim = state_dict["patch_embed.proj.weight"].shape[0]
 
-    num_blocks[0] = get_max_seq_index(state_dict, "encoder_level1.{}.norm1.weight") + 1
-    num_blocks[1] = get_max_seq_index(state_dict, "encoder_level2.{}.norm1.weight") + 1
-    num_blocks[2] = get_max_seq_index(state_dict, "encoder_level3.{}.norm1.weight") + 1
-    num_blocks[3] = get_max_seq_index(state_dict, "latent.{}.norm1.weight") + 1
+    num_blocks[0] = get_seq_len(state_dict, "encoder_level1")
+    num_blocks[1] = get_seq_len(state_dict, "encoder_level2")
+    num_blocks[2] = get_seq_len(state_dict, "encoder_level3")
+    num_blocks[3] = get_seq_len(state_dict, "latent")
 
-    num_refinement_blocks = (
-        get_max_seq_index(state_dict, "refinement.{}.norm1.weight") + 1
-    )
+    num_refinement_blocks = get_seq_len(state_dict, "refinement")
 
     heads[0] = state_dict["encoder_level1.0.ffn.temperature"].shape[0]
     heads[1] = state_dict["encoder_level2.0.ffn.temperature"].shape[0]
@@ -87,21 +85,17 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
     img_channel = state_dict["intro.weight"].shape[1]
     width = state_dict["intro.weight"].shape[0]
 
-    middle_blk_num = get_max_seq_index(state_dict, "middle_blks.{}.w") + 1
+    middle_blk_num = get_seq_len(state_dict, "middle_blks")
 
-    enc_count = get_max_seq_index(state_dict, "encoders.{}.0.w") + 1
+    enc_count = get_seq_len(state_dict, "encoders")
     enc_blk_nums = [1] * enc_count
     for i in range(enc_count):
-        enc_blk_nums[i] = (
-            get_max_seq_index(state_dict, "encoders." + str(i) + ".{}.w") + 1
-        )
+        enc_blk_nums[i] = get_seq_len(state_dict, "encoders." + str(i))
 
-    dec_count = get_max_seq_index(state_dict, "decoders.{}.0.w") + 1
+    dec_count = get_seq_len(state_dict, "decoders")
     dec_blk_nums = [1] * dec_count
     for i in range(dec_count):
-        dec_blk_nums[i] = (
-            get_max_seq_index(state_dict, "decoders." + str(i) + ".{}.w") + 1
-        )
+        dec_blk_nums[i] = get_seq_len(state_dict, "decoders." + str(i))
 
     # in code: ffn_ch = int(c * ffn_scale)
     temp_c = state_dict["middle_blks.0.conv4.weight"].shape[1]
