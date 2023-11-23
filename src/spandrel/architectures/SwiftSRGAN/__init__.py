@@ -12,7 +12,7 @@ def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
     in_channels = state["initial.cnn.depthwise.weight"].shape[0]
     num_channels = state["initial.cnn.pointwise.weight"].shape[0]
     num_blocks = get_seq_len(state, "residual")
-    upscale_factor = get_seq_len(state, "upsampler") * 2
+    upscale_factor = 2 ** get_seq_len(state, "upsampler")
 
     model = SwiftSRGAN(
         in_channels=in_channels,
