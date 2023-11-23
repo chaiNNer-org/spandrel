@@ -15,7 +15,7 @@ import numpy as np
 import torch
 from syrupy.filters import props
 
-from spandrel.__helpers.model_descriptor import ModelDescriptor, StateDict
+from spandrel.__helpers.model_descriptor import ModelBase, ModelDescriptor, StateDict
 
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
@@ -176,7 +176,7 @@ T = TypeVar("T", bound=torch.nn.Module)
 
 
 def assert_loads_correctly(
-    load: Callable[[StateDict], ModelDescriptor],
+    load: Callable[[StateDict], ModelBase[T]],
     *models: Callable[[], T],
     condition: Callable[[T, T], bool] = lambda _a, _b: True,
 ):
