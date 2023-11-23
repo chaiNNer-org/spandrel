@@ -21,9 +21,25 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[FBCNN]:
     nb = get_seq_len(state_dict, "m_body_encoder")
 
     nc[0] = state_dict["m_head.weight"].shape[0]
-    nc[1] = state_dict[f"m_down1.{nb}.weight"].shape[0]
-    nc[2] = state_dict[f"m_down2.{nb}.weight"].shape[0]
-    nc[3] = state_dict[f"m_down3.{nb}.weight"].shape[0]
+    nc[1] = state_dict["m_down2.0.res.0.weight"].shape[0]
+    nc[2] = state_dict["m_down3.0.res.0.weight"].shape[0]
+    nc[3] = state_dict["m_body_encoder.0.res.0.weight"].shape[0]
+
+    if f"m_down1.{nb}.weight" in state_dict:
+        downsample_mode = "strideconv"
+    else:
+        # It's either "avgpool" or "maxpool".
+        # We cannot detect this from the state dict alone.
+        downsample_mode = "avgpool"
+
+    if "m_up3.0.weight" in state_dict:
+        upsample_mode = "convtranspose"
+    elif "m_up3.0.1.weight" in state_dict:
+        upsample_mode = "upconv"
+    elif "m_up3.0.0.weight" in state_dict:
+        upsample_mode = "pixelshuffle"
+    else:
+        raise ValueError("Unable to detect upsample mode")
 
     model = FBCNN(
         in_nc=in_nc,
