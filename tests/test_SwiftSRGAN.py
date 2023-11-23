@@ -1,10 +1,29 @@
 from spandrel import ModelLoader
-from spandrel.architectures.SwiftSRGAN import SwiftSRGAN
+from spandrel.architectures.SwiftSRGAN import SwiftSRGAN, load
 
-from .util import ModelFile, TestImage, assert_image_inference, disallowed_props
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    disallowed_props,
+)
 
 
-def test_SwiftSRGan_2x(snapshot):
+def test_SwiftSRGAN_load():
+    assert_loads_correctly(
+        load,
+        lambda: SwiftSRGAN(),
+        lambda: SwiftSRGAN(in_channels=1),
+        lambda: SwiftSRGAN(num_channels=32),
+        lambda: SwiftSRGAN(num_blocks=7),
+        lambda: SwiftSRGAN(upscale_factor=2),
+        lambda: SwiftSRGAN(upscale_factor=4),
+        lambda: SwiftSRGAN(upscale_factor=8),
+    )
+
+
+def test_SwiftSRGAN_2x(snapshot):
     file = ModelFile("swift_srgan_2x.pth").download(
         "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_2x.pth.tar"
     )
@@ -18,7 +37,7 @@ def test_SwiftSRGan_2x(snapshot):
     )
 
 
-def test_SwiftSRGan_4x(snapshot):
+def test_SwiftSRGAN_4x(snapshot):
     file = ModelFile("swift_srgan_4x.pth").download(
         "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_4x.pth.tar"
     )
