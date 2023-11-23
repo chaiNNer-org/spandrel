@@ -1,6 +1,8 @@
 # type: ignore
 # From https://github.com/Koushik0901/Swift-SRGAN/blob/master/swift-srgan/models.py
 
+import math
+
 import torch
 from torch import nn
 
@@ -124,7 +126,7 @@ class Generator(nn.Module):
         self.upsampler = nn.Sequential(
             *[
                 UpsampleBlock(num_channels, scale_factor=2)
-                for _ in range(upscale_factor // 2)
+                for _ in range(int(math.log2(upscale_factor)))
             ]
         )
         self.final_conv = SeperableConv2d(

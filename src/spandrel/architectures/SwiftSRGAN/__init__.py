@@ -1,20 +1,18 @@
 from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ..__arch_helpers.state import get_seq_len
 from .arch.SwiftSRGAN import Generator as SwiftSRGAN
 
 
 def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
-    in_nc: int = state["initial.cnn.depthwise.weight"].shape[0]
-    out_nc: int = state["final_conv.pointwise.weight"].shape[0]
-    num_filters: int = state["initial.cnn.pointwise.weight"].shape[0]
-    num_blocks = len(set([x.split(".")[1] for x in state.keys() if "residual" in x]))
-    scale: int = 2 ** len(
-        set([x.split(".")[1] for x in state.keys() if "upsampler" in x])
-    )
+    in_channels: int = 3
+    num_channels: int = 64
+    num_blocks: int = 16
+    upscale_factor: int = 4
 
-    in_channels = in_nc
-    num_channels = num_filters
-    num_blocks = num_blocks
-    upscale_factor = scale
+    in_channels = state["initial.cnn.depthwise.weight"].shape[0]
+    num_channels = state["initial.cnn.pointwise.weight"].shape[0]
+    num_blocks = get_seq_len(state, "residual")
+    upscale_factor = 2 ** get_seq_len(state, "upsampler")
 
     model = SwiftSRGAN(
         in_channels=in_channels,
@@ -23,7 +21,7 @@ def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
         upscale_factor=upscale_factor,
     )
     tags = [
-        f"{num_filters}nf",
+        f"{num_channels}nf",
         f"{num_blocks}nb",
     ]
 
@@ -34,7 +32,7 @@ def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
         tags=tags,
         supports_half=True,
         supports_bfloat16=True,
-        scale=scale,
-        input_channels=in_nc,
-        output_channels=out_nc,
+        scale=upscale_factor,
+        input_channels=in_channels,
+        output_channels=in_channels,
     )

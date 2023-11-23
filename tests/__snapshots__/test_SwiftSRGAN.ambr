@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_SwiftSRGan_2x
+# name: test_SwiftSRGAN_2x
   SRModelDescriptor(
     architecture='Swift-SRGAN',
     input_channels=3,
@@ -14,7 +14,7 @@
     ]),
   )
 # ---
-# name: test_SwiftSRGan_4x
+# name: test_SwiftSRGAN_4x
   SRModelDescriptor(
     architecture='Swift-SRGAN',
     input_channels=3,
