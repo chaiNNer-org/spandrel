@@ -6,7 +6,7 @@ from typing import Any, Dict, Generic, TypeVar, Union
 
 import torch
 
-T = TypeVar("T", bound=torch.nn.Module)
+T = TypeVar("T", bound=torch.nn.Module, covariant=True)
 
 StateDict = Dict[str, Any]
 
@@ -188,10 +188,10 @@ class RestorationModelDescriptor(ModelBase[T], Generic[T]):
 
 
 ModelDescriptor = Union[
-    SRModelDescriptor,
-    FaceSRModelDescriptor,
-    InpaintModelDescriptor,
-    RestorationModelDescriptor,
+    SRModelDescriptor[torch.nn.Module],
+    FaceSRModelDescriptor[torch.nn.Module],
+    InpaintModelDescriptor[torch.nn.Module],
+    RestorationModelDescriptor[torch.nn.Module],
 ]
 """
 A model descriptor is a loaded model with metadata. Metadata includes the
