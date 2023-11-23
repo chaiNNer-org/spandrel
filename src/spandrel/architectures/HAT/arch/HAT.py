@@ -1,5 +1,6 @@
-# type: ignore
 # HAT from https://github.com/XPixelGroup/HAT/blob/main/hat/archs/hat_arch.py
+from __future__ import annotations
+
 import math
 
 import torch
@@ -13,6 +14,7 @@ from ...__arch_helpers.timm.weight_init import trunc_normal_
 
 def drop_path(x, drop_prob: float = 0.0, training: bool = False):
     """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
+
     From: https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/drop.py
     """
     if drop_prob == 0.0 or not training:
@@ -29,6 +31,7 @@ def drop_path(x, drop_prob: float = 0.0, training: bool = False):
 
 class DropPath(nn.Module):
     """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks).
+
     From: https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/drop.py
     """
 
@@ -47,7 +50,7 @@ class ChannelAttention(nn.Module):
         squeeze_factor (int): Channel squeeze factor. Default: 16.
     """
 
-    def __init__(self, num_feat, squeeze_factor=16):
+    def __init__(self, num_feat, squeeze_factor: int | float = 16):
         super().__init__()
         self.attention = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -63,7 +66,12 @@ class ChannelAttention(nn.Module):
 
 
 class CAB(nn.Module):
-    def __init__(self, num_feat, compress_ratio=3, squeeze_factor=30):
+    def __init__(
+        self,
+        num_feat,
+        compress_ratio: int | float = 3,
+        squeeze_factor: int | float = 30,
+    ):
         super().__init__()
 
         self.cab = nn.Sequential(
@@ -108,6 +116,7 @@ def window_partition(x, window_size):
     Args:
         x: (b, h, w, c)
         window_size (int): window size
+
     Returns:
         windows: (num_windows*b, window_size, window_size, c)
     """
@@ -126,6 +135,7 @@ def window_reverse(windows, window_size, h, w):
         window_size (int): Window size
         h (int): Height of image
         w (int): Width of image
+
     Returns:
         x: (b, h, w, c)
     """
@@ -140,6 +150,7 @@ def window_reverse(windows, window_size, h, w):
 class WindowAttention(nn.Module):
     r"""Window based multi-head self attention (W-MSA) module with relative position bias.
     It supports both of shifted and non-shifted window.
+
     Args:
         dim (int): Number of input channels.
         window_size (tuple[int]): The height and width of the window.
@@ -168,7 +179,7 @@ class WindowAttention(nn.Module):
         self.scale = qk_scale or head_dim**-0.5
 
         # define a parameter table of relative position bias
-        self.relative_position_bias_table = nn.Parameter(  # type: ignore
+        self.relative_position_bias_table = nn.Parameter(
             torch.zeros((2 * window_size[0] - 1) * (2 * window_size[1] - 1), num_heads)
         )  # 2*Wh-1 * 2*Ww-1, nH
 
@@ -232,6 +243,7 @@ class WindowAttention(nn.Module):
 
 class HAB(nn.Module):
     r"""Hybrid Attention Block.
+
     Args:
         dim (int): Number of input channels.
         input_resolution (tuple[int]): Input resolution.
@@ -255,8 +267,8 @@ class HAB(nn.Module):
         num_heads,
         window_size=7,
         shift_size=0,
-        compress_ratio=3,
-        squeeze_factor=30,
+        compress_ratio: int | float = 3,
+        squeeze_factor: int | float = 30,
         conv_scale=0.01,
         mlp_ratio=4.0,
         qkv_bias=True,
@@ -364,6 +376,7 @@ class HAB(nn.Module):
 
 class PatchMerging(nn.Module):
     r"""Patch Merging Layer.
+
     Args:
         input_resolution (tuple[int]): Resolution of input feature.
         dim (int): Number of input channels.
@@ -413,7 +426,7 @@ class OCAB(nn.Module):
         num_heads,
         qkv_bias=True,
         qk_scale=None,
-        mlp_ratio=2,
+        mlp_ratio=2.0,
         norm_layer=nn.LayerNorm,
     ):
         super().__init__()
@@ -434,7 +447,7 @@ class OCAB(nn.Module):
         )
 
         # define a parameter table of relative position bias
-        self.relative_position_bias_table = nn.Parameter(  # type: ignore
+        self.relative_position_bias_table = nn.Parameter(
             torch.zeros(
                 (window_size + self.overlap_win_size - 1)
                 * (window_size + self.overlap_win_size - 1),
@@ -537,6 +550,7 @@ class OCAB(nn.Module):
 
 class AttenBlocks(nn.Module):
     """A series of attention blocks for one RHAG.
+
     Args:
         dim (int): Number of input channels.
         input_resolution (tuple[int]): Input resolution.
@@ -561,8 +575,8 @@ class AttenBlocks(nn.Module):
         depth,
         num_heads,
         window_size,
-        compress_ratio,
-        squeeze_factor,
+        compress_ratio: int | float,
+        squeeze_factor: int | float,
         conv_scale,
         overlap_ratio,
         mlp_ratio=4.0,
@@ -616,7 +630,7 @@ class AttenBlocks(nn.Module):
             num_heads=num_heads,
             qkv_bias=qkv_bias,
             qk_scale=qk_scale,
-            mlp_ratio=mlp_ratio,  # type: ignore
+            mlp_ratio=mlp_ratio,
             norm_layer=norm_layer,
         )
 
@@ -641,6 +655,7 @@ class AttenBlocks(nn.Module):
 
 class RHAG(nn.Module):
     """Residual Hybrid Attention Group (RHAG).
+
     Args:
         dim (int): Number of input channels.
         input_resolution (tuple[int]): Input resolution.
@@ -668,8 +683,8 @@ class RHAG(nn.Module):
         depth,
         num_heads,
         window_size,
-        compress_ratio,
-        squeeze_factor,
+        compress_ratio: int | float,
+        squeeze_factor: int | float,
         conv_scale,
         overlap_ratio,
         mlp_ratio=4.0,
@@ -745,6 +760,7 @@ class RHAG(nn.Module):
 
 class PatchEmbed(nn.Module):
     r"""Image to Patch Embedding
+
     Args:
         img_size (int): Image size.  Default: 224.
         patch_size (int): Patch token size. Default: 4.
@@ -785,6 +801,7 @@ class PatchEmbed(nn.Module):
 
 class PatchUnEmbed(nn.Module):
     r"""Image to Patch Unembedding
+
     Args:
         img_size (int): Image size.  Default: 224.
         patch_size (int): Patch token size. Default: 4.
@@ -822,6 +839,7 @@ class PatchUnEmbed(nn.Module):
 
 class Upsample(nn.Sequential):
     """Upsample module.
+
     Args:
         scale (int): Scale factor. Supported scales: 2^n and 3.
         num_feat (int): Channel number of intermediate features.
@@ -880,8 +898,8 @@ class HAT(nn.Module):
         depths=(6, 6, 6, 6),
         num_heads=(6, 6, 6, 6),
         window_size=7,
-        compress_ratio=3,
-        squeeze_factor=30,
+        compress_ratio: int | float = 3,
+        squeeze_factor: int | float = 30,
         conv_scale=0.01,
         overlap_ratio=0.5,
         mlp_ratio=4.0,
@@ -899,8 +917,6 @@ class HAT(nn.Module):
         upsampler="",
         resi_connection="1conv",
         num_feat=64,
-        num_out_ch=3,
-        **kwargs,
     ):
         super().__init__()
 
@@ -909,7 +925,7 @@ class HAT(nn.Module):
         self.overlap_ratio = overlap_ratio
 
         num_in_ch = in_chans
-        # num_out_ch = in_chans
+        num_out_ch = in_chans
         # num_feat = 64
         self.img_range = img_range
         if in_chans == 3:
@@ -960,7 +976,7 @@ class HAT(nn.Module):
 
         # absolute position embedding
         if self.ape:
-            self.absolute_pos_embed = nn.Parameter(  # type: ignore[arg-type]
+            self.absolute_pos_embed = nn.Parameter(
                 torch.zeros(1, num_patches, embed_dim)
             )
             trunc_normal_(self.absolute_pos_embed, std=0.02)
@@ -1025,7 +1041,7 @@ class HAT(nn.Module):
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
+            if isinstance(m, nn.Linear) and m.bias is not None:  # type: ignore
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
             nn.init.constant_(m.bias, 0)
@@ -1130,7 +1146,7 @@ class HAT(nn.Module):
         x_size = (x.shape[2], x.shape[3])
 
         # Calculate attention mask and relative position index in advance to speed up inference.
-        # The original code is very time-cosuming for large window size.
+        # The original code is very time-consuming for large window size.
         attn_mask = self.calculate_mask(x_size).to(x.device)
         params = {
             "attn_mask": attn_mask,

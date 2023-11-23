@@ -17,3 +17,21 @@
     ]),
   )
 # ---
+# name: test_HAT_community2
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64w16',
+      '64nf',
+      '144dim',
+      '1conv',
+    ]),
+  )
+# ---
