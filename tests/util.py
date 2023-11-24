@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -21,10 +22,28 @@ MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
 
 
+def get_url_file_name(url: str) -> str:
+    return Path(unquote(urlparse(url).path)).name
+
+
+def convert_google_drive_link(url: str) -> str:
+    pattern = re.compile(
+        r"^https://drive.google.com/file/d/([a-zA-Z0-9\-]+)/view(?:\?.*)?$"
+    )
+    m = pattern.match(url)
+    if not m:
+        return url
+    file_id = m.group(1)
+    return "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
+
+
 def download_model(url: str, name: str | None = None) -> str:
-    filename = name or Path(unquote(urlparse(url).path)).name
+    filename = name or get_url_file_name(url)
     print(f"Downloading {filename}...")
     MODEL_DIR.mkdir(exist_ok=True)
+
+    url = convert_google_drive_link(url)
+
     path, _ = urlretrieve(url, filename=MODEL_DIR / filename)
     return path
 
@@ -47,8 +66,8 @@ class ModelFile:
         return self
 
     @staticmethod
-    def from_url(url: str):
-        name = Path(unquote(urlparse(url).path)).name
+    def from_url(url: str, name: str | None = None):
+        name = name or get_url_file_name(url)
         return ModelFile(name).download(url)
 
 

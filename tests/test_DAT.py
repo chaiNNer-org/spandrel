@@ -1,6 +1,13 @@
+from spandrel import ModelLoader
 from spandrel.architectures.DAT import DAT, load
 
-from .util import assert_loads_correctly
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    disallowed_props,
+)
 
 
 def test_DAT_load():
@@ -34,4 +41,64 @@ def test_DAT_load():
             and a.embed_dim == b.embed_dim
             and a.num_features == b.num_features
         ),
+    )
+
+
+def test_DAT_S_x4(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1iY30DyLYjar-2DjrJtAv2chCOlw4xiOj/view",
+        name="DAT_S_x4.pth",
+    )
+    model = ModelLoader().load_from_file(file.path)
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_DAT_S_x3(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Fmj7VFKznbak-atd6pEu59UTZxKTXYVi/view",
+        name="DAT_S_x3.pth",
+    )
+    model = ModelLoader().load_from_file(file.path)
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_DAT_x4(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1pEhXmg--IWHaZOwHUFdh7TEJqt2qeuYg/view",
+        name="DAT_x4.pth",
+    )
+    model = ModelLoader().load_from_file(file.path)
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_DAT_2_x4(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1sfB15jklXRjGiZZWgYXZAYc2Ut4TuKOz/view",
+        name="DAT_2_x4.pth",
+    )
+    model = ModelLoader().load_from_file(file.path)
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
     )
