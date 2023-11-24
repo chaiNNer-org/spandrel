@@ -318,7 +318,7 @@ class WindowAttention(Attention):
     def __init__(
         self,
         input_resolution,
-        window_size,
+        window_size: tuple[int, int],
         num_heads,
         window_shift=False,
         attn_drop=0.0,

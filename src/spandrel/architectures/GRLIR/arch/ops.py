@@ -77,7 +77,9 @@ def window_reverse(
     return x
 
 
-def _fill_window(input_resolution, window_size, shift_size=None):
+def _fill_window(
+    input_resolution, window_size: tuple[int, int] | list[int], shift_size=None
+):
     if shift_size is None:
         shift_size = [s // 2 for s in window_size]
 
