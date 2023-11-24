@@ -13,6 +13,7 @@ from ..architectures import (
     SPSR,
     CodeFormer,
     Compact,
+    FeMaSR,
     KBNet,
     LaMa,
     OmniSR,
@@ -121,6 +122,17 @@ MAIN_REGISTRY.add(
             "layers.0.residual_group.blocks.0.attn.relative_position_index",
         ),
         load=SwinIR.load,
+    ),
+    ArchSupport(
+        id="FeMaSR",
+        detect=_has_keys(
+            "multiscale_encoder.in_conv.weight",
+            "multiscale_encoder.blocks.0.0.weight",
+            "decoder_group.0.block.1.weight",
+            "out_conv.weight",
+            "before_quant_group.0.weight",
+        ),
+        load=FeMaSR.load,
     ),
     ArchSupport(
         id="GFPGAN",

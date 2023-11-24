@@ -4,6 +4,22 @@ import math
 from typing import Any
 
 
+def get_first_seq_index(state: dict, key_pattern: str) -> int:
+    """
+    Returns the maximum index `i` such that `key_pattern.format(str(i))` is in `state`.
+
+    If no such key is in state, then `-1` is returned.
+
+    Example:
+        get_first_seq_index(state, "body.{}.weight") -> -1
+        get_first_seq_index(state, "body.{}.weight") -> 3
+    """
+    for i in range(100):
+        if key_pattern.format(str(i)) in state:
+            return i
+    return -1
+
+
 def get_seq_len(state: dict[str, Any], seq_key: str) -> int:
     """
     Returns the length of a sequence in the state dict.
