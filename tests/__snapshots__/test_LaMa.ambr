@@ -5,7 +5,7 @@
     input_channels=4,
     output_channels=3,
     scale=1,
-    size_requirements=SizeRequirements(minimum=16, multiple_of=None, square=False),
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
