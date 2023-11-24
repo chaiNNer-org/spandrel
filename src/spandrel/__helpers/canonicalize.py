@@ -1,4 +1,14 @@
+from __future__ import annotations
+
 from .model_descriptor import StateDict
+
+
+def remove_common_prefix(state_dict: StateDict, prefixes: list[str]) -> StateDict:
+    if len(state_dict) > 0:
+        for prefix in prefixes:
+            if all(i.startswith(prefix) for i in state_dict.keys()):
+                state_dict = {k[len(prefix) :]: v for k, v in state_dict.items()}
+    return state_dict
 
 
 def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
@@ -19,9 +29,6 @@ def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
             break
 
     # remove known common prefixes
-    if len(state_dict) > 0:
-        for prefix in ["module.", "netG."]:
-            if all(i.startswith(prefix) for i in state_dict.keys()):
-                state_dict = {k[len(prefix) :]: v for k, v in state_dict.items()}
+    state_dict = remove_common_prefix(state_dict, ["module.", "netG."])
 
     return state_dict

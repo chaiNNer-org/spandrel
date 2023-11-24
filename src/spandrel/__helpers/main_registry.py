@@ -7,6 +7,7 @@ from ..architectures import (
     ESRGAN,
     FBCNN,
     GFPGAN,
+    GRLIR,
     HAT,
     MAT,
     SPSR,
@@ -81,6 +82,24 @@ MAIN_REGISTRY.add(
             "relative_position_index_SA",
         ),
         load=HAT.load,
+    ),
+    ArchSupport(
+        id="GRLIR",
+        detect=lambda state: _has_keys(
+            "conv_first.weight",
+            "norm_start.weight",
+            "norm_end.weight",
+            "layers.0.blocks.0.attn.window_attn.attn_transform.logit_scale",
+            "layers.0.blocks.0.attn.stripe_attn.attn_transform1.logit_scale",
+        )(state)
+        or _has_keys(
+            "model.conv_first.weight",
+            "model.norm_start.weight",
+            "model.norm_end.weight",
+            "model.layers.0.blocks.0.attn.window_attn.attn_transform.logit_scale",
+            "model.layers.0.blocks.0.attn.stripe_attn.attn_transform1.logit_scale",
+        )(state),
+        load=GRLIR.load,
     ),
     ArchSupport(
         id="Swin2SR",
