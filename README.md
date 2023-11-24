@@ -98,6 +98,7 @@ This has only been tested with the models that are linked here, and any unoffici
 - [SRFormer](https://github.com/HVision-NKU/SRFormer) | [Models](https://github.com/HVision-NKU/SRFormer#pretrain-models)
 - [DAT](https://github.com/zhengchen1999/DAT) | [Models](https://github.com/zhengchen1999/DAT#testing)
 - [FeMaSR](https://github.com/chaofengc/FeMaSR) | [Models](https://github.com/chaofengc/FeMaSR/releases/tag/v0.1-pretrain_models)
+- [GRLIR](https://github.com/ofsoundof/GRL-Image-Restoration) | [Models](https://github.com/ofsoundof/GRL-Image-Restoration/releases/tag/v1.0.0)
 
 #### Face Restoration
 
