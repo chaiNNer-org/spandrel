@@ -16,7 +16,7 @@ import numpy as np
 import torch
 from syrupy.filters import props
 
-from spandrel.__helpers.model_descriptor import ModelBase, ModelDescriptor, StateDict
+from spandrel import ModelBase, ModelDescriptor, ModelLoader, StateDict
 
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
@@ -64,6 +64,9 @@ class ModelFile:
         if not self.exists:
             download_model(url, name=self.name)
         return self
+
+    def load_model(self) -> ModelDescriptor:
+        return ModelLoader().load_from_file(self.path)
 
     @staticmethod
     def from_url(url: str, name: str | None = None):

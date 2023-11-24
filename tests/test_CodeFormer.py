@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.CodeFormer import CodeFormer, load
 
 from .util import ModelFile, assert_loads_correctly, disallowed_props
@@ -24,6 +23,6 @@ def test_CodeFormer(snapshot):
     file = ModelFile.from_url(
         "https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, CodeFormer)

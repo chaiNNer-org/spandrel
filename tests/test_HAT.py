@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.HAT import HAT, load
 
 from .util import (
@@ -53,7 +52,7 @@ def test_HAT_community1(snapshot):
     file = ModelFile.from_url(
         "https://github.com/Phhofm/models/raw/main/4xLexicaHAT/4xLexicaHAT.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, HAT)
     assert_image_inference(
@@ -67,7 +66,7 @@ def test_HAT_community2(snapshot):
     file = ModelFile.from_url(
         "https://github.com/Phhofm/models/raw/main/4xNomos8kSCHAT-S/4xNomos8kSCHAT-S.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, HAT)
     assert_image_inference(
