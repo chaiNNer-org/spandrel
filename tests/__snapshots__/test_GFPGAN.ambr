@@ -5,7 +5,7 @@
     input_channels=3,
     output_channels=3,
     scale=8,
-    size_requirements=SizeRequirements(minimum=512, multiple_of=None, square=False),
+    size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
@@ -18,7 +18,7 @@
     input_channels=3,
     output_channels=3,
     scale=8,
-    size_requirements=SizeRequirements(minimum=512, multiple_of=None, square=False),
+    size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
@@ -31,7 +31,7 @@
     input_channels=3,
     output_channels=3,
     scale=8,
-    size_requirements=SizeRequirements(minimum=512, multiple_of=None, square=False),
+    size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([

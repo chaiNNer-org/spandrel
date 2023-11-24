@@ -13,17 +13,23 @@ StateDict = Dict[str, Any]
 
 @dataclass
 class SizeRequirements:
-    minimum: int | None = None
+    minimum: int = 0
     """
     The minimum size of the input image in pixels.
+
+    Default/neutral value: `0`
     """
-    multiple_of: int | None = None
+    multiple_of: int = 1
     """
     The width and height of the image must be a multiple of this value.
+
+    Default/neutral value: `1`
     """
     square: bool = False
     """
     The image must be square.
+
+    Default/neutral value: `False`
     """
 
     @property
@@ -33,23 +39,20 @@ class SizeRequirements:
 
         If True, then `check` is guaranteed to always return True.
         """
-        return self.minimum is None and self.multiple_of is None and not self.square
+        return self.minimum == 0 and self.multiple_of == 1 and not self.square
 
     def check(self, width: int, height: int) -> bool:
         """
         Checks if the given width and height satisfy the size requirements.
         """
-        if self.minimum is not None:
-            if width < self.minimum or height < self.minimum:
-                return False
+        if width < self.minimum or height < self.minimum:
+            return False
 
-        if self.multiple_of is not None:
-            if width % self.multiple_of != 0 or height % self.multiple_of != 0:
-                return False
+        if width % self.multiple_of != 0 or height % self.multiple_of != 0:
+            return False
 
-        if self.square:
-            if width != height:
-                return False
+        if self.square and width != height:
+            return False
 
         return True
 
