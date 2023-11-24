@@ -1,0 +1,40 @@
+# serializer version: 1
+# name: test_FeMaSR_1x
+  SRModelDescriptor(
+    architecture='FeMaSR',
+    input_channels=3,
+    output_channels=3,
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_FeMaSR_2x
+  SRModelDescriptor(
+    architecture='FeMaSR',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=32, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---
+# name: test_FeMaSR_4x
+  SRModelDescriptor(
+    architecture='FeMaSR',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=16, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+  )
+# ---

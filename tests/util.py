@@ -139,7 +139,10 @@ def assert_image_inference(
             image_c == model.input_channels
         ), f"Expected the input image '{test_image.value}' to have {model.input_channels} channels, but it had {image_c} channels."
 
-        output = image_inference(model.model, image)
+        try:
+            output = image_inference(model.model, image)
+        except Exception as e:
+            raise AssertionError(f"Failed on {test_image.value}") from e
         output_h, output_w, output_c = get_h_w_c(output)
 
         assert (
