@@ -1,0 +1,73 @@
+# serializer version: 1
+# name: test_DAT_2_x4
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x32',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_S_x3
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=3,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x16',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_S_x4
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x16',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_x4
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x32',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
