@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.RestoreFormer import RestoreFormer, load
 
 from .util import ModelFile, assert_loads_correctly, disallowed_props
@@ -33,6 +32,6 @@ def test_RestoreFormer(snapshot):
     file = ModelFile.from_url(
         "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/RestoreFormer.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, RestoreFormer)

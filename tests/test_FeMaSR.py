@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.FeMaSR import FeMaSR, load
 from tests.test_GFPGAN import disallowed_props
 
@@ -39,7 +38,7 @@ def test_FeMaSR_1x(snapshot):
     file = ModelFile.from_url(
         "https://github.com/chaofengc/FeMaSR/releases/download/v0.1-pretrain_models/FeMaSR_HRP_model_g.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, FeMaSR)
     assert_image_inference(
@@ -53,7 +52,7 @@ def test_FeMaSR_2x(snapshot):
     file = ModelFile.from_url(
         "https://github.com/chaofengc/FeMaSR/releases/download/v0.1-pretrain_models/FeMaSR_SRX2_model_g.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, FeMaSR)
     assert_image_inference(
@@ -67,7 +66,7 @@ def test_FeMaSR_4x(snapshot):
     file = ModelFile.from_url(
         "https://github.com/chaofengc/FeMaSR/releases/download/v0.1-pretrain_models/FeMaSR_SRX4_model_g.pth"
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, FeMaSR)
     assert_image_inference(
