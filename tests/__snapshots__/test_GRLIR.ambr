@@ -1,105 +1,18 @@
 # serializer version: 1
-# name: test_GRLIR_db_motion_grl_base_gopro
+# name: test_GRLIR_bsr_grl_base
   SRModelDescriptor(
     architecture='GRLIR',
     input_channels=3,
     output_channels=3,
-    scale=1,
+    scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_dn_grl_base_c1s25
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=1,
-    output_channels=1,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_dn_grl_base_c3s50
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=3,
-    output_channels=3,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_dn_grl_small_c3s15
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=3,
-    output_channels=3,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_dn_grl_tiny_c1
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=2,
-    output_channels=1,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_jpeg_grl_small_c1q30
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=1,
-    output_channels=1,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_jpeg_grl_small_c3
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=4,
-    output_channels=3,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
-    ]),
-  )
-# ---
-# name: test_GRLIR_jpeg_grl_small_c3q20
-  SRModelDescriptor(
-    architecture='GRLIR',
-    input_channels=3,
-    output_channels=3,
-    scale=1,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
-    supports_bfloat16=True,
-    supports_half=False,
-    tags=list([
+      'base',
+      '180dim',
+      'w16df4',
+      's32x64',
     ]),
   )
 # ---
@@ -113,6 +26,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      'tiny',
+      '64dim',
+      'w32df4',
+      's64x64',
     ]),
   )
 # ---
@@ -126,6 +43,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      'tiny',
+      '64dim',
+      'w32df4',
+      's64x64',
     ]),
   )
 # ---

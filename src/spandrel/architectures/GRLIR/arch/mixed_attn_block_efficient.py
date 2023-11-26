@@ -66,9 +66,10 @@ def _get_stripe_info(
     stripe_size_in: list[int],
     stripe_groups_in: list[int | None],
     stripe_shift: bool,
-    input_resolution,
+    input_resolution: list[int] | tuple[int, int],
 ):
-    stripe_size, shift_size = [], []
+    stripe_size: list[int] = []
+    shift_size: list[int] = []
     for s, g, d in zip(stripe_size_in, stripe_groups_in, input_resolution):
         if g is None:
             stripe_size.append(s)

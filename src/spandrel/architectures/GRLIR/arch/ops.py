@@ -184,7 +184,10 @@ def calculate_win_mask(
     return attn_mask
 
 
-def _get_meshgrid_coords(start_coords, end_coords):
+def _get_meshgrid_coords(
+    start_coords: tuple[int, int] | list[int],
+    end_coords: tuple[int, int] | list[int],
+):
     coord_h = torch.arange(start_coords[0], end_coords[0])
     coord_w = torch.arange(start_coords[1], end_coords[1])
     coords = torch.stack(torch.meshgrid([coord_h, coord_w], indexing="ij"))  # 2, Wh, Ww
@@ -193,7 +196,9 @@ def _get_meshgrid_coords(start_coords, end_coords):
 
 
 def get_relative_coords_table(
-    window_size, pretrained_window_size=[0, 0], anchor_window_down_factor=1
+    window_size: tuple[int, int] | list[int],
+    pretrained_window_size: tuple[int, int] | list[int] = [0, 0],
+    anchor_window_down_factor=1,
 ):
     """
     Use case: 1)
@@ -229,7 +234,9 @@ def get_relative_coords_table(
 
 
 def get_relative_coords_table_all(
-    window_size, pretrained_window_size=[0, 0], anchor_window_down_factor=1
+    window_size: tuple[int, int] | list[int],
+    pretrained_window_size: tuple[int, int] | list[int] = [0, 0],
+    anchor_window_down_factor=1,
 ):
     """
     Use case: 3)
@@ -289,7 +296,9 @@ def coords_diff(coords1, coords2, max_diff):
 
 
 def get_relative_position_index(
-    window_size, anchor_window_down_factor=1, window_to_anchor=True
+    window_size: tuple[int, int] | list[int],
+    anchor_window_down_factor=1,
+    window_to_anchor=True,
 ):
     """
     Use case: 1)
@@ -323,7 +332,9 @@ def coords_diff_odd(coords1, coords2, start_coord, max_diff):
 
 
 def get_relative_position_index_all(
-    window_size, anchor_window_down_factor=1, window_to_anchor=True
+    window_size: tuple[int, int] | list[int],
+    anchor_window_down_factor=1,
+    window_to_anchor=True,
 ):
     """
     Use case: 3)
@@ -356,7 +367,9 @@ def get_relative_position_index_all(
 
 
 def get_relative_position_index_simple(
-    window_size, anchor_window_down_factor=1, window_to_anchor=True
+    window_size: tuple[int, int] | list[int],
+    anchor_window_down_factor=1,
+    window_to_anchor=True,
 ):
     """
     Use case: 3)
@@ -395,7 +408,9 @@ def get_relative_position_index_simple(
 #     return idx
 
 
-def get_relative_win_position_index(window_size, anchor_window_size):
+def get_relative_win_position_index(
+    window_size: tuple[int, int] | list[int], anchor_window_size
+):
     """
     Use case: 2)
     """
