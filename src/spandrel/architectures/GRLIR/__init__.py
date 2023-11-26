@@ -9,7 +9,23 @@ from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
 from .arch.grl import GRL as GRLIR
 
 
-def _get_output_params(state_dict: StateDict, in_channels: int) -> tuple[int, str, int]:
+def _clean_up_checkpoint(state_dict: StateDict) -> StateDict:
+    # The official checkpoints are all over the place.
+
+    # Issue 1: some models prefix all keys with "model."
+    state_dict = remove_common_prefix(state_dict, ["model."])
+
+    # Issue 2: some models have a bunch of useless keys and prefix all important keys with "model_g."
+    # (looking at you, `bsr_grl_base.ckpt`)
+    if "model_g.conv_first.weight" in state_dict:
+        # only keep keys with "model_g." prefix
+        state_dict = {k: v for k, v in state_dict.items() if k.startswith("model_g.")}
+        state_dict = remove_common_prefix(state_dict, ["model_g."])
+
+    return state_dict
+
+
+def _get_output_params(state_dict: StateDict, in_channels: int):
     out_channels: int
     upsampler: str
     upscale: int
@@ -43,7 +59,9 @@ def _get_output_params(state_dict: StateDict, in_channels: int) -> tuple[int, st
     return out_channels, upsampler, upscale
 
 
-def _get_anchor_params(state_dict: StateDict) -> tuple[bool, str, int]:
+def _get_anchor_params(
+    state_dict: StateDict, default_down_factor: int
+) -> tuple[bool, str, int]:
     anchor_one_stage: bool
     anchor_proj_type: str
     anchor_window_down_factor: int
@@ -57,11 +75,11 @@ def _get_anchor_params(state_dict: StateDict) -> tuple[bool, str, int]:
                 # We can deduce neither proj_type nor window_down_factor.
                 # So we'll just assume the values the official configs use.
                 anchor_proj_type = "avgpool"  # or "maxpool", who knows?
-                anchor_window_down_factor = 2
+                anchor_window_down_factor = default_down_factor
             else:
                 anchor_proj_type = "patchmerging"
-                # window_down_factor is technically undefined here, but 2 makes sense
-                anchor_window_down_factor = 2
+                # window_down_factor is undefined here
+                anchor_window_down_factor = default_down_factor
         elif "layers.0.blocks.0.attn.anchor.body.0.weight" in state_dict:
             anchor_proj_type = "conv2d"
             anchor_window_down_factor = (
@@ -87,8 +105,7 @@ def _get_anchor_params(state_dict: StateDict) -> tuple[bool, str, int]:
 
 
 def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
-    # Delightfully, we have to remove a common prefix from the state_dict.
-    state_dict = remove_common_prefix(state_dict, ["model."])
+    state_dict = _clean_up_checkpoint(state_dict)
 
     img_size: int = 64
     # in_channels: int = 3
@@ -161,12 +178,32 @@ def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
 
     # anchor
     anchor_one_stage, anchor_proj_type, anchor_window_down_factor = _get_anchor_params(
-        state_dict
+        state_dict,
+        # We use 4 as the default value (if the value cannot be detected), because
+        # that's what all the official models use.
+        default_down_factor=4,
     )
 
     # other
     local_connection = "layers.0.blocks.0.conv.cab.0.weight" in state_dict
     mlp_ratio = state_dict["layers.0.blocks.0.mlp.fc1.weight"].shape[0] / embed_dim
+
+    # Set undetectable parameters.
+    # These parameters are huge pain, because they vary widely between models, so we'll
+    # just use some heuristics to support the official models, and call it a day.
+    if upscale == 1:
+        # denoise (dn), deblur (db), demosaic (dm), or jpeg
+        pass
+    else:
+        # sr or bsr
+        if upsampler == "nearest+conv":
+            # bsr
+            window_size = 16
+            stripe_size = [32, 64]
+        else:
+            # sr
+            window_size = 32
+            stripe_size = [64, 64]
 
     model = GRLIR(
         img_size=img_size,
@@ -200,11 +237,20 @@ def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
         euclidean_dist=euclidean_dist,
     )
 
+    size_tag = "base"
+    if len(depths) < 6:
+        size_tag = "small" if embed_dim >= 96 else "tiny"
+
     return SRModelDescriptor(
         model,
         state_dict,
         architecture="GRLIR",
-        tags=[],
+        tags=[
+            size_tag,
+            f"{embed_dim}dim",
+            f"w{window_size}df{anchor_window_down_factor}",
+            f"s{stripe_size[0]}x{stripe_size[1]}",
+        ],
         supports_half=False,
         supports_bfloat16=True,
         scale=upscale,

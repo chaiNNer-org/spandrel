@@ -391,13 +391,15 @@ class GRL(nn.Module):
             for layer in self.layers:
                 layer._init_weights()
 
-    def set_table_index_mask(self, x_size):
+    def set_table_index_mask(self, x_size: tuple[int, int]):
         """
         Two used cases:
         1) At initialization: set the shared buffers.
         2) During forward pass: get the new buffers if the resolution of the input changes
         """
         # ss - stripe_size, sss - stripe_shift_size
+        # ss ~= self.stripe_size
+        # sss ~= self.stripe_size / 2
         ss, sss = _get_stripe_info(self.stripe_size, self.stripe_groups, True, x_size)
         df = self.anchor_window_down_factor
 
@@ -436,7 +438,7 @@ class GRL(nn.Module):
             "mask_sv_w2a": mask_sv_w2a,
         }
 
-    def get_table_index_mask(self, device=None, input_resolution=None):
+    def get_table_index_mask(self, device, input_resolution: tuple[int, int]):
         # Used during forward pass
         if input_resolution == self.input_resolution:
             return {
@@ -575,204 +577,3 @@ class GRL(nn.Module):
                 state_dict.pop(k)
                 print(k)
         return state_dict
-
-
-if __name__ == "__main__":
-    window_size = 8
-
-    # Tiny, 0.33 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[4, 4, 4, 4],
-    #     embed_dim=32,
-    #     num_heads_window=[2, 2, 2, 2],
-    #     num_heads_stripe=[2, 2, 2, 2],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffledirect",
-    # )
-
-    # Small, 3.49 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[4, 4, 4, 4],
-    #     embed_dim=128,
-    #     num_heads_window=[2, 2, 2, 2],
-    #     num_heads_stripe=[2, 2, 2, 2],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Base, 13.84 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[4, 4, 4, 4, 4, 4, 4, 4],
-    #     embed_dim=192,
-    #     num_heads_window=[4, 4, 4, 4, 4, 4, 4, 4],
-    #     num_heads_stripe=[4, 4, 4, 4, 4, 4, 4, 4],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Large, 24.29 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[8, 8, 8, 8, 8, 8, 8, 8],
-    #     embed_dim=192,
-    #     num_heads_window=[4, 4, 4, 4, 4, 4, 4, 4],
-    #     num_heads_stripe=[4, 4, 4, 4, 4, 4, 4, 4],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Huge, 47.83 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-    #     embed_dim=192,
-    #     num_heads_window=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     num_heads_stripe=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Giant, MLP4 - 117.16 M, MLP2 - 83.54 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-    #     embed_dim=256,
-    #     num_heads_window=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     num_heads_stripe=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     mlp_ratio=4,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Compare with HAT Large, 43.22 M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
-    #     embed_dim=192,
-    #     num_heads_window=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     num_heads_stripe=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    ####################
-    # Final version
-    ####################
-
-    # Tiny-final, 0.91M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[4, 4, 4, 4],
-    #     embed_dim=64,
-    #     num_heads_window=[2, 2, 2, 2],
-    #     num_heads_stripe=[2, 2, 2, 2],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffledirect",
-    # )
-
-    # Small-final, 3.49M
-    # model = GRL(
-    #     upscale=4,
-    #     img_size=64,
-    #     window_size=window_size,
-    #     depths=[4, 4, 4, 4],
-    #     embed_dim=128,
-    #     num_heads_window=[2, 2, 2, 2],
-    #     num_heads_stripe=[2, 2, 2, 2],
-    #     mlp_ratio=2,
-    #     qkv_proj_type="linear",
-    #     anchor_proj_type="avgpool",
-    #     anchor_window_down_factor=2,
-    #     out_proj_type="linear",
-    #     conv_type="1conv",
-    #     upsampler="pixelshuffle",
-    # )
-
-    # Large, 20.13 M
-    model = GRL(
-        upscale=4,
-        img_size=64,
-        window_size=window_size,
-        depths=[4, 4, 8, 8, 8, 4, 4],
-        embed_dim=180,
-        num_heads_window=[3, 3, 3, 3, 3, 3, 3],
-        num_heads_stripe=[3, 3, 3, 3, 3, 3, 3],
-        mlp_ratio=2,
-        qkv_proj_type="linear",
-        anchor_proj_type="avgpool",
-        anchor_window_down_factor=2,
-        out_proj_type="linear",
-        conv_type="1conv",
-        upsampler="pixelshuffle",
-        local_connection=True,
-    )
-
-    print(model)
-    # print(height, width, model.flops() / 1e9)
-
-    x = torch.randn((1, 3, 64, 64))
-    x = model(x)
-    print(x.shape)
-    num_params = 0
-    for p in model.parameters():
-        if p.requires_grad:
-            num_params += p.numel()
-    print(f"Number of parameters {num_params / 10 ** 6: 0.2f}")
