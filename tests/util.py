@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 import sys
 import tempfile
@@ -52,9 +53,11 @@ def download_model(url: str, name: str | None = None) -> str:
 
 def extract_zip(path: str, rel_model_dir: Path, name: str):
     if not zipfile.is_zipfile(path):
+        print(f"Skipping {path} because it is not a zip file.")
         return
 
     if (MODEL_DIR / name).exists():
+        print(f"Skipping {path} because {name} already exists.")
         return
 
     with zipfile.ZipFile(path, "r") as zip_ref:
@@ -100,6 +103,7 @@ class ModelFile:
         extract_zip(
             path, rel_model_dir or Path(name or ""), name or get_url_file_name(url)
         )
+        os.remove(path)
         return ModelFile(name or get_url_file_name(url))
 
 

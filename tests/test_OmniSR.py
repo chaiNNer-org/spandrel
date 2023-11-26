@@ -36,9 +36,9 @@ def test_OmniSR_load():
 
 def test_OmniSR_official_x4(snapshot):
     file = ModelFile.from_url_zip(
-        "https://drive.google.com/file/d/1VoPUw0SRnCPAU8_R5Ue15bn2gwSBr97g/view",
-        rel_model_dir=Path("OmniSR_X2_DIV2K/checkpoints/epoch895_OmniSR.pth"),
-        name="epoch895_OmniSR_x4.pth",
+        "https://drive.google.com/file/d/17rJXJHBYt4Su8cMDMh-NOWMBdE6ki5em/view",
+        rel_model_dir=Path("OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth"),
+        name="epoch994_OmniSR_x4.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
