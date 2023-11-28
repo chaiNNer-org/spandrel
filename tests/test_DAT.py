@@ -1,3 +1,4 @@
+from spandrel import ModelLoader
 from spandrel.architectures.DAT import DAT, load
 
 from .util import (
@@ -100,4 +101,67 @@ def test_DAT_2_x4(snapshot):
         file,
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_DAT_tags(snapshot):
+    loader = ModelLoader()
+
+    # https://github.com/muslll/neosr/blob/master/neosr/archs/dat_arch.py#L876
+
+    dat_light = DAT(
+        in_chans=3,
+        img_range=1.0,
+        depth=[18],
+        embed_dim=60,
+        num_heads=[6],
+        expansion_factor=2,
+        resi_connection="3conv",
+        split_size=[8, 32],
+        upsampler="pixelshuffledirect",
+    )
+    assert loader.load_from_state_dict(dat_light.state_dict()) == snapshot(
+        exclude=disallowed_props
+    )
+
+    dat_small = DAT(
+        in_chans=3,
+        img_range=1.0,
+        split_size=[8, 16],
+        depth=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        num_heads=[6, 6, 6, 6, 6, 6],
+        expansion_factor=2,
+        resi_connection="1conv",
+    )
+    assert loader.load_from_state_dict(dat_small.state_dict()) == snapshot(
+        exclude=disallowed_props
+    )
+
+    dat_medium = DAT(
+        in_chans=3,
+        img_range=1.0,
+        split_size=[8, 32],
+        depth=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        num_heads=[6, 6, 6, 6, 6, 6],
+        expansion_factor=4,
+        resi_connection="1conv",
+    )
+    assert loader.load_from_state_dict(dat_medium.state_dict()) == snapshot(
+        exclude=disallowed_props
+    )
+
+    dat_2 = DAT(
+        in_chans=3,
+        img_range=1.0,
+        split_size=[8, 32],
+        depth=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        num_heads=[6, 6, 6, 6, 6, 6],
+        expansion_factor=2,
+        resi_connection="1conv",
+    )
+    assert loader.load_from_state_dict(dat_2.state_dict()) == snapshot(
+        exclude=disallowed_props
     )

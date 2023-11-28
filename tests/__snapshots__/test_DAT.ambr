@@ -13,6 +13,7 @@
       's64|8x32',
       '64nf',
       '180dim',
+      '2.0ef',
       '1conv',
     ]),
   )
@@ -27,10 +28,11 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-      'medium',
+      'small',
       's64|8x16',
       '64nf',
       '180dim',
+      '2.0ef',
       '1conv',
     ]),
   )
@@ -45,10 +47,87 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-      'medium',
+      'small',
       's64|8x16',
       '64nf',
       '180dim',
+      '2.0ef',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_tags
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'light',
+      's64|8x32',
+      '60nf',
+      '60dim',
+      '2.0ef',
+      '3conv',
+    ]),
+  )
+# ---
+# name: test_DAT_tags.1
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64|8x16',
+      '64nf',
+      '180dim',
+      '2.0ef',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_tags.2
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x32',
+      '64nf',
+      '180dim',
+      '4.0ef',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_DAT_tags.3
+  SRModelDescriptor(
+    architecture='DAT',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64|8x32',
+      '64nf',
+      '180dim',
+      '2.0ef',
       '1conv',
     ]),
   )
@@ -67,6 +146,7 @@
       's64|8x32',
       '64nf',
       '180dim',
+      '4.0ef',
       '1conv',
     ]),
   )

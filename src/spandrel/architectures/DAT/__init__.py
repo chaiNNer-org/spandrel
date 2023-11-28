@@ -86,19 +86,19 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
         upsampler=upsampler,
     )
 
-    head_length = len(depth)
-    if head_length <= 4:
+    if len(depth) < 4:
+        size_tag = "light"
+    elif split_size == [8, 16]:
         size_tag = "small"
-    elif head_length < 9:
-        size_tag = "medium"
     else:
-        size_tag = "large"
+        size_tag = "medium"
 
     tags = [
         size_tag,
         f"s{img_size}|{split_size[0]}x{split_size[1]}",
         f"{num_feat}nf",
         f"{embed_dim}dim",
+        f"{expansion_factor}ef",
         f"{resi_connection}",
     ]
 
