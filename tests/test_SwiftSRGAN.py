@@ -23,8 +23,9 @@ def test_SwiftSRGAN_load():
 
 
 def test_SwiftSRGAN_2x(snapshot):
-    file = ModelFile("swift_srgan_2x.pth").download(
-        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_2x.pth.tar"
+    file = ModelFile.from_url(
+        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_2x.pth.tar",
+        name="swift_srgan_2x.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -37,8 +38,9 @@ def test_SwiftSRGAN_2x(snapshot):
 
 
 def test_SwiftSRGAN_4x(snapshot):
-    file = ModelFile("swift_srgan_4x.pth").download(
-        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_4x.pth.tar"
+    file = ModelFile.from_url(
+        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_4x.pth.tar",
+        name="swift_srgan_4x.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
