@@ -1,11 +1,15 @@
 import math
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import get_seq_len
 from .arch.DAT import DAT
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[DAT]:
     # defaults
     img_size = 64  # cannot be deduced from state dict in general
     in_chans = 3
@@ -102,10 +106,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
         f"{resi_connection}",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="DAT",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
         supports_half=False,  # Too much weirdness to support this at the moment
         supports_bfloat16=True,

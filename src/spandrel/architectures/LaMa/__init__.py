@@ -1,5 +1,5 @@
 from ...__helpers.model_descriptor import (
-    InpaintModelDescriptor,
+    MaskedImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -7,7 +7,7 @@ from ..__arch_helpers.state import get_seq_len
 from .arch.LaMa import LaMa
 
 
-def load(state_dict: StateDict) -> InpaintModelDescriptor[LaMa]:
+def load(state_dict: StateDict) -> MaskedImageModelDescriptor[LaMa]:
     state_dict = {
         k.replace("generator.model", "model.model"): v for k, v in state_dict.items()
     }
@@ -25,10 +25,11 @@ def load(state_dict: StateDict) -> InpaintModelDescriptor[LaMa]:
         out_nc=out_nc,
     )
 
-    return InpaintModelDescriptor(
+    return MaskedImageModelDescriptor(
         model,
         state_dict,
         architecture="LaMa",
+        purpose="Inpaint",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,

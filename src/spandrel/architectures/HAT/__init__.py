@@ -1,6 +1,10 @@
 import math
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import get_seq_len
 from .arch.HAT import HAT
 
@@ -47,7 +51,7 @@ def _inv_int_div(a: int, c: int) -> float:
     raise ValueError(f"Could not find a number b such that a // b == c. a={a}, c={c}")
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[HAT]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[HAT]:
     img_size = 64
     patch_size = 1
     in_chans = 3
@@ -189,10 +193,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[HAT]:
         f"{resi_connection}",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="HAT",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
         supports_half=False,
         supports_bfloat16=True,

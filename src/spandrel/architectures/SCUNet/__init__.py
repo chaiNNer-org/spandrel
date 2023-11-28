@@ -1,5 +1,5 @@
 from ...__helpers.model_descriptor import (
-    RestorationModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -7,7 +7,7 @@ from ..__arch_helpers.state import get_seq_len
 from .arch.SCUNet import SCUNet
 
 
-def load(state_dict: StateDict) -> RestorationModelDescriptor[SCUNet]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[SCUNet]:
     in_nc = 3
     config = [4, 4, 4, 4, 4, 4, 4]
     dim = 64
@@ -33,13 +33,15 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[SCUNet]:
         input_resolution=input_resolution,
     )
 
-    return RestorationModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="SCUNet",
+        purpose="Restoration",
         tags=[],
         supports_half=True,
         supports_bfloat16=True,
+        scale=1,
         input_channels=in_nc,
         output_channels=in_nc,
         size_requirements=SizeRequirements(minimum=16),

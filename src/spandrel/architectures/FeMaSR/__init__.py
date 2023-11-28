@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import get_first_seq_index, get_seq_len
 from .arch.femasr import FeMaSRNet as FeMaSR
 
@@ -24,7 +28,7 @@ def _clean_state_dict(state_dict: StateDict):
             del state_dict[k]
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[FeMaSR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[FeMaSR]:
     _clean_state_dict(state_dict)
 
     # in_channel = 3
@@ -107,10 +111,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[FeMaSR]:
 
     multiple_of = {2: 32, 4: 16}.get(scale_factor, 1)
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="FeMaSR",
+        purpose="Restoration" if scale_factor == 1 else "SR",
         tags=[],
         supports_half=True,  # TODO
         supports_bfloat16=True,  # TODO
@@ -118,4 +123,5 @@ def load(state_dict: StateDict) -> SRModelDescriptor[FeMaSR]:
         input_channels=in_channel,
         output_channels=in_channel,
         size_requirements=SizeRequirements(multiple_of=multiple_of),
+        call_fn=lambda model, image: model(image)[0],
     )

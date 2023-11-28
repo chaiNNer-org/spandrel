@@ -18,7 +18,13 @@ import numpy as np
 import torch
 from syrupy.filters import props
 
-from spandrel import ModelBase, ModelDescriptor, ModelLoader, StateDict
+from spandrel import (
+    ImageModelDescriptor,
+    ModelBase,
+    ModelDescriptor,
+    ModelLoader,
+    StateDict,
+)
 
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
@@ -140,14 +146,14 @@ def tensor_to_image(tensor: torch.Tensor) -> np.ndarray:
 
 
 def image_inference_tensor(
-    model: torch.nn.Module, tensor: torch.Tensor
+    model: ImageModelDescriptor, tensor: torch.Tensor
 ) -> torch.Tensor:
     model.eval()
     with torch.no_grad():
         return model(tensor)
 
 
-def image_inference(model: torch.nn.Module, image: np.ndarray) -> np.ndarray:
+def image_inference(model: ImageModelDescriptor, image: np.ndarray) -> np.ndarray:
     return tensor_to_image(image_inference_tensor(model, image_to_tensor(image)))
 
 
@@ -170,6 +176,8 @@ def assert_image_inference(
     model: ModelDescriptor,
     test_images: list[TestImage],
 ):
+    assert isinstance(model, ImageModelDescriptor)
+
     test_images.sort(key=lambda image: image.value)
 
     update_mode = "--snapshot-update" in sys.argv
@@ -185,7 +193,7 @@ def assert_image_inference(
         ), f"Expected the input image '{test_image.value}' to have {model.input_channels} channels, but it had {image_c} channels."
 
         try:
-            output = image_inference(model.model, image)
+            output = image_inference(model, image)
         except Exception as e:
             raise AssertionError(f"Failed on {test_image.value}") from e
         output_h, output_w, output_c = get_h_w_c(output)

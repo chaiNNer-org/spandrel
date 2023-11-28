@@ -1,7 +1,7 @@
 import math
 
 from ...__helpers.model_descriptor import (
-    RestorationModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -9,7 +9,7 @@ from ..__arch_helpers.state import get_seq_len
 from .arch.Uformer import Uformer
 
 
-def load(state_dict: StateDict) -> RestorationModelDescriptor[Uformer]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[Uformer]:
     img_size = 256  # cannot be deduced from state_dict
     in_chans = 3
     dd_in = 3
@@ -107,13 +107,15 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[Uformer]:
         cross_modulator=cross_modulator,
     )
 
-    return RestorationModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="Uformer",
+        purpose="Restoration",
         tags=[],
         supports_half=False,  # Too much weirdness to support this at the moment
         supports_bfloat16=True,
+        scale=1,
         input_channels=dd_in,
         output_channels=dd_in,
         size_requirements=SizeRequirements(multiple_of=128, square=True),
