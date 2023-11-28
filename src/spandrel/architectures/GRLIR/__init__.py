@@ -3,10 +3,28 @@ from __future__ import annotations
 import math
 from typing import Literal
 
+import torch
+
 from ...__helpers.canonicalize import remove_common_prefix
 from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
 from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
 from .arch.grl import GRL as GRLIR
+
+_NON_PERSISTENT_BUFFERS = [
+    "table_w",
+    "table_sh",
+    "table_sv",
+    "index_w",
+    "index_sh_a2w",
+    "index_sh_w2a",
+    "index_sv_a2w",
+    "index_sv_w2a",
+    "mask_w",
+    "mask_sh_a2w",
+    "mask_sh_w2a",
+    "mask_sv_a2w",
+    "mask_sv_w2a",
+]
 
 
 def _clean_up_checkpoint(state_dict: StateDict) -> StateDict:
@@ -104,6 +122,16 @@ def _get_anchor_params(
     return anchor_one_stage, anchor_proj_type, anchor_window_down_factor
 
 
+def _inv_div_add(a: int, d: int) -> int:
+    """
+    Assuming that `a = b + b // d`, this will return `b`.
+    """
+    # a = b + b // d
+    # a = b * (1 + 1 / d)
+    # a / (1 + 1 / d) = b
+    return round(a / (1 + 1 / d))
+
+
 def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
     state_dict = _clean_up_checkpoint(state_dict)
 
@@ -188,22 +216,55 @@ def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
     local_connection = "layers.0.blocks.0.conv.cab.0.weight" in state_dict
     mlp_ratio = state_dict["layers.0.blocks.0.mlp.fc1.weight"].shape[0] / embed_dim
 
-    # Set undetectable parameters.
-    # These parameters are huge pain, because they vary widely between models, so we'll
-    # just use some heuristics to support the official models, and call it a day.
-    if upscale == 1:
-        # denoise (dn), deblur (db), demosaic (dm), or jpeg
-        pass
+    if (
+        "table_w" in state_dict
+        and "table_sh" in state_dict
+        and "index_sh_a2w" in state_dict
+    ):
+        # we can detect the window size, stripe size, and down factor
+        window_size = (state_dict["table_w"].shape[1] + 1) // 2
+
+        # the ratio of `index_sh_a2w`'s shape is down_factor**2
+        index_sh_a2w_shape: torch.Size = state_dict["index_sh_a2w"].shape
+        anchor_window_down_factor = int(
+            math.sqrt(max(*index_sh_a2w_shape) / min(*index_sh_a2w_shape))
+        )
+
+        # The shape of `table_sh` is pretty much `stripe_size + stripe_size // down_factor - 1`.
+        stripe_size = [
+            _inv_div_add(
+                state_dict["table_sh"].shape[1] + 1, anchor_window_down_factor
+            ),
+            _inv_div_add(
+                state_dict["table_sh"].shape[2] + 1, anchor_window_down_factor
+            ),
+        ]
+
     else:
-        # sr or bsr
-        if upsampler == "nearest+conv":
-            # bsr
-            window_size = 16
-            stripe_size = [32, 64]
+        # Set undetectable parameters.
+        # These parameters are huge pain, because they vary widely between models, so we'll
+        # just use some heuristics to support the official models, and call it a day.
+        if upscale == 1:
+            # denoise (dn), deblur (db), demosaic (dm), or jpeg
+            pass
         else:
-            # sr
-            window_size = 32
-            stripe_size = [64, 64]
+            # sr or bsr
+            if upsampler == "nearest+conv":
+                # bsr
+                window_size = 16
+                stripe_size = [32, 64]
+            else:
+                # sr
+                window_size = 32
+                stripe_size = [64, 64]
+
+    # all training configs set this to True
+    stripe_shift = True
+
+    # remove buffer keys
+    for buffer_key in _NON_PERSISTENT_BUFFERS:
+        if buffer_key in state_dict:
+            del state_dict[buffer_key]
 
     model = GRLIR(
         img_size=img_size,
