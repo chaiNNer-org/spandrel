@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_MAT
-  InpaintModelDescriptor(
+  MaskedImageModelDescriptor(
     architecture='MAT',
     input_channels=3,
     output_channels=3,
+    purpose='Inpaint',
     scale=1,
     size_requirements=SizeRequirements(minimum=512, multiple_of=512, square=True),
     supports_bfloat16=True,

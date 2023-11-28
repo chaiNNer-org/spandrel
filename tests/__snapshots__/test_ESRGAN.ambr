@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_BSRGAN
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -15,10 +16,11 @@
   )
 # ---
 # name: test_BSRGAN_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -30,10 +32,11 @@
   )
 # ---
 # name: test_ESRGAN_community
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='Restoration',
     scale=1,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -45,10 +48,11 @@
   )
 # ---
 # name: test_ESRGAN_community_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -60,10 +64,11 @@
   )
 # ---
 # name: test_ESRGAN_community_4x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -75,10 +80,11 @@
   )
 # ---
 # name: test_ESRGAN_community_8x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=8,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -90,10 +96,11 @@
   )
 # ---
 # name: test_RealESRGAN_x2plus
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -105,10 +112,11 @@
   )
 # ---
 # name: test_RealESRGAN_x4plus
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -120,10 +128,11 @@
   )
 # ---
 # name: test_RealESRGAN_x4plus_anime_6B
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -135,10 +144,11 @@
   )
 # ---
 # name: test_RealESRNet_x4plus
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -150,10 +160,11 @@
   )
 # ---
 # name: test_RealSR_DPED
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -165,10 +176,11 @@
   )
 # ---
 # name: test_RealSR_JPEG
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='ESRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,

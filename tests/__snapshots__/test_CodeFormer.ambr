@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_CodeFormer
-  FaceSRModelDescriptor(
+  ImageModelDescriptor(
     architecture='CodeFormer',
     input_channels=3,
     output_channels=3,
+    purpose='FaceSR',
     scale=8,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,

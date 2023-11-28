@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_GFPGAN_1_2
-  FaceSRModelDescriptor(
+  ImageModelDescriptor(
     architecture='GFPGAN',
     input_channels=3,
     output_channels=3,
+    purpose='FaceSR',
     scale=8,
     size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -13,10 +14,11 @@
   )
 # ---
 # name: test_GFPGAN_1_3
-  FaceSRModelDescriptor(
+  ImageModelDescriptor(
     architecture='GFPGAN',
     input_channels=3,
     output_channels=3,
+    purpose='FaceSR',
     scale=8,
     size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -26,10 +28,11 @@
   )
 # ---
 # name: test_GFPGAN_1_4
-  FaceSRModelDescriptor(
+  ImageModelDescriptor(
     architecture='GFPGAN',
     input_channels=3,
     output_channels=3,
+    purpose='FaceSR',
     scale=8,
     size_requirements=SizeRequirements(minimum=512, multiple_of=1, square=False),
     supports_bfloat16=True,
