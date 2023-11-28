@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from spandrel.architectures.OmniSR import OmniSR, load
 
 from .util import (
@@ -37,7 +35,7 @@ def test_OmniSR_load():
 def test_OmniSR_official_x4(snapshot):
     file = ModelFile.from_url_zip(
         "https://drive.google.com/file/d/17rJXJHBYt4Su8cMDMh-NOWMBdE6ki5em/view",
-        rel_model_path=Path("OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth"),
+        rel_model_path="OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth",
         name="epoch994_OmniSR_x4.pth",
     )
     model = file.load_model()
@@ -48,7 +46,7 @@ def test_OmniSR_official_x4(snapshot):
 def test_OmniSR_official_x3(snapshot):
     file = ModelFile.from_url_zip(
         "https://drive.google.com/file/d/1Rwg6o-RGC-TEiyVSVT9FS1iHjx5n948h/view",
-        rel_model_path=Path("OmniSR_X3_DIV2K/checkpoints/epoch919_OmniSR.pth"),
+        rel_model_path="OmniSR_X3_DIV2K/checkpoints/epoch919_OmniSR.pth",
         name="epoch919_OmniSR_x3.pth",
     )
     model = file.load_model()
@@ -59,7 +57,7 @@ def test_OmniSR_official_x3(snapshot):
 def test_OmniSR_official_x2(snapshot):
     file = ModelFile.from_url_zip(
         "https://drive.google.com/file/d/18lSvJq9CGCwDomkas2gh8K6UOq8qRLIw/view",
-        rel_model_path=Path("OmniSR_X2_DIV2K/checkpoints/epoch896_OmniSR.pth"),
+        rel_model_path="OmniSR_X2_DIV2K/checkpoints/epoch896_OmniSR.pth",
         name="epoch896_OmniSR_x2.pth",
     )
     model = file.load_model()
