@@ -42,6 +42,22 @@ def test_GRLIR_load():
         lambda: GRLIR(conv_type="1conv1x1"),
         lambda: GRLIR(conv_type="linear"),
         lambda: GRLIR(conv_type="3conv"),
+        # These require non-persistent buffers to be detected
+        # lambda: GRLIR(
+        #     window_size=16,
+        #     stripe_size=[32, 64],
+        #     anchor_window_down_factor=1,
+        # ),
+        # lambda: GRLIR(
+        #     window_size=16,
+        #     stripe_size=[32, 64],
+        #     anchor_window_down_factor=2,
+        # ),
+        # lambda: GRLIR(
+        #     window_size=16,
+        #     stripe_size=[32, 64],
+        #     anchor_window_down_factor=4,
+        # ),
         # some actual training configs
         lambda: GRLIR(
             upscale=4,
@@ -107,7 +123,6 @@ def test_GRLIR_load():
             and a.stripe_groups == b.stripe_groups
             and a.pretrained_window_size == b.pretrained_window_size
             and a.pretrained_stripe_size == b.pretrained_stripe_size
-            # anchor_window_down_factor isn't well-defined
             # and a.anchor_window_down_factor == b.anchor_window_down_factor
         ),
     )

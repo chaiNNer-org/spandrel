@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.DAT import DAT, load
 
 from .util import (
@@ -49,7 +48,7 @@ def test_DAT_S_x4(snapshot):
         "https://drive.google.com/file/d/1iY30DyLYjar-2DjrJtAv2chCOlw4xiOj/view",
         name="DAT_S_x4.pth",
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, DAT)
     assert_image_inference(
@@ -64,7 +63,7 @@ def test_DAT_S_x3(snapshot):
         "https://drive.google.com/file/d/1Fmj7VFKznbak-atd6pEu59UTZxKTXYVi/view",
         name="DAT_S_x3.pth",
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, DAT)
     assert_image_inference(
@@ -79,7 +78,7 @@ def test_DAT_x4(snapshot):
         "https://drive.google.com/file/d/1pEhXmg--IWHaZOwHUFdh7TEJqt2qeuYg/view",
         name="DAT_x4.pth",
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, DAT)
     assert_image_inference(
@@ -94,7 +93,7 @@ def test_DAT_2_x4(snapshot):
         "https://drive.google.com/file/d/1sfB15jklXRjGiZZWgYXZAYc2Ut4TuKOz/view",
         name="DAT_2_x4.pth",
     )
-    model = ModelLoader().load_from_file(file.path)
+    model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, DAT)
     assert_image_inference(
