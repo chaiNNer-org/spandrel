@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from enum import Enum
 from inspect import getsource
 from pathlib import Path
-from typing import Callable, TypeVar
+from typing import Any, Callable, TypeVar
 from urllib.parse import unquote, urlparse
 from urllib.request import urlretrieve
 
@@ -223,17 +223,51 @@ def assert_image_inference(
 T = TypeVar("T", bound=torch.nn.Module)
 
 
+def _get_different_keys(a: Any, b: Any, keys: list[str]) -> str:
+    lines: list[str] = []
+
+    keys = list(set(dir(a)).intersection(keys))
+    keys.sort()
+
+    for key in keys:
+        a_val = getattr(a, key)
+        b_val = getattr(b, key)
+        if a_val == b_val:
+            lines.append(f"{key}: {a_val}")
+        else:
+            lines.append(f"{key}: {a_val} != {b_val}")
+
+    return "\n".join(lines)
+
+
+def _get_compare_keys(condition: Callable) -> list[str]:
+    pattern = re.compile(r"a\.(\w+)")
+    return [m.group(1) for m in pattern.finditer(getsource(condition))]
+
+
 def assert_loads_correctly(
     load: Callable[[StateDict], ModelBase[T]],
     *models: Callable[[], T],
     condition: Callable[[T, T], bool] = lambda _a, _b: True,
 ):
     for model_fn in models:
+        model_name = getsource(model_fn)
         try:
             model = model_fn()
+        except Exception as e:
+            raise AssertionError(f"Failed to create model: {model_name}") from e
+
+        try:
             state_dict = model.state_dict()
             loaded = load(state_dict)
-            assert type(loaded.model) == type(model)
-            assert condition(model, loaded.model)
         except Exception as e:
-            raise AssertionError(f"Failed on {getsource( model_fn)}") from e
+            raise AssertionError(f"Failed to load: {model_name}") from e
+
+        assert (
+            type(loaded.model) == type(model)
+        ), f"Expected {model_name} to be loaded correctly, but found a {type(loaded.model)} instead."
+
+        assert condition(model, loaded.model), (
+            f"Failed condition for {model_name}."
+            f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
+        )
