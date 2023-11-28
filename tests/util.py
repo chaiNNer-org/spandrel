@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import re
 import sys
-import tempfile
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -40,33 +39,27 @@ def convert_google_drive_link(url: str) -> str:
     return "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
 
 
-def download_model(url: str, name: str | None = None) -> str:
-    filename = name or get_url_file_name(url)
-    print(f"Downloading {filename}...")
-    MODEL_DIR.mkdir(exist_ok=True)
+def download_file(url: str, filename: Path | str) -> str:
+    filename = Path(filename)
+    filename.parent.mkdir(exist_ok=True)
 
     url = convert_google_drive_link(url)
 
-    path, _ = urlretrieve(url, filename=MODEL_DIR / filename)
+    path, _ = urlretrieve(url, filename=filename)
     return path
 
 
-def extract_zip(path: str, rel_model_path: Path | str, name: str):
-    if not zipfile.is_zipfile(path):
-        print(f"Skipping {path} because it is not a zip file.")
-        return
+def extract_file_from_zip(
+    zip_path: Path | str,
+    rel_model_path: str,
+    filename: Path | str,
+):
+    filename = Path(filename)
+    filename.parent.mkdir(exist_ok=True)
 
-    if (MODEL_DIR / name).exists():
-        print(f"Skipping {path} because {name} already exists.")
-        return
-
-    with zipfile.ZipFile(path, "r") as zip_ref:
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            zip_ref.extractall(tmpdirname)
-            model_path = Path(tmpdirname) / rel_model_path
-            assert model_path.exists(), f"Expected {model_path} to exist."
-            model_path.rename(MODEL_DIR / name)
-            return model_path
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        with open(filename, "wb") as f:
+            f.write(zip_ref.read(rel_model_path))
 
 
 @dataclass
@@ -77,33 +70,31 @@ class ModelFile:
     def path(self) -> Path:
         return MODEL_DIR / self.name
 
-    @property
     def exists(self) -> bool:
         return self.path.exists()
-
-    def download(self, url: str):
-        if not self.exists:
-            download_model(url, name=self.name)
-        return self
 
     def load_model(self) -> ModelDescriptor:
         return ModelLoader().load_from_file(self.path)
 
     @staticmethod
     def from_url(url: str, name: str | None = None):
-        name = name or get_url_file_name(url)
-        return ModelFile(name).download(url)
+        file = ModelFile(name or get_url_file_name(url))
+
+        if not file.exists():
+            download_file(url, file.path)
+
+        return file
 
     @staticmethod
-    def from_url_zip(url: str, rel_model_path: Path | str, name: str | None = None):
-        name = os.path.basename(rel_model_path) if name is None else name
-        if (MODEL_DIR / name).exists():
-            return ModelFile(name)
-        path = download_model(url, "temp.zip")
-        print(f"Extracting {path}...")
-        extract_zip(path, rel_model_path or name, name)
-        os.remove(path)
-        return ModelFile(name or get_url_file_name(url))
+    def from_url_zip(url: str, rel_model_path: str, name: str | None = None):
+        file = ModelFile(name or Path(rel_model_path).name)
+
+        if not file.exists():
+            zip_path = download_file(url, MODEL_DIR / "_temp.zip")
+            extract_file_from_zip(zip_path, rel_model_path, file.path)
+            os.remove(zip_path)
+
+        return file
 
 
 disallowed_props = props("model", "state_dict")
