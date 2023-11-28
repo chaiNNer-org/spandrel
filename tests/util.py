@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import os
 import re
 import sys
+import tempfile
+import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
@@ -48,6 +51,24 @@ def download_model(url: str, name: str | None = None) -> str:
     return path
 
 
+def extract_zip(path: str, rel_model_path: Path | str, name: str):
+    if not zipfile.is_zipfile(path):
+        print(f"Skipping {path} because it is not a zip file.")
+        return
+
+    if (MODEL_DIR / name).exists():
+        print(f"Skipping {path} because {name} already exists.")
+        return
+
+    with zipfile.ZipFile(path, "r") as zip_ref:
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            zip_ref.extractall(tmpdirname)
+            model_path = Path(tmpdirname) / rel_model_path
+            assert model_path.exists(), f"Expected {model_path} to exist."
+            model_path.rename(MODEL_DIR / name)
+            return model_path
+
+
 @dataclass
 class ModelFile:
     name: str
@@ -72,6 +93,17 @@ class ModelFile:
     def from_url(url: str, name: str | None = None):
         name = name or get_url_file_name(url)
         return ModelFile(name).download(url)
+
+    @staticmethod
+    def from_url_zip(url: str, rel_model_path: Path | str, name: str | None = None):
+        name = os.path.basename(rel_model_path) if name is None else name
+        if (MODEL_DIR / name).exists():
+            return ModelFile(name)
+        path = download_model(url, "temp.zip")
+        print(f"Extracting {path}...")
+        extract_zip(path, rel_model_path or name, name)
+        os.remove(path)
+        return ModelFile(name or get_url_file_name(url))
 
 
 disallowed_props = props("model", "state_dict")

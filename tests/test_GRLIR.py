@@ -115,6 +115,7 @@ def test_GRLIR_load():
             # upscale is only defined if we have an upsampler
             and (not a.upsampler or a.upscale == b.upscale)
             and a.input_resolution == b.input_resolution
+            # those aren't supported right now
             # and a.pad_size == b.pad_size
             # and a.window_size == b.window_size
             # and a.stripe_size == b.stripe_size

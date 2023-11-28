@@ -9,6 +9,12 @@ from .arch.OmniSR import OmniSR
 
 
 def load(state_dict: StateDict) -> SRModelDescriptor[OmniSR]:
+    # Remove junk from the state dict
+    state_dict_keys = set(state_dict.keys())
+    for key in state_dict_keys:
+        if key.endswith(("total_ops", "total_params")):
+            del state_dict[key]
+
     num_in_ch = 3
     num_out_ch = 3
     num_feat = 64
