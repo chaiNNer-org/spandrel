@@ -925,7 +925,6 @@ class Swin2SR(nn.Module):
         img_range=1.0,
         upsampler="",
         resi_connection="1conv",
-        **kwargs,
     ):
         super().__init__()
         num_in_ch = in_chans
