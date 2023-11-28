@@ -182,7 +182,7 @@ class WindowAttentionWrapperV1(WindowAttentionV1):
             attn_mask = None
         self.register_buffer("attn_mask", attn_mask)
 
-    def forward(self, x, x_size):
+    def forward(self, x, x_size):  # type: ignore
         H, W = x_size
         B, _L, C = x.shape
         x = x.view(B, H, W, C)
@@ -460,7 +460,7 @@ class Linear(nn.Linear):
     def __init__(self, in_features, out_features, bias=True):
         super().__init__(in_features, out_features, bias)
 
-    def forward(self, x):
+    def forward(self, x):  # type: ignore
         _B, _C, H, W = x.shape
         x = bchw_to_blc(x)
         x = super().forward(x)

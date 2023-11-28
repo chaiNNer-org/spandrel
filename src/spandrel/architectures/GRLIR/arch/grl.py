@@ -17,7 +17,7 @@ from ...__arch_helpers.timm.weight_init import trunc_normal_
 from .config import GRLConfig
 from .mixed_attn_block_efficient import (
     EfficientMixAttnTransformerBlock,
-    _get_stripe_info,
+    get_stripe_info,
 )
 from .ops import (
     bchw_to_blc,
@@ -400,7 +400,7 @@ class GRL(nn.Module):
         # ss - stripe_size, sss - stripe_shift_size
         # ss ~= self.stripe_size
         # sss ~= self.stripe_size / 2
-        ss, sss = _get_stripe_info(self.stripe_size, self.stripe_groups, True, x_size)
+        ss, sss = get_stripe_info(self.stripe_size, self.stripe_groups, True, x_size)
         df = self.anchor_window_down_factor
 
         table_w = get_relative_coords_table_all(

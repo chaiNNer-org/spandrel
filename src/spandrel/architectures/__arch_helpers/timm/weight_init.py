@@ -2,7 +2,7 @@ import math
 import warnings
 
 import torch
-from torch.nn.init import _calculate_fan_in_and_fan_out
+from torch.nn.init import _calculate_fan_in_and_fan_out  # type: ignore
 
 
 def _no_grad_trunc_normal_(tensor, mean, std, a, b):

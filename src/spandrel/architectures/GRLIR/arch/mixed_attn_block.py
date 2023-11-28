@@ -456,7 +456,7 @@ class StripeAttention(Attention):
         B, L, C = qkv.shape
         qkv = qkv.view(B, H, W, C)
 
-        running_stripe_size, running_shift_size = self.attn_transform._get_stripe_info(
+        running_stripe_size, running_shift_size = self.attn_transform._get_stripe_info(  # type: ignore
             x_size
         )
         # cyclic shift
@@ -579,7 +579,7 @@ class AnchorStripeAttention(Attention):
         B, _L, C = qkv.shape
         qkv = qkv.view(B, H, W, C)
 
-        stripe_size, shift_size = self.attn_transform1._get_stripe_info(x_size)
+        stripe_size, shift_size = self.attn_transform1._get_stripe_info(x_size)  # type: ignore
         anchor_stripe_size = [s // self.anchor_window_down_factor for s in stripe_size]
         anchor_shift_size = [s // self.anchor_window_down_factor for s in shift_size]
         # cyclic shift
