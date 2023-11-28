@@ -86,14 +86,10 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
         upsampler=upsampler,
     )
 
-    # https://github.com/muslll/neosr/blob/3dbb6bb84f69df802eb6b73d3b816f4c18e51924/neosr/archs/dat_arch.py#L876
     if len(depth) < 4:
         size_tag = "light"
-    elif expansion_factor == 2.0:
-        if split_size == [8, 32]:
-            size_tag = "DAT-2"
-        else:
-            size_tag = "small"
+    elif split_size == [8, 16]:
+        size_tag = "small"
     else:
         size_tag = "medium"
 
@@ -102,6 +98,7 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
         f"s{img_size}|{split_size[0]}x{split_size[1]}",
         f"{num_feat}nf",
         f"{embed_dim}dim",
+        f"{expansion_factor}ef",
         f"{resi_connection}",
     ]
 
