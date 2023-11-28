@@ -30,7 +30,7 @@ def get_url_file_name(url: str) -> str:
 
 def convert_google_drive_link(url: str) -> str:
     pattern = re.compile(
-        r"^https://drive.google.com/file/d/([a-zA-Z0-9\-]+)/view(?:\?.*)?$"
+        r"^https://drive.google.com/file/d/([a-zA-Z0-9_\-]+)/view(?:\?.*)?$"
     )
     m = pattern.match(url)
     if not m:

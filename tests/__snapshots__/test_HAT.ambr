@@ -1,4 +1,112 @@
 # serializer version: 1
+# name: test_HAT_3x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=3,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w16',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_HAT_4x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w16',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_HAT_L_4x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'large',
+      's64w16',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_HAT_S_2x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64w16',
+      '64nf',
+      '144dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_HAT_S_3x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=3,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64w16',
+      '64nf',
+      '144dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_HAT_S_4x
+  SRModelDescriptor(
+    architecture='HAT',
+    input_channels=3,
+    output_channels=3,
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64w16',
+      '64nf',
+      '144dim',
+      '1conv',
+    ]),
+  )
+# ---
 # name: test_HAT_community1
   SRModelDescriptor(
     architecture='HAT',

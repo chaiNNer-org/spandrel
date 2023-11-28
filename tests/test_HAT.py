@@ -48,6 +48,96 @@ def test_HAT_load():
     )
 
 
+def test_HAT_S_2x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Y7-3IgWfIAui9BMQIsFT9CzZXVMlx__e/view?usp=drive_link",
+        name="HAT-S_SRx2.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_HAT_S_3x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1yBoJkvvvQ5GcPxV8cF0z6KGgOF5pMclX/view?usp=drive_link",
+        name="HAT-S_SRx3.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_HAT_S_4x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1YvU9PF1XqlP8TVzH7P0bg-YlfP1TKDPC/view?usp=drive_link",
+        name="HAT-S_SRx4.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_HAT_3x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1dWG4X_6VUSi1hhIwX0zEwddWI9M0tFmI/view?usp=drive_link",
+        name="HAT_SRx3.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_HAT_4x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1pdhaO1fJq3tgSqDIbymdDiGxu4S0nqVq/view?usp=drive_link",
+        name="HAT_SRx4.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_HAT_L_4x(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1uefIctjoNE3Tg6GTzelesTTshVogQdUf/view?usp=drive_link",
+        name="HAT-L_SRx4_ImageNet-pretrain.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, HAT)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
 def test_HAT_community1(snapshot):
     file = ModelFile.from_url(
         "https://github.com/Phhofm/models/raw/main/4xLexicaHAT/4xLexicaHAT.pth"
