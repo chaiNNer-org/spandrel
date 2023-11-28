@@ -86,13 +86,16 @@ def load(state_dict: StateDict) -> SRModelDescriptor[DAT]:
         upsampler=upsampler,
     )
 
-    head_length = len(depth)
-    if head_length <= 4:
-        size_tag = "small"
-    elif head_length < 9:
-        size_tag = "medium"
+    # https://github.com/muslll/neosr/blob/3dbb6bb84f69df802eb6b73d3b816f4c18e51924/neosr/archs/dat_arch.py#L876
+    if len(depth) < 4:
+        size_tag = "light"
+    elif expansion_factor == 2.0:
+        if split_size == [8, 32]:
+            size_tag = "DAT-2"
+        else:
+            size_tag = "small"
     else:
-        size_tag = "large"
+        size_tag = "medium"
 
     tags = [
         size_tag,

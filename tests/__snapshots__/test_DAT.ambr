@@ -9,7 +9,7 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-      'medium',
+      'DAT-2',
       's64|8x32',
       '64nf',
       '180dim',
@@ -27,7 +27,7 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-      'medium',
+      'small',
       's64|8x16',
       '64nf',
       '180dim',
@@ -45,7 +45,7 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
-      'medium',
+      'small',
       's64|8x16',
       '64nf',
       '180dim',
