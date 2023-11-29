@@ -1,3 +1,5 @@
+# ruff: noqa: N806
+
 import math
 
 from ...__helpers.model_descriptor import (
