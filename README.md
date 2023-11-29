@@ -13,7 +13,7 @@ This package ports [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s PyTorc
 
 After seeing many projects extract out chaiNNer's model support into their own projects, I decided it was probably worth the effort of creating a PyPi package that those developers could use instead.
 
-I'm also hoping that by having a central package anyone can use, the community will be encouraged to help add support for more models. This will ultimately benefit everyone.
+I'm also hoping that by having a central package anyone can use, the community will be encouraged [to help add support for more models](CONTRIBUTING.md). This will ultimately benefit everyone.
 
 This package does not yet have easy inference code, but porting that code is planned as well.
 
@@ -146,14 +146,6 @@ Spandrel mainly supports loading `.pth` files for all supported architectures. T
 ## Security
 
 As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This ideally prevents ACE and makes loading untrusted files more secure. Note that there still could be the possibility of ACE (though we don't expect this to be the case), so if you're still concerned about security, only load .safetensors models.
-
-## Contributing
-
-Feel free to contribute more model architecture support. When I add model support, I usually dig through the .pth file (state dict) keys and weights to find a way to get all the parameters of a model. At some point, I will document that entire process here. For now, there are plenty of example to reference.
-
-If the model arch you're adding does not have any parameter variants (for example, different scales or layer counts) then it should be fine adding it without any of the param detection. At the very least, you will need to find something uniquely identifiable in your model (usually a unique, really long key) that you can then add to `/spandrel/__helpers/main_registry.py` in order to load your model (preferably at the bottom). You will also need to set up the `__init__.py` file for your arch to include a `load` method, returning as ModelDescriptor with the model and some metadata about the model and its parameters.
-
-Like with the parameter detection, there's plenty of examples there. This might seem like a lot of hardcoding (and it very well is), but it's the only way to identify models based on just the .pth file (or any other weight storage format), since these files are just the weights of a model. If anybody can figure out a better way to do this, be my guest, but for now this is the best way and it works well.
 
 ## License Notice
 
