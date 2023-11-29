@@ -41,6 +41,6 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: tests/models
-                  key: models
+                  key: update-2023-11-29
             - run: pytest tests
 
