@@ -62,7 +62,7 @@ class AffineTransform(nn.Module):
         return attn
 
 
-def _get_stripe_info(
+def get_stripe_info(
     stripe_size_in: list[int],
     stripe_groups_in: list[int | None],
     stripe_shift: bool,
@@ -234,7 +234,7 @@ class AnchorStripeAttention(Attention):
         B, _L, C = qkv.shape
         qkv = qkv.view(B, H, W, C)
 
-        stripe_size, shift_size = _get_stripe_info(
+        stripe_size, shift_size = get_stripe_info(
             self.stripe_size, self.stripe_groups, self.stripe_shift, x_size
         )
         anchor_stripe_size = [s // self.anchor_window_down_factor for s in stripe_size]

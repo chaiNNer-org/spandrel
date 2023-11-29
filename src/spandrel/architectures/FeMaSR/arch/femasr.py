@@ -425,7 +425,7 @@ class FeMaSRNet(nn.Module):
         out_img = self.out_conv(x)
         return out_img
 
-    @torch.no_grad()
+    @torch.no_grad()  # type: ignore
     def test_tile(self, input, tile_size=240, tile_pad=16):
         # return self.test(input)
         """It will first crop input images to tiles, and then process each tile.
@@ -505,7 +505,7 @@ class FeMaSRNet(nn.Module):
                 ]
         return output
 
-    @torch.no_grad()
+    @torch.no_grad()  # type: ignore
     def test(self, input):
         org_use_semantic_loss = self.use_semantic_loss
         self.use_semantic_loss = False

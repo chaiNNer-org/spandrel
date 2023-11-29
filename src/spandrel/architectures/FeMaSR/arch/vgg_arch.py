@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 import torch
 from torch import nn as nn
-from torchvision.models import vgg as vgg
+from torchvision.models import vgg as vgg  # type: ignore
 
 VGG_PRETRAIN_PATH = "experiments/pretrained_models/vgg19-dcbb9e9d.pth"
 NAMES = {
@@ -259,7 +259,7 @@ class VGGFeatureExtractor(nn.Module):
             x = (x - self.mean) / self.std
 
         output = {}
-        for key, layer in self.vgg_net._modules.items():
+        for key, layer in self.vgg_net._modules.items():  # type: ignore
             x = layer(x)
             if key in self.layer_name_list:
                 output[key] = x.clone()
