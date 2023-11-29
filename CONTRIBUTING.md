@@ -89,7 +89,7 @@ Once you have found the file, create a new directory `src/spandrel/architectures
 
 In the case of DITN, we copy `models/DITN_Real.py` to `src/spandrel/architectures/DITN/arch/DITN_Real.py` and add the `LICENSE` file of the repo.
 
-The main model file might also reference other files in the repo. You have to copy those 2 into your `arch/` directory as well.
+The main model file might also reference other files in the repo. You have to copy those files into your `arch/` directory as well.
 
 In the case of DITN, the main model file doesn't reference any other files, so we are done.
 
@@ -127,7 +127,7 @@ In the case of DITN, its model file has no external dependencies, except for `to
 
 ### Step 2: Adding a `load` method
 
-With the architecture code in place, we can start integrating it into spandrel. The first step is to define a `load` function. This function will take a state dict, detect the hyperparameters of the architecture (=the input arguments of the architecture's Python class), and return a loaded model.
+With the architecture code in place, we can start integrating it into spandrel. The first step is to define a `load` function. This function will take a state dict, detect the hyperparameters of the architecture (= the input arguments of the architecture's Python class), and return a loaded model.
 
 We will worry about parameter detection later, for now, we'll just return a dummy model.
 
@@ -171,7 +171,7 @@ Next, fill in the template:
   - `scale`: If your architecture is a super resolution architecture, there should be a `scale`, `upscale`, or `upscale_factor` parameter. Use this value. If your architecture is not a super resolution architecture, set this value to `1`.
   - `input_channels`: The number of input channels of the architecture. Again, there should be a parameter for this. Something like `in_nc`, `in_channels`, `inp_channels`. If there isn't leave it at 3 for RGB images.
   - `output_channels`: The number of output channels of the architecture. Same as for `input_channels`. However, if there is no parameter for output channels, but there is one for input channels, just use the parameter for input channels.
-- Set the purpose of the architecture. If you have a restoration architecture (e.g. denoising, deblurring, JPEG), set this to "Restoration". If you have a super resolution architecture, set this to "SR" if the scale of the model is >1 and "Restoration" otherwise. We consider 1x model for SR architectures (e.g. 1x ESRGAN model) to be restoration models. (See DITN example below.)
+- Set the purpose of the architecture. If you have a restoration architecture (e.g. denoising, deblurring, removing JPEG artifacts), set this to "Restoration". If you have a super resolution architecture, set this to "SR" if the scale of the model is >1 and "Restoration" otherwise. We consider 1x model for SR architectures (e.g. 1x ESRGAN model) to be restoration models. (See DITN example below.)
 
 In the case of DITN, the filled in template looks like this:
 
@@ -287,7 +287,7 @@ def test_DITN_load():
     )
 ```
 
-Notices how `condition` does not cover all parameters. This particular model doesn't store all parameters as fields, so we don't compare them here.
+Notice how `condition` does not cover all parameters. This particular model doesn't store all parameters as fields, so we don't compare them here.
 
 </details>
 
@@ -625,7 +625,7 @@ ArchSupport(
 )
 ```
 
-Run the test from before again, it should now fail because there's not snapshot for it yet. So let's run the architecture tests from the command line to fix this: `pytest tests/test_ARCH.py --snapshot-update`. Running this, all tests should pass, and a new snapshot should be created. You'll also see a few now images. Those are the snapshots for our inference tests.
+Run the test from before again, it should now fail because there's not snapshot for it yet. So let's run the architecture tests from the command line to fix this: `pytest tests/test_ARCH.py --snapshot-update`. Running this, all tests should pass, and a new snapshot should be created. You'll also see a few new images. Those are the snapshots for our inference tests.
 
 Lastly, your architecture and a link to the official models to `README.md`.
 
