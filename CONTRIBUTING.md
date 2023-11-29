@@ -462,23 +462,23 @@ So `UFONE_blocks` controls the length of the sequence of the `UFONE`. Its defaul
 
 ```yaml
 UFONE.0
-ITLs
-...
+  ITLs
+    ...
 ```
 
 When you see a grouping called `<name>.0`, that's a sequence of length 1. If we modify `dump_dummy.py` to set `UFONE_blocks=3`, we'll get this instead:
 
 ```yaml
 UFONE
-0
-ITLs
-...
-1
-ITLs
-...
-2
-ITLs
-...
+  0
+    ITLs
+      ...
+  1
+    ITLs
+      ...
+  2
+    TLs
+      ..
 ```
 
 So we can clearly see the length of sequences using the groupings in `dump.yml`. However, we cannot access this length directly from state dict. To get around this, we'll use a helper function called `get_seq_len`. As the name suggests, it determines the length of a sequence in a state dict. Adding this to DITN's `load` function looks like this:
