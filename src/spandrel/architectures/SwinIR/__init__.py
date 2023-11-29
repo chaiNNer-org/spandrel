@@ -3,11 +3,15 @@ import re
 
 from torch import nn
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from .arch.SwinIR import SwinIR
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[SwinIR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[SwinIR]:
     # Defaults
     img_size = 64
     patch_size = 1
@@ -196,10 +200,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[SwinIR]:
         f"{resi_connection}",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="SwinIR",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
         supports_half=False,  # Too much weirdness to support this at the moment
         supports_bfloat16=True,

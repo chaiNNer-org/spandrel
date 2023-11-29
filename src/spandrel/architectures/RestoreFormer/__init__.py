@@ -1,5 +1,5 @@
 from ...__helpers.model_descriptor import (
-    FaceSRModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -7,7 +7,7 @@ from ..__arch_helpers.state import get_seq_len
 from .arch.restoreformer_arch import RestoreFormer
 
 
-def load(state_dict: StateDict) -> FaceSRModelDescriptor[RestoreFormer]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[RestoreFormer]:
     n_embed = 1024
     embed_dim = 256
     ch = 64
@@ -61,10 +61,11 @@ def load(state_dict: StateDict) -> FaceSRModelDescriptor[RestoreFormer]:
         head_size=head_size,
     )
 
-    return FaceSRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="RestoreFormer",
+        purpose="FaceSR",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,

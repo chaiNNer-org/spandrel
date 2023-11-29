@@ -1,12 +1,12 @@
 from ...__helpers.model_descriptor import (
-    InpaintModelDescriptor,
+    MaskedImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
 from .arch.MAT import MAT
 
 
-def load(state_dict: StateDict) -> InpaintModelDescriptor[MAT]:
+def load(state_dict: StateDict) -> MaskedImageModelDescriptor[MAT]:
     in_nc = 3
     out_nc = 3
 
@@ -17,10 +17,11 @@ def load(state_dict: StateDict) -> InpaintModelDescriptor[MAT]:
 
     model = MAT()
 
-    return InpaintModelDescriptor(
+    return MaskedImageModelDescriptor(
         model,
         state,
         architecture="MAT",
+        purpose="Inpaint",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,

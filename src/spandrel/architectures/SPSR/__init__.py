@@ -1,4 +1,4 @@
-from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from .arch.SPSR import SPSRNet as SPSR
 
 
@@ -23,7 +23,7 @@ def get_num_blocks(state: StateDict) -> int:
     return nb
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[SPSR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[SPSR]:
     state = state_dict
 
     num_blocks = get_num_blocks(state)
@@ -46,10 +46,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[SPSR]:
         f"{num_blocks}nb",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state,
         architecture="SPSR",
+        purpose="Restoration" if scale == 1 else "SR",
         tags=tags,
         supports_half=True,
         supports_bfloat16=True,

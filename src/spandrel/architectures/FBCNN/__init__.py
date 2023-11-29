@@ -1,12 +1,12 @@
 from ...__helpers.model_descriptor import (
-    RestorationModelDescriptor,
+    ImageModelDescriptor,
     StateDict,
 )
 from ..__arch_helpers.state import get_seq_len
 from .arch.FBCNN import FBCNN
 
 
-def load(state_dict: StateDict) -> RestorationModelDescriptor[FBCNN]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[FBCNN]:
     in_nc = 3
     out_nc = 3
     nc = [64, 128, 256, 512]
@@ -51,13 +51,16 @@ def load(state_dict: StateDict) -> RestorationModelDescriptor[FBCNN]:
         upsample_mode=upsample_mode,
     )
 
-    return RestorationModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="FBCNN",
+        purpose="Restoration",
         tags=[],
         supports_half=True,  # TODO
         supports_bfloat16=True,  # TODO
+        scale=1,
         input_channels=in_nc,
         output_channels=out_nc,
+        call_fn=lambda model, image: model(image)[0],
     )

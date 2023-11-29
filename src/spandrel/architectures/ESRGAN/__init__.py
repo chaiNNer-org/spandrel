@@ -3,7 +3,7 @@ import math
 import re
 from collections import OrderedDict
 
-from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from .arch.RRDB import RRDBNet
 
 
@@ -97,7 +97,7 @@ def _get_num_blocks(state: StateDict, state_map: dict) -> int:
     return max(*nbs) + 1
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[RRDBNet]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
     state = state_dict
     model_arch = "ESRGAN"
 
@@ -165,10 +165,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[RRDBNet]:
         in_nc //= shuffle_factor**2
         scale //= shuffle_factor
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state,
         architecture=model_arch,
+        purpose="Restoration" if scale == 1 else "SR",
         tags=tags,
         supports_half=True,
         supports_bfloat16=True,

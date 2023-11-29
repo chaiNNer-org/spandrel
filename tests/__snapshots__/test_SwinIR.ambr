@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_SwinIR_L_4x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='SwinIR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -18,10 +19,11 @@
   )
 # ---
 # name: test_SwinIR_M_s48w8_4x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='SwinIR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -36,10 +38,11 @@
   )
 # ---
 # name: test_SwinIR_M_s64w8_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='SwinIR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -54,10 +57,11 @@
   )
 # ---
 # name: test_SwinIR_S_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='SwinIR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,

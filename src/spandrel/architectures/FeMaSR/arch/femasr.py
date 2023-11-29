@@ -536,5 +536,4 @@ class FeMaSRNet(nn.Module):
             # in HQ stage, or LQ test stage, no GT indices needed.
             dec, codebook_loss, semantic_loss, indices = self.encode_and_decode(input)  # type: ignore
 
-        # return dec, codebook_loss, semantic_loss, indices
-        return dec
+        return dec, codebook_loss, semantic_loss, indices

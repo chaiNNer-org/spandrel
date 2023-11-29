@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_Swin2SR_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swin2SR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -17,10 +18,11 @@
   )
 # ---
 # name: test_Swin2SR_4x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swin2SR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -34,10 +36,11 @@
   )
 # ---
 # name: test_Swin2SR_compressed
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swin2SR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -51,10 +54,11 @@
   )
 # ---
 # name: test_Swin2SR_jpeg
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swin2SR',
     input_channels=1,
     output_channels=1,
+    purpose='Restoration',
     scale=1,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -68,10 +72,11 @@
   )
 # ---
 # name: test_Swin2SR_lightweight_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swin2SR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,

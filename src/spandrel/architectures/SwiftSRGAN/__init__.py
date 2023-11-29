@@ -1,9 +1,9 @@
-from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from ..__arch_helpers.state import get_seq_len
 from .arch.SwiftSRGAN import Generator as SwiftSRGAN
 
 
-def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
+def load(state: StateDict) -> ImageModelDescriptor[SwiftSRGAN]:
     in_channels: int = 3
     num_channels: int = 64
     num_blocks: int = 16
@@ -25,10 +25,11 @@ def load(state: StateDict) -> SRModelDescriptor[SwiftSRGAN]:
         f"{num_blocks}nb",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state,
         architecture="Swift-SRGAN",
+        purpose="Restoration" if upscale_factor == 1 else "SR",
         tags=tags,
         supports_half=True,
         supports_bfloat16=True,

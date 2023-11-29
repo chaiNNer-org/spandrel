@@ -1,5 +1,5 @@
 from ...__helpers.model_descriptor import (
-    FaceSRModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -7,7 +7,7 @@ from ..__arch_helpers.state import get_seq_len
 from .arch.codeformer import CodeFormer
 
 
-def load(state_dict: StateDict) -> FaceSRModelDescriptor[CodeFormer]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[CodeFormer]:
     dim_embd = 512
     n_head = 8  # cannot be deduced from state dict
     n_layers = 9
@@ -41,10 +41,11 @@ def load(state_dict: StateDict) -> FaceSRModelDescriptor[CodeFormer]:
         fix_modules=fix_modules,
     )
 
-    return FaceSRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="CodeFormer",
+        purpose="FaceSR",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,
