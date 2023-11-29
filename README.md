@@ -116,6 +116,7 @@ This has only been tested with the models that are linked here, and any unoffici
 - [DAT](https://github.com/zhengchen1999/DAT) | [Models](https://github.com/zhengchen1999/DAT#testing)
 - [FeMaSR](https://github.com/chaofengc/FeMaSR) | [Models](https://github.com/chaofengc/FeMaSR/releases/tag/v0.1-pretrain_models)
 - [GRLIR](https://github.com/ofsoundof/GRL-Image-Restoration) | [Models](https://github.com/ofsoundof/GRL-Image-Restoration/releases/tag/v1.0.0)
+- [DITN](https://github.com/yongliuy/DITN) | [Models](https://drive.google.com/drive/folders/1XpHW27H5j2S4IH8t4lccgrgHkIjqrS-X)
 
 #### Face Restoration
 
