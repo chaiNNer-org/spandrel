@@ -4,6 +4,7 @@ from typing import Callable
 
 from ..architectures import (
     DAT,
+    DITN,
     ESRGAN,
     FBCNN,
     GFPGAN,
@@ -244,6 +245,19 @@ MAIN_REGISTRY.add(
             )(state)
         ),
         load=KBNet.load,
+    ),
+    ArchSupport(
+        id="DITN",
+        detect=_has_keys(
+            "sft.weight",
+            "UFONE.0.ITLs.0.attn.temperature",
+            "UFONE.0.ITLs.0.ffn.project_in.weight",
+            "UFONE.0.ITLs.0.ffn.dwconv.weight",
+            "UFONE.0.ITLs.0.ffn.project_out.weight",
+            "conv_after_body.weight",
+            "upsample.0.weight",
+        ),
+        load=DITN.load,
     ),
     ArchSupport(
         id="ESRGAN",
