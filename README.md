@@ -13,9 +13,9 @@ This package ports [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s PyTorc
 
 After seeing many projects extract out chaiNNer's model support into their own projects, I decided it was probably worth the effort of creating a PyPi package that those developers could use instead.
 
-Slightly selfishly, I'm also hoping this will encourage the community to help add support for more models, so I don't have to do it myself. This will ultimately benefit everyone.
+I'm also hoping that by having a central package anyone can use, the community will be encouraged to help add support for more models. This will ultimately benefit everyone.
 
-This package does not yet have easy inference code for these model types, but porting that code is planned as well.
+This package does not yet have easy inference code, but porting that code is planned as well.
 
 ## Installation
 
@@ -42,7 +42,7 @@ model_loader = ModelLoader(torch.device("cuda:0"))
 loaded_model = model_loader.load_from_file(r"/path/to/your/model.pth")
 ```
 
-And that's it. The model gets loaded into a helper class with various helpful bits of information, as well as the actual model information.
+And that's it. The model gets loaded into a helper class called a ModelDescriptor with various helpful bits of information, as well as the actual model information.
 
 ```py
 # The model itself (a torch.nn.Module loaded with the weights)
@@ -74,11 +74,28 @@ loaded_model.output_channels
 loaded_model.size_requirements
 ```
 
-ModelDescriptors also support moving the model to other devices directly, so you can call `.to` on it just like you would the direct model, for convenience.
+ModelDescriptors also support basic inference, with per-descriptor parameters to keep everything simple. For example, an `ImageModelDescriptor` (used for super-resolution and restoration) takes in a single image tensor and returns a single image tensor, whereas a `MaskedModelDescriptor` (used for inpainting) takes in an image tensor and a mask tensor and returns a single image tensor.
+
+> **_NOTE: This is not an inference wrapper in the sense that it wil convert an image to a tensor for you. This is purely making the forward passes of these models more convenient to use, since the actual forward passes are not always as simple as image in/image out._**
+
+ModelDescriptors also have a few convenience methods to make them more similar to regular `torch.nn.Module`s: `.to`, `.train`, and `.eval`.
+
+Example:
+
+```py
+model = ModelLoader().load_from_file(r"/path/to/your/model.pth")
+model.to("cuda:0")
+model.eval()
+def process(tensor: Tensor) -> Tensor:
+    with torch.no_grad():
+        return model(tensor)
+```
 
 ## Model Architecture Support
 
 Spandrel currently supports a limited amount of neural network architectures. It can auto-detect these architectures just from their files alone.
+
+> **_NOTE: By its very nature, Spandrel will never be able to support every model architecture. The goal is just to support as many as is realistically possible._**
 
 This has only been tested with the models that are linked here, and any unofficial variants (especially if changes are made to their architectures) are not guaranteed to work.
 
@@ -124,7 +141,7 @@ This has only been tested with the models that are linked here, and any unoffici
 
 ## File type support
 
-Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, as well as any supported model that has been saved as or converted to a `.safetensors` file.
+Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, and `.safetensors` files for any supported architecture saved in one of these formats.
 
 ## Security
 
