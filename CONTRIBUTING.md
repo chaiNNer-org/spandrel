@@ -343,7 +343,7 @@ upsample.0
   upsample.0.bias:   Tensor float32 Size([48])
 ```
 
-(Shorted for brevity.)
+(Shortened for brevity.)
 
 In this YAMl file, we can see all keys in the state dict and their values. Keys are grouped into a tree structure by common prefix. E.g. `sft.weight` and `sft.bias` are grouped under `sft`. This is useful to see which keys belong to the same python object. Tensor values are printed with their data type and shape. The shape of tensors in the main thing we'll use to detect parameters.
 
