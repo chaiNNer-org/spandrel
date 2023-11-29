@@ -1,11 +1,15 @@
 import math
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import get_seq_len
 from .arch.Swin2SR import Swin2SR
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[Swin2SR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[Swin2SR]:
     # Defaults
     img_size = 64
     patch_size = 1
@@ -149,10 +153,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[Swin2SR]:
         f"{resi_connection}",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="Swin2SR",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
         supports_half=False,  # Too much weirdness to support this at the moment
         supports_bfloat16=True,

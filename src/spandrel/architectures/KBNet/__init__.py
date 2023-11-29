@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from ...__helpers.model_descriptor import (
-    RestorationModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
@@ -12,7 +12,7 @@ from .arch.kbnet_s import KBNet_s
 # KBCNN is essentially 2 similar but different architectures: KBNet_l and KBNet_s.
 
 
-def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
+def load_l(state_dict: StateDict) -> ImageModelDescriptor[KBNet_l]:
     in_nc = 3
     out_nc = 3
     dim = 48
@@ -56,20 +56,22 @@ def load_l(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_l]:
         bias=bias,
     )
 
-    return RestorationModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="KBCNN",
+        purpose="Restoration",
         tags=["L"],
         supports_half=False,
         supports_bfloat16=True,
+        scale=1,
         input_channels=in_nc,
         output_channels=out_nc,
         size_requirements=SizeRequirements(multiple_of=16),
     )
 
 
-def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
+def load_s(state_dict: StateDict) -> ImageModelDescriptor[KBNet_s]:
     img_channel = 3
     width = 64
     middle_blk_num = 12
@@ -112,13 +114,15 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
         ffn_scale=ffn_scale,
     )
 
-    return RestorationModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="KBCNN",
+        purpose="Restoration",
         tags=["S"],
         supports_half=False,
         supports_bfloat16=True,
+        scale=1,
         input_channels=img_channel,
         output_channels=img_channel,
     )
@@ -126,7 +130,7 @@ def load_s(state_dict: StateDict) -> RestorationModelDescriptor[KBNet_s]:
 
 def load(
     state_dict: StateDict
-) -> RestorationModelDescriptor[KBNet_l] | RestorationModelDescriptor[KBNet_s]:
+) -> ImageModelDescriptor[KBNet_l] | ImageModelDescriptor[KBNet_s]:
     if "patch_embed.proj.weight" in state_dict:
         return load_l(state_dict)
     else:

@@ -12,6 +12,7 @@
     "strictSetInference": true,
     "reportDuplicateImport": "warning",
     "reportImportCycles": "error",
+    "reportIncompatibleMethodOverride": "error",
     "reportIncompatibleVariableOverride": "error",
     "reportOverlappingOverload": "error",
     "reportPrivateImportUsage": "error",

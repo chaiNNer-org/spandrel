@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_SwiftSRGAN_2x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swift-SRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -15,10 +16,11 @@
   )
 # ---
 # name: test_SwiftSRGAN_4x
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='Swift-SRGAN',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,

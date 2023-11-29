@@ -585,5 +585,4 @@ class FBCNN(nn.Module):
         x = self.m_tail(x)
         x = x[..., :h, :w]
 
-        # return x, qf
-        return x
+        return x, qf

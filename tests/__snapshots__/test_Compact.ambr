@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_Compact_community
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='RealESRGAN Compact',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -15,10 +16,11 @@
   )
 # ---
 # name: test_Compact_realesr_general_x4v3
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='RealESRGAN Compact',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,

@@ -6,7 +6,7 @@ from typing import Literal
 import torch
 
 from ...__helpers.canonicalize import remove_common_prefix
-from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
 from .arch.grl import GRL as GRLIR
 
@@ -132,7 +132,7 @@ def _inv_div_add(a: int, d: int) -> int:
     return round(a / (1 + 1 / d))
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[GRLIR]:
     state_dict = _clean_up_checkpoint(state_dict)
 
     img_size: int = 64
@@ -302,10 +302,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[GRLIR]:
     if len(depths) < 6:
         size_tag = "small" if embed_dim >= 96 else "tiny"
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="GRLIR",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=[
             size_tag,
             f"{embed_dim}dim",

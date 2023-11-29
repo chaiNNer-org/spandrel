@@ -1,9 +1,9 @@
-from ...__helpers.model_descriptor import SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
 from .arch.SRVGG import SRVGGNetCompact
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[SRVGGNetCompact]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[SRVGGNetCompact]:
     state = state_dict
 
     highest_num = get_seq_len(state, "body") - 1
@@ -25,10 +25,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[SRVGGNetCompact]:
 
     tags = [f"{num_feat}nf", f"{num_conv}nc"]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state,
         architecture="RealESRGAN Compact",
+        purpose="Restoration" if scale == 1 else "SR",
         tags=tags,
         supports_half=True,
         supports_bfloat16=True,

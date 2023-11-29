@@ -1,12 +1,12 @@
 from ...__helpers.model_descriptor import (
-    FaceSRModelDescriptor,
+    ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
 from .arch.gfpganv1_clean_arch import GFPGANv1Clean
 
 
-def load(state_dict: StateDict) -> FaceSRModelDescriptor[GFPGANv1Clean]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[GFPGANv1Clean]:
     out_size = 512
     num_style_feat = 512
     channel_multiplier = 2
@@ -31,10 +31,11 @@ def load(state_dict: StateDict) -> FaceSRModelDescriptor[GFPGANv1Clean]:
         sft_half=sft_half,
     )
 
-    return FaceSRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="GFPGAN",
+        purpose="FaceSR",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,

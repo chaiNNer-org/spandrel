@@ -1,6 +1,10 @@
 import math
 
-from ...__helpers.model_descriptor import SizeRequirements, SRModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import (
     get_scale_and_output_channels,
     get_seq_len,
@@ -8,7 +12,7 @@ from ..__arch_helpers.state import (
 from .arch.OmniSR import OmniSR
 
 
-def load(state_dict: StateDict) -> SRModelDescriptor[OmniSR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[OmniSR]:
     # Remove junk from the state dict
     state_dict_keys = set(state_dict.keys())
     for key in state_dict_keys:
@@ -64,10 +68,11 @@ def load(state_dict: StateDict) -> SRModelDescriptor[OmniSR]:
         f"{res_num}nr",
     ]
 
-    return SRModelDescriptor(
+    return ImageModelDescriptor(
         model,
         state_dict,
         architecture="OmniSR",
+        purpose="Restoration" if up_scale == 1 else "SR",
         tags=tags,
         supports_half=True,  # TODO: Test this
         supports_bfloat16=True,

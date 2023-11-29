@@ -1,9 +1,10 @@
 # serializer version: 1
 # name: test_OmniSR_community1
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='OmniSR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -16,10 +17,11 @@
   )
 # ---
 # name: test_OmniSR_community2
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='OmniSR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -32,10 +34,11 @@
   )
 # ---
 # name: test_OmniSR_official_x2
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='OmniSR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=2,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -48,10 +51,11 @@
   )
 # ---
 # name: test_OmniSR_official_x3
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='OmniSR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=3,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
@@ -64,10 +68,11 @@
   )
 # ---
 # name: test_OmniSR_official_x4
-  SRModelDescriptor(
+  ImageModelDescriptor(
     architecture='OmniSR',
     input_channels=3,
     output_channels=3,
+    purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,
