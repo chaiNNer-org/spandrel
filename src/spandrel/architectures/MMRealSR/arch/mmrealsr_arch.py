@@ -5,7 +5,7 @@ from torch.nn import init
 from torch.nn.modules.batchnorm import _BatchNorm  # type: ignore
 
 
-@torch.no_grad()
+@torch.no_grad()  # type: ignore
 def default_init_weights(module_list, scale: float = 1, bias_fill: float = 0, **kwargs):
     """Initialize network weights.
 
