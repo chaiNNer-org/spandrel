@@ -21,7 +21,7 @@ def load(state_dict: StateDict) -> MaskedImageModelDescriptor[MAT]:
         model,
         state,
         architecture="MAT",
-        purpose="Inpaint",
+        purpose="Inpainting",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,

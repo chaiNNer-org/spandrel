@@ -58,13 +58,13 @@ class SizeRequirements:
         return True
 
 
-Purpose = Literal["SR", "FaceSR", "Inpaint", "Restoration"]
+Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration"]
 """
 A short string describing the purpose of the model.
 
 - `SR`: Super resolution
 - `FaceSR`: Face super resolution
-- `Inpaint`: Image inpainting
+- `Inpainting`: Image inpainting
 - `Restoration`: Image restoration (denoising, deblurring, JPEG, etc.)
 """
 
@@ -219,7 +219,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         model: T,
         state_dict: StateDict,
         architecture: str,
-        purpose: Literal["Inpaint"],
+        purpose: Literal["Inpainting"],
         tags: list[str],
         supports_half: bool,
         supports_bfloat16: bool,
@@ -241,12 +241,12 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
             size_requirements=size_requirements,
         )
 
-        self._purpose: Literal["Inpaint"] = purpose
+        self._purpose: Literal["Inpainting"] = purpose
 
         self._call_fn = call_fn or (lambda model, image, mask: model(image, mask))
 
     @property
-    def purpose(self) -> Literal["Inpaint"]:
+    def purpose(self) -> Literal["Inpainting"]:
         return self._purpose
 
     def __call__(self, image: Tensor, mask: Tensor) -> Tensor:

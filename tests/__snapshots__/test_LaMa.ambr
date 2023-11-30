@@ -4,7 +4,7 @@
     architecture='LaMa',
     input_channels=4,
     output_channels=3,
-    purpose='Inpaint',
+    purpose='Inpainting',
     scale=1,
     size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
     supports_bfloat16=True,

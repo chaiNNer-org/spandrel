@@ -29,7 +29,7 @@ def load(state_dict: StateDict) -> MaskedImageModelDescriptor[LaMa]:
         model,
         state_dict,
         architecture="LaMa",
-        purpose="Inpaint",
+        purpose="Inpainting",
         tags=[],
         supports_half=False,
         supports_bfloat16=True,
