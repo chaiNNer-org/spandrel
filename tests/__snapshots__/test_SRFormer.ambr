@@ -1,0 +1,55 @@
+# serializer version: 1
+# name: test_SRFormerLight_SRx3_DIV2K
+  ImageModelDescriptor(
+    architecture='SRFormer',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=3,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'small',
+      's64w16',
+      '60dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_SRFormer_SRx2_DF2K
+  ImageModelDescriptor(
+    architecture='SRFormer',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w22',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
+# name: test_SRFormer_SRx4_DF2K
+  ImageModelDescriptor(
+    architecture='SRFormer',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w22',
+      '180dim',
+      '1conv',
+    ]),
+  )
+# ---
