@@ -1,0 +1,49 @@
+# serializer version: 1
+# name: test_MMRealSRGAN
+  ImageModelDescriptor(
+    architecture='MMRealSR',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_MMRealSRGAN_ModulationBest
+  ImageModelDescriptor(
+    architecture='MMRealSR',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
+# name: test_MMRealSRNet
+  ImageModelDescriptor(
+    architecture='MMRealSR',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64nf',
+      '23nb',
+    ]),
+  )
+# ---
