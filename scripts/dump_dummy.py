@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     # get source code expression of network
     source = inspect.getsource(create_dummy)
-    source = "\n".join(source.split("\n")[1:])  # remove "def create_dummy():
+    source = "\n".join(source.split("\n")[2:])  # remove "def create_dummy():
     source = dedent(source)
     if source.startswith("return "):
         source = source[7:]
