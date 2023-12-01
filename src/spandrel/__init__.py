@@ -1,4 +1,4 @@
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .__helpers.canonicalize import canonicalize_state_dict
 from .__helpers.loader import ModelLoader
