@@ -118,6 +118,7 @@ This has only been tested with the models that are linked here, and any unoffici
 - [GRLIR](https://github.com/ofsoundof/GRL-Image-Restoration) | [Models](https://github.com/ofsoundof/GRL-Image-Restoration/releases/tag/v1.0.0)
 - [DITN](https://github.com/yongliuy/DITN) | [Models](https://drive.google.com/drive/folders/1XpHW27H5j2S4IH8t4lccgrgHkIjqrS-X)
 - [MM-RealSR](https://github.com/TencentARC/MM-RealSR) | [Models](https://github.com/TencentARC/MM-RealSR/releases/tag/v1.0.0)
+- [SPAN](https://github.com/hongyuanyu/SPAN) | [Models](https://drive.google.com/file/d/1iYUA2TzKuxI0vzmA-UXr_nB43XgPOXUg/view?usp=sharing)
 
 #### Face Restoration
 
