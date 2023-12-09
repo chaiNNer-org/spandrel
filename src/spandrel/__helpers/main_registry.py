@@ -11,6 +11,7 @@ from ..architectures import (
     GRLIR,
     HAT,
     MAT,
+    SPAN,
     SPSR,
     CodeFormer,
     Compact,
@@ -277,6 +278,20 @@ MAIN_REGISTRY.add(
             "dd_embed.0.weight",
         ),
         load=MMRealSR.load,
+    ),
+    ArchSupport(
+        id="SPAN",
+        detect=_has_keys(
+            "conv_1.sk.weight",
+            "block_1.c1_r.sk.weight",
+            "block_1.c1_r.eval_conv.weight",
+            "block_1.c3_r.eval_conv.weight",
+            "conv_cat.weight",
+            "conv_2.sk.weight",
+            "conv_2.eval_conv.weight",
+            "upsampler.0.weight",
+        ),
+        load=SPAN.load,
     ),
     ArchSupport(
         id="ESRGAN",
