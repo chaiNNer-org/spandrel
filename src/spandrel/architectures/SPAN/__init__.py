@@ -34,7 +34,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SPAN]:
     return ImageModelDescriptor(
         model,
         state_dict,
-        architecture="SPSR",
+        architecture="SPAN",
         purpose="Restoration" if upscale == 1 else "SR",
         tags=[f"{feature_channels}nf"],
         supports_half=True,
