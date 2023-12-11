@@ -44,7 +44,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SPSR]:
         architecture="SPSR",
         purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
-        supports_half=False,
+        supports_half=True,
         supports_bfloat16=True,
         scale=upscale,
         input_channels=in_nc,
