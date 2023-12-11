@@ -1,45 +1,37 @@
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
+from ..__arch_helpers.state import get_seq_len
 from .arch.SPSR import SPSRNet as SPSR
 
 
-def get_scale(state: StateDict, min_part: int = 4) -> int:
-    n = 0
-    for part in list(state):
-        parts = part.split(".")
-        if len(parts) == 3:
-            part_num = int(parts[1])
-            if part_num > min_part and parts[0] == "model" and parts[2] == "weight":
-                n += 1
-    return 2**n
-
-
-def get_num_blocks(state: StateDict) -> int:
-    nb = 0
-    for part in list(state):
-        parts = part.split(".")
-        n_parts = len(parts)
-        if n_parts == 5 and parts[2] == "sub":
-            nb = int(parts[3])
-    return nb
-
-
 def load(state_dict: StateDict) -> ImageModelDescriptor[SPSR]:
-    state = state_dict
+    in_nc: int = 3
+    out_nc: int = 3
+    num_filters: int
+    num_blocks: int
+    upscale: int = 4
+    upsample_mode = "upconv"
 
-    num_blocks = get_num_blocks(state)
+    in_nc = state_dict["model.0.weight"].shape[1]
+    out_nc = state_dict["f_HR_conv1.0.weight"].shape[0]
+    num_filters = state_dict["f_HR_conv1.0.weight"].shape[1]
+    num_blocks = get_seq_len(state_dict, "model.1.sub") - 1
 
-    in_nc: int = state["model.0.weight"].shape[1]
-    out_nc: int = state["f_HR_conv1.0.bias"].shape[0]
-
-    scale = get_scale(state, 4)
-    num_filters: int = state["model.0.weight"].shape[0]
+    if "model.2.weight" in state_dict:
+        upsample_mode = "pixelshuffle"
+        upscale_blocks = (get_seq_len(state_dict, "model") - 3) // 3
+        upscale = 2**upscale_blocks
+    else:
+        upsample_mode = "upconv"
+        upscale_blocks = (get_seq_len(state_dict, "model") - 3) // 3
+        upscale = 2**upscale_blocks
 
     model = SPSR(
         in_nc=in_nc,
         out_nc=out_nc,
         num_filters=num_filters,
         num_blocks=num_blocks,
-        upscale=scale,
+        upscale=upscale,
+        upsample_mode=upsample_mode,
     )
     tags = [
         f"{num_filters}nf",
@@ -48,13 +40,13 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SPSR]:
 
     return ImageModelDescriptor(
         model,
-        state,
+        state_dict,
         architecture="SPSR",
-        purpose="Restoration" if scale == 1 else "SR",
+        purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
         supports_half=False,
         supports_bfloat16=True,
-        scale=scale,
+        scale=upscale,
         input_channels=in_nc,
         output_channels=out_nc,
     )
