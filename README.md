@@ -141,6 +141,10 @@ This has only been tested with the models that are linked here, and any unoffici
 
 - [FBCNN](https://github.com/jiaxi-jiang/FBCNN) | [Models](https://github.com/jiaxi-jiang/FBCNN/releases/tag/v1.0)
 
+#### Colorization
+
+- [DDColor](https://github.com/piddnad/DDColor) | [Models](https://github.com/piddnad/DDColor/blob/master/MODEL_ZOO.md)
+
 
 ## File type support
 

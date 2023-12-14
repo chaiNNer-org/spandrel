@@ -129,8 +129,13 @@ def write_image(path: str | Path, image: np.ndarray):
 
 
 def image_to_tensor(img: np.ndarray) -> torch.Tensor:
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = img.astype(np.float32) / 255.0
+    if img.ndim == 2:
+        img = np.expand_dims(img, axis=2)
+    if img.shape[2] == 1:
+        pass
+    else:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = np.transpose(img, (2, 0, 1))
     tensor = torch.from_numpy(img)
     return tensor.unsqueeze(0)
@@ -169,6 +174,7 @@ class TestImage(Enum):
     SR_32 = "32x32.png"
     SR_64 = "64x64.png"
     JPEG_15 = "jpeg-15.jpg"
+    GRAY_EINSTEIN = "einstein.png"
 
 
 def assert_image_inference(
@@ -187,6 +193,10 @@ def assert_image_inference(
 
         image = read_image(path)
         image_h, image_w, image_c = get_h_w_c(image)
+
+        if model.input_channels == 1 and image_c == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            image_c = 1
 
         assert (
             image_c == model.input_channels
