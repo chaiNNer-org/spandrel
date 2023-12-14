@@ -1,0 +1,20 @@
+# serializer version: 1
+# name: test_DDColor_paper_tiny
+  ImageModelDescriptor(
+    architecture='DDColor',
+    input_channels=1,
+    output_channels=3,
+    purpose='Restoration',
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'MultiScaleColorDecoder',
+      'Spectral',
+      'convnext-t',
+      '512nf',
+      '100nq 3ns 9dl',
+    ]),
+  )
+# ---
