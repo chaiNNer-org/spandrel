@@ -1,5 +1,6 @@
 from ...__helpers.model_descriptor import (
     ImageModelDescriptor,
+    ModelTiling,
     SizeRequirements,
     StateDict,
 )
@@ -45,4 +46,5 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SCUNet]:
         input_channels=in_nc,
         output_channels=in_nc,
         size_requirements=SizeRequirements(minimum=16),
+        tiling=ModelTiling.DISCOURAGED,
     )

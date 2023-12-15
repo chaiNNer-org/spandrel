@@ -13,6 +13,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_MMRealSRGAN_ModulationBest
@@ -29,6 +30,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_MMRealSRNet
@@ -45,5 +47,6 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

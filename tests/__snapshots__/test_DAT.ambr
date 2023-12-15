@@ -17,6 +17,7 @@
       '2.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_S_x3
@@ -37,6 +38,7 @@
       '2.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_S_x4
@@ -57,6 +59,7 @@
       '2.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_tags
@@ -77,6 +80,7 @@
       '2.0ef',
       '3conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_tags.1
@@ -97,6 +101,7 @@
       '2.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_tags.2
@@ -117,6 +122,7 @@
       '4.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_tags.3
@@ -137,6 +143,7 @@
       '2.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DAT_x4
@@ -157,5 +164,6 @@
       '4.0ef',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

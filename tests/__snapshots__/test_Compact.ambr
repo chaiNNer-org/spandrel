@@ -13,6 +13,7 @@
       '64nf',
       '16nc',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_Compact_realesr_general_x4v3
@@ -29,5 +30,6 @@
       '64nf',
       '32nc',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

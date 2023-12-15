@@ -11,5 +11,6 @@
     supports_half=False,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

@@ -16,6 +16,7 @@
       '240dim',
       '3conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SwinIR_M_s48w8_4x
@@ -35,6 +36,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SwinIR_M_s64w8_2x
@@ -54,6 +56,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SwinIR_S_2x
@@ -73,5 +76,6 @@
       '60dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

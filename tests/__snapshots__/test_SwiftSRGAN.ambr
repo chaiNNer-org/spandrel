@@ -13,6 +13,7 @@
       '64nf',
       '16nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SwiftSRGAN_4x
@@ -29,5 +30,6 @@
       '64nf',
       '16nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

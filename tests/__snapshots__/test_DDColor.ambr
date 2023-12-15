@@ -16,5 +16,6 @@
       '512nf',
       '100nq 3ns 9dl',
     ]),
+    tiling=<ModelTiling.INTERNAL: 3>,
   )
 # ---

@@ -13,6 +13,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_BSRGAN_2x
@@ -29,6 +30,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_ESRGAN_community
@@ -45,6 +47,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_ESRGAN_community_2x
@@ -61,6 +64,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_ESRGAN_community_4x
@@ -77,6 +81,7 @@
       '32nf',
       '12nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_ESRGAN_community_8x
@@ -93,6 +98,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealESRGAN_x2plus
@@ -109,6 +115,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealESRGAN_x4plus
@@ -125,6 +132,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealESRGAN_x4plus_anime_6B
@@ -141,6 +149,7 @@
       '64nf',
       '6nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealESRNet_x4plus
@@ -157,6 +166,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealSR_DPED
@@ -173,6 +183,7 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_RealSR_JPEG
@@ -189,5 +200,6 @@
       '64nf',
       '23nb',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

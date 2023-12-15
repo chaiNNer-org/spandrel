@@ -6,6 +6,7 @@ from torch import Tensor
 
 from ...__helpers.model_descriptor import (
     ImageModelDescriptor,
+    ModelTiling,
     StateDict,
 )
 from ..__arch_helpers.color import lab_to_rgb, linear_rgb_to_lab, rgb_to_linear_rgb
@@ -163,5 +164,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[DDColor]:
         scale=1,
         input_channels=1,
         output_channels=3,
+        tiling=ModelTiling.INTERNAL,
         call_fn=_call,
     )

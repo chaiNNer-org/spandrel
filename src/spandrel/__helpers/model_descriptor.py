@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Callable, Dict, Generic, Literal, TypeVar, Union
 
 import torch
@@ -69,6 +70,28 @@ A short string describing the purpose of the model.
 """
 
 
+class ModelTiling(Enum):
+    SUPPORTED = 1
+    """
+    The model supports tiling.
+    """
+    DISCOURAGED = 2
+    """
+    The model supports tiling, but it is not recommended.
+
+    This might be because the model heavily relies and global image information,
+    and so tiling will likely cause artifacts.
+    """
+    INTERNAL = 3
+    """
+    The model does tiling (or similar) internally.
+
+    This is typically done by models that require global image information to
+    work properly. As such, it is recommend to not do any tiling before passing
+    the image to the model.
+    """
+
+
 class ModelBase(ABC, Generic[T]):
     def __init__(
         self,
@@ -82,6 +105,7 @@ class ModelBase(ABC, Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        tiling: ModelTiling = ModelTiling.SUPPORTED,
     ):
         self.model: T = model
         """
@@ -132,6 +156,13 @@ class ModelBase(ABC, Generic[T]):
         """
         Size requirements for the input image. E.g. minimum size.
         """
+        self.tiling: ModelTiling = tiling
+        """
+        Whether the model supports tiling.
+
+        Technically, all models support tiling. This is simply a recommendation
+        on how to best use the model.
+        """
 
         self.model.load_state_dict(state_dict)  # type: ignore
 
@@ -174,6 +205,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        tiling: ModelTiling = ModelTiling.SUPPORTED,
         call_fn: Callable[[T, Tensor], Tensor] | None = None,
     ):
         assert (
@@ -191,6 +223,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
             input_channels=input_channels,
             output_channels=output_channels,
             size_requirements=size_requirements,
+            tiling=tiling,
         )
 
         self._purpose: Literal["SR", "FaceSR", "Restoration"] = purpose
@@ -226,6 +259,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         input_channels: int,
         output_channels: int,
         size_requirements: SizeRequirements | None = None,
+        tiling: ModelTiling = ModelTiling.SUPPORTED,
         call_fn: Callable[[T, Tensor, Tensor], Tensor] | None = None,
     ):
         super().__init__(
@@ -239,6 +273,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
             input_channels=input_channels,
             output_channels=output_channels,
             size_requirements=size_requirements,
+            tiling=tiling,
         )
 
         self._purpose: Literal["Inpainting"] = purpose

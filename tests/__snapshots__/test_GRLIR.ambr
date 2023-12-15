@@ -15,6 +15,7 @@
       'w16df4',
       's32x64',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_GRLIR_sr_grl_tiny_c3x3
@@ -33,6 +34,7 @@
       'w32df4',
       's64x64',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_GRLIR_sr_grl_tiny_c3x4
@@ -51,5 +53,6 @@
       'w32df4',
       's64x64',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

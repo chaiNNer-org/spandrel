@@ -16,6 +16,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_4x
@@ -35,6 +36,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_L_4x
@@ -54,6 +56,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_S_2x
@@ -73,6 +76,7 @@
       '144dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_S_3x
@@ -92,6 +96,7 @@
       '144dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_S_4x
@@ -111,6 +116,7 @@
       '144dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_community1
@@ -130,6 +136,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_HAT_community2
@@ -149,5 +156,6 @@
       '144dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

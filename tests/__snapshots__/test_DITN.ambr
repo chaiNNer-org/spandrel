@@ -12,6 +12,7 @@
     tags=list([
       '60dim',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_DITN_Real_x4
@@ -27,5 +28,6 @@
     tags=list([
       '60dim',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
