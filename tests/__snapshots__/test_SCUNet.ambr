@@ -11,6 +11,7 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
   )
 # ---
 # name: test_SCUNet_color_GAN
@@ -25,6 +26,7 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
   )
 # ---
 # name: test_SCUNet_color_RSNR
@@ -39,6 +41,7 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
   )
 # ---
 # name: test_SCUNet_gray_25
@@ -53,5 +56,6 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
   )
 # ---

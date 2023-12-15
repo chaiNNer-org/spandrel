@@ -15,6 +15,7 @@
       '60dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SRFormer_SRx2_DF2K
@@ -33,6 +34,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_SRFormer_SRx4_DF2K
@@ -51,5 +53,6 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

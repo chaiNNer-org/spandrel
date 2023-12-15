@@ -11,6 +11,7 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_FBCNN_gray
@@ -25,5 +26,6 @@
     supports_half=True,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

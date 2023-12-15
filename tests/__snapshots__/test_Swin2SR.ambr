@@ -15,6 +15,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_Swin2SR_4x
@@ -33,6 +34,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_Swin2SR_compressed
@@ -51,6 +53,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_Swin2SR_jpeg
@@ -69,6 +72,7 @@
       '180dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_Swin2SR_lightweight_2x
@@ -87,5 +91,6 @@
       '60dim',
       '1conv',
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---

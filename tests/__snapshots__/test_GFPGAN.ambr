@@ -11,6 +11,7 @@
     supports_half=False,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_GFPGAN_1_3
@@ -25,6 +26,7 @@
     supports_half=False,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
 # name: test_GFPGAN_1_4
@@ -39,5 +41,6 @@
     supports_half=False,
     tags=list([
     ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
