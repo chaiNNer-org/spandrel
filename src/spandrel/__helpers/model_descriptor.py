@@ -59,14 +59,15 @@ class SizeRequirements:
         return True
 
 
-Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration"]
+Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration", "GuidedSR"]
 """
 A short string describing the purpose of the model.
 
 - `SR`: Super resolution
 - `FaceSR`: Face super resolution
 - `Inpainting`: Image inpainting
-- `Restoration`: Image restoration (denoising, deblurring, JPEG, etc.)
+- `Restoration`: Image restoration (e.g. denoising, deblurring, JPEG, etc.)
+- `GuidedSR`: Guided super resolution (e.g. guided depth map super resolution)
 """
 
 
@@ -292,9 +293,64 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         return output
 
 
+class GuidedImageModelDescriptor(ModelBase[T], Generic[T]):
+    """
+    A model that takes an image and a guide image as input and returns an image.
+    """
+
+    def __init__(
+        self,
+        model: T,
+        state_dict: StateDict,
+        architecture: str,
+        purpose: Literal["GuidedSR"],
+        tags: list[str],
+        supports_half: bool,
+        supports_bfloat16: bool,
+        scale: int,
+        input_channels: int,
+        output_channels: int,
+        guide_input_channels: int,
+        size_requirements: SizeRequirements | None = None,
+        tiling: ModelTiling = ModelTiling.SUPPORTED,
+        call_fn: Callable[[T, Tensor, Tensor], Tensor] | None = None,
+    ):
+        super().__init__(
+            model,
+            state_dict,
+            architecture,
+            tags,
+            supports_half=supports_half,
+            supports_bfloat16=supports_bfloat16,
+            scale=scale,
+            input_channels=input_channels,
+            output_channels=output_channels,
+            size_requirements=size_requirements,
+            tiling=tiling,
+        )
+
+        self._purpose: Literal["GuidedSR"] = purpose
+
+        self.guide_input_channels: int = guide_input_channels
+
+        self._call_fn = call_fn or (lambda model, image, guide: model(image, guide))
+
+    @property
+    def purpose(self) -> Literal["GuidedSR"]:
+        return self._purpose
+
+    def __call__(self, image: Tensor, guide: Tensor) -> Tensor:
+        output = self._call_fn(self.model, image, guide)
+        assert isinstance(
+            output, Tensor
+        ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
+        return output
+
+
 ModelDescriptor = Union[
     ImageModelDescriptor[torch.nn.Module],
     MaskedImageModelDescriptor[torch.nn.Module],
+    GuidedImageModelDescriptor[torch.nn.Module],
 ]
 """
 A model descriptor is a loaded model with metadata. Metadata includes the
