@@ -59,6 +59,7 @@ extend-select = [
     "ANN001",
     "ANN002",
     "B",      # bugbear
+    "C4",     # comprehensions
     "E",      # pycodestyle
     "F",      # pyflakes
     "FA",     # flake8-future-annotations

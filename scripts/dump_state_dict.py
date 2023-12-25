@@ -134,7 +134,7 @@ def group_keys(state: State, level: int = 0) -> Fork[State] | State:
         key_state = by_key[key]
         key_state[k] = v
 
-    if all([len(v) == 1 for v in by_key.values()]):
+    if all(len(v) == 1 for v in by_key.values()):
         return state
 
     paths: dict[str, Fork[State] | State] = {}
