@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import sys
+import time
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -51,8 +52,17 @@ def download_file(url: str, filename: Path | str) -> str:
 
     url = convert_google_drive_link(url)
 
-    path, _ = urlretrieve(url, filename=filename)
-    return path
+    temp_filename = filename.with_suffix(f".part-{int(time.time())}")
+
+    try:
+        path, _ = urlretrieve(url, filename=temp_filename)
+        temp_filename.rename(filename)
+        return str(filename)
+    finally:
+        try:
+            temp_filename.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def extract_file_from_zip(
