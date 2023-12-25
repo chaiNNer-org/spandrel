@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=46.4.0", "wheel", "build"]
+requires = ["setuptools>=46.4.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -34,7 +34,7 @@ dependencies = ["torch", "torchvision", "safetensors", "numpy", "einops"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-build = ["setuptools>=46.4.0", "wheel", "build", "twine"]
+build = ["build", "twine"]
 lint = ["ruff==0.1.6"]
 typecheck = ["pyright==1.1.335"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
