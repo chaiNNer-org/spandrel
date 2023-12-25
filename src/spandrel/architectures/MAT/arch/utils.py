@@ -21,8 +21,8 @@ class EasyDict(dict):
     def __getattr__(self, name: str) -> Any:
         try:
             return self[name]
-        except KeyError:
-            raise AttributeError(name)
+        except KeyError as ke:
+            raise AttributeError(name) from ke
 
     def __setattr__(self, name: str, value: Any) -> None:
         self[name] = value

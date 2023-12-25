@@ -58,6 +58,7 @@ src = ["src"]
 extend-select = [
     "ANN001",
     "ANN002",
+    "B",      # bugbear
     "E",      # pycodestyle
     "F",      # pyflakes
     "FA",     # flake8-future-annotations
@@ -74,7 +75,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
-"**/arch/**/*" = ["N", "ANN"]
+"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN"]
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]

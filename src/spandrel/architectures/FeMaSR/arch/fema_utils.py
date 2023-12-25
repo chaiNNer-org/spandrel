@@ -27,7 +27,7 @@ class NormLayer(nn.Module):
         elif norm_type == "none":
             self.norm = lambda x: x * 1.0
         else:
-            assert False, f"Norm type {norm_type} not support."
+            raise ValueError(f"Norm type {norm_type} not supported")
 
     def forward(self, x):
         return self.norm(x)
@@ -61,7 +61,7 @@ class ActLayer(nn.Module):
         elif relu_type == "gelu":
             self.func = nn.GELU()
         else:
-            assert False, f"activation type {relu_type} not support."
+            raise ValueError(f"Activation type {relu_type} not supported")
 
     def forward(self, x):
         return self.func(x)
