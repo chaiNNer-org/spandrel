@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import logging
 import os
 import re
 import sys
+import time
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -29,6 +31,8 @@ from spandrel import (
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
 
+logger = logging.getLogger(__name__)
+
 
 def get_url_file_name(url: str) -> str:
     return Path(unquote(urlparse(url).path)).name
@@ -45,14 +49,23 @@ def convert_google_drive_link(url: str) -> str:
     return "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
 
 
-def download_file(url: str, filename: Path | str) -> str:
+def download_file(url: str, filename: Path | str) -> None:
     filename = Path(filename)
     filename.parent.mkdir(exist_ok=True)
 
     url = convert_google_drive_link(url)
 
-    path, _ = urlretrieve(url, filename=filename)
-    return path
+    temp_filename = filename.with_suffix(f".part-{int(time.time())}")
+
+    try:
+        logger.info("Downloading %s to %s", url, filename)
+        path, _ = urlretrieve(url, filename=temp_filename)
+        temp_filename.rename(filename)
+    finally:
+        try:
+            temp_filename.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def extract_file_from_zip(
@@ -96,7 +109,8 @@ class ModelFile:
         file = ModelFile(name or Path(rel_model_path).name)
 
         if not file.exists():
-            zip_path = download_file(url, MODEL_DIR / "_temp.zip")
+            zip_path = MODEL_DIR / "_temp.zip"
+            download_file(url, zip_path)
             extract_file_from_zip(zip_path, rel_model_path, file.path)
             os.remove(zip_path)
 
