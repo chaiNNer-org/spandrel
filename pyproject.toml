@@ -35,8 +35,8 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 build = ["build", "twine"]
-lint = ["ruff==0.1.6"]
-typecheck = ["pyright==1.1.335"]
+lint = ["ruff==0.1.8"]
+typecheck = ["pyright==1.1.342"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
 
 [tool.setuptools]

@@ -129,7 +129,7 @@ def load_s(state_dict: StateDict) -> ImageModelDescriptor[KBNet_s]:
 
 
 def load(
-    state_dict: StateDict
+    state_dict: StateDict,
 ) -> ImageModelDescriptor[KBNet_l] | ImageModelDescriptor[KBNet_s]:
     if "patch_embed.proj.weight" in state_dict:
         return load_l(state_dict)
