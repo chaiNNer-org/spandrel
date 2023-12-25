@@ -56,25 +56,25 @@ src = ["src"]
 # extend-exclude = ["src/architectures/**"]
 
 extend-select = [
-    "UP",     # pyupgrade
-    "E",      # pycodestyle
-    "W",      # pycodestyle
-    "F",      # pyflakes
-    "I",      # isort
-    "FA",     # flake8-future-annotations
-    "N",      # pep8-naming
     "ANN001",
     "ANN002",
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "FA",     # flake8-future-annotations
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "W",      # pycodestyle
 ]
 ignore = [
     "E501", # Line too long
-    "N999", # Invalid module name
     "N814", # Camelcase imported as constant
+    "N999", # Invalid module name
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/arch/**/*" = ["N", "ANN"]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
+"**/arch/**/*" = ["N", "ANN"]
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
