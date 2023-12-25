@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import re
 import sys
@@ -30,6 +31,8 @@ from spandrel import (
 MODEL_DIR = Path("./tests/models/")
 IMAGE_DIR = Path("./tests/images/")
 
+logger = logging.getLogger(__name__)
+
 
 def get_url_file_name(url: str) -> str:
     return Path(unquote(urlparse(url).path)).name
@@ -55,6 +58,7 @@ def download_file(url: str, filename: Path | str) -> str:
     temp_filename = filename.with_suffix(f".part-{int(time.time())}")
 
     try:
+        logger.info("Downloading %s to %s", url, filename)
         path, _ = urlretrieve(url, filename=temp_filename)
         temp_filename.rename(filename)
         return str(filename)
