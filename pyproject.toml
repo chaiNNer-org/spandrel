@@ -7,7 +7,7 @@ name = "spandrel"
 authors = [{ name = "chaiNNer team" }]
 description = "Give your project support for a variety of PyTorch model architectures, including auto-detecting model architecture from just .pth files. spandrel gives you arch support."
 readme = "README.md"
-requires-python = ">=3.8,<3.12"
+requires-python = ">=3.8"
 keywords = [
     "spandrel",
     "pytorch architecture",
