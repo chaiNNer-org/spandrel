@@ -64,6 +64,7 @@ extend-select = [
     "FA",     # flake8-future-annotations
     "I",      # isort
     "N",      # pep8-naming
+    "SIM",    # simplify
     "UP",     # pyupgrade
     "W",      # pycodestyle
 ]
@@ -71,11 +72,15 @@ ignore = [
     "E501", # Line too long
     "N814", # Camelcase imported as constant
     "N999", # Invalid module name
+    "SIM105", # `contextlib.suppress()` has a performance cost, so disabled
+    "SIM108", # Ternary operators can be unreadable, so disabled
+    "SIM117", # Non-nested with statements make for long lines, so disabled
+    "SIM118", # `.keys()` might be a false positive, so disabled
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
-"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN"]
+"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN", "SIM102", "SIM114"]
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]

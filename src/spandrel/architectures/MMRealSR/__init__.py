@@ -20,11 +20,7 @@ def _get_in_ch_and_scale(combined: int, num_out_ch: int) -> tuple[int, int]:
     # It is not possible to read the original values for num_in_ch and scale, so we
     # have to deduce them from the combined value. Luckily, only scale=1,2,4 are supported.
     # We'll also assume that num_in_ch == num_out_ch is very likely
-    if num_out_ch * 1 == combined:
-        num_in_ch = num_out_ch
-    elif num_out_ch * 4 == combined:
-        num_in_ch = num_out_ch
-    elif num_out_ch * 16 == combined:
+    if combined in (num_out_ch, num_out_ch * 4, num_out_ch * 16):
         num_in_ch = num_out_ch
     elif combined % 3 == 0:
         num_in_ch = 3
