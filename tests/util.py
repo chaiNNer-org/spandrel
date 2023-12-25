@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 import os
 import re
@@ -13,10 +14,11 @@ from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 from urllib.parse import unquote, urlparse
-from urllib.request import urlretrieve
+from urllib.request import Request, urlopen, urlretrieve
 
 import cv2
 import numpy as np
+import pytest
 import torch
 from syrupy.filters import props
 
@@ -59,7 +61,7 @@ def download_file(url: str, filename: Path | str) -> None:
 
     try:
         logger.info("Downloading %s to %s", url, filename)
-        path, _ = urlretrieve(url, filename=temp_filename)
+        urlretrieve(url, filename=temp_filename)
         temp_filename.rename(filename)
     finally:
         try:
@@ -303,3 +305,78 @@ def assert_loads_correctly(
             f"Failed condition for {model_name}."
             f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
         )
+
+
+class GithubActions:
+    def __init__(self) -> None:
+        def get_required_env(name: str) -> str:
+            value = os.getenv(name)
+            assert value is not None, f"Missing required environment variable: {name}"
+            return value
+
+        self.github_token = get_required_env("GITHUB_TOKEN")
+        self.repository = get_required_env("GITHUB_REPOSITORY")
+        """`owner/repo`"""
+        self.ref = get_required_env("GITHUB_REF")
+
+        self._cached_pr_changed_files: list[str] | None = None
+
+    @property
+    def pr_number(self) -> int | None:
+        """Returns the pull request number if the current workflow is a pull request, otherwise returns None."""
+        if self.ref.startswith("refs/pull/"):
+            return int(self.ref.split("/")[2])
+        return None
+
+    @property
+    def is_pr(self) -> bool:
+        return self.pr_number is not None
+
+    @property
+    def pr_changed_files(self) -> list[str]:
+        if self._cached_pr_changed_files is None:
+            self._cached_pr_changed_files = self._get_pr_changed_files()
+        return self._cached_pr_changed_files
+
+    def _get_pr_changed_files(self) -> list[str]:
+        request = Request(
+            f"https://api.github.com/repos/{self.repository}/pulls/{self.pr_number}/files",
+            headers={
+                "Authorization": f"Bearer {self.github_token}",
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
+
+        try:
+            response = urlopen(request)
+            if response.getcode() == 200:
+                files = [
+                    file["filename"]
+                    for file in json.loads(response.read().decode("utf-8"))
+                ]
+                return files
+            else:
+                print(
+                    f"Failed to fetch changed files. Status code: {response.getcode()}"
+                )
+                return []
+        except Exception as e:
+            print(f"Error making request: {e}")
+            return []
+
+    @staticmethod
+    def get() -> GithubActions | None:
+        is_ci = bool(os.getenv("CI"))
+        if not is_ci:
+            return None
+        return GithubActions()
+
+
+def model_test(test_fn: Callable):
+    def wrapper(*args, **kwargs):
+        ci = GithubActions.get()
+        if ci and ci.is_pr:
+            pytest.skip("Skipping test on CI")
+        return test_fn(*args, **kwargs)
+
+    return wrapper
