@@ -38,6 +38,7 @@ build = ["build", "twine"]
 lint = ["ruff==0.1.9"]
 typecheck = ["pyright==1.1.342"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
+docs = ["pydoctor==23.9.1"]
 
 [tool.setuptools]
 license-files = ["LICENSE"]
@@ -70,9 +71,9 @@ extend-select = [
     "W",      # pycodestyle
 ]
 ignore = [
-    "E501", # Line too long
-    "N814", # Camelcase imported as constant
-    "N999", # Invalid module name
+    "E501",   # Line too long
+    "N814",   # Camelcase imported as constant
+    "N999",   # Invalid module name
     "SIM105", # `contextlib.suppress()` has a performance cost, so disabled
     "SIM108", # Ternary operators can be unreadable, so disabled
     "SIM117", # Non-nested with statements make for long lines, so disabled
@@ -86,3 +87,18 @@ ignore = [
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+
+[tool.pydoctor]
+project-name = "spandrel"
+add-package = ["src/spandrel"]
+project-url = "https://github.com/chaiNNer-org/spandrel"
+docformat = "restructuredtext"
+warnings-as-errors = false
+make-html = true
+html-output = "docs"
+theme = "readthedocs"
+privacy = [
+    "HIDDEN:spandrel.__version__",
+    "HIDDEN:spandrel.__helpers",
+    "PRIVATE:spandrel.canonicalize_state_dict",
+]

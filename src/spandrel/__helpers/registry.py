@@ -8,11 +8,19 @@ from .model_descriptor import ModelDescriptor, StateDict
 
 
 class UnsupportedModelError(Exception):
+    """
+    An error that will be thrown by `ArchRegistry` and `ModelLoader` if a model architecture is not supported.
+    """
+
     pass
 
 
 @dataclass(frozen=True)
 class ArchSupport:
+    """
+    An entry in an `ArchRegistry` that describes how to detect and load a model architecture.
+    """
+
     id: str
     """
     The ID of the architecture.
@@ -87,7 +95,7 @@ class ArchRegistry:
         Adds the given architectures to the registry.
 
         Throws an error if an architecture with the same ID already exists.
-        Throws an error if a circular dependency of `detect_before` references is detected.
+        Throws an error if a circular dependency of `before` references is detected.
 
         If an error is thrown, the registry is left unchanged.
         """

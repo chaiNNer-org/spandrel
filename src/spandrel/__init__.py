@@ -1,3 +1,7 @@
+"""
+Spandrel is a library for loading and running pre-trained PyTorch models. It automatically detects the model architecture and hyper parameters from model files, and provides a unified interface for running models.
+"""
+
 __version__ = "0.1.6"
 
 from .__helpers.canonicalize import canonicalize_state_dict
