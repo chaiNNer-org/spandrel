@@ -119,6 +119,7 @@ This has only been tested with the models that are linked here, and any unoffici
 - [DITN](https://github.com/yongliuy/DITN) | [Models](https://drive.google.com/drive/folders/1XpHW27H5j2S4IH8t4lccgrgHkIjqrS-X)
 - [MM-RealSR](https://github.com/TencentARC/MM-RealSR) | [Models](https://github.com/TencentARC/MM-RealSR/releases/tag/v1.0.0)
 - [SPAN](https://github.com/hongyuanyu/SPAN) | [Models](https://drive.google.com/file/d/1iYUA2TzKuxI0vzmA-UXr_nB43XgPOXUg/view?usp=sharing)
+- [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN) | [Models](https://drive.google.com/drive/folders/1jAJyBf2qKe2povySwsGXsVMnzVyQzqDD), [Pro Models](https://drive.google.com/drive/folders/1hfT4WwnNUaS43ErrgXk0J1R5Ik8s5NVo)
 
 #### Face Restoration
 
