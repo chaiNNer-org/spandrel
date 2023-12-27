@@ -11,10 +11,19 @@ from torch import Tensor
 T = TypeVar("T", bound=torch.nn.Module, covariant=True)
 
 StateDict = Dict[str, Any]
+"""
+Spandrel's type alias for PyTorch state dicts.
+
+See https://pytorch.org/tutorials/recipes/recipes/what_is_state_dict.html
+"""
 
 
 @dataclass
 class SizeRequirements:
+    """
+    A set of requirements for the size of an input image.
+    """
+
     minimum: int = 0
     """
     The minimum size of the input image in pixels.
@@ -71,6 +80,10 @@ A short string describing the purpose of the model.
 
 
 class ModelTiling(Enum):
+    """
+    Describes whether and how a model supports tiling.
+    """
+
     SUPPORTED = 1
     """
     The model supports tiling.
@@ -93,6 +106,12 @@ class ModelTiling(Enum):
 
 
 class ModelBase(ABC, Generic[T]):
+    """
+    The base class of all model descriptors.
+
+    This is mostly intended for `instanceof` checks in user code. Use `ModelDescriptor` for type hints instead.
+    """
+
     def __init__(
         self,
         model: T,
@@ -155,6 +174,8 @@ class ModelBase(ABC, Generic[T]):
         )
         """
         Size requirements for the input image. E.g. minimum size.
+
+        Requirements are specific to individual models and may be different for models of the same architecture.
         """
         self.tiling: ModelTiling = tiling
         """
@@ -300,6 +321,6 @@ ModelDescriptor = Union[
 A model descriptor is a loaded model with metadata. Metadata includes the
 architecture, purpose, tags, and other information about the model.
 
-The purpose of a model is described by the type of the model descriptor. E.g.
-a super resolution model has a descriptor of type `SRModelDescriptor`.
+The API of a model is described by the type of the model descriptor. E.g.
+a SISR model will have a descriptor of type `ImageModelDescriptor`.
 """

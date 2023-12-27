@@ -43,3 +43,14 @@ jobs:
                   key: update-2023-11-29
             - run: pytest tests
 
+    docs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: '3.11'
+                  cache: 'pip'
+            - run: pip install .[docs]
+            - run: pydoctor
+
