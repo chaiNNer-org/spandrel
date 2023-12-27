@@ -159,8 +159,9 @@ def conv_block(
 ):
     """
     Conv layer with padding, normalization, activation
-    mode: CNA --> Conv -> Norm -> Act
-        NAC --> Norm -> Act --> Conv (Identity Mappings in Deep Residual Networks, ECCV16)
+    mode:
+    - ``CNA`` --> Conv -> Norm -> Act
+    - ``NAC`` --> Norm -> Act --> Conv (Identity Mappings in Deep Residual Networks, ECCV16)
     """
 
     assert mode in ("CNA", "NAC", "CNAC"), f"Wrong conv mode [{mode:s}]"
@@ -338,23 +339,20 @@ class RRDB(nn.Module):
 class ResidualDenseBlock_5C(nn.Module):
     """
     Residual Dense Block
-    style: 5 convs
+    Style: 5 convs
     The core module of paper: (Residual Dense Network for Image Super-Resolution, CVPR 18)
     Modified options that can be used:
-        - "Partial Convolution based Padding" arXiv:1811.11718
-        - "Spectral normalization" arXiv:1802.05957
-        - "ICASSP 2020 - ESRGAN+ : Further Improving ESRGAN" N. C.
-            {Rakotonirina} and A. {Rasoanaivo}
+
+    - "Partial Convolution based Padding" `arXiv:1811.11718`
+    - "Spectral normalization" `arXiv:1802.05957`
+    - "ICASSP 2020 - ESRGAN+ : Further Improving ESRGAN" N. C. {Rakotonirina} and A. {Rasoanaivo}
 
     Args:
         nf (int): Channel number of intermediate features (num_feat).
-        gc (int): Channels for each growth (num_grow_ch: growth channel,
-            i.e. intermediate channels).
+        gc (int): Channels for each growth (num_grow_ch: growth channel, i.e. intermediate channels).
         convtype (str): the type of convolution to use. Default: 'Conv2D'
-        gaussian_noise (bool): enable the ESRGAN+ gaussian noise (no new
-            trainable parameters)
-        plus (bool): enable the additional residual paths from ESRGAN+
-            (adds trainable parameters)
+        gaussian_noise (bool): enable the ESRGAN+ gaussian noise (no new trainable parameters)
+        plus (bool): enable the additional residual paths from ESRGAN+ (adds trainable parameters)
     """
 
     def __init__(
