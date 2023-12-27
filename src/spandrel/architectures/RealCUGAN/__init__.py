@@ -13,7 +13,7 @@ from .arch.upcunet_v3 import UpCunet2x, UpCunet3x, UpCunet4x
 
 
 def load(
-    state_dict: StateDict
+    state_dict: StateDict,
 ) -> ImageModelDescriptor[UpCunet2x | UpCunet3x | UpCunet4x]:
     scale: Literal[2, 3, 4]
     in_channels: int
