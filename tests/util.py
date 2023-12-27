@@ -189,6 +189,7 @@ class TestImage(Enum):
     SR_64 = "64x64.png"
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
+    BLURRY_FACE = "blurry-face.jpg"
 
 
 def assert_image_inference(
