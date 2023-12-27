@@ -35,7 +35,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 build = ["build", "twine"]
-lint = ["ruff==0.1.8"]
+lint = ["ruff==0.1.9"]
 typecheck = ["pyright==1.1.342"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
 
@@ -56,25 +56,32 @@ src = ["src"]
 # extend-exclude = ["src/architectures/**"]
 
 extend-select = [
-    "UP",     # pyupgrade
-    "E",      # pycodestyle
-    "W",      # pycodestyle
-    "F",      # pyflakes
-    "I",      # isort
-    "FA",     # flake8-future-annotations
-    "N",      # pep8-naming
     "ANN001",
     "ANN002",
+    "B",      # bugbear
+    "C4",     # comprehensions
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "FA",     # flake8-future-annotations
+    "I",      # isort
+    "N",      # pep8-naming
+    "SIM",    # simplify
+    "UP",     # pyupgrade
+    "W",      # pycodestyle
 ]
 ignore = [
     "E501", # Line too long
-    "N999", # Invalid module name
     "N814", # Camelcase imported as constant
+    "N999", # Invalid module name
+    "SIM105", # `contextlib.suppress()` has a performance cost, so disabled
+    "SIM108", # Ternary operators can be unreadable, so disabled
+    "SIM117", # Non-nested with statements make for long lines, so disabled
+    "SIM118", # `.keys()` might be a false positive, so disabled
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/arch/**/*" = ["N", "ANN"]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
+"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN", "SIM102", "SIM114"]
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]

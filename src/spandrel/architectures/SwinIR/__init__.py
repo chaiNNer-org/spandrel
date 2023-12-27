@@ -77,7 +77,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SwinIR]:
     if upsampler == "nearest+conv":
         upsample_keys = [x for x in state_keys if "conv_up" in x and "bias" not in x]
 
-        for upsample_key in upsample_keys:
+        for _upsample_key in upsample_keys:
             upscale *= 2
     elif upsampler == "pixelshuffle":
         upsample_keys = [

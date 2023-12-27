@@ -27,7 +27,7 @@ class ArchSupport:
     """
     Loads a model descriptor for this architecture from the given state dict.
     """
-    before: tuple[str, ...] = tuple()
+    before: tuple[str, ...] = ()
     """
     This architecture is detected before the architectures with the given IDs.
 

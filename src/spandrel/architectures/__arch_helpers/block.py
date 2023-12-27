@@ -192,7 +192,7 @@ def conv_block(
         n = norm(norm_type, in_nc) if norm_type else None
         return sequential(n, a, p, c)
     else:
-        assert False, f"Invalid conv mode {mode}"
+        raise ValueError(f"Invalid conv mode {mode}")
 
 
 ####################
