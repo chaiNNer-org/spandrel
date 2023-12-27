@@ -33,8 +33,6 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install .[docs]
-      - name: Install dependencies
-        run: npm ci
       - name: Build the website
         run: pydoctor --project-url=https://github.com/$GITHUB_REPOSITORY --html-viewsource-base=https://github.com/$GITHUB_REPOSITORY/tree/$GITHUB_SHA
       - name: Upload artifact
