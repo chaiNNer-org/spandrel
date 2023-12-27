@@ -204,7 +204,7 @@ class DEResNet(nn.Module):
             self.conv_first.append(nn.Conv2d(num_in_ch, num_feats[0], 3, 1, 1))
         self.body = nn.ModuleList()
         for _ in range(num_degradation):
-            body = list()
+            body = []
             for stage in range(num_stage):
                 for _ in range(num_blocks[stage]):
                     body.append(ResidualBlockNoBN(num_feats[stage]))
