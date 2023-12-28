@@ -47,6 +47,7 @@ def test_CRAFT_x2(snapshot):
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
     )
 
+
 def test_CRAFT_x3(snapshot):
     file = ModelFile.from_url_zip(
         "https://drive.google.com/file/d/13wAmc93BPeBUBQ24zUZOuUpdBFG2aAY5/view",
@@ -62,6 +63,7 @@ def test_CRAFT_x3(snapshot):
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
     )
 
+
 def test_CRAFT_x4(snapshot):
     file = ModelFile.from_url_zip(
         "https://drive.google.com/file/d/13wAmc93BPeBUBQ24zUZOuUpdBFG2aAY5/view",
@@ -76,6 +78,7 @@ def test_CRAFT_x4(snapshot):
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
     )
+
 
 def test_CRAFT_tags(snapshot):
     loader = ModelLoader()

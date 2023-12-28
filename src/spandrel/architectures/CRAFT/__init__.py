@@ -1,5 +1,5 @@
-import re
 import math
+import re
 
 from ...__helpers.model_descriptor import (
     ImageModelDescriptor,
