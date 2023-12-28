@@ -3,7 +3,6 @@
 Code used for this implementation of MAT is modified from lama-cleaner,
 copyright of Sanster: https://github.com/fenglinglwb/MAT"""
 
-import random
 
 import numpy as np
 import torch
@@ -1588,11 +1587,6 @@ class Generator(nn.Module):
 class MAT(nn.Module):
     def __init__(self):
         super().__init__()
-
-        seed = 240  # pick up a random number
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
 
         self.model = Generator(
             z_dim=512, c_dim=0, w_dim=512, img_resolution=512, img_channels=3
