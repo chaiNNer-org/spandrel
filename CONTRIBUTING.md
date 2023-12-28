@@ -32,6 +32,12 @@ We use [ruff](https://docs.astral.sh/ruff/) for formatting and linting and [pyri
 - Ruff formatting: `ruff format src tests`
 - PyRight: `pyright src tests`
 
+#### `pre-commit`
+
+You can also use [pre-commit](https://pre-commit.com/) to automatically run Ruff before committing.
+To do so, install pre-commit (`pip install pre-commit`) and run `pre-commit install` in the root directory of the repo.
+You can also run `pre-commit run --all-files` to run pre-commit on all files in the repo.
+
 ### Project Structure
 
 The project is structured as follows:

@@ -18,19 +18,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    formatting:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v5
-              with:
-                  python-version: '3.11'
-                  cache: 'pip'
-            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
-            - run: ruff format src --check
-            - run: ruff format tests --check
-            - run: ruff format scripts --check
-
     lint:
         runs-on: ubuntu-latest
         steps:
@@ -39,10 +26,9 @@ jobs:
               with:
                   python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
-            - run: ruff check src
-            - run: ruff check tests
-            - run: ruff check scripts
+            - uses: pre-commit/action@v3.0.0
+              env:
+                RUFF_OUTPUT_FORMAT: github
 
     pyright:
         runs-on: ubuntu-latest
