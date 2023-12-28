@@ -26,7 +26,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
 
     # norm_layer=nn.LayerNorm
 
-    upscale, _ = get_scale_and_output_channels(state_dict['upsample.0.bias'].shape[0], in_chans)
+    upscale = int(math.sqrt(state_dict['upsample.0.bias'].shape[0] / in_chans))
     img_range = 1.
     resi_connection = '1conv'
 
