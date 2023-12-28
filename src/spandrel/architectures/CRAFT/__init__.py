@@ -6,12 +6,10 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from ..__arch_helpers.state import get_scale_and_output_channels
 from .arch.CRAFT import CRAFT
 
 
 def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
-    # Required values
     in_chans = state_dict["conv_first.weight"].shape[1]
     embed_dim = state_dict["layers.0.conv.weight"].shape[1]
 
