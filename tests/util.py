@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import random
 import re
 import sys
 import time
@@ -304,3 +305,9 @@ def assert_loads_correctly(
             f"Failed condition for {model_name}."
             f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
         )
+
+
+def seed_rngs(seed: int) -> None:
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
