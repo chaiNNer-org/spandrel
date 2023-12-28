@@ -49,9 +49,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
         if re.fullmatch(r"layers.\d+.residual_group.hf_blocks.0.attn.temperature", key):
             num_heads.append(tensor.shape[0])
 
-    # Tag values
-    num_feat = state_dict["upsample.0.weight"].shape[1]
-
     model = CRAFT(
         in_chans=in_chans,
         embed_dim=embed_dim,
@@ -70,7 +67,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
 
     tags = [
         f"{split_size_0}x{split_size_1}",
-        f"{num_feat}nf",
         f"{embed_dim}dim",
         f"{resi_connection}",
     ]
