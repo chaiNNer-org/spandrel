@@ -39,8 +39,9 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[GFPGANv1Clean]:
         tags=[],
         supports_half=False,
         supports_bfloat16=True,
-        scale=8,
+        scale=1,
         input_channels=3,
         output_channels=3,
         size_requirements=SizeRequirements(minimum=512),
+        call_fn=lambda model, image: model(image)[0],
     )

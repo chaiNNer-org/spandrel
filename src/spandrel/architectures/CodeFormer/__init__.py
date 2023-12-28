@@ -49,8 +49,9 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CodeFormer]:
         tags=[],
         supports_half=False,
         supports_bfloat16=True,
-        scale=8,
+        scale=1,
         input_channels=in_nc,
         output_channels=out_nc,
         size_requirements=SizeRequirements(minimum=16),
+        call_fn=lambda model, image: model(image)[0],
     )

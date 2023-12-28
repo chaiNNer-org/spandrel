@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import random
 import re
 import sys
 import time
@@ -189,6 +190,7 @@ class TestImage(Enum):
     SR_64 = "64x64.png"
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
+    BLURRY_FACE = "blurry-face.jpg"
 
 
 def assert_image_inference(
@@ -303,3 +305,9 @@ def assert_loads_correctly(
             f"Failed condition for {model_name}."
             f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
         )
+
+
+def seed_rngs(seed: int) -> None:
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
