@@ -233,8 +233,7 @@ MAIN_REGISTRY.add(
     ArchSupport(
         id="CRAFT",
         detect=_has_keys(
-            "conv_first.weight",
-            "layers.0.residual_group.hf_blocks.0.attn.temperature"
+            "conv_first.weight", "layers.0.residual_group.hf_blocks.0.attn.temperature"
         ),
         load=CRAFT.load,
     ),
