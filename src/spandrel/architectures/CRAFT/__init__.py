@@ -24,22 +24,21 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
     qkv_bias = True
     qk_scale = None
 
-    # norm_layer=nn.LayerNorm
-
     upscale = int(math.sqrt(state_dict['upsample.0.bias'].shape[0] / in_chans))
     img_range = 1.
     resi_connection = '1conv'
 
     for key, tensor in state_dict.items():
-        depth_match = re.search('layers.(\d+).residual_group.srwa_blocks.(\d+).norm1.weight', key)
+        depth_match = re.search(r'layers.(\d+).residual_group.srwa_blocks.(\d+).norm1.weight', key)
         if depth_match and int(depth_match.group(2)) % 2 == 0:
             layer = int(depth_match.group(1))
-            if len(depths) - 1 < layer: depths.append(0)
+            if len(depths) - 1 < layer:
+                depths.append(0)
 
             depths[layer] += 1
             continue
         
-        if re.fullmatch('layers.\d+.residual_group.hf_blocks.0.attn.temperature', key):
+        if re.fullmatch(r'layers.\d+.residual_group.hf_blocks.0.attn.temperature', key):
             num_heads.append(tensor.shape[0])
 
     # Tag values
@@ -55,7 +54,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
         mlp_ratio=mlp_ratio,
         qkv_bias=qkv_bias,
         qk_scale=qk_scale,
-        # norm_layer=nn.LayerNorm,
         upscale=upscale,
         img_range=img_range,
         resi_connection=resi_connection
@@ -74,7 +72,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
         architecture="CRAFT",
         purpose="Restoration" if upscale == 1 else "SR",
         tags=tags,
-        supports_half=True, # Not throughly tested
+        supports_half=True, # TODO: Not thoroughly tested
         supports_bfloat16=True,
         scale=upscale,
         input_channels=in_chans,
