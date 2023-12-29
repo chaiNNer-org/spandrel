@@ -196,21 +196,34 @@ class ModelBase(ABC, Generic[T]):
         ...
 
     def to(self, device: torch.device):
+        """
+        Moves the parameters and buffers of the underlying module to the given device.
+        """
         self.model.to(device)
         return self
 
     def eval(self):
+        """
+        Sets the underlying module in evaluation mode.
+
+        Same as `self.train(False)`.
+        """
         self.model.eval()
         return self
 
     def train(self, mode: bool = True):
+        """
+        Sets the underlying module in training mode.
+
+        Same as `self.model.train(mode)`.
+        """
         self.model.train(mode)
         return self
 
 
 class ImageModelDescriptor(ModelBase[T], Generic[T]):
     """
-    A model that takes an image as input and returns an image.
+    A model that takes an image as input and returns an image. See `__call__` for more information.
     """
 
     def __init__(
@@ -256,6 +269,14 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         return self._purpose
 
     def __call__(self, image: Tensor) -> Tensor:
+        """
+        Takes a single image tensor as input and returns a single image tensor as output.
+
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The data type (float32, float16, bfloat16) and device of the `image` tensor must be the same as the model. The range of the `image` tensor must be ``[0, 1]``.
+
+        The output tensor will be a 4D tensor with shape `(1, output_channels, H*scale, W*scale)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
+        """
+
         output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
@@ -265,7 +286,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
 
 class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
     """
-    A model that takes an image and a mask for that image as input and returns an image.
+    A model that takes an image and a mask for that image as input and returns an image. See `__call__` for more information.
     """
 
     def __init__(
@@ -306,6 +327,18 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         return self._purpose
 
     def __call__(self, image: Tensor, mask: Tensor) -> Tensor:
+        """
+        Takes an image tensor and an image mask tensor as input and returns a single image tensor as output.
+
+        The data type (float32, float16, bfloat16) and device of the `image` and `mask` tensors must be the same as the model.
+
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The range of the `image` tensor must be ``[0, 1]``.
+
+        The `mask` tensor must be a 4D tensor with shape `(1, 1, H, W)`. The width and height must be the same as `image` tensor. The values of the `mask` tensor must be either 0 (keep) or 1 (inpaint).
+
+        The output tensor will be a 4D tensor with shape `(1, output_channels, H, W)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
+        """
+
         output = self._call_fn(self.model, image, mask)
         assert isinstance(
             output, Tensor
