@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 from ..architectures import (
+    CRAFT,
     DAT,
     DITN,
     ESRGAN,
@@ -228,6 +229,13 @@ MAIN_REGISTRY.add(
         id="DAT",
         detect=_has_keys("layers.0.blocks.2.attn.attn_mask_0", "conv_first.weight"),
         load=DAT.load,
+    ),
+    ArchSupport(
+        id="CRAFT",
+        detect=_has_keys(
+            "conv_first.weight", "layers.0.residual_group.hf_blocks.0.attn.temperature"
+        ),
+        load=CRAFT.load,
     ),
     ArchSupport(
         id="KBNet",
