@@ -4,102 +4,65 @@
 [![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases)
 [![PyPi Downloads](https://img.shields.io/pypi/dw/spandrel)](https://pypi.org/project/spandrel/#files)
 [![Python Version](https://img.shields.io/pypi/pyversions/spandrel)](https://pypi.org/project/spandrel/#files:~:text=Requires%3A%20Python%20%3C3.12%2C%20%3E%3D3.8)
+[![Documentation](https://img.shields.io/badge/-documentation-blue)](https://chainner.app/spandrel/)
 
 [![Actions Status](https://github.com/chaiNNer-org/spandrel/workflows/Test/badge.svg)](https://github.com/chaiNNer-org/spandrel/actions)
 [![License](https://img.shields.io/github/license/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/chaiNNer-org/spandrel)](https://github.com/chaiNNer-org/spandrel/graphs/contributors)
 
-This package ports [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s PyTorch architecture support and model loading functionality into its own package, and wraps it into an easy-to-use API.
+Spandrel is a library for loading and running pre-trained PyTorch models. It automatically detects the model architecture and hyperparameters from model files, and provides a unified interface for running models.
 
-After seeing many projects extract out chaiNNer's model support into their own projects, I decided it was probably worth the effort of creating a PyPi package that those developers could use instead.
-
-I'm also hoping that by having a central package anyone can use, the community will be encouraged [to help add support for more models](CONTRIBUTING.md). This will ultimately benefit everyone.
+After seeing many projects extract out [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)'s model support into their own projects, I decided to create this PyPi package for the architecture support and model loading functionality. I'm also hoping that by having a central package anyone can use, the community will be encouraged [to help add support for more models](CONTRIBUTING.md).
 
 This package does not yet have easy inference code, but porting that code is planned as well.
 
 ## Installation
 
-Spandrel is available through pip and can be installed via a simple pip install command:
+Spandrel is available through pip:
 
 ```shell
 pip install spandrel
 ```
 
-## Usage
+## Basic Usage
 
-**This package is still in early stages of development, and is subject to change at any time.**
-
-To use this package for automatic architecture loading, simply use the ModelLoader class like so:
+While Spandrel supports different kinds of models, this is how you would run a super resolution model (e.g. ESRGAN, SwinIR, HAT, etc.):
 
 ```python
-from spandrel import ModelLoader
+from spandrel import ImageModelDescriptor, ModelLoader
 import torch
 
-# Initialize the ModelLoader class with an optional preferred torch.device. Defaults to cpu.
-model_loader = ModelLoader(torch.device("cuda:0"))
+device = torch.device("cuda:0")
 
-# Load the model from the given path
-loaded_model = model_loader.load_from_file(r"/path/to/your/model.pth")
-```
+# load a model from disk
+model = ModelLoader().load_from_file(r"path/to/model.pth")
 
-And that's it. The model gets loaded into a helper class called a ModelDescriptor with various helpful bits of information, as well as the actual model information.
+# make sure it's an image to image model
+assert isinstance(model, ImageModelDescriptor)
 
-```py
-# The model itself (a torch.nn.Module loaded with the weights)
-loaded_model.model
-
-# The architecture of the model (e.g. "ESRGAN")
-loaded_model.architecture
-
-# A list of tags for the model, usually describing the size (e.g. ["64nf", "large"])
-loaded_model.tags
-
-# A boolean indicating whether the model supports half precision (fp16)
-loaded_model.supports_half
-
-# A boolean indicating whether the model supports bfloat16 precision
-loaded_model.supports_bfloat16
-
-# The scale of the model (e.g. 4)
-loaded_model.scale
-
-# The number of input channels of the model (e.g. 3)
-loaded_model.input_channels
-
-# The number of output channels of the model (e.g. 3)
-loaded_model.output_channels
-
-# A SizeRequirements object describing the image size requirements of the model
-# i.e the minimum size, the multiple of size, and whether the model requires a square input
-loaded_model.size_requirements
-```
-
-ModelDescriptors also support basic inference, with per-descriptor parameters to keep everything simple. For example, an `ImageModelDescriptor` (used for super-resolution and restoration) takes in a single image tensor and returns a single image tensor, whereas a `MaskedModelDescriptor` (used for inpainting) takes in an image tensor and a mask tensor and returns a single image tensor.
-
-> **_NOTE: This is not an inference wrapper in the sense that it wil convert an image to a tensor for you. This is purely making the forward passes of these models more convenient to use, since the actual forward passes are not always as simple as image in/image out._**
-
-ModelDescriptors also have a few convenience methods to make them more similar to regular `torch.nn.Module`s: `.to`, `.train`, and `.eval`.
-
-Example:
-
-```py
-model = ModelLoader().load_from_file(r"/path/to/your/model.pth")
-model.to("cuda:0")
+# send it to the GPU and put it in inference mode
+model.to(device)
 model.eval()
-def process(tensor: Tensor) -> Tensor:
+
+# use the model
+def process(image: torch.Tensor) -> torch.Tensor:
     with torch.no_grad():
         return model(tensor)
 ```
 
-## Model Architecture Support
+Note that `model` is a [`ModelDescriptor`](https://chainner.app/spandrel/#ModelDescriptor) object, which is a wrapper around the actual PyTorch model. This wrapper provides a unified interface for running models, and also contains metadata about the model. See [`ImageModelDescriptor`](https://chainner.app/spandrel/spandrel.ImageModelDescriptor.html) for more details about the metadata contained and how to call the model.
 
-Spandrel currently supports a limited amount of neural network architectures. It can auto-detect these architectures just from their files alone.
+> **_NOTE: `ImageModelDescriptor` will NOT convert an image to a tensor for you. It is purely making the forward passes of these models more convenient to use, since the actual forward passes are not always as simple as image in/image out._**
+
+## Supported File Types
+
+Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, and `.safetensors` files for any supported architecture saved in one of these formats.
+
+## Model Architecture Support
 
 > **_NOTE: By its very nature, Spandrel will never be able to support every model architecture. The goal is just to support as many as is realistically possible._**
 
-This has only been tested with the models that are linked here, and any unofficial variants (especially if changes are made to their architectures) are not guaranteed to work.
-
-### Pytorch
+Spandrel currently supports a limited amount of network architectures. If the architecture you need is not supported, feel free to [request it](https://github.com/chaiNNer-org/spandrel/issues) or try [adding it](CONTRIBUTING.md).
 
 #### Single Image Super Resolution
 
@@ -146,17 +109,14 @@ This has only been tested with the models that are linked here, and any unoffici
 
 - [DDColor](https://github.com/piddnad/DDColor) | [Models](https://github.com/piddnad/DDColor/blob/master/MODEL_ZOO.md)
 
-
-## File type support
-
-Spandrel mainly supports loading `.pth` files for all supported architectures. This is what you will typically find from official repos and community trained models. However, Spandrel also supports loading TorchScript traced models (`.pt`), certain types of `.ckpt` files, and `.safetensors` files for any supported architecture saved in one of these formats.
-
 ## Security
 
-As you may know, loading `.pth` files usually [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being unsafe and vulnerable to arbitrary code execution (ACE). Because of this, Spandrel uses a custom unpickler function that only allows loading certain types of data out of a .pth file. This ideally prevents ACE and makes loading untrusted files more secure. Note that there still could be the possibility of ACE (though we don't expect this to be the case), so if you're still concerned about security, only load .safetensors models.
+Use `.safetensors` files for guaranteed security.
+
+As you may know, loading `.pth` files [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being inherently unsafe and vulnerable to arbitrary code execution (ACE). To mitigate this, Spandrel only allows deserializing certain types of data. This helps to improve security, but it still doesn't fully solve the issue of ACE.
 
 ## License Notice
 
-This repo is bounded by GPLv3 license. However, all the architectures used in this repository are bound by their own original licenses, which have been included in their respective places in this repo. The state dict parsing (load.py) files are not bound by these original licenses as they are new code.
+This repo is bounded by GPLv3 license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses. See `src/spandrel/architectures/<name>/arch/LICENSE` for the license of a specific architecture.
 
-The original code has also been slightly modified and formatted to fit the needs of this repo. If you want to use these architectures in your own codebase (but why would you if you have this package 😉), I recommend grabbing them from their original sources.
+The original architecture code has also been slightly modified and formatted to fit the needs of this repo. If you want to use these architectures in your own codebase (but why would you if you have this package 😉), I recommend grabbing them from their original sources.
