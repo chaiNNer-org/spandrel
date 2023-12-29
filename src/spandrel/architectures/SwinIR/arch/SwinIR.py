@@ -836,7 +836,6 @@ class SwinIR(nn.Module):
         upsampler="",
         resi_connection="1conv",
         start_unshuffle=1,
-        **kwargs,
     ):
         super().__init__()
         self.start_unshuffle = start_unshuffle
