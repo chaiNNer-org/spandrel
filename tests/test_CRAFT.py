@@ -15,6 +15,7 @@ def test_CRAFT_load():
         load,
         lambda: CRAFT(),
         lambda: CRAFT(embed_dim=60),
+        lambda: CRAFT(mlp_ratio=4.0),
         lambda: CRAFT(in_chans=1),
         lambda: CRAFT(in_chans=4),
         lambda: CRAFT(depths=[2, 2], num_heads=[6, 6]),
