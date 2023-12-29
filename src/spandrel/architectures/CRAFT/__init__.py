@@ -19,7 +19,9 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
     split_size_0 = 4
     split_size_1 = 16
 
-    mlp_hidden_dim = state_dict["layers.0.residual_group.srwa_blocks.0.mlp.fc1.bias"].shape[0]
+    mlp_hidden_dim = state_dict[
+        "layers.0.residual_group.srwa_blocks.0.mlp.fc1.bias"
+    ].shape[0]
     mlp_ratio = float(mlp_hidden_dim / embed_dim)
 
     qkv_bias = True
