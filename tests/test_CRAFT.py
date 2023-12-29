@@ -1,4 +1,3 @@
-from spandrel import ModelLoader
 from spandrel.architectures.CRAFT import CRAFT, load
 
 from .util import (
