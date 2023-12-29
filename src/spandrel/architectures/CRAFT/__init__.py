@@ -46,9 +46,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
         if re.fullmatch(r"layers.\d+.residual_group.hf_blocks.0.attn.temperature", key):
             num_heads.append(tensor.shape[0])
 
-        if re.fullmatch(r"layers.\d+.residual_group.hf_blocks.0.attn.temperature", key):
-            num_heads.append(tensor.shape[0])
-
     model = CRAFT(
         in_chans=in_chans,
         embed_dim=embed_dim,
