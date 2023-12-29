@@ -5,7 +5,6 @@ import os
 import random
 import re
 import sys
-import time
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -14,7 +13,6 @@ from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 from urllib.parse import unquote, urlparse
-from urllib.request import urlretrieve
 
 import cv2
 import numpy as np
@@ -53,20 +51,9 @@ def convert_google_drive_link(url: str) -> str:
 def download_file(url: str, filename: Path | str) -> None:
     filename = Path(filename)
     filename.parent.mkdir(exist_ok=True)
-
     url = convert_google_drive_link(url)
-
-    temp_filename = filename.with_suffix(f".part-{int(time.time())}")
-
-    try:
-        logger.info("Downloading %s to %s", url, filename)
-        path, _ = urlretrieve(url, filename=temp_filename)
-        temp_filename.rename(filename)
-    finally:
-        try:
-            temp_filename.unlink()
-        except FileNotFoundError:
-            pass
+    logger.info("Downloading %s to %s", url, filename)
+    torch.hub.download_url_to_file(url, str(filename))
 
 
 def extract_file_from_zip(
