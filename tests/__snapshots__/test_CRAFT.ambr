@@ -1,0 +1,55 @@
+# serializer version: 1
+# name: test_CRAFT_x2
+  ImageModelDescriptor(
+    architecture='CRAFT',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=2,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=16, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '4x16',
+      '48dim',
+      '1conv',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_CRAFT_x3
+  ImageModelDescriptor(
+    architecture='CRAFT',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=3,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=16, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '4x16',
+      '48dim',
+      '1conv',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_CRAFT_x4
+  ImageModelDescriptor(
+    architecture='CRAFT',
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=16, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '4x16',
+      '48dim',
+      '1conv',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
