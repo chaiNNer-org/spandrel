@@ -139,6 +139,7 @@ cython_debug/
 
 # cached model files
 tests/models/
+tests/zips/
 
 # docs
 docs/

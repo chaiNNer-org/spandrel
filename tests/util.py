@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import logging
-import os
 import random
 import re
 import sys
-import time
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -14,7 +13,6 @@ from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 from urllib.parse import unquote, urlparse
-from urllib.request import urlretrieve
 
 import cv2
 import numpy as np
@@ -30,6 +28,7 @@ from spandrel import (
 )
 
 MODEL_DIR = Path("./tests/models/")
+ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
 
 logger = logging.getLogger(__name__)
@@ -53,20 +52,9 @@ def convert_google_drive_link(url: str) -> str:
 def download_file(url: str, filename: Path | str) -> None:
     filename = Path(filename)
     filename.parent.mkdir(exist_ok=True)
-
     url = convert_google_drive_link(url)
-
-    temp_filename = filename.with_suffix(f".part-{int(time.time())}")
-
-    try:
-        logger.info("Downloading %s to %s", url, filename)
-        path, _ = urlretrieve(url, filename=temp_filename)
-        temp_filename.rename(filename)
-    finally:
-        try:
-            temp_filename.unlink()
-        except FileNotFoundError:
-            pass
+    logger.info("Downloading %s to %s", url, filename)
+    torch.hub.download_url_to_file(url, str(filename))
 
 
 def extract_file_from_zip(
@@ -78,8 +66,7 @@ def extract_file_from_zip(
     filename.parent.mkdir(exist_ok=True)
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        with open(filename, "wb") as f:
-            f.write(zip_ref.read(rel_model_path))
+        filename.write_bytes(zip_ref.read(rel_model_path))
 
 
 @dataclass
@@ -110,10 +97,10 @@ class ModelFile:
         file = ModelFile(name or Path(rel_model_path).name)
 
         if not file.exists():
-            zip_path = MODEL_DIR / "_temp.zip"
-            download_file(url, zip_path)
+            zip_path = ZIP_DIR / f"{hashlib.sha256(url.encode()).hexdigest()}.zip"
+            if not zip_path.exists():
+                download_file(url, zip_path)
             extract_file_from_zip(zip_path, rel_model_path, file.path)
-            os.remove(zip_path)
 
         return file
 
