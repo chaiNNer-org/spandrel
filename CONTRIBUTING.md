@@ -26,7 +26,11 @@ Updating/adding snapshots has to be done via the command line. Use the command: 
 
 ### Formatting, linting, type checking
 
-We use [ruff](https://docs.astral.sh/ruff/) for formatting and linting and [pyright](https://microsoft.github.io/pyright/#/type-concepts) for static type checking. If you are using VSCode with the recommended extensions, everything is already set up and configured for you. If you are using a different IDE, you will have to set up these tools yourself or use them through the command line.
+We use [ruff](https://docs.astral.sh/ruff/) for formatting and linting and [pyright](https://microsoft.github.io/pyright/#/type-concepts) for static type checking. If you are using VSCode with the recommended extensions, everything is already set up and configured for you. If you are using a different IDE, you will have to set up these tools yourself or use them through the command line:
+
+- Ruff linting + auto fix: `ruff check src tests --fix --unsafe-fixes`
+- Ruff formatting: `ruff format src tests`
+- PyRight: `pyright src tests`
 
 ### Project Structure
 
