@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import hashlib
 import logging
-import os
 import random
 import re
 import sys
@@ -28,6 +28,7 @@ from spandrel import (
 )
 
 MODEL_DIR = Path("./tests/models/")
+ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
 
 logger = logging.getLogger(__name__)
@@ -65,8 +66,7 @@ def extract_file_from_zip(
     filename.parent.mkdir(exist_ok=True)
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        with open(filename, "wb") as f:
-            f.write(zip_ref.read(rel_model_path))
+        filename.write_bytes(zip_ref.read(rel_model_path))
 
 
 @dataclass
@@ -97,10 +97,10 @@ class ModelFile:
         file = ModelFile(name or Path(rel_model_path).name)
 
         if not file.exists():
-            zip_path = MODEL_DIR / "_temp.zip"
-            download_file(url, zip_path)
+            zip_path = ZIP_DIR / f"{hashlib.sha256(url.encode()).hexdigest()}.zip"
+            if not zip_path.exists():
+                download_file(url, zip_path)
             extract_file_from_zip(zip_path, rel_model_path, file.path)
-            os.remove(zip_path)
 
         return file
 
