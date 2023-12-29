@@ -1,53 +1,81 @@
 import math
-import re
 
 from ...__helpers.model_descriptor import (
     ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
+from ..__arch_helpers.state import get_seq_len
 from .arch.CRAFT import CRAFT
 
 
 def load(state_dict: StateDict) -> ImageModelDescriptor[CRAFT]:
-    in_chans = state_dict["conv_first.weight"].shape[1]
-    embed_dim = state_dict["layers.0.conv.weight"].shape[1]
-
-    depths = []
-    num_heads = []
-
+    # default values
+    in_chans = 3
+    window_size = 16  # cannot be deduced from state dict
+    embed_dim = 48
+    depths = [2, 2, 2, 2]
+    num_heads = [6, 6, 6, 6]
     split_size_0 = 4
     split_size_1 = 16
+    mlp_ratio = 2.0
+    qkv_bias = True
+    qk_scale = None  # cannot be deduced from state dict
+    upscale = 4
+    img_range = 1.0
+    resi_connection = "1conv"
+
+    # detect parameters
+    in_chans = state_dict["conv_first.weight"].shape[1]
+    embed_dim = state_dict["conv_first.weight"].shape[0]
+
+    num_layers = get_seq_len(state_dict, "layers")
+    depths = [2] * num_layers
+    num_heads = [6] * num_layers
+    for i in range(num_layers):
+        depths[i] = get_seq_len(state_dict, f"layers.{i}.residual_group.hf_blocks")
+        num_heads[i] = state_dict[
+            f"layers.{i}.residual_group.hf_blocks.0.attn.temperature"
+        ].shape[0]
+
+    upscale = int(math.sqrt(state_dict["upsample.0.bias"].shape[0] / in_chans))
+
+    if "conv_after_body.weight" in state_dict:
+        resi_connection = "1conv"
+    else:
+        resi_connection = "identity"
+
+    qkv_bias = "layers.0.residual_group.srwa_blocks.0.qkv.bias" in state_dict
 
     mlp_hidden_dim = state_dict[
         "layers.0.residual_group.srwa_blocks.0.mlp.fc1.bias"
     ].shape[0]
     mlp_ratio = float(mlp_hidden_dim / embed_dim)
 
-    qkv_bias = True
-    qk_scale = None
-
-    upscale = int(math.sqrt(state_dict["upsample.0.bias"].shape[0] / in_chans))
-    img_range = 1.0
-    resi_connection = "1conv"
-
-    for key, tensor in state_dict.items():
-        depth_match = re.search(
-            r"layers.(\d+).residual_group.srwa_blocks.(\d+).norm1.weight", key
-        )
-        if depth_match and int(depth_match.group(2)) % 2 == 0:
-            layer = int(depth_match.group(1))
-            if len(depths) - 1 < layer:
-                depths.append(0)
-
-            depths[layer] += 1
-            continue
-
-        if re.fullmatch(r"layers.\d+.residual_group.hf_blocks.0.attn.temperature", key):
-            num_heads.append(tensor.shape[0])
+    # Now split_size_0 and split_size_1:
+    # What we know:
+    #   a = s0 * s1
+    #   b = (2*s0-1) * (2*s1-1)
+    a = state_dict["relative_position_index_h"].shape[0]
+    b = state_dict["biases_v"].shape[0]
+    # Let's rearrange:
+    #   s0 = a / s1
+    #   b = (2*a/s1-1) * (2*s1-1)
+    # Solve for s1 (wolfram alpha):
+    #   s1 = 1/4 (-sqrt(16 a^2 - 8 a (b + 1) + (b - 1)^2) + 4 a - b + 1)
+    s1 = int(
+        0.25 * (-math.sqrt(16 * a**2 - 8 * a * (b + 1) + (b - 1) ** 2) + 4 * a - b + 1)
+    )
+    s0 = a // s1
+    if s0 * s1 != a:
+        raise ValueError("Could not find valid split_size_0 and split_size_1")
+    # since we don't know which is which, we'll just assume split_size_0 <= split_size_1
+    split_size_0 = min(s0, s1)
+    split_size_1 = max(s0, s1)
 
     model = CRAFT(
         in_chans=in_chans,
+        window_size=window_size,
         embed_dim=embed_dim,
         depths=depths,
         num_heads=num_heads,
