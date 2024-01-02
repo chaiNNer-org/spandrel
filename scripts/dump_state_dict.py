@@ -42,21 +42,16 @@ state dict.
 from __future__ import annotations
 
 import argparse
+import collections
+import textwrap
 from dataclasses import dataclass
-from typing import Any, Dict, Generic, Iterable, TypeVar
+from typing import Any, Dict, Generic, Iterable, Mapping, TypeVar
 
 from torch import Tensor
 
 from spandrel import ModelLoader
 
 State = Dict[str, object]
-
-
-def indent(lines: list[str], indentation: str = "  "):
-    def do(line: str) -> str:
-        return "\n".join(indentation + s for s in line.splitlines())
-
-    return [do(s) for s in lines]
 
 
 def get_iter_type_union_expr(collection: Iterable[object]) -> str:
@@ -89,14 +84,15 @@ def get_line(k: str, v: object, max_key_len: int = 0) -> str:
         dtype = str(v.dtype).replace("torch.", "")
         shape = str(v.shape).replace("torch.", "")
         value = f"Tensor {dtype} {shape}"
-    elif isinstance(v, dict) and all(isinstance(k, str) for k in v.keys()):
-        value = f"{get_type_expr(v)} ({str(len(v))})"
-        value += "\n" + "\n".join(indent(dump_lines(v)))
+    elif isinstance(v, dict) and all(isinstance(k, str) for k in v):
+        value = f"{get_type_expr(v)} ({len(v)})"
+        value += "\n" + textwrap.indent("\n".join(dump_lines(group_keys(v))), "  ")
     else:
         value = get_type_expr(v)
 
-    k += ": " + " " * (max(0, max_key_len - len(k)))
-    return k + value if value else k
+    if value:
+        return f"{k: <{max_key_len}}: {value}"
+    return k
 
 
 T = TypeVar("T")
@@ -118,13 +114,9 @@ def group_keys(state: State, level: int = 0) -> Fork[State] | State:
             return state
         current_keys.append(parts[level])
 
-    by_key: dict[str, State] = {}
-    for i, (k, v) in enumerate(state.items()):
-        key = current_keys[i]
-        if key not in by_key:
-            by_key[key] = {}
-        key_state = by_key[key]
-        key_state[k] = v
+    by_key: Mapping[str, State] = collections.defaultdict(dict)
+    for key, (k, v) in zip(current_keys, state.items()):
+        by_key[key][k] = v
 
     if all(len(v) == 1 for v in by_key.values()):
         return state
@@ -135,7 +127,7 @@ def group_keys(state: State, level: int = 0) -> Fork[State] | State:
 
         if isinstance(path, Fork) and len(path.paths) == 1:
             # inline when a fork only has one path
-            inner_key = list(path.paths.keys())[0]
+            inner_key = next(iter(path.paths))
             k += "." + inner_key
             path = path.paths[inner_key]
 
@@ -144,31 +136,25 @@ def group_keys(state: State, level: int = 0) -> Fork[State] | State:
     return Fork(paths)
 
 
-def dump_lines(state: State) -> list[str]:
-    lines: list[str] = []
+def dump_lines(s: Fork[State] | State, *, level: int = 0):
+    indentation = "  " * level
 
-    def dump(s: Fork[State] | State, level: int = 0):
-        indentation = "  " * level
-
-        if isinstance(s, Fork):
-            for k, v in s.paths.items():
-                lines.append(indentation + k)
-                dump(v, level + 1)
-        else:
-            max_key_len = max([len(k) for k in s.keys()])
-            for k, v in s.items():
-                lines.append(indentation + get_line(k, v, max_key_len))
-
-    dump(group_keys(state))
-
-    return lines
+    if isinstance(s, Fork):
+        for k, v in s.paths.items():
+            yield indentation + k
+            yield from dump_lines(v, level=level + 1)
+    else:
+        max_key_len = max(len(k) for k in s)
+        for k, v in s.items():
+            yield indentation + get_line(k, v, max_key_len)
 
 
 def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
     with open(file, "w") as f:
-        comment = "\n".join("# " + s for s in comment.splitlines())
-        f.write(f"{comment}\n")
-        f.write("\n".join(dump_lines(state)))
+        for line in comment.splitlines():
+            print("#", line, file=f)
+        for line in dump_lines(group_keys(state)):
+            print(line, file=f)
 
     print(f"Dumped {len(state)} keys to {file}")
 
