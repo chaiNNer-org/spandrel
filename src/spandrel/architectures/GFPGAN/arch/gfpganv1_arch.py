@@ -368,13 +368,10 @@ class GFPGANv1(nn.Module):
             sft_half=sft_half,
         )
 
-        # load pre-trained stylegan2 model if necessary
         if decoder_load_path:
-            self.stylegan_decoder.load_state_dict(
-                torch.load(
-                    decoder_load_path, map_location=lambda storage, loc: storage
-                )["params_ema"]
-            )
+            # Refuse to attempt to load a decoder here
+            raise NotImplementedError(f"Got a non-empty {decoder_load_path=}")
+
         # fix decoder without updating params
         if fix_decoder:
             for _, param in self.stylegan_decoder.named_parameters():
