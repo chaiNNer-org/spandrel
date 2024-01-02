@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 import random
 import re
 import sys
@@ -67,6 +68,10 @@ def extract_file_from_zip(
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         filename.write_bytes(zip_ref.read(rel_model_path))
+
+
+def get_test_device_name() -> str:
+    return os.environ.get("SPANDREL_TEST_DEVICE") or "cpu"
 
 
 @dataclass
@@ -161,7 +166,8 @@ def image_inference_tensor(
 
 
 def image_inference(model: ImageModelDescriptor, image: np.ndarray) -> np.ndarray:
-    return tensor_to_image(image_inference_tensor(model, image_to_tensor(image)))
+    tensor = image_to_tensor(image).to(get_test_device_name())
+    return tensor_to_image(image_inference_tensor(model, tensor))
 
 
 def get_h_w_c(image: np.ndarray) -> tuple[int, int, int]:
@@ -191,6 +197,9 @@ def assert_image_inference(
 
     update_mode = "--snapshot-update" in sys.argv
 
+    outputs_dir = os.environ.get("SPANDREL_TEST_OUTPUTS_DIR") or "outputs"
+    model.to(torch.device(get_test_device_name()))
+
     for test_image in test_images:
         path = IMAGE_DIR / "inputs" / test_image.value
 
@@ -219,7 +228,7 @@ def assert_image_inference(
         ), f"Expected the input image '{test_image.value}' {image_w}x{image_h} to be scaled {model.scale}x, but the output was {output_w}x{output_h}."
 
         expected_path = (
-            IMAGE_DIR / "outputs" / path.stem / f"{model_file.path.stem}.png"
+            IMAGE_DIR / outputs_dir / path.stem / f"{model_file.path.stem}.png"
         )
 
         if update_mode and not expected_path.exists():
