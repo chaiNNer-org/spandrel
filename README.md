@@ -116,6 +116,14 @@ Use `.safetensors` files for guaranteed security.
 
 As you may know, loading `.pth` files [poses a security risk](https://github.com/pytorch/pytorch/issues/52596) due to python's `pickle` module being inherently unsafe and vulnerable to arbitrary code execution (ACE). To mitigate this, Spandrel only allows deserializing certain types of data. This helps to improve security, but it still doesn't fully solve the issue of ACE.
 
+## Used By
+
+Here are some cool projects that use Spandrel:
+
+- [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
+- [AUTOMATIC1111's SD WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+- [dgenerate](https://github.com/Teriks/dgenerate)
+
 ## License Notice
 
 This repo is bounded by GPLv3 license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses. See `src/spandrel/architectures/<name>/arch/LICENSE` for the license of a specific architecture.
