@@ -2,7 +2,23 @@ from ...__helpers.model_descriptor import GuidedImageModelDescriptor, StateDict
 from .arch.sgnet import SGNet
 
 
+def _migrate(state_dict: StateDict):
+    # this fixes up some renamed keys
+    # see https://github.com/yanzq95/SGNet/issues/6 for more details
+    for key in list(state_dict.keys()):
+        if ".panprocess." in key:
+            new_key = key.replace(".panprocess.", ".rgbprocess.")
+            state_dict[new_key] = state_dict[key]
+            del state_dict[key]
+        if ".panpre." in key:
+            new_key = key.replace(".panpre.", ".rgbpre.")
+            state_dict[new_key] = state_dict[key]
+            del state_dict[key]
+
+
 def load(state_dict: StateDict) -> GuidedImageModelDescriptor[SGNet]:
+    _migrate(state_dict)
+
     # this arch doesn't have default values
     num_feats: int
     kernel_size: int

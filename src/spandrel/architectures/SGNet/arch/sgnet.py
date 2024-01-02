@@ -60,9 +60,9 @@ class SGNet(nn.Module):
             default_conv, 3 * num_feats, kernel_size, reduction=16, n_resblocks=6
         )
 
-        self.bridge1 = SDM(channels=num_feats, rgb_channels=num_feats)
-        self.bridge2 = SDM(channels=2 * num_feats, rgb_channels=num_feats)
-        self.bridge3 = SDM(channels=3 * num_feats, rgb_channels=num_feats)
+        self.bridge1 = SDM(channels=num_feats, rgb_channels=num_feats, scale=scale)
+        self.bridge2 = SDM(channels=2 * num_feats, rgb_channels=num_feats, scale=scale)
+        self.bridge3 = SDM(channels=3 * num_feats, rgb_channels=num_feats, scale=scale)
 
         self.c_de = default_conv(4 * num_feats, 2 * num_feats, 1)
 
@@ -97,7 +97,7 @@ class SGNet(nn.Module):
 
         self.act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
 
-        self.gradNet = GCM(n_feats=num_feats)
+        self.gradNet = GCM(n_feats=num_feats, scale=scale)
 
     def forward(self, x):
         image, depth = x

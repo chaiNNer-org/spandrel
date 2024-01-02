@@ -23,31 +23,41 @@ def test_SGNet_Real(snapshot):
     assert isinstance(model.model, SGNet)
 
 
-# def test_SGNet_X4(snapshot):
-#     file = ModelFile.from_url(
-#         "https://drive.google.com/file/d/1qmWbKm1nrfGc-TNFLJp4IpQ4NWWXxcc6/view?usp=sharing",
-#         name="SGNet_X4.pth",
-#     )
-#     model = file.load_model()
-#     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, SGNet)
+def test_SGNet_Real_R(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/151nAaBMOBXey3dqukKFO0T7jSA0kWJ3W/view?usp=sharing",
+        name="SGNet_Real_R.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SGNet)
 
 
-# def test_SGNet_X8(snapshot):
-#     file = ModelFile.from_url(
-#         "https://drive.google.com/file/d/1Rn9PWxyRdVxdnceo7X_QiUrqpFzrERW4/view?usp=sharing",
-#         name="SGNet_X8.pth",
-#     )
-#     model = file.load_model()
-#     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, SGNet)
+def test_SGNet_X4(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1qmWbKm1nrfGc-TNFLJp4IpQ4NWWXxcc6/view?usp=sharing",
+        name="SGNet_X4.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SGNet)
 
 
-# def test_SGNet_X16(snapshot):
-#     file = ModelFile.from_url(
-#         "https://drive.google.com/file/d/1KqxhMcP3AJzk1U9TjjZz_XZCm9Kb_Vh9/view?usp=sharing",
-#         name="SGNet_X16.pth",
-#     )
-#     model = file.load_model()
-#     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, SGNet)
+def test_SGNet_X4_R(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/12Lv8DldEWz6KZ7tmUgjPgl1LkQJaTc_N/view?usp=sharing",
+        name="SGNet_X4_R.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SGNet)
+
+
+def test_SGNet_X8(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Rn9PWxyRdVxdnceo7X_QiUrqpFzrERW4/view?usp=sharing",
+        name="SGNet_X8.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SGNet)

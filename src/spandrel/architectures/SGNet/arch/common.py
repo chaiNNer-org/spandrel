@@ -215,7 +215,7 @@ class InvBlock(nn.Module):
         )
 
         y1 = x1 + self.F(x2)  # 1 channel
-        self.s = self.clamp * (torch.sigmoid(self.H(y1)) * 2 - 1)
+        self.s = self.clamp * (torch.sigmoid(self.H(y1)) * 2 - 1)  # type: ignore
         y2 = x2.mul(torch.exp(self.s)) + self.G(y1)  # 2 channel
         out = torch.cat((y1, y2), 1)
 
@@ -445,7 +445,7 @@ class get_Fre(nn.Module):
 
 
 class SDM(nn.Module):
-    def __init__(self, channels: int, rgb_channels: int):
+    def __init__(self, channels: int, rgb_channels: int, scale: int):
         super().__init__()
         self.rgbprocess = nn.Conv2d(rgb_channels, rgb_channels, 3, 1, 1)
         self.rgbpre = nn.Conv2d(rgb_channels, rgb_channels, 1, 1, 0)
@@ -476,9 +476,11 @@ class SDM(nn.Module):
         )
 
         self.downBlock = DenseProjection(
-            channels, channels, 8, up=False, bottleneck=False
+            channels, channels, scale, up=False, bottleneck=False
         )
-        self.upBlock = DenseProjection(channels, channels, 8, up=True, bottleneck=False)
+        self.upBlock = DenseProjection(
+            channels, channels, scale, up=True, bottleneck=False
+        )
 
     def forward(self, dp, rgb):  # , i
         dp = self.upBlock(dp)
@@ -553,13 +555,13 @@ class Get_gradient_nopadding_d(nn.Module):
 
 
 class GCM(nn.Module):
-    def __init__(self, n_feats: int):
+    def __init__(self, n_feats: int, scale: int):
         super().__init__()
         self.grad_rgb = Get_gradient_nopadding_rgb()
         self.grad_d = Get_gradient_nopadding_d()
-        self.upBlock = DenseProjection(1, 1, 8, up=True, bottleneck=False)
+        self.upBlock = DenseProjection(1, 1, scale, up=True, bottleneck=False)
         self.downBlock = DenseProjection(
-            n_feats, n_feats, 8, up=False, bottleneck=False
+            n_feats, n_feats, scale, up=False, bottleneck=False
         )
         self.c_rgb = default_conv(3, n_feats, 3)
         self.c_d = default_conv(1, n_feats, 3)
