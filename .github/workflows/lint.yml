@@ -26,7 +26,7 @@ jobs:
               with:
                   python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[lint]
+            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: ruff format src --check
             - run: ruff format tests --check
             - run: ruff format scripts --check
@@ -39,7 +39,7 @@ jobs:
               with:
                   python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[lint]
+            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: ruff check src
             - run: ruff check tests
             - run: ruff check scripts
@@ -52,7 +52,7 @@ jobs:
               with:
                   python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[typecheck,test]
+            - run: pip install .[typecheck,test] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: pyright src/
             - run: pyright tests/
             - run: pyright scripts/

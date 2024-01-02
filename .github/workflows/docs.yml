@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install .[docs]
+      - run: pip install .[docs] --extra-index-url https://download.pytorch.org/whl/cpu
       - name: Build the website
         run: pydoctor --project-url=https://github.com/$GITHUB_REPOSITORY --html-viewsource-base=https://github.com/$GITHUB_REPOSITORY/tree/$GITHUB_SHA
       - name: Upload artifact
