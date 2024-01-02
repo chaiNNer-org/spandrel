@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install .[build]
+        run: pip install .[build] --extra-index-url https://download.pytorch.org/whl/cpu
       - name: Build and publish
         env:
           TWINE_USERNAME: __token__
