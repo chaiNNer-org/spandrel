@@ -47,7 +47,7 @@ model.eval()
 # use the model
 def process(image: torch.Tensor) -> torch.Tensor:
     with torch.no_grad():
-        return model(tensor)
+        return model(image)
 ```
 
 Note that `model` is a [`ModelDescriptor`](https://chainner.app/spandrel/#ModelDescriptor) object, which is a wrapper around the actual PyTorch model. This wrapper provides a unified interface for running models, and also contains metadata about the model. See [`ImageModelDescriptor`](https://chainner.app/spandrel/spandrel.ImageModelDescriptor.html) for more details about the metadata contained and how to call the model.
