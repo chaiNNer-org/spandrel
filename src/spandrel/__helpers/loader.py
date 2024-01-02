@@ -18,9 +18,11 @@ class ModelLoader:
 
     def __init__(
         self,
-        device: torch.device | None = None,
+        device: str | torch.device | None = None,
         registry: ArchRegistry = MAIN_REGISTRY,
     ):
+        if isinstance(device, str):
+            device = torch.device(device)
         self.device: torch.device = device or torch.device("cpu")
         self.registry: ArchRegistry = registry
         """

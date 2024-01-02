@@ -195,7 +195,7 @@ class ModelBase(ABC, Generic[T]):
         """
         ...
 
-    def to(self, device: torch.device):
+    def to(self, device: str | torch.device):
         """
         Moves the parameters and buffers of the underlying module to the given device.
         """
