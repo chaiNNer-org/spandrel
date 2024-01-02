@@ -11,10 +11,19 @@ from torch import Tensor
 T = TypeVar("T", bound=torch.nn.Module, covariant=True)
 
 StateDict = Dict[str, Any]
+"""
+Spandrel's type alias for PyTorch state dicts.
+
+See https://pytorch.org/tutorials/recipes/recipes/what_is_state_dict.html
+"""
 
 
 @dataclass
 class SizeRequirements:
+    """
+    A set of requirements for the size of an input image.
+    """
+
     minimum: int = 0
     """
     The minimum size of the input image in pixels.
@@ -72,6 +81,10 @@ A short string describing the purpose of the model.
 
 
 class ModelTiling(Enum):
+    """
+    Describes whether and how a model supports tiling.
+    """
+
     SUPPORTED = 1
     """
     The model supports tiling.
@@ -94,6 +107,12 @@ class ModelTiling(Enum):
 
 
 class ModelBase(ABC, Generic[T]):
+    """
+    The base class of all model descriptors.
+
+    This is mostly intended for `instanceof` checks in user code. Use `ModelDescriptor` for type hints instead.
+    """
+
     def __init__(
         self,
         model: T,
@@ -156,6 +175,8 @@ class ModelBase(ABC, Generic[T]):
         )
         """
         Size requirements for the input image. E.g. minimum size.
+
+        Requirements are specific to individual models and may be different for models of the same architecture.
         """
         self.tiling: ModelTiling = tiling
         """
@@ -176,21 +197,34 @@ class ModelBase(ABC, Generic[T]):
         ...
 
     def to(self, device: torch.device):
+        """
+        Moves the parameters and buffers of the underlying module to the given device.
+        """
         self.model.to(device)
         return self
 
     def eval(self):
+        """
+        Sets the underlying module in evaluation mode.
+
+        Same as `self.train(False)`.
+        """
         self.model.eval()
         return self
 
     def train(self, mode: bool = True):
+        """
+        Sets the underlying module in training mode.
+
+        Same as `self.model.train(mode)`.
+        """
         self.model.train(mode)
         return self
 
 
 class ImageModelDescriptor(ModelBase[T], Generic[T]):
     """
-    A model that takes an image as input and returns an image.
+    A model that takes an image as input and returns an image. See `__call__` for more information.
     """
 
     def __init__(
@@ -236,6 +270,14 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         return self._purpose
 
     def __call__(self, image: Tensor) -> Tensor:
+        """
+        Takes a single image tensor as input and returns a single image tensor as output.
+
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The data type (float32, float16, bfloat16) and device of the `image` tensor must be the same as the model. The range of the `image` tensor must be ``[0, 1]``.
+
+        The output tensor will be a 4D tensor with shape `(1, output_channels, H*scale, W*scale)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
+        """
+
         output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
@@ -245,7 +287,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
 
 class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
     """
-    A model that takes an image and a mask for that image as input and returns an image.
+    A model that takes an image and a mask for that image as input and returns an image. See `__call__` for more information.
     """
 
     def __init__(
@@ -286,6 +328,18 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         return self._purpose
 
     def __call__(self, image: Tensor, mask: Tensor) -> Tensor:
+        """
+        Takes an image tensor and an image mask tensor as input and returns a single image tensor as output.
+
+        The data type (float32, float16, bfloat16) and device of the `image` and `mask` tensors must be the same as the model.
+
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The range of the `image` tensor must be ``[0, 1]``.
+
+        The `mask` tensor must be a 4D tensor with shape `(1, 1, H, W)`. The width and height must be the same as `image` tensor. The values of the `mask` tensor must be either 0 (keep) or 1 (inpaint).
+
+        The output tensor will be a 4D tensor with shape `(1, output_channels, H, W)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
+        """
+
         output = self._call_fn(self.model, image, mask)
         assert isinstance(
             output, Tensor
@@ -356,6 +410,6 @@ ModelDescriptor = Union[
 A model descriptor is a loaded model with metadata. Metadata includes the
 architecture, purpose, tags, and other information about the model.
 
-The purpose of a model is described by the type of the model descriptor. E.g.
-a super resolution model has a descriptor of type `SRModelDescriptor`.
+The API of a model is described by the type of the model descriptor. E.g.
+a SISR model will have a descriptor of type `ImageModelDescriptor`.
 """

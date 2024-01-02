@@ -156,18 +156,13 @@ def conv_block(
     norm_type: str | None = None,
     act_type: str | None = "relu",
     mode: ConvMode = "CNA",
-    c2x2=False,
 ):
     """
     Conv layer with padding, normalization, activation
-    mode: CNA --> Conv -> Norm -> Act
-        NAC --> Norm -> Act --> Conv (Identity Mappings in Deep Residual Networks, ECCV16)
+    mode:
+    - ``CNA`` --> Conv -> Norm -> Act
+    - ``NAC`` --> Norm -> Act --> Conv (Identity Mappings in Deep Residual Networks, ECCV16)
     """
-
-    if c2x2:
-        return conv_block_2c2(
-            in_nc, out_nc, act_type=act_type if act_type is not None else "relu"
-        )
 
     assert mode in ("CNA", "NAC", "CNAC"), f"Wrong conv mode [{mode:s}]"
     padding = get_valid_padding(kernel_size, dilation)
@@ -198,7 +193,7 @@ def conv_block(
         n = norm(norm_type, in_nc) if norm_type else None
         return sequential(n, a, p, c)
     else:
-        assert False, f"Invalid conv mode {mode}"
+        raise ValueError(f"Invalid conv mode {mode}")
 
 
 ####################
@@ -295,7 +290,6 @@ class RRDB(nn.Module):
         _convtype="Conv2D",
         _spectral_norm=False,
         plus=False,
-        c2x2=False,
     ):
         super().__init__()
         self.RDB1 = ResidualDenseBlock_5C(
@@ -309,7 +303,6 @@ class RRDB(nn.Module):
             act_type,
             mode,
             plus=plus,
-            c2x2=c2x2,
         )
         self.RDB2 = ResidualDenseBlock_5C(
             nf,
@@ -322,7 +315,6 @@ class RRDB(nn.Module):
             act_type,
             mode,
             plus=plus,
-            c2x2=c2x2,
         )
         self.RDB3 = ResidualDenseBlock_5C(
             nf,
@@ -335,7 +327,6 @@ class RRDB(nn.Module):
             act_type,
             mode,
             plus=plus,
-            c2x2=c2x2,
         )
 
     def forward(self, x):
@@ -348,23 +339,20 @@ class RRDB(nn.Module):
 class ResidualDenseBlock_5C(nn.Module):
     """
     Residual Dense Block
-    style: 5 convs
+    Style: 5 convs
     The core module of paper: (Residual Dense Network for Image Super-Resolution, CVPR 18)
     Modified options that can be used:
-        - "Partial Convolution based Padding" arXiv:1811.11718
-        - "Spectral normalization" arXiv:1802.05957
-        - "ICASSP 2020 - ESRGAN+ : Further Improving ESRGAN" N. C.
-            {Rakotonirina} and A. {Rasoanaivo}
+
+    - "Partial Convolution based Padding" `arXiv:1811.11718`
+    - "Spectral normalization" `arXiv:1802.05957`
+    - "ICASSP 2020 - ESRGAN+ : Further Improving ESRGAN" N. C. {Rakotonirina} and A. {Rasoanaivo}
 
     Args:
         nf (int): Channel number of intermediate features (num_feat).
-        gc (int): Channels for each growth (num_grow_ch: growth channel,
-            i.e. intermediate channels).
+        gc (int): Channels for each growth (num_grow_ch: growth channel, i.e. intermediate channels).
         convtype (str): the type of convolution to use. Default: 'Conv2D'
-        gaussian_noise (bool): enable the ESRGAN+ gaussian noise (no new
-            trainable parameters)
-        plus (bool): enable the additional residual paths from ESRGAN+
-            (adds trainable parameters)
+        gaussian_noise (bool): enable the ESRGAN+ gaussian noise (no new trainable parameters)
+        plus (bool): enable the additional residual paths from ESRGAN+ (adds trainable parameters)
     """
 
     def __init__(
@@ -379,7 +367,6 @@ class ResidualDenseBlock_5C(nn.Module):
         act_type="leakyrelu",
         mode: ConvMode = "CNA",
         plus=False,
-        c2x2=False,
     ):
         super().__init__()
 
@@ -397,7 +384,6 @@ class ResidualDenseBlock_5C(nn.Module):
             norm_type=norm_type,
             act_type=act_type,
             mode=mode,
-            c2x2=c2x2,
         )
         self.conv2 = conv_block(
             nf + gc,
@@ -409,7 +395,6 @@ class ResidualDenseBlock_5C(nn.Module):
             norm_type=norm_type,
             act_type=act_type,
             mode=mode,
-            c2x2=c2x2,
         )
         self.conv3 = conv_block(
             nf + 2 * gc,
@@ -421,7 +406,6 @@ class ResidualDenseBlock_5C(nn.Module):
             norm_type=norm_type,
             act_type=act_type,
             mode=mode,
-            c2x2=c2x2,
         )
         self.conv4 = conv_block(
             nf + 3 * gc,
@@ -433,7 +417,6 @@ class ResidualDenseBlock_5C(nn.Module):
             norm_type=norm_type,
             act_type=act_type,
             mode=mode,
-            c2x2=c2x2,
         )
         if mode == "CNA":
             last_act = None
@@ -449,7 +432,6 @@ class ResidualDenseBlock_5C(nn.Module):
             norm_type=norm_type,
             act_type=last_act,
             mode=mode,
-            c2x2=c2x2,
         )
 
     def forward(self, x):
@@ -519,7 +501,6 @@ def upconv_block(
     norm_type: str | None = None,
     act_type="relu",
     mode="nearest",
-    c2x2=False,
 ):
     # Up conv
     # described in https://distill.pub/2016/deconv-checkerboard/
@@ -533,6 +514,5 @@ def upconv_block(
         pad_type=pad_type,
         norm_type=norm_type,
         act_type=act_type,
-        c2x2=c2x2,
     )
     return sequential(upsample, conv)

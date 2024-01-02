@@ -1,6 +1,11 @@
 from spandrel.architectures.GFPGAN import GFPGANv1Clean
 
-from .util import ModelFile, disallowed_props
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    disallowed_props,
+)
 
 
 def test_GFPGAN_1_2(snapshot):
@@ -28,3 +33,8 @@ def test_GFPGAN_1_4(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, GFPGANv1Clean)
+    assert_image_inference(
+        model_file=file,
+        model=model,
+        test_images=[TestImage.BLURRY_FACE],
+    )

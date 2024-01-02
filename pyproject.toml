@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=46.4.0", "wheel", "build"]
+requires = ["setuptools>=46.4.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "spandrel"
 authors = [{ name = "chaiNNer team" }]
 description = "Give your project support for a variety of PyTorch model architectures, including auto-detecting model architecture from just .pth files. spandrel gives you arch support."
 readme = "README.md"
-requires-python = ">=3.8,<3.12"
+requires-python = ">=3.8"
 keywords = [
     "spandrel",
     "pytorch architecture",
@@ -34,13 +34,17 @@ dependencies = ["torch", "torchvision", "safetensors", "numpy", "einops"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-build = ["setuptools>=46.4.0", "wheel", "build", "twine"]
-lint = ["ruff==0.1.6"]
-typecheck = ["pyright==1.1.335"]
+build = ["build", "twine"]
+lint = ["ruff==0.1.9"]
+typecheck = ["pyright==1.1.342"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
+docs = ["pydoctor==23.9.1"]
 
-# [tool.setuptools.dynamic]
-# version = { attr = "spandrel.VERSION" }
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.dynamic]
+version = { attr = "spandrel.__version__" }
 
 [tool.ruff]
 # Same as Black.
@@ -53,26 +57,54 @@ src = ["src"]
 # extend-exclude = ["src/architectures/**"]
 
 extend-select = [
-    "UP",     # pyupgrade
-    "E",      # pycodestyle
-    "W",      # pycodestyle
-    "F",      # pyflakes
-    "I",      # isort
-    "FA",     # flake8-future-annotations
-    "N",      # pep8-naming
     "ANN001",
     "ANN002",
+    "B",      # bugbear
+    "C4",     # comprehensions
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "FA",     # flake8-future-annotations
+    "I",      # isort
+    "N",      # pep8-naming
+    "SIM",    # simplify
+    "UP",     # pyupgrade
+    "W",      # pycodestyle
 ]
 ignore = [
-    "E501", # Line too long
-    "N999", # Invalid module name
-    "N814", # Camelcase imported as constant
+    "E501",   # Line too long
+    "N814",   # Camelcase imported as constant
+    "N999",   # Invalid module name
+    "SIM105", # `contextlib.suppress()` has a performance cost, so disabled
+    "SIM108", # Ternary operators can be unreadable, so disabled
+    "SIM117", # Non-nested with statements make for long lines, so disabled
+    "SIM118", # `.keys()` might be a false positive, so disabled
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/arch/**/*" = ["N", "ANN"]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
+"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN", "SIM102", "SIM114"]
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
-filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::UserWarning",
+]
+pythonpath = [
+  "src",
+]
+
+[tool.pydoctor]
+project-name = "spandrel"
+add-package = ["src/spandrel"]
+project-url = "https://github.com/chaiNNer-org/spandrel"
+docformat = "restructuredtext"
+warnings-as-errors = false
+make-html = true
+html-output = "docs"
+theme = "readthedocs"
+privacy = [
+    "HIDDEN:spandrel.__version__",
+    "HIDDEN:spandrel.__helpers",
+    "PRIVATE:spandrel.canonicalize_state_dict",
+]

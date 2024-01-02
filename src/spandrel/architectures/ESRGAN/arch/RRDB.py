@@ -19,7 +19,6 @@ class RRDBNet(nn.Module):
         num_filters: int = 64,
         num_blocks: int = 23,
         scale: int = 4,
-        c2x2: bool = False,
         plus: bool = False,
         shuffle_factor: int | None = None,
         norm=None,
@@ -60,7 +59,6 @@ class RRDBNet(nn.Module):
                 out_nc=num_filters,
                 upscale_factor=3,
                 act_type=act,
-                c2x2=c2x2,
             )
         else:
             upsample_blocks = [
@@ -68,7 +66,6 @@ class RRDBNet(nn.Module):
                     in_nc=num_filters,
                     out_nc=num_filters,
                     act_type=act,
-                    c2x2=c2x2,
                 )
                 for _ in range(int(math.log(scale, 2)))
             ]
@@ -81,7 +78,6 @@ class RRDBNet(nn.Module):
                 kernel_size=3,
                 norm_type=None,
                 act_type=None,
-                c2x2=c2x2,
             ),
             B.ShortcutBlock(
                 B.sequential(
@@ -98,7 +94,6 @@ class RRDBNet(nn.Module):
                             act_type=act,
                             mode="CNA",
                             plus=plus,
-                            c2x2=c2x2,
                         )
                         for _ in range(num_blocks)
                     ],
@@ -110,7 +105,6 @@ class RRDBNet(nn.Module):
                         norm_type=norm,
                         act_type=None,
                         mode=mode,
-                        c2x2=c2x2,
                     ),
                 )
             ),
@@ -122,7 +116,6 @@ class RRDBNet(nn.Module):
                 kernel_size=3,
                 norm_type=None,
                 act_type=act,
-                c2x2=c2x2,
             ),
             # hr_conv1
             B.conv_block(
@@ -131,7 +124,6 @@ class RRDBNet(nn.Module):
                 kernel_size=3,
                 norm_type=None,
                 act_type=None,
-                c2x2=c2x2,
             ),
         )
 

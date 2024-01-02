@@ -21,12 +21,12 @@ jobs:
     formatting:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
               with:
-                  python-version: '3.9'
+                  python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[lint]
+            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: ruff format src --check
             - run: ruff format tests --check
             - run: ruff format scripts --check
@@ -34,12 +34,12 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
               with:
-                  python-version: '3.9'
+                  python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[lint]
+            - run: pip install .[lint] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: ruff check src
             - run: ruff check tests
             - run: ruff check scripts
@@ -47,13 +47,12 @@ jobs:
     pyright:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
               with:
-                  python-version: '3.9'
+                  python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[typecheck]
-            - run: pip install .[test]
+            - run: pip install .[typecheck,test] --extra-index-url https://download.pytorch.org/whl/cpu
             - run: pyright src/
             - run: pyright tests/
             - run: pyright scripts/

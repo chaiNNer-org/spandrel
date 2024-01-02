@@ -1,6 +1,12 @@
 from spandrel.architectures.CodeFormer import CodeFormer, load
 
-from .util import ModelFile, assert_loads_correctly, disallowed_props
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    disallowed_props,
+)
 
 
 def test_CodeFormer_load():
@@ -26,3 +32,8 @@ def test_CodeFormer(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, CodeFormer)
+    assert_image_inference(
+        model_file=file,
+        model=model,
+        test_images=[TestImage.BLURRY_FACE],
+    )

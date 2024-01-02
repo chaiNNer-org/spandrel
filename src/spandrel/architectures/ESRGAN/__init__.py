@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import functools
 import math
 import re
 from collections import OrderedDict
 
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
+from ..__arch_helpers.state import get_seq_len
 from .arch.RRDB import RRDBNet
 
 
@@ -71,15 +74,18 @@ def _new_to_old_arch(state: StateDict, state_map: dict, num_blocks: int):
     return out_dict
 
 
-def _get_scale(state: StateDict, min_part: int = 6) -> int:
-    n = 0
-    for part in list(state):
-        parts = part.split(".")[1:]
-        if len(parts) == 2:
-            part_num = int(parts[0])
-            if part_num > min_part and parts[1] == "weight":
-                n += 1
-    return 2**n
+def _get_scale(state: StateDict) -> int:
+    # model is composed of a few blocks that look like this flattened:
+    #
+    #   Conv2d
+    #   B.ShortcutBlock
+    #   [nn.Upsample, Conv2d, nn.LeakyReLU] for i in range(log2(scale))
+    #   Conv2d
+    #   nn.LeakyReLU (activation)
+    #   Conv2d
+    seq_len = get_seq_len(state, "model")
+    log2_scale = (seq_len - 5) // 3
+    return 2**log2_scale
 
 
 def _get_num_blocks(state: StateDict, state_map: dict) -> int:
@@ -97,10 +103,7 @@ def _get_num_blocks(state: StateDict, state_map: dict) -> int:
     return max(*nbs) + 1
 
 
-def load(state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
-    state = state_dict
-    model_arch = "ESRGAN"
-
+def _to_old_arch(state: StateDict) -> StateDict:
     state_map = {
         # currently supports old, new, and newer RRDBNet arch models
         # ESRGAN, BSRGAN/RealSR, Real-ESRGAN
@@ -113,29 +116,39 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
             r"body\.(\d+)\.rdb(\d)\.conv(\d+)\.(weight|bias)",
         ),
     }
+
     if "params_ema" in state:
         state = state["params_ema"]
-        # model_arch = "RealESRGAN"
+
     num_blocks = _get_num_blocks(state, state_map)
-    plus = any("conv1x1" in k for k in state.keys())
-    if plus:
+    return _new_to_old_arch(state, state_map, num_blocks)
+
+
+def load(state: StateDict) -> ImageModelDescriptor[RRDBNet]:
+    # default values
+    in_nc: int = 3
+    out_nc: int = 3
+    num_filters: int = 64
+    num_blocks: int = 23
+    scale: int = 4
+    plus: bool = False
+    shuffle_factor: int | None = None
+
+    state = _to_old_arch(state)
+    model_arch = "ESRGAN"
+
+    model_seq_len = get_seq_len(state, "model")
+
+    in_nc = state["model.0.weight"].shape[1]
+    out_nc = state[f"model.{model_seq_len-1}.weight"].shape[0]
+
+    scale = _get_scale(state)
+    num_blocks = get_seq_len(state, "model.1.sub") - 1
+    num_filters = state["model.0.weight"].shape[0]
+
+    if any(".conv1x1." in k for k in state.keys()):
+        plus = True
         model_arch = "ESRGAN+"
-
-    state = _new_to_old_arch(state, state_map, num_blocks)
-
-    highest_weight_num = max(int(re.search(r"model.(\d+)", k).group(1)) for k in state)  # type: ignore
-
-    in_nc: int = state["model.0.weight"].shape[1]
-    out_nc: int = state[f"model.{highest_weight_num}.bias"].shape[0]
-
-    scale: int = _get_scale(state)
-    num_filters: int = state["model.0.weight"].shape[0]
-
-    c2x2 = False
-    if state["model.0.weight"].shape[-2] == 2:
-        c2x2 = True
-        scale = round(math.sqrt(scale / 4))
-        model_arch = "ESRGAN-2c2"
 
     # Detect if pixelunshuffle was used (Real-ESRGAN)
     if in_nc in (out_nc * 4, out_nc * 16) and out_nc in (
@@ -152,7 +165,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
         num_filters=num_filters,
         num_blocks=num_blocks,
         scale=scale,
-        c2x2=c2x2,
+        plus=plus,
         shuffle_factor=shuffle_factor,
     )
     tags = [

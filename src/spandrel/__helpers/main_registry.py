@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 from ..architectures import (
+    CRAFT,
     DAT,
     DITN,
     ESRGAN,
@@ -21,6 +22,7 @@ from ..architectures import (
     LaMa,
     MMRealSR,
     OmniSR,
+    RealCUGAN,
     RestoreFormer,
     SCUNet,
     SGNet,
@@ -230,6 +232,13 @@ MAIN_REGISTRY.add(
         load=DAT.load,
     ),
     ArchSupport(
+        id="CRAFT",
+        detect=_has_keys(
+            "conv_first.weight", "layers.0.residual_group.hf_blocks.0.attn.temperature"
+        ),
+        load=CRAFT.load,
+    ),
+    ArchSupport(
         id="KBNet",
         detect=lambda state: (
             # KBNet_s
@@ -294,6 +303,31 @@ MAIN_REGISTRY.add(
             "upsampler.0.weight",
         ),
         load=SPAN.load,
+    ),
+    ArchSupport(
+        id="RealCUGAN",
+        detect=_has_keys(
+            "unet1.conv1.conv.0.weight",
+            "unet1.conv1.conv.2.weight",
+            "unet1.conv1_down.weight",
+            "unet1.conv2.conv.0.weight",
+            "unet1.conv2.conv.2.weight",
+            "unet1.conv2.seblock.conv1.weight",
+            "unet1.conv2_up.weight",
+            "unet1.conv_bottom.weight",
+            "unet2.conv1.conv.0.weight",
+            "unet2.conv1_down.weight",
+            "unet2.conv2.conv.0.weight",
+            "unet2.conv2.seblock.conv1.weight",
+            "unet2.conv3.conv.0.weight",
+            "unet2.conv3.seblock.conv1.weight",
+            "unet2.conv3_up.weight",
+            "unet2.conv4.conv.0.weight",
+            "unet2.conv4_up.weight",
+            "unet2.conv5.weight",
+            "unet2.conv_bottom.weight",
+        ),
+        load=RealCUGAN.load,
     ),
     ArchSupport(
         id="DDColor",

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-import os
+import hashlib
+import logging
+import random
 import re
 import sys
 import zipfile
@@ -11,7 +13,6 @@ from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 from urllib.parse import unquote, urlparse
-from urllib.request import urlretrieve
 
 import cv2
 import numpy as np
@@ -27,7 +28,10 @@ from spandrel import (
 )
 
 MODEL_DIR = Path("./tests/models/")
+ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
+
+logger = logging.getLogger(__name__)
 
 
 def get_url_file_name(url: str) -> str:
@@ -45,14 +49,12 @@ def convert_google_drive_link(url: str) -> str:
     return "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
 
 
-def download_file(url: str, filename: Path | str) -> str:
+def download_file(url: str, filename: Path | str) -> None:
     filename = Path(filename)
     filename.parent.mkdir(exist_ok=True)
-
     url = convert_google_drive_link(url)
-
-    path, _ = urlretrieve(url, filename=filename)
-    return path
+    logger.info("Downloading %s to %s", url, filename)
+    torch.hub.download_url_to_file(url, str(filename))
 
 
 def extract_file_from_zip(
@@ -64,8 +66,7 @@ def extract_file_from_zip(
     filename.parent.mkdir(exist_ok=True)
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        with open(filename, "wb") as f:
-            f.write(zip_ref.read(rel_model_path))
+        filename.write_bytes(zip_ref.read(rel_model_path))
 
 
 @dataclass
@@ -96,9 +97,10 @@ class ModelFile:
         file = ModelFile(name or Path(rel_model_path).name)
 
         if not file.exists():
-            zip_path = download_file(url, MODEL_DIR / "_temp.zip")
+            zip_path = ZIP_DIR / f"{hashlib.sha256(url.encode()).hexdigest()}.zip"
+            if not zip_path.exists():
+                download_file(url, zip_path)
             extract_file_from_zip(zip_path, rel_model_path, file.path)
-            os.remove(zip_path)
 
         return file
 
@@ -175,6 +177,7 @@ class TestImage(Enum):
     SR_64 = "64x64.png"
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
+    BLURRY_FACE = "blurry-face.jpg"
 
 
 def assert_image_inference(
@@ -289,3 +292,9 @@ def assert_loads_correctly(
             f"Failed condition for {model_name}."
             f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
         )
+
+
+def seed_rngs(seed: int) -> None:
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)

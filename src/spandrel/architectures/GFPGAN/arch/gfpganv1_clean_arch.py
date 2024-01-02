@@ -203,6 +203,9 @@ class GFPGANv1Clean(nn.Module):
         sft_half=True,
     ):
         super().__init__()
+        self.different_w = different_w
+        self.input_is_latent = input_is_latent
+        self.num_style_feat = num_style_feat
 
         unet_narrow = narrow * 0.5  # by default, use a half of input channels
         channels = {
