@@ -46,4 +46,5 @@ def load(state_dict: StateDict) -> GuidedImageModelDescriptor[SGNet]:
         input_channels=1,
         output_channels=1,
         guide_input_channels=3,
+        call_fn=lambda model, x, guide: model((guide, x))[0],
     )
