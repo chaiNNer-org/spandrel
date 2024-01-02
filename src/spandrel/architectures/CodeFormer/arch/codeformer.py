@@ -339,6 +339,8 @@ class VQAutoEncoder(nn.Module):
         gumbel_kl_weight=1e-8,
         model_path=None,
     ):
+        if model_path:
+            raise NotImplementedError(f"Got a non-empty {model_path=}")
         super().__init__()
         self.in_channels = 3
         self.nf = nf
@@ -377,21 +379,6 @@ class VQAutoEncoder(nn.Module):
         self.generator = Generator(
             nf, ch_mult, res_blocks, img_size, attn_resolutions, emb_dim
         )
-
-        if model_path is not None:
-            chkpt = torch.load(model_path, map_location="cpu")
-            if "params_ema" in chkpt:
-                self.load_state_dict(
-                    torch.load(model_path, map_location="cpu")["params_ema"]
-                )
-                # print(f"vqgan is loaded from: {model_path} [params_ema]")
-            elif "params" in chkpt:
-                self.load_state_dict(
-                    torch.load(model_path, map_location="cpu")["params"]
-                )
-                # print(f"vqgan is loaded from: {model_path} [params]")
-            else:
-                raise ValueError("Wrong params!")
 
     def forward(self, x):
         x = self.encoder(x)
