@@ -17,23 +17,16 @@ VSCode is the recommended IDE for this task.
 After you edited the function, run this script, and it will dump the state dict
 of the dummy model to `dump.yml`.
 
-    python scripts/dump_dummy.py
+    python -m scripts.dump_dummy
 
 For more detail on the dump itself, see the docs of `dump_state_dict.py`.
 """
 
-
 import inspect
-import os
-import sys
 from textwrap import dedent
 
 import torch
-
-# This hack is necessary to make our module import
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
-
-from dump_state_dict import dump
+from scripts.dump_state_dict import dump
 
 from spandrel.architectures import SCUNet
 
@@ -43,7 +36,7 @@ def create_dummy() -> torch.nn.Module:
     return SCUNet.SCUNet()
 
 
-if __name__ == "__main__":
+def main():
     net = create_dummy()
     state = net.state_dict()
 
@@ -55,3 +48,7 @@ if __name__ == "__main__":
         source = source[7:]
 
     dump(state, source)
+
+
+if __name__ == "__main__":
+    main()

@@ -15,7 +15,7 @@ similar models do the following:
 
 Usage:
 
-    python scripts/dump_state_dict.py /path/to/model.pth
+    python -m scripts.dump_state_dict /path/to/model.pth
 
 Example `dump.yml`:
 
@@ -41,23 +41,15 @@ state dict.
 
 from __future__ import annotations
 
-import os
 import sys
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, TypeVar
 
 from torch import Tensor
 
-# This hack is necessary to make our module import
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
-
-from spandrel import ModelLoader  # noqa: E402
+from spandrel import ModelLoader
 
 State = Dict[str, object]
-
-
-def load_state(file: str) -> State:
-    return ModelLoader().load_state_dict_from_file(file)
 
 
 def indent(lines: list[str], indentation: str = "  "):
@@ -181,9 +173,13 @@ def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
     print(f"Dumped {len(state)} keys to {file}")
 
 
-if __name__ == "__main__":
+def main() -> None:
     file = sys.argv[1]
     print(f"Input file: {file}")
-    state = load_state(file)
+    state = ModelLoader().load_state_dict_from_file(file)
 
     dump(state, file)
+
+
+if __name__ == "__main__":
+    main()
