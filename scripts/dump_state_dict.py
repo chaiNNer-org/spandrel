@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import os
 import sys
+import argparse
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, TypeVar
 
@@ -181,9 +182,16 @@ def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
     print(f"Dumped {len(state)} keys to {file}")
 
 
-if __name__ == "__main__":
-    file = sys.argv[1]
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("file", help="Path to model file")
+    ap.add_argument("-o", "--output", help="Output file", default="dump.yml")
+    args = ap.parse_args()
+    file = args.file
     print(f"Input file: {file}")
-    state = load_state(file)
+    state = ModelLoader().load_state_dict_from_file(file)
+    dump(state, comment=file, file=args.output)
 
-    dump(state, file)
+
+if __name__ == "__main__":
+    main()
