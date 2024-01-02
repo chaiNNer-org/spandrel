@@ -120,8 +120,8 @@ As you may know, loading `.pth` files [poses a security risk](https://github.com
 
 Here are some cool projects that use Spandrel:
 
-- [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
 - [AUTOMATIC1111's SD WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+- [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
 - [dgenerate](https://github.com/Teriks/dgenerate)
 
 ## License Notice
