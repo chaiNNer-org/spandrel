@@ -8,8 +8,9 @@ import math
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
+
+from ...__arch_helpers.padding import pad_to_multiple
 
 # Originally from the timm package
 from ...__arch_helpers.timm.drop import DropPath
@@ -997,11 +998,7 @@ class SwinIR(nn.Module):
         return {"relative_position_bias_table"}
 
     def check_image_size(self, x):
-        _, _, h, w = x.size()
-        mod_pad_h = (self.window_size - h % self.window_size) % self.window_size
-        mod_pad_w = (self.window_size - w % self.window_size) % self.window_size
-        x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "reflect")
-        return x
+        return pad_to_multiple(x, self.window_size, mode="reflect")
 
     def forward_features(self, x):
         x_size = (x.shape[2], x.shape[3])
