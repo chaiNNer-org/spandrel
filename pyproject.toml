@@ -86,7 +86,13 @@ ignore = [
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
-filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::UserWarning",
+]
+pythonpath = [
+  "src",
+]
 
 [tool.pydoctor]
 project-name = "spandrel"
