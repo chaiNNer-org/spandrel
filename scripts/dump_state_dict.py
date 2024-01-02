@@ -41,7 +41,7 @@ state dict.
 
 from __future__ import annotations
 
-import sys
+import argparse
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, TypeVar
 
@@ -174,11 +174,14 @@ def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
 
 
 def main() -> None:
-    file = sys.argv[1]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("file", help="Path to model file")
+    ap.add_argument("-o", "--output", help="Output file", default="dump.yml")
+    args = ap.parse_args()
+    file = args.file
     print(f"Input file: {file}")
     state = ModelLoader().load_state_dict_from_file(file)
-
-    dump(state, file)
+    dump(state, comment=file, file=args.output)
 
 
 if __name__ == "__main__":
