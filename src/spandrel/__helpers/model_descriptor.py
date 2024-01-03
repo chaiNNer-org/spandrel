@@ -195,9 +195,24 @@ class ModelBase(ABC, Generic[T]):
         """
         ...
 
+    @property
+    def device(self) -> torch.device:
+        """
+        The device of the underlying module.
+
+        Use `to` to move the model to a different device.
+        """
+        # This makes the following assumptions:
+        # - The model is on a single device
+        # - The model has at least one parameter
+        # Both are true for all models implemented in Spandrel.
+        return next(self.model.parameters()).device
+
     def to(self, device: str | torch.device):
         """
         Moves the parameters and buffers of the underlying module to the given device.
+
+        Use `device` to get the current device of the model.
         """
         self.model.to(device)
         return self
