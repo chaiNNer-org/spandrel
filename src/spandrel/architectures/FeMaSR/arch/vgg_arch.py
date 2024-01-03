@@ -1,11 +1,9 @@
-import os
 from collections import OrderedDict
 
 import torch
 from torch import nn as nn
 from torchvision.models import vgg as vgg  # type: ignore
 
-VGG_PRETRAIN_PATH = "experiments/pretrained_models/vgg19-dcbb9e9d.pth"
 NAMES = {
     "vgg11": [
         "conv1_1",
@@ -200,14 +198,7 @@ class VGGFeatureExtractor(nn.Module):
             if idx > max_idx:
                 max_idx = idx
 
-        if os.path.exists(VGG_PRETRAIN_PATH):
-            vgg_net = getattr(vgg, vgg_type)(pretrained=False)
-            state_dict = torch.load(
-                VGG_PRETRAIN_PATH, map_location=lambda storage, loc: storage
-            )
-            vgg_net.load_state_dict(state_dict)
-        else:
-            vgg_net = getattr(vgg, vgg_type)(pretrained=True)
+        vgg_net = getattr(vgg, vgg_type)(pretrained=True)
 
         features = vgg_net.features[: max_idx + 1]
 

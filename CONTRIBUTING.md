@@ -32,6 +32,12 @@ We use [ruff](https://docs.astral.sh/ruff/) for formatting and linting and [pyri
 - Ruff formatting: `ruff format src tests`
 - PyRight: `pyright src tests`
 
+#### `pre-commit`
+
+You can also use [pre-commit](https://pre-commit.com/) to automatically run Ruff before committing.
+To do so, install pre-commit (`pip install pre-commit`) and run `pre-commit install` in the root directory of the repo.
+You can also run `pre-commit run --all-files` to run pre-commit on all files in the repo.
+
 ### Project Structure
 
 The project is structured as follows:
@@ -46,18 +52,30 @@ The project is structured as follows:
 
 ### Useful commands
 
-Type checking:
+#### Type checking
 
 - `pyright src`: Check for type errors.
 
-Testing:
+#### Testing
 
 - `pytest tests`: Run all tests.
 - `pytest tests --snapshot-update`: Run all tests and update snapshots.
 - `pytest tests/test_<arch>.py`: Run the tests for a specific architecture.
 - `pytest tests/test_<arch>.py --snapshot-update`: Run the tests for a specific architecture and update snapshots.
 
-Scripts:
+##### Running inference tests with another Torch device
+
+You can set the `SPANDREL_TEST_DEVICE` environment variable to run inference tests using the specified Torch device.  The default is `cpu`.
+
+If you use that environment variable, it may be useful to set `SPANDREL_TEST_OUTPUTS_DIR` to (e.g.) `outputs-mps`; this will make the test suite output images to a directory named `outputs-mps` instead of `outputs`, so you can use your favorite comparison tool to compare the outputs of the tests run on different devices.
+
+For instance, to test inference using `mps` (Metal Performance Shaders) on an Apple Silicon chip, you could try:
+
+```
+env PYTORCH_ENABLE_MPS_FALLBACK=1 SPANDREL_TEST_DEVICE=mps SPANDREL_TEST_OUTPUTS_DIR=outputs-mps pytest --snapshot-update
+```
+
+#### Scripts
 
 - `python scripts/dump_state_dict.py /path/to/model.pth`: Dumps the contents of a state dict into `dump.yml`. Useful for adding architectures. See the documentation in the file for more information.
 - `python scripts/dump_dummy.py`: Same as `dump_state_dict.py`, but it dumps the contents of a dummy model instead. See the documentation in the file for more information.
