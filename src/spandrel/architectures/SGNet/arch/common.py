@@ -506,12 +506,13 @@ class Get_gradient_nopadding_rgb(nn.Module):
         super().__init__()
         kernel_v = [[0, -1, 0], [0, 0, 0], [0, 1, 0]]
         kernel_h = [[0, 0, 0], [-1, 0, 1], [0, 0, 0]]
-        kernel_h = torch.FloatTensor(kernel_h).unsqueeze(0).unsqueeze(0)
-        kernel_v = torch.FloatTensor(kernel_v).unsqueeze(0).unsqueeze(0)
-        self.weight_h = nn.Parameter(data=kernel_h, requires_grad=False).cuda()
-        self.weight_v = nn.Parameter(data=kernel_v, requires_grad=False).cuda()
+        self.weight_h = torch.FloatTensor(kernel_h).unsqueeze(0).unsqueeze(0)
+        self.weight_v = torch.FloatTensor(kernel_v).unsqueeze(0).unsqueeze(0)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
+        self.weight_v = self.weight_v.to(x.device)
+        self.weight_h = self.weight_h.to(x.device)
+
         x0 = x[:, 0]
         x1 = x[:, 1]
         x2 = x[:, 2]
@@ -537,12 +538,13 @@ class Get_gradient_nopadding_d(nn.Module):
         super().__init__()
         kernel_v = [[0, -1, 0], [0, 0, 0], [0, 1, 0]]
         kernel_h = [[0, 0, 0], [-1, 0, 1], [0, 0, 0]]
-        kernel_h = torch.FloatTensor(kernel_h).unsqueeze(0).unsqueeze(0)
-        kernel_v = torch.FloatTensor(kernel_v).unsqueeze(0).unsqueeze(0)
-        self.weight_h = nn.Parameter(data=kernel_h, requires_grad=False).cuda()
-        self.weight_v = nn.Parameter(data=kernel_v, requires_grad=False).cuda()
+        self.weight_h = torch.FloatTensor(kernel_h).unsqueeze(0).unsqueeze(0)
+        self.weight_v = torch.FloatTensor(kernel_v).unsqueeze(0).unsqueeze(0)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
+        self.weight_v = self.weight_v.to(x.device)
+        self.weight_h = self.weight_h.to(x.device)
+
         x0 = x[:, 0]
 
         x0_v = F.conv2d(x0.unsqueeze(1), self.weight_v, padding=1)
