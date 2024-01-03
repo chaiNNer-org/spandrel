@@ -206,6 +206,7 @@ class ModelBase(ABC, Generic[T]):
         # - The model is on a single device
         # - The model has at least one parameter
         # Both are true for all models implemented in Spandrel.
+        # https://stackoverflow.com/questions/58926054/how-to-get-the-device-type-of-a-pytorch-module-conveniently
         return next(self.model.parameters()).device
 
     def to(self, device: str | torch.device):
