@@ -19,7 +19,7 @@ def sum(tensor, dim=None, keepdim=False):
     else:
         if isinstance(dim, int):
             dim = [dim]
-        dim = sorted(dim)
+        dim = sorted(dim)  # type: ignore
         for d in dim:
             tensor = tensor.sum(dim=d, keepdim=True)
         if not keepdim:
