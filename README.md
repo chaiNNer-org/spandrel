@@ -32,8 +32,6 @@ While Spandrel supports different kinds of models, this is how you would run a s
 from spandrel import ImageModelDescriptor, ModelLoader
 import torch
 
-device = torch.device("cuda:0")
-
 # load a model from disk
 model = ModelLoader().load_from_file(r"path/to/model.pth")
 
@@ -41,7 +39,7 @@ model = ModelLoader().load_from_file(r"path/to/model.pth")
 assert isinstance(model, ImageModelDescriptor)
 
 # send it to the GPU and put it in inference mode
-model.to(device)
+model.to("cuda:0")
 model.eval()
 
 # use the model
