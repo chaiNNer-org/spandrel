@@ -35,7 +35,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 build = ["build", "twine"]
-lint = ["ruff==0.1.9"]
+lint = ["ruff==0.1.11"]
 typecheck = ["pyright==1.1.342"]
 test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
 docs = ["pydoctor==23.9.1"]
@@ -86,13 +86,8 @@ ignore = [
 "**/tests/**/*" = ["N802", "ANN"]
 
 [tool.pytest.ini_options]
-filterwarnings = [
-  "ignore::DeprecationWarning",
-  "ignore::UserWarning",
-]
-pythonpath = [
-  "src",
-]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+pythonpath = ["src"]
 
 [tool.pydoctor]
 project-name = "spandrel"
