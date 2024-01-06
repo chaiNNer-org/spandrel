@@ -4,7 +4,7 @@ cache_mode:
 1:使用cache缓存必要参数,对cache进行8bit量化节省显存,带来小许延时增长
 2:不使用cache,耗时约为mode0的2倍,但是显存不受输入图像分辨率限制,tile_mode填得够大,1.5G显存可超任意比例
 """
-
+from __future__ import annotations
 
 import torch
 from torch import Tensor
@@ -287,14 +287,23 @@ class UNet2(nn.Module):
 class UpCunet2x(nn.Module):
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
-        self.pro = pro
+        self.pro: Tensor | None
+        if pro:
+            self.register_buffer("pro", torch.zeros(1))
+        else:
+            self.pro = None
+
         self.unet1 = UNet1(in_channels, out_channels, deconv=True)
         self.unet2 = UNet2(in_channels, out_channels, deconv=False)
+
+    @property
+    def is_pro(self):
+        return self.pro is not None
 
     def forward(self, x: Tensor, alpha: float = 1):
         _, _, h0, w0 = x.shape
 
-        if self.pro:
+        if self.is_pro:
             # pro expects a different input range
             x = x * 0.7 + 0.15
 
@@ -308,7 +317,7 @@ class UpCunet2x(nn.Module):
         if w0 != pw or h0 != ph:
             x = x[:, :, : h0 * 2, : w0 * 2]
 
-        if self.pro:
+        if self.is_pro:
             x = (x - 0.15) / 0.7
 
         return x
@@ -317,14 +326,23 @@ class UpCunet2x(nn.Module):
 class UpCunet3x(nn.Module):
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
-        self.pro = pro
+        self.pro: Tensor | None
+        if pro:
+            self.register_buffer("pro", torch.zeros(1))
+        else:
+            self.pro = None
+
         self.unet1 = UNet1x3(in_channels, out_channels, deconv=True)
         self.unet2 = UNet2(in_channels, out_channels, deconv=False)
+
+    @property
+    def is_pro(self):
+        return self.pro is not None
 
     def forward(self, x: Tensor, alpha: float = 1):
         _, _, h0, w0 = x.shape
 
-        if self.pro:
+        if self.is_pro:
             # pro expects a different input range
             x = x * 0.7 + 0.15
 
@@ -338,7 +356,7 @@ class UpCunet3x(nn.Module):
         if w0 != pw or h0 != ph:
             x = x[:, :, : h0 * 3, : w0 * 3]
 
-        if self.pro:
+        if self.is_pro:
             x = (x - 0.15) / 0.7
 
         return x
@@ -347,16 +365,25 @@ class UpCunet3x(nn.Module):
 class UpCunet4x(nn.Module):
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
-        self.pro = pro
+        self.pro: Tensor | None
+        if pro:
+            self.register_buffer("pro", torch.zeros(1))
+        else:
+            self.pro = None
+
         self.unet1 = UNet1(in_channels, 64, deconv=True)
         self.unet2 = UNet2(64, 64, deconv=False)
         self.ps = nn.PixelShuffle(2)
         self.conv_final = nn.Conv2d(64, 12, 3, 1, padding=0, bias=True)
 
+    @property
+    def is_pro(self):
+        return self.pro is not None
+
     def forward(self, x: Tensor, alpha: float = 1):
         _, _, h0, w0 = x.shape
 
-        if self.pro:
+        if self.is_pro:
             # pro expects a different input range
             x = x * 0.7 + 0.15
 
@@ -376,7 +403,7 @@ class UpCunet4x(nn.Module):
             x = x[:, :, : h0 * 4, : w0 * 4]
         x += F.interpolate(x00, scale_factor=4, mode="nearest")
 
-        if self.pro:
+        if self.is_pro:
             x = (x - 0.15) / 0.7
 
         return x

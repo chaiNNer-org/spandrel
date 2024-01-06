@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Literal
 
+import torch
+
 from ...__helpers.model_descriptor import (
     ImageModelDescriptor,
     SizeRequirements,
@@ -22,7 +24,7 @@ def load(
     if "pro" in state_dict:
         pro = True
         tags.append("pro")
-        del state_dict["pro"]
+        state_dict["pro"] = torch.zeros(1)
 
     if "conv_final.weight" in state_dict:
         # UpCunet4x
