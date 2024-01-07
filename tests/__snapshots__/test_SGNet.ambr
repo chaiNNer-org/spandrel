@@ -1,0 +1,86 @@
+# serializer version: 1
+# name: test_SGNet_Real
+  GuidedImageModelDescriptor(
+    architecture='SGNet',
+    guide_input_channels=3,
+    input_channels=1,
+    output_channels=1,
+    purpose='GuidedSR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '24nf',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_SGNet_Real_R
+  GuidedImageModelDescriptor(
+    architecture='SGNet',
+    guide_input_channels=3,
+    input_channels=1,
+    output_channels=1,
+    purpose='GuidedSR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '24nf',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_SGNet_X4
+  GuidedImageModelDescriptor(
+    architecture='SGNet',
+    guide_input_channels=3,
+    input_channels=1,
+    output_channels=1,
+    purpose='GuidedSR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '48nf',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_SGNet_X4_R
+  GuidedImageModelDescriptor(
+    architecture='SGNet',
+    guide_input_channels=3,
+    input_channels=1,
+    output_channels=1,
+    purpose='GuidedSR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '48nf',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_SGNet_X8
+  GuidedImageModelDescriptor(
+    architecture='SGNet',
+    guide_input_channels=3,
+    input_channels=1,
+    output_channels=1,
+    purpose='GuidedSR',
+    scale=8,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '40nf',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---

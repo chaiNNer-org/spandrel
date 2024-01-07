@@ -8,6 +8,7 @@ from .__helpers.canonicalize import canonicalize_state_dict
 from .__helpers.loader import ModelLoader
 from .__helpers.main_registry import MAIN_REGISTRY
 from .__helpers.model_descriptor import (
+    GuidedImageModelDescriptor,
     ImageModelDescriptor,
     MaskedImageModelDescriptor,
     ModelBase,
@@ -23,6 +24,7 @@ __all__ = [
     "ArchRegistry",
     "ArchSupport",
     "canonicalize_state_dict",
+    "GuidedImageModelDescriptor",
     "ImageModelDescriptor",
     "MAIN_REGISTRY",
     "MaskedImageModelDescriptor",
