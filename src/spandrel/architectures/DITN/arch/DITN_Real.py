@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 
+from ...__arch_helpers.padding import pad_to_multiple
+
 
 def default_conv(in_channels, out_channels, kernel_size, bias=True):
     return nn.Conv2d(
@@ -297,14 +299,10 @@ class DITN_Real(nn.Module):
         self.ITL_blocks = ITL_blocks
 
     def check_image_size(self, x):
-        _, _, h, w = x.size()
         wsize = self.patch_sizes[0]
         for i in range(1, len(self.patch_sizes)):
             wsize = wsize * self.patch_sizes[i] // math.gcd(wsize, self.patch_sizes[i])
-        mod_pad_h = (wsize - h % wsize) % wsize
-        mod_pad_w = (wsize - w % wsize) % wsize
-        x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "reflect")
-        return x
+        return pad_to_multiple(x, wsize, mode="reflect")
 
     def forward(self, inp_img):
         _, _, old_h, old_w = inp_img.shape

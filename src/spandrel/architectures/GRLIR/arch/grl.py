@@ -10,8 +10,8 @@ from typing import Literal
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
+from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
 from .config import GRLConfig
@@ -487,16 +487,10 @@ class GRL(nn.Module):
         return {"relative_position_bias_table"}
 
     def check_image_size(self, x):
-        _, _, h, w = x.size()
-        mod_pad_h = (self.pad_size - h % self.pad_size) % self.pad_size
-        mod_pad_w = (self.pad_size - w % self.pad_size) % self.pad_size
-        # print("padding size", h, w, self.pad_size, mod_pad_h, mod_pad_w)
-
         try:
-            x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "reflect")
-        except BaseException:
-            x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "constant")
-        return x
+            return pad_to_multiple(x, self.pad_size, mode="reflect")
+        except BaseException:  # TODO: this is suspicious
+            return pad_to_multiple(x, self.pad_size, mode="constant")
 
     def forward_features(self, x):
         x_size = (x.shape[2], x.shape[3])

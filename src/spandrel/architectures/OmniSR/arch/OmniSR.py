@@ -11,8 +11,8 @@
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
+from ...__arch_helpers.padding import pad_to_multiple
 from .OSAG import OSAG
 from .pixelshuffle import pixelshuffle_block
 
@@ -74,13 +74,7 @@ class OmniSR(nn.Module):
         #         m.weight.data.normal_(0, sqrt(2. / n))
 
     def check_image_size(self, x):
-        _, _, h, w = x.size()
-        # import pdb; pdb.set_trace()
-        mod_pad_h = (self.window_size - h % self.window_size) % self.window_size
-        mod_pad_w = (self.window_size - w % self.window_size) % self.window_size
-        # x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), 'reflect')
-        x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "constant", 0)
-        return x
+        return pad_to_multiple(x, self.window_size, mode="constant")
 
     def forward(self, x):
         H, W = x.shape[2:]

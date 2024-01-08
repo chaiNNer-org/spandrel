@@ -7,10 +7,10 @@
 import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from einops import rearrange
 from einops.layers.torch import Rearrange
 
+from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.drop import DropPath
 from ...__arch_helpers.timm.weight_init import trunc_normal_
 
@@ -409,11 +409,7 @@ class SCUNet(nn.Module):
         # self.apply(self._init_weights)
 
     def check_image_size(self, x):
-        _, _, h, w = x.size()
-        mod_pad_h = (64 - h % 64) % 64
-        mod_pad_w = (64 - w % 64) % 64
-        x = F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "reflect")
-        return x
+        return pad_to_multiple(x, 64, mode="reflect")
 
     def forward(self, x0):
         h, w = x0.size()[-2:]
