@@ -1,7 +1,7 @@
 # serializer version: 1
-# name: test_GRLIR_bsr_grl_base
+# name: test_GRL_bsr_grl_base
   ImageModelDescriptor(
-    architecture='GRLIR',
+    architecture='GRL',
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -18,9 +18,9 @@
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
-# name: test_GRLIR_sr_grl_tiny_c3x3
+# name: test_GRL_sr_grl_tiny_c3x3
   ImageModelDescriptor(
-    architecture='GRLIR',
+    architecture='GRL',
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -37,9 +37,9 @@
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
-# name: test_GRLIR_sr_grl_tiny_c3x4
+# name: test_GRL_sr_grl_tiny_c3x4
   ImageModelDescriptor(
-    architecture='GRLIR',
+    architecture='GRL',
     input_channels=3,
     output_channels=3,
     purpose='SR',

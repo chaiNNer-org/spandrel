@@ -8,7 +8,7 @@ import torch
 from ...__helpers.canonicalize import remove_common_prefix
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from ..__arch_helpers.state import get_scale_and_output_channels, get_seq_len
-from .arch.grl import GRL as GRLIR
+from .arch.grl import GRL
 
 _NON_PERSISTENT_BUFFERS = [
     "table_w",
@@ -132,7 +132,7 @@ def _inv_div_add(a: int, d: int) -> int:
     return round(a / (1 + 1 / d))
 
 
-def load(state_dict: StateDict) -> ImageModelDescriptor[GRLIR]:
+def load(state_dict: StateDict) -> ImageModelDescriptor[GRL]:
     state_dict = _clean_up_checkpoint(state_dict)
 
     img_size: int = 64
@@ -266,7 +266,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[GRLIR]:
         if buffer_key in state_dict:
             del state_dict[buffer_key]
 
-    model = GRLIR(
+    model = GRL(
         img_size=img_size,
         in_channels=in_channels,
         out_channels=out_channels,
@@ -305,7 +305,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[GRLIR]:
     return ImageModelDescriptor(
         model,
         state_dict,
-        architecture="GRLIR",
+        architecture="GRL",
         purpose="Restoration" if upscale == 1 else "SR",
         tags=[
             size_tag,
