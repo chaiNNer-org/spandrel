@@ -1,5 +1,4 @@
-from spandrel.architectures.GRL import GRL as GRL
-from spandrel.architectures.GRL import load
+from spandrel.architectures.GRL import GRL, load
 
 from .util import (
     ModelFile,
