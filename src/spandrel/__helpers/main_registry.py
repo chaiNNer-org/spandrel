@@ -9,7 +9,7 @@ from ..architectures import (
     ESRGAN,
     FBCNN,
     GFPGAN,
-    GRLIR,
+    GRL,
     HAT,
     MAT,
     SPAN,
@@ -91,7 +91,7 @@ MAIN_REGISTRY.add(
         load=HAT.load,
     ),
     ArchSupport(
-        id="GRLIR",
+        id="GRL",
         detect=lambda state: (
             _has_keys(
                 "conv_first.weight",
@@ -115,7 +115,7 @@ MAIN_REGISTRY.add(
                 "model_g.layers.0.blocks.0.attn.stripe_attn.attn_transform1.logit_scale",
             )(state)
         ),
-        load=GRLIR.load,
+        load=GRL.load,
     ),
     ArchSupport(
         id="Swin2SR",

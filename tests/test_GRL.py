@@ -1,4 +1,5 @@
-from spandrel.architectures.GRLIR import GRLIR, load
+from spandrel.architectures.GRL import GRL as GRL
+from spandrel.architectures.GRL import load
 
 from .util import (
     ModelFile,
@@ -9,57 +10,57 @@ from .util import (
 )
 
 
-def test_GRLIR_load():
+def test_GRL_load():
     assert_loads_correctly(
         load,
-        lambda: GRLIR(),
-        lambda: GRLIR(in_channels=1, out_channels=3),
-        lambda: GRLIR(in_channels=4, out_channels=4),
-        lambda: GRLIR(embed_dim=16),
+        lambda: GRL(),
+        lambda: GRL(in_channels=1, out_channels=3),
+        lambda: GRL(in_channels=4, out_channels=4),
+        lambda: GRL(embed_dim=16),
         # embed_dim=16 makes tests go faster
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffle", upscale=2),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffle", upscale=3),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffle", upscale=4),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffle", upscale=8),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffledirect", upscale=2),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffledirect", upscale=3),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffledirect", upscale=4),
-        lambda: GRLIR(embed_dim=16, upsampler="pixelshuffledirect", upscale=8),
-        lambda: GRLIR(embed_dim=16, upsampler="nearest+conv", upscale=4),
-        lambda: GRLIR(
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffle", upscale=2),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffle", upscale=3),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffle", upscale=4),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffle", upscale=8),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffledirect", upscale=2),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffledirect", upscale=3),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffledirect", upscale=4),
+        lambda: GRL(embed_dim=16, upsampler="pixelshuffledirect", upscale=8),
+        lambda: GRL(embed_dim=16, upsampler="nearest+conv", upscale=4),
+        lambda: GRL(
             embed_dim=16,
             depths=[4, 5, 3, 2, 1],
             num_heads_window=[2, 3, 5, 1, 3],
             num_heads_stripe=[2, 4, 7, 1, 1],
         ),
-        lambda: GRLIR(mlp_ratio=2),
-        lambda: GRLIR(mlp_ratio=3),
-        lambda: GRLIR(qkv_proj_type="linear", qkv_bias=True),
-        lambda: GRLIR(qkv_proj_type="linear", qkv_bias=False),
-        lambda: GRLIR(qkv_proj_type="separable_conv", qkv_bias=True),
-        lambda: GRLIR(qkv_proj_type="separable_conv", qkv_bias=False),
-        lambda: GRLIR(conv_type="1conv"),
-        lambda: GRLIR(conv_type="1conv1x1"),
-        lambda: GRLIR(conv_type="linear"),
-        lambda: GRLIR(conv_type="3conv"),
+        lambda: GRL(mlp_ratio=2),
+        lambda: GRL(mlp_ratio=3),
+        lambda: GRL(qkv_proj_type="linear", qkv_bias=True),
+        lambda: GRL(qkv_proj_type="linear", qkv_bias=False),
+        lambda: GRL(qkv_proj_type="separable_conv", qkv_bias=True),
+        lambda: GRL(qkv_proj_type="separable_conv", qkv_bias=False),
+        lambda: GRL(conv_type="1conv"),
+        lambda: GRL(conv_type="1conv1x1"),
+        lambda: GRL(conv_type="linear"),
+        lambda: GRL(conv_type="3conv"),
         # These require non-persistent buffers to be detected
-        # lambda: GRLIR(
+        # lambda: GRL(
         #     window_size=16,
         #     stripe_size=[32, 64],
         #     anchor_window_down_factor=1,
         # ),
-        # lambda: GRLIR(
+        # lambda: GRL(
         #     window_size=16,
         #     stripe_size=[32, 64],
         #     anchor_window_down_factor=2,
         # ),
-        # lambda: GRLIR(
+        # lambda: GRL(
         #     window_size=16,
         #     stripe_size=[32, 64],
         #     anchor_window_down_factor=4,
         # ),
         # some actual training configs
-        lambda: GRLIR(
+        lambda: GRL(
             upscale=4,
             img_size=64,
             window_size=8,
@@ -75,7 +76,7 @@ def test_GRLIR_load():
             conv_type="1conv",
             upsampler="pixelshuffledirect",
         ),
-        lambda: GRLIR(
+        lambda: GRL(
             upscale=4,
             img_size=64,
             window_size=8,
@@ -91,7 +92,7 @@ def test_GRLIR_load():
             conv_type="1conv",
             upsampler="pixelshuffle",
         ),
-        lambda: GRLIR(
+        lambda: GRL(
             upscale=4,
             img_size=64,
             window_size=8,
@@ -128,43 +129,43 @@ def test_GRLIR_load():
     )
 
 
-# def test_GRLIR_dn_grl_tiny_c1(snapshot):
+# def test_GRL_dn_grl_tiny_c1(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/dn_grl_tiny_c1.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     # this model is weird, so no inference test
 
 
-# def test_GRLIR_dn_grl_base_c1s25(snapshot):
+# def test_GRL_dn_grl_base_c1s25(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/dn_grl_base_c1s25.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     # we don't have grayscale images yet
 
 
-# def test_GRLIR_jpeg_grl_small_c1q30(snapshot):
+# def test_GRL_jpeg_grl_small_c1q30(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/jpeg_grl_small_c1q30.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     # we don't have grayscale images yet
 
 
-# def test_GRLIR_dn_grl_small_c3s15(snapshot):
+# def test_GRL_dn_grl_small_c3s15(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/dn_grl_small_c3s15.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     assert_image_inference(
 #         file,
 #         model,
@@ -172,13 +173,13 @@ def test_GRLIR_load():
 #     )
 
 
-# def test_GRLIR_dn_grl_base_c3s50(snapshot):
+# def test_GRL_dn_grl_base_c3s50(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/dn_grl_base_c3s50.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     assert_image_inference(
 #         file,
 #         model,
@@ -186,13 +187,13 @@ def test_GRLIR_load():
 #     )
 
 
-# def test_GRLIR_db_motion_grl_base_gopro(snapshot):
+# def test_GRL_db_motion_grl_base_gopro(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/db_motion_grl_base_gopro.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     assert_image_inference(
 #         file,
 #         model,
@@ -200,23 +201,23 @@ def test_GRLIR_load():
 #     )
 
 
-# def test_GRLIR_jpeg_grl_small_c3(snapshot):
+# def test_GRL_jpeg_grl_small_c3(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/jpeg_grl_small_c3.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     # this model is weird, so no inference test
 
 
-# def test_GRLIR_jpeg_grl_small_c3q20(snapshot):
+# def test_GRL_jpeg_grl_small_c3q20(snapshot):
 #     file = ModelFile.from_url(
 #         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/jpeg_grl_small_c3q20.ckpt"
 #     )
 #     model = file.load_model()
 #     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, GRLIR)
+#     assert isinstance(model.model, GRL)
 #     assert_image_inference(
 #         file,
 #         model,
@@ -224,13 +225,13 @@ def test_GRLIR_load():
 #     )
 
 
-def test_GRLIR_sr_grl_tiny_c3x3(snapshot):
+def test_GRL_sr_grl_tiny_c3x3(snapshot):
     file = ModelFile.from_url(
         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/sr_grl_tiny_c3x3.ckpt"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GRLIR)
+    assert isinstance(model.model, GRL)
     assert_image_inference(
         file,
         model,
@@ -238,13 +239,13 @@ def test_GRLIR_sr_grl_tiny_c3x3(snapshot):
     )
 
 
-def test_GRLIR_sr_grl_tiny_c3x4(snapshot):
+def test_GRL_sr_grl_tiny_c3x4(snapshot):
     file = ModelFile.from_url(
         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/sr_grl_tiny_c3x4.ckpt"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GRLIR)
+    assert isinstance(model.model, GRL)
     assert_image_inference(
         file,
         model,
@@ -252,14 +253,14 @@ def test_GRLIR_sr_grl_tiny_c3x4(snapshot):
     )
 
 
-def test_GRLIR_bsr_grl_base(snapshot):
+def test_GRL_bsr_grl_base(snapshot):
     file = ModelFile.from_url(
         "https://drive.google.com/file/d/1JdzeTFiBVSia7PmSvr5VduwDdLnirxAG/view",
         name="bsr_grl_base.safetensors",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GRLIR)
+    assert isinstance(model.model, GRL)
     assert_image_inference(
         file,
         model,
