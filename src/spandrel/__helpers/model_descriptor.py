@@ -30,6 +30,8 @@ class SizeRequirements:
 
     `minimum` is guaranteed to be a multiple of `multiple_of` and to be >= 0.
 
+    On initialization, if `minimum` is not a multiple of `multiple_of`, it will be rounded up to the next multiple of `multiple_of`.
+
     Default/neutral value: `0`
     """
     multiple_of: int = 1
