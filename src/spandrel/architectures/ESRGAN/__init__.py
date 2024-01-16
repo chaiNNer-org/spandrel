@@ -5,7 +5,11 @@ import math
 import re
 from collections import OrderedDict
 
-from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    ImageModelDescriptor,
+    SizeRequirements,
+    StateDict,
+)
 from ..__arch_helpers.state import get_seq_len
 from .arch.RRDB import RRDBNet
 
@@ -189,4 +193,5 @@ def load(state: StateDict) -> ImageModelDescriptor[RRDBNet]:
         scale=scale,
         input_channels=in_nc,
         output_channels=out_nc,
+        size_requirements=SizeRequirements(multiple_of=4 if shuffle_factor else 1),
     )
