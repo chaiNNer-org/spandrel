@@ -28,6 +28,8 @@ class SizeRequirements:
     """
     The minimum size of the input image in pixels.
 
+    `minimum` is **NOT** guaranteed to be a multiple of `multiple_of`.
+
     Default/neutral value: `0`
     """
     multiple_of: int = 1

@@ -198,7 +198,7 @@ def assert_image_inference(
     update_mode = "--snapshot-update" in sys.argv
 
     outputs_dir = os.environ.get("SPANDREL_TEST_OUTPUTS_DIR") or "outputs"
-    model.to(torch.device(get_test_device_name()))
+    model.to(get_test_device_name())
 
     for test_image in test_images:
         path = IMAGE_DIR / "inputs" / test_image.value
@@ -307,3 +307,53 @@ def seed_rngs(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+
+
+def assert_size_requirements(
+    model: ModelDescriptor,
+    max_size: int = 64,
+    max_candidates: int = 8,
+) -> None:
+    assert isinstance(model, ImageModelDescriptor)
+
+    device = get_test_device_name()
+
+    def test_size(width: int, height: int) -> None:
+        try:
+            input_tensor = torch.rand(1, model.input_channels, height, width)
+            model.to(device).eval()
+
+            with torch.no_grad():
+                output_tensor = model(input_tensor.to(device))
+
+            assert output_tensor.shape[1] == model.output_channels, "Incorrect channels"
+            assert output_tensor.shape[2] == height * model.scale, "Incorrect height"
+            assert output_tensor.shape[3] == width * model.scale, "Incorrect width"
+        except Exception as e:
+            raise AssertionError(
+                f"Failed size requirement test for {width=} {height=}"
+            ) from e
+
+    req = model.size_requirements
+    candidates: list[int] = []
+
+    # fill candidates
+    current = req.minimum // req.multiple_of * req.multiple_of
+    while current <= max_size and len(candidates) < max_candidates:
+        if req.check(current, current) and current > 0:
+            candidates.append(current)
+        current += req.multiple_of
+
+    if req.square:
+        # just test the candidates
+        for width in candidates:
+            test_size(width, width)
+    else:
+        # test 2 candidates at once by using one as width and the other as height
+
+        # make sure the list is even
+        if len(candidates) % 2 == 1:
+            candidates.append(candidates[-1])
+
+        for i in range(0, len(candidates), 2):
+            test_size(candidates[i], candidates[i + 1])
