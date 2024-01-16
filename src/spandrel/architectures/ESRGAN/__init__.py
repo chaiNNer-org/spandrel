@@ -193,5 +193,5 @@ def load(state: StateDict) -> ImageModelDescriptor[RRDBNet]:
         scale=scale,
         input_channels=in_nc,
         output_channels=out_nc,
-        size_requirements=SizeRequirements(multiple_of=4),
+        size_requirements=SizeRequirements(multiple_of=4 if shuffle_factor else 1),
     )
