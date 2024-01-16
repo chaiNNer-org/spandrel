@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -23,6 +24,26 @@ def test_RealCUGAN_load():
         lambda: UpCunet4x(pro=True),
         condition=lambda a, b: (a.is_pro == b.is_pro),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1VtBY4ZEebEiYL-IZRGJ61LUDCSRvkdoC/view?usp=sharing",
+        name="up2x-latest-no-denoise.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1DfB-tMUKU_3NwQuM9Z0ZGYPhfLmzkDHb/view?usp=sharing",
+        name="up3x-latest-no-denoise.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Y7SGNuivVjPf1g6F3IMvTsqt64p_pTeH/view?usp=sharing",
+        name="up4x-latest-no-denoise.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_RealCUGAN_2x(snapshot):

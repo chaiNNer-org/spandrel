@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -126,6 +127,18 @@ def test_GRL_load():
             # and a.anchor_window_down_factor == b.anchor_window_down_factor
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/sr_grl_tiny_c3x3.ckpt"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/sr_grl_tiny_c3x4.ckpt"
+    )
+    assert_size_requirements(file.load_model())
 
 
 # def test_GRL_dn_grl_tiny_c1(snapshot):

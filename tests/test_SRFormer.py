@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -48,6 +49,20 @@ def test_SRFormer_load():
             and a.patches_resolution == b.patches_resolution
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1lU8SsKeaTwBSC5bP69LjBuJs69Qt4Rsf/view?usp=drive_link",
+        name="SRFormer_SRx2_DF2K.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Eeei_NEjDeni7ysSejmR7AwyG24fO5bp/view?usp=drive_link",
+        name="SRFormerLight_SRx3_DIV2K.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_SRFormer_SRx2_DF2K(snapshot):

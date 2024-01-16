@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -36,6 +37,22 @@ def test_CRAFT_load():
             and a.window_size == b.window_size
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url_zip(
+        "https://drive.google.com/file/d/13wAmc93BPeBUBQ24zUZOuUpdBFG2aAY5/view",
+        rel_model_path="pretrained_models/CRAFT_MODEL_X2.pth",
+        name="CRAFT_MODEL_X2.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url_zip(
+        "https://drive.google.com/file/d/13wAmc93BPeBUBQ24zUZOuUpdBFG2aAY5/view",
+        rel_model_path="pretrained_models/CRAFT_MODEL_X3.pth",
+        name="CRAFT_MODEL_X3.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_CRAFT_x2(snapshot):

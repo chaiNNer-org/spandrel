@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -46,6 +47,20 @@ def test_HAT_load():
             and a.mlp_ratio == b.mlp_ratio
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1Y7-3IgWfIAui9BMQIsFT9CzZXVMlx__e/view?usp=drive_link",
+        name="HAT-S_SRx2.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1pdhaO1fJq3tgSqDIbymdDiGxu4S0nqVq/view?usp=drive_link",
+        name="HAT_SRx4.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_HAT_S_2x(snapshot):

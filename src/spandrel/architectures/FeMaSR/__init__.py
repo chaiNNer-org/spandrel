@@ -109,7 +109,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[FeMaSR]:
         use_residual=use_residual,
     )
 
-    multiple_of = {2: 32, 4: 16}.get(scale_factor, 1)
+    multiple_of = {2: 32, 4: 16}.get(scale_factor, 8)
 
     return ImageModelDescriptor(
         model,

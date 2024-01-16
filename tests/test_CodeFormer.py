@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -23,6 +24,14 @@ def test_CodeFormer_load():
             and a.codebook_size == b.codebook_size
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth"
+    )
+    # TODO: this currently doesn't ensure that 1024x1024 is invalid
+    assert_size_requirements(file.load_model(), max_size=512)
 
 
 def test_CodeFormer(snapshot):
