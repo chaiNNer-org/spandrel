@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -30,6 +31,20 @@ def test_OmniSR_load():
             and a.window_size == b.window_size
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url_zip(
+        "https://drive.google.com/file/d/17rJXJHBYt4Su8cMDMh-NOWMBdE6ki5em/view",
+        rel_model_path="OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth",
+        name="epoch994_OmniSR_x4.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/Phhofm/models/raw/main/2xHFA2kAVCOmniSR/2xHFA2kAVCOmniSR.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_OmniSR_official_x4(snapshot):

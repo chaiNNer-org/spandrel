@@ -1,7 +1,13 @@
 from spandrel.architectures.FeMaSR import FeMaSR, load
 from tests.test_GFPGAN import disallowed_props
 
-from .util import ModelFile, TestImage, assert_image_inference, assert_loads_correctly
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    assert_size_requirements,
+)
 
 
 def test_FeMaSR_load():
@@ -32,6 +38,18 @@ def test_FeMaSR_load():
             and a.use_semantic_loss == b.use_semantic_loss
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/chaofengc/FeMaSR/releases/download/v0.1-pretrain_models/FeMaSR_HRP_model_g.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/chaofengc/FeMaSR/releases/download/v0.1-pretrain_models/FeMaSR_SRX4_model_g.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_FeMaSR_1x(snapshot):

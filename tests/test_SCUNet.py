@@ -1,6 +1,11 @@
 from spandrel.architectures.SCUNet import SCUNet, load
 
-from .util import ModelFile, assert_loads_correctly, disallowed_props
+from .util import (
+    ModelFile,
+    assert_loads_correctly,
+    assert_size_requirements,
+    disallowed_props,
+)
 
 
 def test_SCUNet_load():
@@ -14,6 +19,18 @@ def test_SCUNet_load():
         lambda: SCUNet(config=[5, 3, 7, 2, 3, 1, 3]),
         condition=lambda a, b: a.dim == b.dim and a.config == b.config,
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/cszn/KAIR/releases/download/v1.0/scunet_color_real_gan.pth"
+    )
+    assert_size_requirements(file.load_model(), max_size=128)
+
+    file = ModelFile.from_url(
+        "https://github.com/cszn/KAIR/releases/download/v1.0/scunet_color_real_psnr.pth"
+    )
+    assert_size_requirements(file.load_model(), max_size=128)
 
 
 def test_SCUNet_color_GAN(snapshot):

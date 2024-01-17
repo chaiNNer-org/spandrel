@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -29,6 +30,18 @@ def test_SwinIR_load():
             and a.patches_resolution == b.patches_resolution
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/001_classicalSR_DF2K_s64w8_SwinIR-M_x2.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_SwinIR_M_s64w8_2x(snapshot):

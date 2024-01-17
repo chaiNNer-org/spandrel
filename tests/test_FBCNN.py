@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -24,6 +25,18 @@ def test_FBCNN_load():
         lambda: FBCNN(upsample_mode="pixelshuffle"),
         condition=lambda a, b: (a.nb == b.nb and a.nc == b.nc),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/jiaxi-jiang/FBCNN/releases/download/v1.0/fbcnn_color.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/jiaxi-jiang/FBCNN/releases/download/v1.0/fbcnn_gray.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_FBCNN_color(snapshot):

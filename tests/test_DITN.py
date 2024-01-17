@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -32,6 +33,20 @@ def test_DITN_load():
             and a.ITL_blocks == b.ITL_blocks
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/12y6WjNowBkJ982fMql_yj6zBpwPKuhV2/view?usp=drive_link",
+        name="DITN_Real_GAN_x4.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1V9KHVPvLtOTwYINaD8_nGRuc37KZurkJ/view?usp=drive_link",
+        name="DITN_Real_x4.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_DITN_Real_GAN_x4(snapshot):

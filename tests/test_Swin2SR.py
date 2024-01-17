@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -45,6 +46,18 @@ def test_Swin2SR_load():
             and a.patches_resolution == b.patches_resolution
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/mv-lab/swin2sr/releases/download/v0.0.1/Swin2SR_ClassicalSR_X4_64.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/mv-lab/swin2sr/releases/download/v0.0.1/Swin2SR_Jpeg_dynamic.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_Swin2SR_2x(snapshot):

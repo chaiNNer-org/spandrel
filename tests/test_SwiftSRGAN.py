@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -20,6 +21,20 @@ def test_SwiftSRGAN_load():
         lambda: SwiftSRGAN(upscale_factor=4),
         lambda: SwiftSRGAN(upscale_factor=8),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_2x.pth.tar",
+        name="swift_srgan_2x.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/Koushik0901/Swift-SRGAN/releases/download/v0.1/swift_srgan_4x.pth.tar",
+        name="swift_srgan_4x.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_SwiftSRGAN_2x(snapshot):

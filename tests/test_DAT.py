@@ -6,6 +6,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -42,6 +43,14 @@ def test_DAT_load():
             and a.num_features == b.num_features
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1iY30DyLYjar-2DjrJtAv2chCOlw4xiOj/view",
+        name="DAT_S_x4.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_DAT_S_x4(snapshot):

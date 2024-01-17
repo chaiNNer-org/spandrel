@@ -45,6 +45,6 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SCUNet]:
         scale=1,
         input_channels=in_nc,
         output_channels=in_nc,
-        size_requirements=SizeRequirements(minimum=16),
+        size_requirements=SizeRequirements(minimum=40),
         tiling=ModelTiling.DISCOURAGED,
     )

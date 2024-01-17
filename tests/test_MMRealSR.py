@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_size_requirements,
     disallowed_props,
 )
 
@@ -64,6 +65,18 @@ def test_MMRealSR_load():
             and a.num_block == b.num_block
         ),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/TencentARC/MM-RealSR/releases/download/v1.0.0/MMRealSRGAN.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/TencentARC/MM-RealSR/releases/download/v1.0.0/MMRealSRNet.pth"
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_MMRealSRGAN(snapshot):
