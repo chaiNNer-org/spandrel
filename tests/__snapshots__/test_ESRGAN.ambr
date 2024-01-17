@@ -108,7 +108,7 @@
     output_channels=3,
     purpose='SR',
     scale=2,
-    size_requirements=SizeRequirements(minimum=2, multiple_of=4, square=False),
+    size_requirements=SizeRequirements(minimum=4, multiple_of=4, square=False),
     supports_bfloat16=True,
     supports_half=True,
     tags=list([

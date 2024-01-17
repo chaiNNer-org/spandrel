@@ -28,13 +28,17 @@ class SizeRequirements:
     """
     The minimum size of the input image in pixels.
 
-    `minimum` is **NOT** guaranteed to be a multiple of `multiple_of`.
+    `minimum` is guaranteed to be a multiple of `multiple_of` and to be >= 0.
+
+    On initialization, if `minimum` is not a multiple of `multiple_of`, it will be rounded up to the next multiple of `multiple_of`.
 
     Default/neutral value: `0`
     """
     multiple_of: int = 1
     """
     The width and height of the image must be a multiple of this value.
+
+    `multiple_of` is guaranteed to be >= 1.
 
     Default/neutral value: `1`
     """
@@ -44,6 +48,13 @@ class SizeRequirements:
 
     Default/neutral value: `False`
     """
+
+    def __post_init__(self):
+        assert self.minimum >= 0, "minimum must be >= 0"
+        assert self.multiple_of >= 1, "multiple_of must be >= 1"
+
+        if self.minimum % self.multiple_of != 0:
+            self.minimum = (self.minimum // self.multiple_of + 1) * self.multiple_of
 
     @property
     def none(self) -> bool:
@@ -56,7 +67,7 @@ class SizeRequirements:
 
     def check(self, width: int, height: int) -> bool:
         """
-        Checks if the given width and height satisfy the size requirements.
+        Returns whether the given width and height satisfy the size requirements.
         """
         if width < self.minimum or height < self.minimum:
             return False
