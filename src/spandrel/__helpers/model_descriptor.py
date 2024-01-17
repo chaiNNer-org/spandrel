@@ -310,7 +310,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
-        return output
+        return output.clamp_(0, 1)
 
 
 class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
@@ -372,7 +372,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
-        return output
+        return output.clamp_(0, 1)
 
 
 ModelDescriptor = Union[
