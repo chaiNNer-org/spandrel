@@ -82,6 +82,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [SPAN](https://github.com/hongyuanyu/SPAN) | [Models](https://drive.google.com/file/d/1iYUA2TzKuxI0vzmA-UXr_nB43XgPOXUg/view?usp=sharing)
 - [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN) | [Models](https://drive.google.com/drive/folders/1jAJyBf2qKe2povySwsGXsVMnzVyQzqDD), [Pro Models](https://drive.google.com/drive/folders/1hfT4WwnNUaS43ErrgXk0J1R5Ik8s5NVo)
 - [CRAFT](https://github.com/AVC2-UESTC/CRAFT-SR) | [Models](https://drive.google.com/file/d/13wAmc93BPeBUBQ24zUZOuUpdBFG2aAY5/view?usp=sharing)
+- [SAFMN](https://github.com/AVC2-UESTC/CRAFT-SR) | [Models](https://drive.google.com/drive/folders/12O_xgwfgc76DsYbiClYnl6ErCDrsi_S9?usp=share_link)
 
 #### Face Restoration
 
