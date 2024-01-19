@@ -110,7 +110,7 @@ class ModelFile:
         return file
 
 
-disallowed_props = props("model", "state_dict", "device")
+disallowed_props = props("model", "state_dict", "device", "dtype")
 
 
 @contextmanager
