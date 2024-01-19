@@ -344,16 +344,40 @@ def assert_size_requirements(
             candidates.append(current)
         current += req.multiple_of
 
-    if req.square:
-        # just test the candidates
-        for width in candidates:
-            test_size(width, width)
-    else:
+    # fast path for non-square models
+    failed_non_square = None
+    if not req.square:
         # test 2 candidates at once by using one as width and the other as height
 
-        # make sure the list is even
-        if len(candidates) % 2 == 1:
-            candidates.append(candidates[-1])
+        try:
+            # make sure the list is even
+            if len(candidates) % 2 == 1:
+                candidates.append(candidates[-1])
 
-        for i in range(0, len(candidates), 2):
-            test_size(candidates[i], candidates[i + 1])
+            for i in range(0, len(candidates), 2):
+                test_size(candidates[i], candidates[i + 1])
+            return
+        except Exception as e:  # noqa: E722
+            # fall through and let the below code handle it
+            failed_non_square = e
+
+    valid: list[int] = []
+    invalid: list[tuple[int, Exception]] = []
+    for width in candidates:
+        try:
+            test_size(width, width)
+            valid.append(width)
+        except Exception as e:
+            invalid.append((width, e))
+
+    if len(invalid) > 0:
+        raise AssertionError(
+            f"Failed size requirement test.\n"
+            f"Valid sizes: {valid}\n"
+            f"Invalid sizes: {[size for size, _ in invalid]}"
+        ) from invalid[0][1]
+
+    if failed_non_square is not None:
+        raise AssertionError(
+            "Failed size requirement test for non-square models"
+        ) from failed_non_square
