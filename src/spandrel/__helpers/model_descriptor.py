@@ -3,10 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Dict, Generic, Literal, TypeVar, Union
+from typing import Any, Callable, Dict, Generic, Literal, TypeVar, Union, overload
 
 import torch
 from torch import Tensor
+from typing_extensions import Self
 
 T = TypeVar("T", bound=torch.nn.Module, covariant=True)
 
@@ -232,16 +233,30 @@ class ModelBase(ABC, Generic[T]):
         # this makes the same assumptions as `device`
         return next(self.model.parameters()).dtype
 
-    def to(self, device: str | torch.device):
-        """
-        Moves the parameters and buffers of the underlying module to the given device.
+    @overload
+    def to(
+        self,
+        device: torch.device | None = None,
+        dtype: torch.dtype | str | None = None,
+    ) -> Self:
+        ...
 
-        Use `device` to get the current device of the model.
+    @overload
+    def to(self, dtype: torch.dtype | str) -> Self:
+        ...
+
+    def to(self, *args, **kwargs) -> Self:
         """
-        self.model.to(device)
+        Moves and casts the parameters and buffers of the underlying module to the given device and data type.
+
+        For more information, see https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.to.
+
+        Use `device` to get the current device and `dtype` to get the current data type of the model.
+        """
+        self.model.to(*args, **kwargs)
         return self
 
-    def cpu(self) -> ModelBase[T]:
+    def cpu(self) -> Self:
         """
         Moves the parameters and buffers of the underlying module to the CPU.
 
@@ -250,7 +265,7 @@ class ModelBase(ABC, Generic[T]):
         self.model.cpu()
         return self
 
-    def cuda(self, device: int | None = None) -> ModelBase[T]:
+    def cuda(self, device: int | None = None) -> Self:
         """
         Moves the parameters and buffers of the underlying module to the GPU.
 
@@ -259,7 +274,7 @@ class ModelBase(ABC, Generic[T]):
         self.model.cuda(device)
         return self
 
-    def eval(self):
+    def eval(self) -> Self:
         """
         Sets the underlying module in evaluation mode.
 
@@ -268,7 +283,7 @@ class ModelBase(ABC, Generic[T]):
         self.model.eval()
         return self
 
-    def train(self, mode: bool = True):
+    def train(self, mode: bool = True) -> Self:
         """
         Sets the underlying module in training mode.
 
