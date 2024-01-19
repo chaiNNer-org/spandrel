@@ -222,6 +222,16 @@ class ModelBase(ABC, Generic[T]):
         # https://stackoverflow.com/questions/58926054/how-to-get-the-device-type-of-a-pytorch-module-conveniently
         return next(self.model.parameters()).device
 
+    @property
+    def dtype(self) -> torch.dtype:
+        """
+        The data type of the underlying module.
+
+        Use `to` to cast the model to a different data type.
+        """
+        # this makes the same assumptions as `device`
+        return next(self.model.parameters()).dtype
+
     def to(self, device: str | torch.device):
         """
         Moves the parameters and buffers of the underlying module to the given device.
@@ -229,6 +239,24 @@ class ModelBase(ABC, Generic[T]):
         Use `device` to get the current device of the model.
         """
         self.model.to(device)
+        return self
+
+    def cpu(self) -> ModelBase[T]:
+        """
+        Moves the parameters and buffers of the underlying module to the CPU.
+
+        Same as `self.to(torch.device("cpu"))`.
+        """
+        self.model.cpu()
+        return self
+
+    def cuda(self, device: int | None = None) -> ModelBase[T]:
+        """
+        Moves the parameters and buffers of the underlying module to the GPU.
+
+        Same as `self.to(torch.device("cuda"))`.
+        """
+        self.model.cuda(device)
         return self
 
     def eval(self):
