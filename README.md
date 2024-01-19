@@ -39,8 +39,7 @@ model = ModelLoader().load_from_file(r"path/to/model.pth")
 assert isinstance(model, ImageModelDescriptor)
 
 # send it to the GPU and put it in inference mode
-model.to("cuda:0")
-model.eval()
+model.cuda().eval()
 
 # use the model
 def process(image: torch.Tensor) -> torch.Tensor:
