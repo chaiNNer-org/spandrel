@@ -1,6 +1,13 @@
 from spandrel.architectures.SPAN import SPAN, load
 
-from .util import assert_loads_correctly
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    assert_size_requirements,
+    disallowed_props,
+)
 
 
 def test_SPAN_load():
@@ -24,13 +31,22 @@ def test_SPAN_load():
     )
 
 
-# def test_SPAN_x4_ch52(snapshot):
-#     file = ModelFile.from_url("https://example.com/spanx4_ch52.pth")
-#     model = file.load_model()
-#     assert model == snapshot(exclude=disallowed_props)
-#     assert isinstance(model.model, SPAN)
-#     assert_image_inference(
-#         file,
-#         model,
-#         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
-#     )
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/4x-spanx4-ch48.pth"
+    )
+    assert_size_requirements(file.load_model())
+
+
+def test_SPAN_x4_ch48(snapshot):
+    file = ModelFile.from_url(
+        "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/4x-spanx4-ch48.pth"
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SPAN)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
