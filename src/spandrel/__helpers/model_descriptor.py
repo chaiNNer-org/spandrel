@@ -306,7 +306,7 @@ class ModelBase(ABC, Generic[T]):
                     f"{self.architecture} does not support bfloat16 precision"
                 )
 
-        self.model.to(*args, device=device, dtype=dtype)
+        self.model.to(device=device, dtype=dtype)
         return self
 
     def half(self) -> Self:
