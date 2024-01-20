@@ -70,16 +70,7 @@ class SizeRequirements:
         """
         Returns whether the given width and height satisfy the size requirements.
         """
-        if width < self.minimum or height < self.minimum:
-            return False
-
-        if width % self.multiple_of != 0 or height % self.multiple_of != 0:
-            return False
-
-        if self.square and width != height:
-            return False
-
-        return True
+        return self.get_padding(width, height) == (0, 0)
 
     def get_padding(self, width: int, height: int) -> tuple[int, int]:
         """
@@ -101,6 +92,18 @@ class SizeRequirements:
             w = h = max(w, h)
 
         return w - width, h - height
+
+
+def _pad(t: torch.Tensor, req: SizeRequirements):
+    w = t.shape[-1]
+    h = t.shape[-2]
+
+    pad_w, pad_h = req.get_padding(w, h)
+
+    if pad_w or pad_h:
+        return True, torch.nn.functional.pad(t, (0, pad_w, 0, pad_h), "reflect")
+    else:
+        return False, t
 
 
 Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration"]
@@ -445,16 +448,36 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         """
         Takes a single image tensor as input and returns a single image tensor as output.
 
-        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The data type (float32, float16, bfloat16) and device of the `image` tensor must be the same as the model. The range of the `image` tensor must be ``[0, 1]``.
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The data type (float32, float16, bfloat16) and device of the `image` tensor must be the same as the model. The range of the `image` tensor must be ``[0, 1]``.
 
         The output tensor will be a 4D tensor with shape `(1, output_channels, H*scale, W*scale)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
-        """
 
+        If the width and height of the `image` tensor do not satisfy the `size_requirements` of the model, then the `image` tensor will be padded to satisfy the requirements. The additional padding will be removed from the output tensor before returning it. If the image already satisfies the requirements, then no padding will be added.
+        """
+        if len(image.shape) != 4:
+            raise ValueError(
+                f"Expected image tensor to have 4 dimensions, but got {image.shape}"
+            )
+
+        _, _, h, w = image.shape
+
+        # satisfy size requirements
+        did_pad, image = _pad(image, self.size_requirements)
+
+        # call model
         output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
-        return output.clamp_(0, 1)
+
+        # guarantee range
+        output = output.clamp_(0, 1)
+
+        # remove padding
+        if did_pad:
+            output = output[..., : h * self.scale, : w * self.scale]
+
+        return output
 
 
 class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
@@ -505,18 +528,50 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
 
         The data type (float32, float16, bfloat16) and device of the `image` and `mask` tensors must be the same as the model.
 
-        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The width and height are expected to satisfy the `size_requirements` of the model. The range of the `image` tensor must be ``[0, 1]``.
+        The `image` tensor must be a 4D tensor with shape `(1, input_channels, H, W)`. The range of the `image` tensor must be ``[0, 1]``.
 
         The `mask` tensor must be a 4D tensor with shape `(1, 1, H, W)`. The width and height must be the same as `image` tensor. The values of the `mask` tensor must be either 0 (keep) or 1 (inpaint).
 
         The output tensor will be a 4D tensor with shape `(1, output_channels, H, W)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
-        """
 
+        If the width and height of the `image` tensor do not satisfy the `size_requirements` of the model, then the `image` tensor will be padded to satisfy the requirements. The additional padding will be removed from the output tensor before returning it. If the image already satisfies the requirements, then no padding will be added.
+        """
+        if len(image.shape) != 4:
+            raise ValueError(
+                f"Expected image tensor to have 4 dimensions, but got {image.shape}"
+            )
+        if len(mask.shape) != 4:
+            raise ValueError(
+                f"Expected mask tensor to have 4 dimensions, but got {mask.shape}"
+            )
+
+        _, _, h, w = image.shape
+
+        # check mask
+        mask_shape = torch.Size([1, 1, h, w])
+        if mask.shape != mask_shape:
+            raise ValueError(
+                f"Expected mask shape to be {mask_shape}, but got {mask.shape}"
+            )
+
+        # satisfy size requirements
+        did_pad, image = _pad(image, self.size_requirements)
+        _, mask = _pad(mask, self.size_requirements)
+
+        # call model
         output = self._call_fn(self.model, image, mask)
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
-        return output.clamp_(0, 1)
+
+        # guarantee range
+        output = output.clamp_(0, 1)
+
+        # remove padding
+        if did_pad:
+            output = output[..., : h * self.scale, : w * self.scale]
+
+        return output
 
 
 ModelDescriptor = Union[
