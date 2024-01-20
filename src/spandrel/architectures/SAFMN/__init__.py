@@ -37,7 +37,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SAFMN]:
         state_dict,
         architecture="SAFMN",
         purpose="Restoration" if upscaling_factor == 1 else "SR",
-        tags=[f"{n_blocks}nb"],
+        tags=[f"{dim}dim", f"{n_blocks}nb"],
         supports_half=False,  # TODO: verify
         supports_bfloat16=True,
         scale=upscaling_factor,
