@@ -81,6 +81,27 @@ class SizeRequirements:
 
         return True
 
+    def get_padding(self, width: int, height: int) -> tuple[int, int]:
+        """
+        Given an image size, this returns the minimum amount of padding necessary to satisfy the size requirements. The returned padding is in the format `(pad_width, pad_height)` and is guaranteed to be non-negative.
+        """
+
+        def ceil_modulo(x: int, mod: int) -> int:
+            if x % mod == 0:
+                return x
+            return (x // mod + 1) * mod
+
+        w: int = max(self.minimum, width)
+        h: int = max(self.minimum, height)
+
+        w = ceil_modulo(w, self.multiple_of)
+        h = ceil_modulo(h, self.multiple_of)
+
+        if self.square:
+            w = h = max(w, h)
+
+        return w - width, h - height
+
 
 Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration"]
 """
