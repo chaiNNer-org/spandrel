@@ -70,8 +70,8 @@ def extract_file_from_zip(
         filename.write_bytes(zip_ref.read(rel_model_path))
 
 
-def get_test_device_name() -> str:
-    return os.environ.get("SPANDREL_TEST_DEVICE") or "cpu"
+def get_test_device() -> torch.device:
+    return torch.device(os.environ.get("SPANDREL_TEST_DEVICE") or "cpu")
 
 
 @dataclass
@@ -166,7 +166,7 @@ def image_inference_tensor(
 
 
 def image_inference(model: ImageModelDescriptor, image: np.ndarray) -> np.ndarray:
-    tensor = image_to_tensor(image).to(get_test_device_name())
+    tensor = image_to_tensor(image).to(get_test_device())
     return tensor_to_image(image_inference_tensor(model, tensor))
 
 
@@ -198,7 +198,7 @@ def assert_image_inference(
     update_mode = "--snapshot-update" in sys.argv
 
     outputs_dir = os.environ.get("SPANDREL_TEST_OUTPUTS_DIR") or "outputs"
-    model.to(get_test_device_name())
+    model.to(get_test_device())
 
     for test_image in test_images:
         path = IMAGE_DIR / "inputs" / test_image.value
@@ -316,7 +316,7 @@ def assert_size_requirements(
 ) -> None:
     assert isinstance(model, ImageModelDescriptor)
 
-    device = get_test_device_name()
+    device = get_test_device()
 
     def test_size(width: int, height: int) -> None:
         try:
