@@ -293,6 +293,9 @@ class ModelBase(ABC, Generic[T]):
         device: torch.device | None = kwargs.pop("device", None)
         dtype: torch.dtype | None = kwargs.pop("dtype", None)
 
+        if len(kwargs) > 0:
+            raise TypeError(f"to() got unexpected keyword arguments {list(kwargs)}")
+
         if dtype is not None:
             if dtype == torch.float16 and not self.supports_half:
                 raise UnsupportedDtypeError(
