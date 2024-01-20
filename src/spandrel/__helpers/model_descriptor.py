@@ -224,6 +224,8 @@ class ModelBase(ABC, Generic[T]):
         Size requirements for the input image. E.g. minimum size.
 
         Requirements are specific to individual models and may be different for models of the same architecture.
+
+        Users of spandrel's call API can largely ignore size requirements, because the call API will automatically pad the input image to satisfy the requirements. Size requirements might still be useful for user code that tiles images by allowing it to pick an optimal tile size to avoid padding.
         """
         self.tiling: ModelTiling = tiling
         """
