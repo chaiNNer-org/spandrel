@@ -16,6 +16,7 @@ from .__helpers.model_descriptor import (
     Purpose,
     SizeRequirements,
     StateDict,
+    UnsupportedDtypeError,
 )
 from .__helpers.registry import ArchRegistry, ArchSupport, UnsupportedModelError
 
@@ -33,5 +34,6 @@ __all__ = [
     "Purpose",
     "SizeRequirements",
     "StateDict",
+    "UnsupportedDtypeError",
     "UnsupportedModelError",
 ]
