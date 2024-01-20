@@ -119,6 +119,16 @@ class ModelTiling(Enum):
     """
 
 
+class UnsupportedDtypeError(Exception):
+    """
+    An error that will be thrown by `.to` if the model does not support the given dtype.
+
+    See `ModelBase.to` for more information.
+    """
+
+    pass
+
+
 class ModelBase(ABC, Generic[T]):
     """
     The base class of all model descriptors.
@@ -237,23 +247,93 @@ class ModelBase(ABC, Generic[T]):
     def to(
         self,
         device: torch.device | None = None,
-        dtype: torch.dtype | str | None = None,
+        dtype: torch.dtype | None = None,
     ) -> Self:
         ...
 
     @overload
-    def to(self, dtype: torch.dtype | str) -> Self:
+    def to(self, dtype: torch.dtype) -> Self:
         ...
 
-    def to(self, *args, **kwargs) -> Self:
+    def to(self, *args: object, **kwargs) -> Self:
         """
         Moves and casts the parameters and buffers of the underlying module to the given device and data type.
 
         For more information, see https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.to.
 
         Use `device` to get the current device and `dtype` to get the current data type of the model.
+
+        Throws `UnsupportedDtypeError` if the model does not support the given data type. If you want to force a dtype cast, use `.model.to(dtype)` instead.
         """
-        self.model.to(*args, **kwargs)
+
+        # turn positional arguments into keyword arguments
+        def set_kw(name: str, value: object):
+            if name in kwargs:
+                raise TypeError(f"to() got multiple values for keyword argument {name}")
+            kwargs[name] = value
+
+        if len(args) == 1:
+            arg: object = args[0]
+            if isinstance(arg, torch.dtype):
+                set_kw("dtype", arg)
+            elif isinstance(arg, torch.device) or arg is None:
+                set_kw("device", arg)
+            else:
+                raise TypeError(
+                    f"to() expected a torch.device or torch.dtype, but got {type(arg)}"
+                )
+        elif len(args) == 2:
+            set_kw("device", args[0])
+            set_kw("dtype", args[1])
+        elif len(args) > 2:
+            raise TypeError(
+                f"to() expected at most 2 positional arguments, got {len(args)}"
+            )
+
+        device: torch.device | None = kwargs.pop("device", None)
+        dtype: torch.dtype | None = kwargs.pop("dtype", None)
+
+        if len(kwargs) > 0:
+            raise TypeError(f"to() got unexpected keyword arguments {list(kwargs)}")
+
+        if dtype is not None:
+            if dtype == torch.float16 and not self.supports_half:
+                raise UnsupportedDtypeError(
+                    f"{self.architecture} does not support half precision (fp16)"
+                )
+            if dtype == torch.bfloat16 and not self.supports_bfloat16:
+                raise UnsupportedDtypeError(
+                    f"{self.architecture} does not support bfloat16 precision"
+                )
+
+        self.model.to(device=device, dtype=dtype)
+        return self
+
+    def half(self) -> Self:
+        """
+        Moves the parameters and buffers of the underlying module to half precision (fp16).
+
+        Same as `self.to(torch.half)`.
+        """
+        self.to(torch.half)
+        return self
+
+    def bfloat16(self) -> Self:
+        """
+        Moves the parameters and buffers of the underlying module to bfloat16 precision.
+
+        Same as `self.to(torch.bfloat16)`.
+        """
+        self.to(torch.bfloat16)
+        return self
+
+    def float(self) -> Self:
+        """
+        Moves the parameters and buffers of the underlying module to single precision (fp32).
+
+        Same as `self.to(torch.float)`.
+        """
+        self.to(torch.float)
         return self
 
     def cpu(self) -> Self:
