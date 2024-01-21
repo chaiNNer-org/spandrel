@@ -31,14 +31,27 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
-dependencies = ["torch", "torchvision", "safetensors", "numpy", "einops", "typing_extensions"]
+dependencies = [
+    "torch",
+    "torchvision",
+    "safetensors",
+    "numpy",
+    "einops",
+    "typing_extensions",
+]
 dynamic = ["version"]
 
 [project.optional-dependencies]
 build = ["build", "twine"]
 lint = ["ruff==0.1.11"]
 typecheck = ["pyright==1.1.342"]
-test = ["pytest==7.4.0", "syrupy==4.6.0", "opencv-python==4.8.1.78"]
+test = [
+    "pytest==7.4.0",
+    "syrupy==4.6.0",
+    "opencv-python==4.8.1.78",
+    "requests",
+    "beautifulsoup4",
+]
 docs = ["pydoctor==23.9.1"]
 
 [tool.setuptools]
