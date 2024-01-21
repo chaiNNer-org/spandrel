@@ -282,7 +282,7 @@ class ModelBase(ABC, Generic[T]):
     @overload
     def to(
         self,
-        device: torch.device | None = None,
+        device: torch.device | str | None = None,
         dtype: torch.dtype | None = None,
     ) -> Self:
         ...
@@ -312,7 +312,7 @@ class ModelBase(ABC, Generic[T]):
             arg: object = args[0]
             if isinstance(arg, torch.dtype):
                 set_kw("dtype", arg)
-            elif isinstance(arg, torch.device) or arg is None:
+            elif isinstance(arg, (torch.device, str)) or arg is None:
                 set_kw("device", arg)
             else:
                 raise TypeError(
@@ -326,7 +326,7 @@ class ModelBase(ABC, Generic[T]):
                 f"to() expected at most 2 positional arguments, got {len(args)}"
             )
 
-        device: torch.device | None = kwargs.pop("device", None)
+        device: torch.device | str | None = kwargs.pop("device", None)
         dtype: torch.dtype | None = kwargs.pop("dtype", None)
 
         if len(kwargs) > 0:
@@ -341,6 +341,9 @@ class ModelBase(ABC, Generic[T]):
                 raise UnsupportedDtypeError(
                     f"{self.architecture} does not support bfloat16 precision"
                 )
+
+        if isinstance(device, str):
+            device = torch.device(device)
 
         self.model.to(device=device, dtype=dtype)
         return self
