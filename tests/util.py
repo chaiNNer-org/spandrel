@@ -13,11 +13,13 @@ from enum import Enum
 from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, TypeVar
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlencode, urlparse
 
 import cv2
 import numpy as np
+import requests
 import torch
+from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
 from spandrel import (
@@ -46,8 +48,32 @@ def convert_google_drive_link(url: str) -> str:
     m = pattern.match(url)
     if not m:
         return url
+
     file_id = m.group(1)
-    return "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
+    url = "https://drive.google.com/uc?export=download&confirm=1&id=" + file_id
+
+    # confirm=1 doesn't work sometimes, so we check whether we get a file or a
+    # website, and then parse the website to get the real download link
+    response = requests.head(url, allow_redirects=True)
+    response.raise_for_status()
+    content_type = response.headers["Content-Type"]
+    if content_type == "text/html; charset=utf-8":
+        # download and parse the website
+        response = requests.get(url)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.text)
+        form = soup.find("form")
+        assert isinstance(form, Tag)
+        base_url = form.attrs["action"]
+        params: dict[str, str] = {}
+        for i in form.find_all("input"):
+            assert isinstance(i, Tag)
+            if "name" in i.attrs and "value" in i.attrs:
+                params[i.attrs["name"]] = i.attrs["value"]
+        url = base_url + "?" + urlencode(params)
+
+    return url
 
 
 def download_file(url: str, filename: Path | str) -> None:
