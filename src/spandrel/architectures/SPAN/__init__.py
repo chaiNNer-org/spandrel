@@ -1,3 +1,5 @@
+import torch
+
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
 from ..__arch_helpers.state import get_scale_and_output_channels
 from .arch.span import SPAN
@@ -9,6 +11,7 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SPAN]:
     feature_channels: int = 48
     upscale: int = 4
     bias = True  # unused internally
+    norm = True
     img_range = 255.0  # cannot be deduced from state_dict
     rgb_mean = (0.4488, 0.4371, 0.4040)  # cannot be deduced from state_dict
 
@@ -21,12 +24,18 @@ def load(state_dict: StateDict) -> ImageModelDescriptor[SPAN]:
         num_in_ch,
     )
 
+    # norm
+    if "no_norm" in state_dict:
+        norm = False
+        state_dict["no_norm"] = torch.zeros(1)
+
     model = SPAN(
         num_in_ch=num_in_ch,
         num_out_ch=num_out_ch,
         feature_channels=feature_channels,
         upscale=upscale,
         bias=bias,
+        norm=norm,
         img_range=img_range,
         rgb_mean=rgb_mean,
     )
