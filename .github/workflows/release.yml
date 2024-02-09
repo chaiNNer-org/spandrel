@@ -22,3 +22,11 @@ jobs:
         run: |
           python -m build . --wheel
           twine upload --repository pypi dist/*
+      - name: Build and publish (FOSS)
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python ./scripts/prepare_foss_version.py
+          python -m build . --wheel
+          twine upload --repository pypi dist/*
