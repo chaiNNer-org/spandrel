@@ -10,6 +10,7 @@ class TestArch(Architecture):
     def __init__(self, id: str) -> None:
         super().__init__(
             id=id,
+            license="MIT",
             detect=lambda _: False,
         )
 
