@@ -31,7 +31,7 @@ See https://pytorch.org/tutorials/recipes/recipes/what_is_state_dict.html
 
 ArchId = NewType("ArchId", str)
 """
-A unique identifier for an architecture.
+A unique identifier for an `Architecture`.
 """
 
 

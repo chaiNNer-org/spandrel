@@ -13,7 +13,6 @@
     "reportOverlappingOverload": "error",
     "reportPrivateImportUsage": "error",
     "reportUninitializedInstanceVariable": "error",
-    "reportImplicitOverride": "error",
     "reportUnusedClass": "warning",
     "reportUnusedFunction": "warning",
     "reportUnusedImport": "warning",

@@ -1,3 +1,7 @@
+"""
+A module containing commonly-used functionality to implement architectures.
+"""
+
 from __future__ import annotations
 
 import math
