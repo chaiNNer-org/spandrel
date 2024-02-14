@@ -18,6 +18,7 @@ import torch
 from torch import Tensor
 from typing_extensions import Self, override
 
+from .licenses import KnownLicense, License
 from .size_req import SizeRequirements, pad_tensor
 
 T = TypeVar("T", bound=torch.nn.Module, covariant=True)
@@ -45,13 +46,17 @@ class Architecture(ABC, Generic[T]):
         *,
         id: ArchId | str,
         detect: Callable[[StateDict], bool],
+        license: License | KnownLicense,
         name: str | None = None,
     ) -> None:
         super().__init__()
 
-        self._id = ArchId(id)
-        self._name = name or id
+        self._id: ArchId = ArchId(id)
+        self._name: str = name or id
         self._detect = detect
+        self._license: License = (
+            License.from_known(license) if isinstance(license, str) else license
+        )
 
     @property
     def id(self) -> ArchId:
@@ -70,6 +75,15 @@ class Architecture(ABC, Generic[T]):
         This is often the same as `id`.
         """
         return self._name
+
+    @property
+    def license(self) -> License:
+        """
+        The license of the architecture's code.
+
+        This license (generally) does not extend to models of this architecture, which likely have different licenses.
+        """
+        return self._license
 
     def detect(self, state_dict: StateDict) -> bool:
         """

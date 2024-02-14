@@ -12,6 +12,7 @@ class NAFNetArch(Architecture[NAFNet]):
     def __init__(self) -> None:
         super().__init__(
             id="NAFNet",
+            license="MIT",
             detect=KeyCondition.has_all(
                 "intro.weight",
                 "ending.weight",

@@ -15,6 +15,7 @@ class MATArch(Architecture[MAT]):
     def __init__(self) -> None:
         super().__init__(
             id="MAT",
+            license="CC-BY-NC-4.0",
             detect=KeyCondition.has_all(
                 "synthesis.first_stage.conv_first.conv.resample_filter",
             ),

@@ -19,6 +19,7 @@ class CRAFTArch(Architecture[CRAFT]):
     ) -> None:
         super().__init__(
             id="CRAFT",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "conv_first.weight",
                 "layers.0.residual_group.hf_blocks.0.attn.temperature",

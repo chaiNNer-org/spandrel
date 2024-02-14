@@ -138,6 +138,7 @@ class GRLArch(Architecture[GRL]):
     def __init__(self) -> None:
         super().__init__(
             id="GRL",
+            license="MIT",
             detect=KeyCondition.has_any(
                 KeyCondition.has_all(
                     "conv_first.weight",

@@ -11,6 +11,7 @@ class SwiftSRGANArch(Architecture[SwiftSRGAN]):
         super().__init__(
             id="SwiftSRGAN",
             name="Swift-SRGAN",
+            license="CC0-1.0",
             detect=KeyCondition.has_all(
                 "initial.cnn.depthwise.weight",
                 "final_conv.pointwise.weight",

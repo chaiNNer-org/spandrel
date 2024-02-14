@@ -15,6 +15,7 @@ class LaMaArch(Architecture[LaMa]):
     def __init__(self) -> None:
         super().__init__(
             id="LaMa",
+            license="Apache-2.0",
             detect=KeyCondition.has_any(
                 "model.model.1.bn_l.running_mean",
                 "generator.model.1.bn_l.running_mean",

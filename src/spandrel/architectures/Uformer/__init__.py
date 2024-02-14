@@ -17,6 +17,7 @@ class UformerArch(Architecture[Uformer]):
     def __init__(self) -> None:
         super().__init__(
             id="Uformer",
+            license="MIT",
             detect=KeyCondition.has_all(
                 "input_proj.proj.0.weight",
                 "output_proj.proj.0.weight",

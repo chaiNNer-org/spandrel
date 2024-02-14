@@ -22,6 +22,7 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
     def __init__(self) -> None:
         super().__init__(
             id="RealCUGAN",
+            license="MIT",
             detect=KeyCondition.has_all(
                 "unet1.conv1.conv.0.weight",
                 "unet1.conv1.conv.2.weight",

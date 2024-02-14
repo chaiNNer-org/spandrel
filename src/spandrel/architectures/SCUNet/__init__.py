@@ -16,6 +16,7 @@ class SCUNetArch(Architecture[SCUNet]):
     def __init__(self) -> None:
         super().__init__(
             id="SCUNet",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "m_head.0.weight",
                 "m_tail.0.weight",

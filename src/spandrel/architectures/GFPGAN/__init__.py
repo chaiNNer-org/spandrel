@@ -15,6 +15,7 @@ class GFPGANArch(Architecture[GFPGANv1Clean]):
     def __init__(self) -> None:
         super().__init__(
             id="GFPGAN",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "toRGB.0.weight",
                 "stylegan_decoder.style_mlp.1.weight",

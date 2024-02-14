@@ -19,6 +19,7 @@ class DITNArch(Architecture[DITN]):
     def __init__(self) -> None:
         super().__init__(
             id="DITN",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "sft.weight",
                 "UFONE.0.ITLs.0.attn.temperature",

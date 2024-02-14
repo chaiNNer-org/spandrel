@@ -18,6 +18,7 @@ class SwinIRArch(Architecture[SwinIR]):
     def __init__(self) -> None:
         super().__init__(
             id="SwinIR",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "layers.0.residual_group.blocks.0.norm1.weight",
                 "conv_first.weight",

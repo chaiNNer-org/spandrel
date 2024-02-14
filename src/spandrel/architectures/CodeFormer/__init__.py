@@ -5,6 +5,7 @@ from spandrel.util import KeyCondition, get_seq_len
 from ...__helpers.model_descriptor import (
     Architecture,
     ImageModelDescriptor,
+    License,
     SizeRequirements,
     StateDict,
 )
@@ -15,6 +16,7 @@ class CodeFormerArch(Architecture[CodeFormer]):
     def __init__(self) -> None:
         super().__init__(
             id="CodeFormer",
+            license=License("S-Lab License 1.0", spdx_id=None, commercial=False),
             detect=KeyCondition.has_all(
                 "position_emb",
                 "idx_pred_layer.1.weight",

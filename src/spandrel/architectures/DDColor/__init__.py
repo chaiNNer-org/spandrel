@@ -10,6 +10,7 @@ from spandrel.util import KeyCondition, get_seq_len
 from ...__helpers.model_descriptor import (
     Architecture,
     ImageModelDescriptor,
+    License,
     ModelTiling,
     StateDict,
 )
@@ -82,6 +83,11 @@ class DDColorArch(Architecture[DDColor]):
     def __init__(self) -> None:
         super().__init__(
             id="DDColor",
+            license=License(
+                "For academic and non-commercial use only",
+                spdx_id=None,
+                commercial=False,
+            ),
             detect=KeyCondition.has_all(
                 "mean",
                 "std",

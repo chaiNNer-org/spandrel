@@ -17,6 +17,7 @@ class OmniSRArch(Architecture[OmniSR]):
     def __init__(self) -> None:
         super().__init__(
             id="OmniSR",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "residual_layer.0.residual_layer.0.layer.0.fn.0.weight",
                 "input.weight",

@@ -2,7 +2,11 @@ from typing_extensions import override
 
 from spandrel.util import KeyCondition, get_scale_and_output_channels, get_seq_len
 
-from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
+from ...__helpers.model_descriptor import (
+    Architecture,
+    ImageModelDescriptor,
+    StateDict,
+)
 from .arch.SRVGG import SRVGGNetCompact
 
 
@@ -13,6 +17,7 @@ class CompactArch(Architecture[SRVGGNetCompact]):
         super().__init__(
             id="Compact",
             name="RealESRGAN Compact",
+            license="BSD-3-Clause",
             detect=KeyCondition.has_all(
                 "body.0.weight",
                 "body.1.weight",

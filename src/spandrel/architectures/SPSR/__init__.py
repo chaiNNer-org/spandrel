@@ -10,6 +10,7 @@ class SPSRArch(Architecture[SPSR]):
     def __init__(self) -> None:
         super().__init__(
             id="SPSR",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "f_HR_conv1.0.weight",
                 "model.0.weight",

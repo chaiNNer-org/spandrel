@@ -59,6 +59,7 @@ class HATArch(Architecture[HAT]):
     def __init__(self) -> None:
         super().__init__(
             id="HAT",
+            license="MIT",
             detect=KeyCondition.has_all(
                 "layers.0.residual_group.blocks.0.norm1.weight",
                 "layers.0.residual_group.blocks.0.conv_block.cab.0.weight",

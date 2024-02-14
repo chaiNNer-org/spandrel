@@ -11,6 +11,7 @@ class SPANArch(Architecture[SPAN]):
     def __init__(self) -> None:
         super().__init__(
             id="SPAN",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "conv_1.sk.weight",
                 "block_1.c1_r.sk.weight",

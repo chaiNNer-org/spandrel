@@ -36,6 +36,7 @@ class FeMaSRArch(Architecture[FeMaSR]):
     def __init__(self) -> None:
         super().__init__(
             id="FeMaSR",
+            license="CC-BY-NC-SA-4.0",
             detect=KeyCondition.has_all(
                 "multiscale_encoder.in_conv.weight",
                 "multiscale_encoder.blocks.0.0.weight",

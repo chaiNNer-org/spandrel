@@ -116,6 +116,7 @@ class MMRealSRArch(Architecture[MMRealSR]):
     def __init__(self) -> None:
         super().__init__(
             id="MMRealSR",
+            license="BSD-3-Clause",
             detect=KeyCondition.has_all(
                 "conv_first.weight",
                 "conv_body.weight",

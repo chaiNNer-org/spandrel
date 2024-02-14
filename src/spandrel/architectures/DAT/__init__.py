@@ -17,6 +17,7 @@ class DATArch(Architecture[DAT]):
     def __init__(self) -> None:
         super().__init__(
             id="DAT",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "layers.0.blocks.2.attn.attn_mask_0",
                 "conv_first.weight",

@@ -23,6 +23,7 @@ class KBNetArch(Architecture[_KBNet]):
     def __init__(self) -> None:
         super().__init__(
             id="KBNet",
+            license="MIT",
             detect=KeyCondition.has_any(
                 KeyCondition.has_all(
                     # KBNet_s

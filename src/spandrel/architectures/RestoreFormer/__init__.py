@@ -15,6 +15,7 @@ class RestoreFormerArch(Architecture[RestoreFormer]):
     def __init__(self) -> None:
         super().__init__(
             id="RestoreFormer",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "quantize.embedding.weight",
                 "encoder.conv_in.weight",

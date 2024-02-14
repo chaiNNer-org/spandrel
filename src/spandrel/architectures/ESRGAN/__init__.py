@@ -136,6 +136,7 @@ class ESRGANArch(Architecture[RRDBNet]):
     def __init__(self) -> None:
         super().__init__(
             id="ESRGAN",
+            license="Apache-2.0",
             detect=KeyCondition.has_any(
                 KeyCondition.has_all(
                     "model.0.weight",

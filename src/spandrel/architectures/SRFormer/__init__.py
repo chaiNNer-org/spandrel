@@ -17,6 +17,7 @@ class SRFormerArch(Architecture[SRFormer]):
     def __init__(self) -> None:
         super().__init__(
             id="SRFormer",
+            license="CC-BY-NC-4.0",
             detect=KeyCondition.has_all(
                 "layers.0.residual_group.blocks.0.norm1.weight",
                 "layers.0.residual_group.blocks.0.attn.aligned_relative_position_index",

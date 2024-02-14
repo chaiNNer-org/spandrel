@@ -17,6 +17,7 @@ class SAFMNArch(Architecture[SAFMN]):
     def __init__(self) -> None:
         super().__init__(
             id="SAFMN",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "to_feat.weight",
                 "feats.0.norm1.weight",

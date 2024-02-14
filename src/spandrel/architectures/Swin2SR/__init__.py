@@ -17,6 +17,7 @@ class Swin2SRArch(Architecture[Swin2SR]):
     def __init__(self) -> None:
         super().__init__(
             id="Swin2SR",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "layers.0.residual_group.blocks.0.norm1.weight",
                 "patch_embed.proj.weight",

@@ -10,6 +10,7 @@ class FBCNNArch(Architecture[FBCNN]):
     def __init__(self) -> None:
         super().__init__(
             id="FBCNN",
+            license="Apache-2.0",
             detect=KeyCondition.has_all(
                 "m_head.weight",
                 "m_down1.0.res.0.weight",
