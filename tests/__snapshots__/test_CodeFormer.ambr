@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_CodeFormer
   ImageModelDescriptor(
-    architecture='CodeFormer',
+    architecture=CodeFormerArch(
+      id='CodeFormer',
+      name='CodeFormer',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',

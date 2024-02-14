@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SCUNet_color_25
   ImageModelDescriptor(
-    architecture='SCUNet',
+    architecture=SCUNetArch(
+      id='SCUNet',
+      name='SCUNet',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',
@@ -16,7 +19,10 @@
 # ---
 # name: test_SCUNet_color_GAN
   ImageModelDescriptor(
-    architecture='SCUNet',
+    architecture=SCUNetArch(
+      id='SCUNet',
+      name='SCUNet',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',
@@ -31,7 +37,10 @@
 # ---
 # name: test_SCUNet_color_RSNR
   ImageModelDescriptor(
-    architecture='SCUNet',
+    architecture=SCUNetArch(
+      id='SCUNet',
+      name='SCUNet',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',
@@ -46,7 +55,10 @@
 # ---
 # name: test_SCUNet_gray_25
   ImageModelDescriptor(
-    architecture='SCUNet',
+    architecture=SCUNetArch(
+      id='SCUNet',
+      name='SCUNet',
+    ),
     input_channels=1,
     output_channels=1,
     purpose='Restoration',

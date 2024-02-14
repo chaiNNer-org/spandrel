@@ -1,4 +1,4 @@
-from spandrel.architectures.MMRealSR import MMRealSR, load
+from spandrel.architectures.MMRealSR import MMRealSR, MMRealSRArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_MMRealSR_load():
     assert_loads_correctly(
-        load,
+        MMRealSRArch(),
         # num_block=2 is used everywhere to make tests faster
         lambda: MMRealSR(num_block=2, num_in_ch=3, num_out_ch=3),
         lambda: MMRealSR(num_block=2, num_in_ch=3, num_out_ch=3, scale=1),

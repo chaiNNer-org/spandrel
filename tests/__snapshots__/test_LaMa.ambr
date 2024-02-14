@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_LaMa
   MaskedImageModelDescriptor(
-    architecture='LaMa',
+    architecture=LaMaArch(
+      id='LaMa',
+      name='LaMa',
+    ),
     input_channels=4,
     output_channels=3,
     purpose='Inpainting',

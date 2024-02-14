@@ -1,4 +1,4 @@
-from spandrel.architectures.OmniSR import OmniSR, load
+from spandrel.architectures.OmniSR import OmniSR, OmniSRArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_OmniSR_load():
     assert_loads_correctly(
-        load,
+        OmniSRArch(),
         lambda: OmniSR(),
         lambda: OmniSR(num_in_ch=1, num_out_ch=1),
         lambda: OmniSR(num_in_ch=3, num_out_ch=3),

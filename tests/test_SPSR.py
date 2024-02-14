@@ -1,11 +1,11 @@
-from spandrel.architectures.SPSR import SPSR, load
+from spandrel.architectures.SPSR import SPSR, SPSRArch
 
 from .util import assert_loads_correctly
 
 
 def test_SPSR_load():
     assert_loads_correctly(
-        load,
+        SPSRArch(),
         lambda: SPSR(
             in_nc=3,
             out_nc=3,

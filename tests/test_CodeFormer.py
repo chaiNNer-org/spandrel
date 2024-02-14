@@ -1,4 +1,4 @@
-from spandrel.architectures.CodeFormer import CodeFormer, load
+from spandrel.architectures.CodeFormer import CodeFormer, CodeFormerArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_CodeFormer_load():
     assert_loads_correctly(
-        load,
+        CodeFormerArch(),
         lambda: CodeFormer(),
         lambda: CodeFormer(dim_embd=256, n_head=4),
         lambda: CodeFormer(n_layers=5, codebook_size=512, latent_size=64),

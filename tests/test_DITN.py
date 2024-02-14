@@ -1,4 +1,4 @@
-from spandrel.architectures.DITN import DITN, load
+from spandrel.architectures.DITN import DITN, DITNArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_DITN_load():
     assert_loads_correctly(
-        load,
+        DITNArch(),
         lambda: DITN(),
         lambda: DITN(inp_channels=4),
         lambda: DITN(inp_channels=1),

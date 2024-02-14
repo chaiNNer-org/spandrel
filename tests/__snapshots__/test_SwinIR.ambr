@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SwinIR_L_4x
   ImageModelDescriptor(
-    architecture='SwinIR',
+    architecture=SwinIRArch(
+      id='SwinIR',
+      name='SwinIR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -21,7 +24,10 @@
 # ---
 # name: test_SwinIR_M_s48w8_4x
   ImageModelDescriptor(
-    architecture='SwinIR',
+    architecture=SwinIRArch(
+      id='SwinIR',
+      name='SwinIR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -41,7 +47,10 @@
 # ---
 # name: test_SwinIR_M_s64w8_2x
   ImageModelDescriptor(
-    architecture='SwinIR',
+    architecture=SwinIRArch(
+      id='SwinIR',
+      name='SwinIR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -61,7 +70,10 @@
 # ---
 # name: test_SwinIR_S_2x
   ImageModelDescriptor(
-    architecture='SwinIR',
+    architecture=SwinIRArch(
+      id='SwinIR',
+      name='SwinIR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

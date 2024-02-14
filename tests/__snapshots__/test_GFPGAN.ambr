@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_GFPGAN_1_2
   ImageModelDescriptor(
-    architecture='GFPGAN',
+    architecture=GFPGANArch(
+      id='GFPGAN',
+      name='GFPGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',
@@ -16,7 +19,10 @@
 # ---
 # name: test_GFPGAN_1_3
   ImageModelDescriptor(
-    architecture='GFPGAN',
+    architecture=GFPGANArch(
+      id='GFPGAN',
+      name='GFPGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',
@@ -31,7 +37,10 @@
 # ---
 # name: test_GFPGAN_1_4
   ImageModelDescriptor(
-    architecture='GFPGAN',
+    architecture=GFPGANArch(
+      id='GFPGAN',
+      name='GFPGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',

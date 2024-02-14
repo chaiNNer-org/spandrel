@@ -1,4 +1,4 @@
-from spandrel.architectures.FeMaSR import FeMaSR, load
+from spandrel.architectures.FeMaSR import FeMaSR, FeMaSRArch
 from tests.test_GFPGAN import disallowed_props
 
 from .util import (
@@ -12,7 +12,7 @@ from .util import (
 
 def test_FeMaSR_load():
     assert_loads_correctly(
-        load,
+        FeMaSRArch(),
         lambda: FeMaSR(),
         lambda: FeMaSR(in_channel=1),
         lambda: FeMaSR(in_channel=4),

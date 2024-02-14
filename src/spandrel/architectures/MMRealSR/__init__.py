@@ -2,12 +2,16 @@ from __future__ import annotations
 
 from typing import Literal
 
+from typing_extensions import override
+
+from spandrel.util import KeyCondition, get_seq_len
+
 from ...__helpers.model_descriptor import (
+    Architecture,
     ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
-from ..__arch_helpers.state import get_seq_len
 from .arch.mmrealsr_arch import MMRRDBNet_test as MMRealSR
 
 
@@ -108,61 +112,84 @@ def _get_num_feats_blocks_and_downscales(state_dict: StateDict):
     return num_feats, num_blocks, downscales
 
 
-def load(state_dict: StateDict) -> ImageModelDescriptor[MMRealSR]:
-    # default values
-    num_in_ch = 3
-    num_out_ch = 3
-    scale = 4
-    num_feat = 64
-    num_block = 23
-    num_grow_ch = 32
-    num_degradation = 2
-    degradation_degree_actv = "sigmoid"  # cannot be deduced from state_dict
-    num_feats = [64, 128, 256, 512]
-    num_blocks = [2, 2, 2, 2]
-    downscales = [2, 2, 2, 1]
+class MMRealSRArch(Architecture[MMRealSR]):
+    def __init__(self) -> None:
+        super().__init__(
+            id="MMRealSR",
+            detect=KeyCondition.has_all(
+                "conv_first.weight",
+                "conv_body.weight",
+                "conv_up1.weight",
+                "conv_up2.weight",
+                "conv_hr.weight",
+                "conv_last.weight",
+                "body.0.rdb1.conv1.weight",
+                "am_list.0.fc.0.weight",
+                "de_net.conv_first.0.weight",
+                "de_net.body.0.0.conv1.weight",
+                "de_net.fc_degree.0.0.weight",
+                "dd_embed.0.weight",
+            ),
+        )
 
-    num_out_ch = state_dict["conv_last.weight"].shape[0]
-    num_feat = state_dict["conv_last.weight"].shape[1]
+    @override
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[MMRealSR]:
+        # default values
+        num_in_ch = 3
+        num_out_ch = 3
+        scale = 4
+        num_feat = 64
+        num_block = 23
+        num_grow_ch = 32
+        num_degradation = 2
+        degradation_degree_actv = "sigmoid"  # cannot be deduced from state_dict
+        num_feats = [64, 128, 256, 512]
+        num_blocks = [2, 2, 2, 2]
+        downscales = [2, 2, 2, 1]
 
-    combined = state_dict["conv_first.weight"].shape[1]
-    num_in_ch, scale = _get_in_ch_and_scale(combined, num_out_ch)
+        num_out_ch = state_dict["conv_last.weight"].shape[0]
+        num_feat = state_dict["conv_last.weight"].shape[1]
 
-    num_block = get_seq_len(state_dict, "body")
-    num_grow_ch = state_dict["body.0.rdb1.conv1.weight"].shape[0]
+        combined = state_dict["conv_first.weight"].shape[1]
+        num_in_ch, scale = _get_in_ch_and_scale(combined, num_out_ch)
 
-    num_degradation = state_dict["dd_embed.0.weight"].shape[1]
+        num_block = get_seq_len(state_dict, "body")
+        num_grow_ch = state_dict["body.0.rdb1.conv1.weight"].shape[0]
 
-    num_feats, num_blocks, downscales = _get_num_feats_blocks_and_downscales(state_dict)
+        num_degradation = state_dict["dd_embed.0.weight"].shape[1]
 
-    model = MMRealSR(
-        num_in_ch=num_in_ch,
-        num_out_ch=num_out_ch,
-        scale=scale,
-        num_feat=num_feat,
-        num_block=num_block,
-        num_grow_ch=num_grow_ch,
-        num_degradation=num_degradation,
-        degradation_degree_actv=degradation_degree_actv,
-        num_feats=num_feats,
-        num_blocks=num_blocks,
-        downscales=downscales,
-    )
+        num_feats, num_blocks, downscales = _get_num_feats_blocks_and_downscales(
+            state_dict
+        )
 
-    return ImageModelDescriptor(
-        model,
-        state_dict,
-        architecture="MMRealSR",
-        purpose="Restoration" if scale == 1 else "SR",
-        tags=[
-            f"{num_feat}nf",
-            f"{num_block}nb",
-        ],
-        supports_half=True,  # TODO: Test this
-        supports_bfloat16=True,
-        scale=scale,
-        input_channels=num_in_ch,
-        output_channels=num_out_ch,
-        size_requirements=SizeRequirements(minimum=16),
-        call_fn=lambda model, image: model(image)[0],
-    )
+        model = MMRealSR(
+            num_in_ch=num_in_ch,
+            num_out_ch=num_out_ch,
+            scale=scale,
+            num_feat=num_feat,
+            num_block=num_block,
+            num_grow_ch=num_grow_ch,
+            num_degradation=num_degradation,
+            degradation_degree_actv=degradation_degree_actv,
+            num_feats=num_feats,
+            num_blocks=num_blocks,
+            downscales=downscales,
+        )
+
+        return ImageModelDescriptor(
+            model,
+            state_dict,
+            architecture=self,
+            purpose="Restoration" if scale == 1 else "SR",
+            tags=[
+                f"{num_feat}nf",
+                f"{num_block}nb",
+            ],
+            supports_half=True,  # TODO: Test this
+            supports_bfloat16=True,
+            scale=scale,
+            input_channels=num_in_ch,
+            output_channels=num_out_ch,
+            size_requirements=SizeRequirements(minimum=16),
+            call_fn=lambda model, image: model(image)[0],
+        )

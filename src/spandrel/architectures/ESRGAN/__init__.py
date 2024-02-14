@@ -5,12 +5,16 @@ import math
 import re
 from collections import OrderedDict
 
+from typing_extensions import override
+
+from spandrel.util import KeyCondition, get_seq_len
+
 from ...__helpers.model_descriptor import (
+    Architecture,
     ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
-from ..__arch_helpers.state import get_seq_len
 from .arch.RRDB import RRDBNet
 
 
@@ -128,73 +132,104 @@ def _to_old_arch(state: StateDict) -> StateDict:
     return _new_to_old_arch(state, state_map, num_blocks)
 
 
-def load(state: StateDict) -> ImageModelDescriptor[RRDBNet]:
-    # default values
-    in_nc: int = 3
-    out_nc: int = 3
-    num_filters: int = 64
-    num_blocks: int = 23
-    scale: int = 4
-    plus: bool = False
-    shuffle_factor: int | None = None
+class ESRGANArch(Architecture[RRDBNet]):
+    def __init__(self) -> None:
+        super().__init__(
+            id="ESRGAN",
+            detect=KeyCondition.has_any(
+                KeyCondition.has_all(
+                    "model.0.weight",
+                    "model.1.sub.0.RDB1.conv1.0.weight",
+                ),
+                KeyCondition.has_all(
+                    "conv_first.weight",
+                    "body.0.rdb1.conv1.weight",
+                    "conv_body.weight",
+                    "conv_last.weight",
+                ),
+                KeyCondition.has_all(
+                    # BSRGAN/RealSR
+                    "conv_first.weight",
+                    "RRDB_trunk.0.RDB1.conv1.weight",
+                    "trunk_conv.weight",
+                    "conv_last.weight",
+                ),
+                KeyCondition.has_all(
+                    # ESRGAN+
+                    "model.0.weight",
+                    "model.1.sub.0.RDB1.conv1x1.weight",
+                ),
+            ),
+        )
 
-    state = _to_old_arch(state)
-    model_arch = "ESRGAN"
+    @override
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
+        # default values
+        in_nc: int = 3
+        out_nc: int = 3
+        num_filters: int = 64
+        num_blocks: int = 23
+        scale: int = 4
+        plus: bool = False
+        shuffle_factor: int | None = None
 
-    model_seq_len = get_seq_len(state, "model")
+        state_dict = _to_old_arch(state_dict)
 
-    in_nc = state["model.0.weight"].shape[1]
-    out_nc = state[f"model.{model_seq_len-1}.weight"].shape[0]
+        model_seq_len = get_seq_len(state_dict, "model")
 
-    scale = _get_scale(state)
-    num_blocks = get_seq_len(state, "model.1.sub") - 1
-    num_filters = state["model.0.weight"].shape[0]
+        in_nc = state_dict["model.0.weight"].shape[1]
+        out_nc = state_dict[f"model.{model_seq_len-1}.weight"].shape[0]
 
-    if any(".conv1x1." in k for k in state.keys()):
-        plus = True
-        model_arch = "ESRGAN+"
+        scale = _get_scale(state_dict)
+        num_blocks = get_seq_len(state_dict, "model.1.sub") - 1
+        num_filters = state_dict["model.0.weight"].shape[0]
 
-    # Detect if pixelunshuffle was used (Real-ESRGAN)
-    if in_nc in (out_nc * 4, out_nc * 16) and out_nc in (
-        in_nc / 4,
-        in_nc / 16,
-    ):
-        shuffle_factor = int(math.sqrt(in_nc / out_nc))
-    else:
-        shuffle_factor = None
+        if any(".conv1x1." in k for k in state_dict.keys()):
+            plus = True
 
-    model = RRDBNet(
-        in_nc=in_nc,
-        out_nc=out_nc,
-        num_filters=num_filters,
-        num_blocks=num_blocks,
-        scale=scale,
-        plus=plus,
-        shuffle_factor=shuffle_factor,
-    )
-    tags = [
-        f"{num_filters}nf",
-        f"{num_blocks}nb",
-    ]
+        # Detect if pixelunshuffle was used (Real-ESRGAN)
+        if in_nc in (out_nc * 4, out_nc * 16) and out_nc in (
+            in_nc / 4,
+            in_nc / 16,
+        ):
+            shuffle_factor = int(math.sqrt(in_nc / out_nc))
+        else:
+            shuffle_factor = None
 
-    # Adjust these properties for calculations outside of the model
-    if shuffle_factor:
-        in_nc //= shuffle_factor**2
-        scale //= shuffle_factor
+        model = RRDBNet(
+            in_nc=in_nc,
+            out_nc=out_nc,
+            num_filters=num_filters,
+            num_blocks=num_blocks,
+            scale=scale,
+            plus=plus,
+            shuffle_factor=shuffle_factor,
+        )
+        tags = [
+            f"{num_filters}nf",
+            f"{num_blocks}nb",
+        ]
+        if plus:
+            tags.insert(0, "ESRGAN+")
 
-    return ImageModelDescriptor(
-        model,
-        state,
-        architecture=model_arch,
-        purpose="Restoration" if scale == 1 else "SR",
-        tags=tags,
-        supports_half=True,
-        supports_bfloat16=True,
-        scale=scale,
-        input_channels=in_nc,
-        output_channels=out_nc,
-        size_requirements=SizeRequirements(
-            minimum=2,
-            multiple_of=4 if shuffle_factor else 1,
-        ),
-    )
+        # Adjust these properties for calculations outside of the model
+        if shuffle_factor:
+            in_nc //= shuffle_factor**2
+            scale //= shuffle_factor
+
+        return ImageModelDescriptor(
+            model,
+            state_dict,
+            architecture=self,
+            purpose="Restoration" if scale == 1 else "SR",
+            tags=tags,
+            supports_half=True,
+            supports_bfloat16=True,
+            scale=scale,
+            input_channels=in_nc,
+            output_channels=out_nc,
+            size_requirements=SizeRequirements(
+                minimum=2,
+                multiple_of=4 if shuffle_factor else 1,
+            ),
+        )

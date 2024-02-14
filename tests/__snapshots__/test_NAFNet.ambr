@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_NAFNet_GoPro_width32
   ImageModelDescriptor(
-    architecture='NAFNet',
+    architecture=NAFNetArch(
+      id='NAFNet',
+      name='NAFNet',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',

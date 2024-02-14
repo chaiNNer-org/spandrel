@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SRFormerLight_SRx3_DIV2K
   ImageModelDescriptor(
-    architecture='SRFormer',
+    architecture=SRFormerArch(
+      id='SRFormer',
+      name='SRFormer',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -20,7 +23,10 @@
 # ---
 # name: test_SRFormer_SRx2_DF2K
   ImageModelDescriptor(
-    architecture='SRFormer',
+    architecture=SRFormerArch(
+      id='SRFormer',
+      name='SRFormer',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -39,7 +45,10 @@
 # ---
 # name: test_SRFormer_SRx4_DF2K
   ImageModelDescriptor(
-    architecture='SRFormer',
+    architecture=SRFormerArch(
+      id='SRFormer',
+      name='SRFormer',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

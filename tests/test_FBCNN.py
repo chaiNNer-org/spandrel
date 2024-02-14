@@ -1,4 +1,4 @@
-from spandrel.architectures.FBCNN import FBCNN, load
+from spandrel.architectures.FBCNN import FBCNN, FBCNNArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_FBCNN_load():
     assert_loads_correctly(
-        load,
+        FBCNNArch(),
         lambda: FBCNN(),
         lambda: FBCNN(in_nc=1),
         lambda: FBCNN(out_nc=4),

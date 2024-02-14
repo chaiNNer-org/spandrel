@@ -1,4 +1,4 @@
-from spandrel.architectures.DDColor import DDColor, load
+from spandrel.architectures.DDColor import DDColor, DDColorArch
 
 from .util import (
     ModelFile,
@@ -11,7 +11,7 @@ from .util import (
 
 def test_DDColor_load():
     assert_loads_correctly(
-        load,
+        DDColorArch(),
         lambda: DDColor(
             nf=64,
             num_queries=20,
