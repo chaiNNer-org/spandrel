@@ -1,4 +1,4 @@
-from spandrel.architectures.Swin2SR import Swin2SR, load
+from spandrel.architectures.Swin2SR import Swin2SR, Swin2SRArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_Swin2SR_load():
     assert_loads_correctly(
-        load,
+        Swin2SRArch(),
         lambda: Swin2SR(window_size=8, upsampler="pixelshuffledirect"),
         lambda: Swin2SR(window_size=8, upsampler="pixelshuffledirect", ape=True),
         lambda: Swin2SR(

@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_Compact_community
   ImageModelDescriptor(
-    architecture='RealESRGAN Compact',
+    architecture=CompactArch(
+      id='Compact',
+      name='RealESRGAN Compact',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -18,7 +21,10 @@
 # ---
 # name: test_Compact_realesr_general_x4v3
   ImageModelDescriptor(
-    architecture='RealESRGAN Compact',
+    architecture=CompactArch(
+      id='Compact',
+      name='RealESRGAN Compact',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

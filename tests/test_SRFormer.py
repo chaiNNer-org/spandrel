@@ -1,4 +1,4 @@
-from spandrel.architectures.SRFormer import SRFormer, load
+from spandrel.architectures.SRFormer import SRFormer, SRFormerArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_SRFormer_load():
     assert_loads_correctly(
-        load,
+        SRFormerArch(),
         lambda: SRFormer(window_size=8),
         lambda: SRFormer(window_size=8, in_chans=1),
         lambda: SRFormer(window_size=8, in_chans=4),

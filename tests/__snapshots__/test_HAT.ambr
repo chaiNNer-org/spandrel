@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_HAT_3x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -21,7 +24,10 @@
 # ---
 # name: test_HAT_4x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -41,7 +47,10 @@
 # ---
 # name: test_HAT_L_4x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -61,7 +70,10 @@
 # ---
 # name: test_HAT_S_2x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -81,7 +93,10 @@
 # ---
 # name: test_HAT_S_3x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -101,7 +116,10 @@
 # ---
 # name: test_HAT_S_4x
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -121,7 +139,10 @@
 # ---
 # name: test_HAT_community1
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -141,7 +162,10 @@
 # ---
 # name: test_HAT_community2
   ImageModelDescriptor(
-    architecture='HAT',
+    architecture=HATArch(
+      id='HAT',
+      name='HAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

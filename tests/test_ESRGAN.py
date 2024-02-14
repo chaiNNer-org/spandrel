@@ -1,4 +1,4 @@
-from spandrel.architectures.ESRGAN import RRDBNet, load
+from spandrel.architectures.ESRGAN import ESRGANArch, RRDBNet
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_ESRGAN_load():
     assert_loads_correctly(
-        load,
+        ESRGANArch(),
         lambda: RRDBNet(in_nc=3, out_nc=3, num_filters=64, num_blocks=23, scale=4),
         lambda: RRDBNet(in_nc=1, out_nc=3, num_filters=32, num_blocks=11, scale=2),
         lambda: RRDBNet(in_nc=1, out_nc=1, num_filters=64, num_blocks=23, scale=1),

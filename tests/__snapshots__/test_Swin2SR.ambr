@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_Swin2SR_2x
   ImageModelDescriptor(
-    architecture='Swin2SR',
+    architecture=Swin2SRArch(
+      id='Swin2SR',
+      name='Swin2SR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -20,7 +23,10 @@
 # ---
 # name: test_Swin2SR_4x
   ImageModelDescriptor(
-    architecture='Swin2SR',
+    architecture=Swin2SRArch(
+      id='Swin2SR',
+      name='Swin2SR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -39,7 +45,10 @@
 # ---
 # name: test_Swin2SR_compressed
   ImageModelDescriptor(
-    architecture='Swin2SR',
+    architecture=Swin2SRArch(
+      id='Swin2SR',
+      name='Swin2SR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -58,7 +67,10 @@
 # ---
 # name: test_Swin2SR_jpeg
   ImageModelDescriptor(
-    architecture='Swin2SR',
+    architecture=Swin2SRArch(
+      id='Swin2SR',
+      name='Swin2SR',
+    ),
     input_channels=1,
     output_channels=1,
     purpose='Restoration',
@@ -77,7 +89,10 @@
 # ---
 # name: test_Swin2SR_lightweight_2x
   ImageModelDescriptor(
-    architecture='Swin2SR',
+    architecture=Swin2SRArch(
+      id='Swin2SR',
+      name='Swin2SR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

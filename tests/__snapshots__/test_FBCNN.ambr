@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_FBCNN_color
   ImageModelDescriptor(
-    architecture='FBCNN',
+    architecture=FBCNNArch(
+      id='FBCNN',
+      name='FBCNN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',
@@ -16,7 +19,10 @@
 # ---
 # name: test_FBCNN_gray
   ImageModelDescriptor(
-    architecture='FBCNN',
+    architecture=FBCNNArch(
+      id='FBCNN',
+      name='FBCNN',
+    ),
     input_channels=1,
     output_channels=1,
     purpose='Restoration',

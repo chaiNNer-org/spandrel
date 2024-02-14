@@ -1,4 +1,4 @@
-from spandrel.architectures.CRAFT import CRAFT, load
+from spandrel.architectures.CRAFT import CRAFT, CRAFTArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_CRAFT_load():
     assert_loads_correctly(
-        load,
+        CRAFTArch(),
         lambda: CRAFT(),
         lambda: CRAFT(embed_dim=60),
         lambda: CRAFT(mlp_ratio=4.0),

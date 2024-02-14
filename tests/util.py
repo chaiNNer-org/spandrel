@@ -23,11 +23,10 @@ from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
 from spandrel import (
+    Architecture,
     ImageModelDescriptor,
-    ModelBase,
     ModelDescriptor,
     ModelLoader,
-    StateDict,
 )
 
 MODEL_DIR = Path("./tests/models/")
@@ -302,7 +301,7 @@ def _get_compare_keys(condition: Callable) -> list[str]:
 
 
 def assert_loads_correctly(
-    load: Callable[[StateDict], ModelBase[T]],
+    arch: Architecture[T],
     *models: Callable[[], T],
     condition: Callable[[T, T], bool] = lambda _a, _b: True,
 ):
@@ -315,7 +314,7 @@ def assert_loads_correctly(
 
         try:
             state_dict = model.state_dict()
-            loaded = load(state_dict)
+            loaded = arch.load(state_dict)
         except Exception as e:
             raise AssertionError(f"Failed to load: {model_name}") from e
 

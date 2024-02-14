@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_OmniSR_community1
   ImageModelDescriptor(
-    architecture='OmniSR',
+    architecture=OmniSRArch(
+      id='OmniSR',
+      name='OmniSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -19,7 +22,10 @@
 # ---
 # name: test_OmniSR_community2
   ImageModelDescriptor(
-    architecture='OmniSR',
+    architecture=OmniSRArch(
+      id='OmniSR',
+      name='OmniSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -37,7 +43,10 @@
 # ---
 # name: test_OmniSR_official_x2
   ImageModelDescriptor(
-    architecture='OmniSR',
+    architecture=OmniSRArch(
+      id='OmniSR',
+      name='OmniSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -55,7 +64,10 @@
 # ---
 # name: test_OmniSR_official_x3
   ImageModelDescriptor(
-    architecture='OmniSR',
+    architecture=OmniSRArch(
+      id='OmniSR',
+      name='OmniSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -73,7 +85,10 @@
 # ---
 # name: test_OmniSR_official_x4
   ImageModelDescriptor(
-    architecture='OmniSR',
+    architecture=OmniSRArch(
+      id='OmniSR',
+      name='OmniSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

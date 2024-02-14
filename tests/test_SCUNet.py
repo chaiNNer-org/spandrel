@@ -1,4 +1,4 @@
-from spandrel.architectures.SCUNet import SCUNet, load
+from spandrel.architectures.SCUNet import SCUNet, SCUNetArch
 
 from .util import (
     ModelFile,
@@ -10,7 +10,7 @@ from .util import (
 
 def test_SCUNet_load():
     assert_loads_correctly(
-        load,
+        SCUNetArch(),
         lambda: SCUNet(),
         lambda: SCUNet(in_nc=1),
         lambda: SCUNet(in_nc=4),

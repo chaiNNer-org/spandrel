@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_DAT_2_x4
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -22,7 +25,10 @@
 # ---
 # name: test_DAT_S_x3
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -43,7 +49,10 @@
 # ---
 # name: test_DAT_S_x4
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -64,7 +73,10 @@
 # ---
 # name: test_DAT_tags
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -85,7 +97,10 @@
 # ---
 # name: test_DAT_tags.1
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -106,7 +121,10 @@
 # ---
 # name: test_DAT_tags.2
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -127,7 +145,10 @@
 # ---
 # name: test_DAT_tags.3
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -148,7 +169,10 @@
 # ---
 # name: test_DAT_x4
   ImageModelDescriptor(
-    architecture='DAT',
+    architecture=DATArch(
+      id='DAT',
+      name='DAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

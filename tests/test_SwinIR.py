@@ -1,4 +1,4 @@
-from spandrel.architectures.SwinIR import SwinIR, load
+from spandrel.architectures.SwinIR import SwinIR, SwinIRArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_SwinIR_load():
     assert_loads_correctly(
-        load,
+        SwinIRArch(),
         lambda: SwinIR(window_size=8),
         lambda: SwinIR(depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6], window_size=8),
         lambda: SwinIR(depths=[6, 6, 2, 1], num_heads=[6, 4, 6, 3], window_size=8),

@@ -1,4 +1,4 @@
-from spandrel.architectures.HAT import HAT, load
+from spandrel.architectures.HAT import HAT, HATArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_HAT_load():
     assert_loads_correctly(
-        load,
+        HATArch(),
         lambda: HAT(),
         lambda: HAT(in_chans=1),
         lambda: HAT(in_chans=4),

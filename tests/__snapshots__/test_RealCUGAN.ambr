@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_RealCUGAN_2x
   ImageModelDescriptor(
-    architecture='RealCUGAN',
+    architecture=RealCUGANArch(
+      id='RealCUGAN',
+      name='RealCUGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -16,7 +19,10 @@
 # ---
 # name: test_RealCUGAN_2x_pro
   ImageModelDescriptor(
-    architecture='RealCUGAN',
+    architecture=RealCUGANArch(
+      id='RealCUGAN',
+      name='RealCUGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -32,7 +38,10 @@
 # ---
 # name: test_RealCUGAN_3x
   ImageModelDescriptor(
-    architecture='RealCUGAN',
+    architecture=RealCUGANArch(
+      id='RealCUGAN',
+      name='RealCUGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -47,7 +56,10 @@
 # ---
 # name: test_RealCUGAN_3x_pro
   ImageModelDescriptor(
-    architecture='RealCUGAN',
+    architecture=RealCUGANArch(
+      id='RealCUGAN',
+      name='RealCUGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -63,7 +75,10 @@
 # ---
 # name: test_RealCUGAN_4x
   ImageModelDescriptor(
-    architecture='RealCUGAN',
+    architecture=RealCUGANArch(
+      id='RealCUGAN',
+      name='RealCUGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

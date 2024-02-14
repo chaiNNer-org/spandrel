@@ -1,5 +1,5 @@
 from spandrel import ModelLoader
-from spandrel.architectures.DAT import DAT, load
+from spandrel.architectures.DAT import DAT, DATArch
 
 from .util import (
     ModelFile,
@@ -13,7 +13,7 @@ from .util import (
 
 def test_DAT_load():
     assert_loads_correctly(
-        load,
+        DATArch(),
         lambda: DAT(),
         lambda: DAT(embed_dim=60),
         lambda: DAT(in_chans=1),

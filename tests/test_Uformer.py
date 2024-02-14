@@ -1,11 +1,11 @@
-from spandrel.architectures.Uformer import Uformer, load
+from spandrel.architectures.Uformer import Uformer, UformerArch
 
 from .util import assert_loads_correctly
 
 
 def test_Uformer_load():
     assert_loads_correctly(
-        load,
+        UformerArch(),
         lambda: Uformer(),
         lambda: Uformer(in_chans=1),
         lambda: Uformer(dd_in=1),

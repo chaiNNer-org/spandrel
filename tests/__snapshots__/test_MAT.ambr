@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_MAT
   MaskedImageModelDescriptor(
-    architecture='MAT',
+    architecture=MATArch(
+      id='MAT',
+      name='MAT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Inpainting',

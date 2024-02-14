@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_RestoreFormer
   ImageModelDescriptor(
-    architecture='RestoreFormer',
+    architecture=RestoreFormerArch(
+      id='RestoreFormer',
+      name='RestoreFormer',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',

@@ -1,13 +1,24 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Dict, Generic, Literal, TypeVar, Union, overload
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    Literal,
+    NewType,
+    TypeVar,
+    Union,
+    overload,
+)
 
 import torch
 from torch import Tensor
-from typing_extensions import Self
+from typing_extensions import Self, override
+
+from .size_req import SizeRequirements, pad_tensor
 
 T = TypeVar("T", bound=torch.nn.Module, covariant=True)
 
@@ -18,102 +29,69 @@ Spandrel's type alias for PyTorch state dicts.
 See https://pytorch.org/tutorials/recipes/recipes/what_is_state_dict.html
 """
 
+ArchId = NewType("ArchId", str)
+"""
+A unique identifier for an `Architecture`.
+"""
 
-@dataclass
-class SizeRequirements:
+
+class Architecture(ABC, Generic[T]):
     """
-    A set of requirements for the size of an input image.
-    """
-
-    minimum: int = 0
-    """
-    The minimum size of the input image in pixels.
-
-    `minimum` is guaranteed to be a multiple of `multiple_of` and to be >= 0.
-
-    On initialization, if `minimum` is not a multiple of `multiple_of`, it will be rounded up to the next multiple of `multiple_of`.
-
-    Default/neutral value: `0`
-    """
-    multiple_of: int = 1
-    """
-    The width and height of the image must be a multiple of this value.
-
-    `multiple_of` is guaranteed to be >= 1.
-
-    Default/neutral value: `1`
-    """
-    square: bool = False
-    """
-    The image must be square.
-
-    Default/neutral value: `False`
+    The abstract base class for all architectures.
     """
 
-    def __post_init__(self):
-        assert self.minimum >= 0, "minimum must be >= 0"
-        assert self.multiple_of >= 1, "multiple_of must be >= 1"
+    def __init__(
+        self,
+        *,
+        id: ArchId | str,
+        detect: Callable[[StateDict], bool],
+        name: str | None = None,
+    ) -> None:
+        super().__init__()
 
-        if self.minimum % self.multiple_of != 0:
-            self.minimum = (self.minimum // self.multiple_of + 1) * self.multiple_of
+        self._id = ArchId(id)
+        self._name = name or id
+        self._detect = detect
 
     @property
-    def none(self) -> bool:
+    def id(self) -> ArchId:
         """
-        Returns True if no size requirements are specified.
+        The unique ID of the architecture.
 
-        If True, then `check` is guaranteed to always return True.
+        For built-in architectures, this is the same as the module name. E.g. `spandrel.architectures.RestoreFormer` has the ID `RestoreFormer`.
         """
-        return self.minimum == 0 and self.multiple_of == 1 and not self.square
+        return self._id
 
-    def check(self, width: int, height: int) -> bool:
+    @property
+    def name(self) -> str:
         """
-        Returns whether the given width and height satisfy the size requirements.
+        The name of the architecture.
+
+        This is often the same as `id`.
         """
-        return self.get_padding(width, height) == (0, 0)
+        return self._name
 
-    def get_padding(self, width: int, height: int) -> tuple[int, int]:
+    def detect(self, state_dict: StateDict) -> bool:
         """
-        Given an image size, this returns the minimum amount of padding necessary to satisfy the size requirements. The returned padding is in the format `(pad_width, pad_height)` and is guaranteed to be non-negative.
+        Inspects the given state dict and returns ``True`` if it is a state dict of this architecture.
+
+        This guarantees that there are no false negatives, but there might be false positives.
+        This is important to remember when ordering architectures in a registry.
+
+        (Note: while false positives are allowed, they are supposed to be rare. So we do accept bug reports for false positives.)
         """
+        return self._detect(state_dict)
 
-        def ceil_modulo(x: int, mod: int) -> int:
-            if x % mod == 0:
-                return x
-            return (x // mod + 1) * mod
+    @abstractmethod
+    def load(
+        self, state_dict: StateDict
+    ) -> ImageModelDescriptor[T] | MaskedImageModelDescriptor[T]:
+        """
+        Loads the given state dict into a model. The hyperparameters will automatically be deduced.
 
-        w: int = max(self.minimum, width)
-        h: int = max(self.minimum, height)
-
-        w = ceil_modulo(w, self.multiple_of)
-        h = ceil_modulo(h, self.multiple_of)
-
-        if self.square:
-            w = h = max(w, h)
-
-        return w - width, h - height
-
-
-def _pad(t: torch.Tensor, req: SizeRequirements):
-    w = t.shape[-1]
-    h = t.shape[-2]
-
-    pad_w, pad_h = req.get_padding(w, h)
-
-    if pad_w or pad_h:
-        # reflect padding only allows a maximum padding of size - 1
-        reflect_pad_w = min(pad_w, w - 1)
-        reflect_pad_h = min(pad_h, h - 1)
-        t = torch.nn.functional.pad(t, (0, reflect_pad_w, 0, reflect_pad_h), "reflect")
-
-        # do the rest of the padding (if any) with replicate, which has no such restrictions
-        pad_w -= reflect_pad_w
-        pad_h -= reflect_pad_h
-        t = torch.nn.functional.pad(t, (0, pad_w, 0, pad_h), "replicate")
-
-        return True, t
-    else:
-        return False, t
+        The state dict is assumed to be a state dict of this architecture, meaning that `detect` returned `True` for the state dict.
+        If this is not the case, then the behavior of this function is unspecified (the model may be loaded incorrect or an error is thrown).
+        """
 
 
 Purpose = Literal["SR", "FaceSR", "Inpainting", "Restoration"]
@@ -174,7 +152,7 @@ class ModelBase(ABC, Generic[T]):
         self,
         model: T,
         state_dict: StateDict,
-        architecture: str,
+        architecture: Architecture[T],
         tags: list[str],
         supports_half: bool,
         supports_bfloat16: bool,
@@ -184,16 +162,8 @@ class ModelBase(ABC, Generic[T]):
         size_requirements: SizeRequirements | None = None,
         tiling: ModelTiling = ModelTiling.SUPPORTED,
     ):
-        self.model: T = model
-        """
-        The model itself: a `torch.nn.Module` with weights loaded in.
-
-        The specific subclass of `torch.nn.Module` depends on the model architecture.
-        """
-        self.architecture: str = architecture
-        """
-        The name of the model architecture. E.g. "ESRGAN".
-        """
+        self._model: T = model
+        self._architecture: Architecture[T] = architecture
         self.tags: list[str] = tags
         """
         A list of tags for the model, usually describing the size or model
@@ -246,6 +216,22 @@ class ModelBase(ABC, Generic[T]):
         """
 
         self.model.load_state_dict(state_dict)  # type: ignore
+
+    @property
+    def model(self) -> T:
+        """
+        The model itself: a `torch.nn.Module` with weights loaded in.
+
+        The specific subclass of `torch.nn.Module` depends on the model architecture.
+        """
+        return self._model
+
+    @property
+    def architecture(self) -> Architecture[T]:
+        """
+        The architecture of the model.
+        """
+        return self._architecture
 
     @property
     @abstractmethod
@@ -421,7 +407,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         self,
         model: T,
         state_dict: StateDict,
-        architecture: str,
+        architecture: Architecture[T],
         purpose: Literal["SR", "FaceSR", "Restoration"],
         tags: list[str],
         supports_half: bool,
@@ -456,6 +442,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         self._call_fn = call_fn or (lambda model, image: model(image))
 
     @property
+    @override
     def purpose(self) -> Literal["SR", "FaceSR", "Restoration"]:
         return self._purpose
 
@@ -477,7 +464,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         _, _, h, w = image.shape
 
         # satisfy size requirements
-        did_pad, image = _pad(image, self.size_requirements)
+        did_pad, image = pad_tensor(image, self.size_requirements)
 
         # call model
         output = self._call_fn(self.model, image)
@@ -504,7 +491,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         self,
         model: T,
         state_dict: StateDict,
-        architecture: str,
+        architecture: Architecture[T],
         purpose: Literal["Inpainting"],
         tags: list[str],
         supports_half: bool,
@@ -534,6 +521,7 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
         self._call_fn = call_fn or (lambda model, image, mask: model(image, mask))
 
     @property
+    @override
     def purpose(self) -> Literal["Inpainting"]:
         return self._purpose
 
@@ -570,8 +558,8 @@ class MaskedImageModelDescriptor(ModelBase[T], Generic[T]):
             )
 
         # satisfy size requirements
-        did_pad, image = _pad(image, self.size_requirements)
-        _, mask = _pad(mask, self.size_requirements)
+        did_pad, image = pad_tensor(image, self.size_requirements)
+        _, mask = pad_tensor(mask, self.size_requirements)
 
         # call model
         output = self._call_fn(self.model, image, mask)

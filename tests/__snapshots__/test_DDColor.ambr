@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_DDColor_paper_tiny
   ImageModelDescriptor(
-    architecture='DDColor',
+    architecture=DDColorArch(
+      id='DDColor',
+      name='DDColor',
+    ),
     input_channels=1,
     output_channels=3,
     purpose='Restoration',

@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SAFMN_DF2K_x2
   ImageModelDescriptor(
-    architecture='SAFMN',
+    architecture=SAFMNArch(
+      id='SAFMN',
+      name='SAFMN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -18,7 +21,10 @@
 # ---
 # name: test_SAFMN_DF2K_x3
   ImageModelDescriptor(
-    architecture='SAFMN',
+    architecture=SAFMNArch(
+      id='SAFMN',
+      name='SAFMN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -35,7 +41,10 @@
 # ---
 # name: test_SAFMN_DF2K_x4
   ImageModelDescriptor(
-    architecture='SAFMN',
+    architecture=SAFMNArch(
+      id='SAFMN',
+      name='SAFMN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

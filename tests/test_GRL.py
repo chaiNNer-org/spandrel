@@ -1,4 +1,4 @@
-from spandrel.architectures.GRL import GRL, load
+from spandrel.architectures.GRL import GRL, GRLArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_GRL_load():
     assert_loads_correctly(
-        load,
+        GRLArch(),
         lambda: GRL(),
         lambda: GRL(in_channels=1, out_channels=3),
         lambda: GRL(in_channels=4, out_channels=4),
