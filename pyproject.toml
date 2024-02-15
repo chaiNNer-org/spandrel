@@ -15,7 +15,7 @@ keywords = [
     "model arch",
     "model architecture",
 ]
-license = "MIT"
+license = { text = "MIT" }
 classifiers = [
     # see https://pypi.org/classifiers/
     "Development Status :: 2 - Pre-Alpha",
