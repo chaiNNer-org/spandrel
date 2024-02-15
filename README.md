@@ -125,6 +125,6 @@ Here are some cool projects that use Spandrel:
 
 ## License Notice
 
-This repo is bounded by GPLv3 license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses. See `src/spandrel/architectures/<name>/arch/LICENSE` for the license of a specific architecture.
+This repo is bounded by the MIT license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses. See `src/spandrel/architectures/<name>/arch/LICENSE` for the license of a specific architecture.
 
 The original architecture code has also been slightly modified and formatted to fit the needs of this repo. If you want to use these architectures in your own codebase (but why would you if you have this package 😉), I recommend grabbing them from their original sources.

@@ -15,7 +15,7 @@ keywords = [
     "model arch",
     "model architecture",
 ]
-license = { text = "GPLv3" }
+license = "MIT"
 classifiers = [
     # see https://pypi.org/classifiers/
     "Development Status :: 2 - Pre-Alpha",
@@ -28,7 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
