@@ -18,6 +18,7 @@ from urllib.parse import unquote, urlencode, urlparse
 import cv2
 import numpy as np
 import requests
+import safetensors.torch
 import torch
 from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
@@ -304,6 +305,7 @@ def assert_loads_correctly(
     arch: Architecture[T],
     *models: Callable[[], T],
     condition: Callable[[T, T], bool] = lambda _a, _b: True,
+    check_safe_tensors: bool = True,
 ):
     for model_fn in models:
         model_name = getsource(model_fn)
@@ -324,8 +326,28 @@ def assert_loads_correctly(
 
         assert condition(model, loaded.model), (
             f"Failed condition for {model_name}."
-            f" Keys:\n\n{_get_different_keys(model,loaded.model, _get_compare_keys(condition))}"
+            f" Keys:\n\n{_get_different_keys(model, loaded.model, _get_compare_keys(condition))}"
         )
+
+        if check_safe_tensors:
+            try:
+                b = safetensors.torch.save(model.state_dict())
+            except Exception as e:
+                raise AssertionError(
+                    f"Failed to save as safetensors: {model_name}"
+                ) from e
+
+            try:
+                sf_loaded = arch.load(safetensors.torch.load(b))
+            except Exception as e:
+                raise AssertionError(
+                    f"Failed to load from safetensors: {model_name}"
+                ) from e
+
+            assert condition(model, sf_loaded.model), (
+                f"Failed condition for {model_name}."
+                f" Keys:\n\n{_get_different_keys(model, sf_loaded.model, _get_compare_keys(condition))}"
+            )
 
 
 def seed_rngs(seed: int) -> None:
