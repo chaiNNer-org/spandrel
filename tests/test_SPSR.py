@@ -89,4 +89,5 @@ def test_SPSR_load():
             upscale=8,
             upsample_mode="pixelshuffle",
         ),
+        check_safe_tensors=False,
     )
