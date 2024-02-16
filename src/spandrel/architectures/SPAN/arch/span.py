@@ -182,8 +182,8 @@ class Conv3XC(nn.Module):
         self.weight_concat = self.weight_concat + sk_w
         self.bias_concat = self.bias_concat + sk_b
 
-        self.eval_conv.weight.data = self.weight_concat
-        self.eval_conv.bias.data = self.bias_concat  # type: ignore
+        self.eval_conv.weight.data = self.weight_concat.contiguous()
+        self.eval_conv.bias.data = self.bias_concat.contiguous()  # type: ignore
 
     def forward(self, x):
         if self.training:
