@@ -257,7 +257,7 @@ from spandrel.architectures.ARCH_NAME import ARCH_NAME, load
 from .util import assert_loads_correctly
 
 
-def test_ARCH_NAME_load():
+def test_load():
     assert_loads_correctly(
         load,
         lambda: ARCH_NAME(),
@@ -295,7 +295,7 @@ from spandrel.architectures.DITN import DITN, load
 from .util import assert_loads_correctly
 
 
-def test_DITN_load():
+def test_load():
     assert_loads_correctly(
         load,
         lambda: DITN(),
@@ -607,7 +607,7 @@ from .util import (
 )
 
 
-def test_ARCH_load():
+def test_load():
     ...
 
 

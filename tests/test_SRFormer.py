@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_SRFormer_load():
+def test_load():
     assert_loads_correctly(
         SRFormerArch(),
         lambda: SRFormer(window_size=8),

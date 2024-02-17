@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_Swin2SR_load():
+def test_load():
     assert_loads_correctly(
         Swin2SRArch(),
         lambda: Swin2SR(window_size=8, upsampler="pixelshuffledirect"),

@@ -3,7 +3,7 @@ from spandrel.architectures.Uformer import Uformer, UformerArch
 from .util import assert_loads_correctly
 
 
-def test_Uformer_load():
+def test_load():
     assert_loads_correctly(
         UformerArch(),
         lambda: Uformer(),

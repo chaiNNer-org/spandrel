@@ -3,7 +3,7 @@ from spandrel.architectures.LaMa import LaMa, LaMaArch
 from .util import ModelFile, assert_loads_correctly, disallowed_props
 
 
-def test_LaMa_load():
+def test_load():
     assert_loads_correctly(
         LaMaArch(),
         lambda: LaMa(),

@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_SPAN_load():
+def test_load():
     assert_loads_correctly(
         SPANArch(),
         lambda: SPAN(num_in_ch=3, num_out_ch=3),

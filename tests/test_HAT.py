@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_HAT_load():
+def test_load():
     assert_loads_correctly(
         HATArch(),
         lambda: HAT(),

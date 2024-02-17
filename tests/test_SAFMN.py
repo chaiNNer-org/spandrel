@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_SAFMN_load():
+def test_load():
     assert_loads_correctly(
         SAFMNArch(),
         lambda: SAFMN(dim=36, n_blocks=8, ffn_scale=2.0, upscaling_factor=4),

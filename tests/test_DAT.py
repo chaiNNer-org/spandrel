@@ -11,7 +11,7 @@ from .util import (
 )
 
 
-def test_DAT_load():
+def test_load():
     assert_loads_correctly(
         DATArch(),
         lambda: DAT(),
