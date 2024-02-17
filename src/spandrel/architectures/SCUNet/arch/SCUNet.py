@@ -48,6 +48,7 @@ class WMSA(nn.Module):
             )
             .transpose(1, 2)
             .transpose(0, 1)
+            .contiguous()
         )
 
     def generate_mask(self, h, w, p, shift):

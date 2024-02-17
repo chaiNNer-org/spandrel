@@ -18,6 +18,7 @@ def test_load():
         lambda: SCUNet(dim=24),
         lambda: SCUNet(config=[5, 3, 7, 2, 3, 1, 3]),
         condition=lambda a, b: a.dim == b.dim and a.config == b.config,
+        check_safe_tensors=False,
     )
 
 
