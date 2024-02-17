@@ -3,7 +3,7 @@ from spandrel.architectures.SPSR import SPSR, SPSRArch
 from .util import assert_loads_correctly
 
 
-def test_SPSR_load():
+def test_load():
     assert_loads_correctly(
         SPSRArch(),
         lambda: SPSR(

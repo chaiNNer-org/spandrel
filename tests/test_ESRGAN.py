@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_ESRGAN_load():
+def test_load():
     assert_loads_correctly(
         ESRGANArch(),
         lambda: RRDBNet(in_nc=3, out_nc=3, num_filters=64, num_blocks=23, scale=4),

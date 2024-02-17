@@ -3,7 +3,7 @@ from spandrel.architectures.RestoreFormer import RestoreFormer, RestoreFormerArc
 from .util import ModelFile, assert_loads_correctly, disallowed_props
 
 
-def test_RestoreFormer_load():
+def test_load():
     assert_loads_correctly(
         RestoreFormerArch(),
         lambda: RestoreFormer(),

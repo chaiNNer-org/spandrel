@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_SwinIR_load():
+def test_load():
     assert_loads_correctly(
         SwinIRArch(),
         lambda: SwinIR(window_size=8),

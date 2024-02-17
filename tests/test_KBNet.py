@@ -3,7 +3,7 @@ from spandrel.architectures.KBNet import KBNet_l, KBNet_s, KBNetArch
 from .util import assert_loads_correctly
 
 
-def test_KBCNN_load():
+def test_load():
     assert_loads_correctly(
         KBNetArch(),
         lambda: KBNet_l(),

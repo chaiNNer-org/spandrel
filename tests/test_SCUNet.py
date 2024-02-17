@@ -8,7 +8,7 @@ from .util import (
 )
 
 
-def test_SCUNet_load():
+def test_load():
     assert_loads_correctly(
         SCUNetArch(),
         lambda: SCUNet(),

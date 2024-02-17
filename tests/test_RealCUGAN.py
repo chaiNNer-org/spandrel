@@ -15,7 +15,7 @@ from .util import (
 )
 
 
-def test_RealCUGAN_load():
+def test_load():
     assert_loads_correctly(
         RealCUGANArch(),
         lambda: UpCunet2x(in_channels=3, out_channels=3),

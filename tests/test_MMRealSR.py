@@ -10,7 +10,7 @@ from .util import (
 )
 
 
-def test_MMRealSR_load():
+def test_load():
     assert_loads_correctly(
         MMRealSRArch(),
         # num_block=2 is used everywhere to make tests faster
