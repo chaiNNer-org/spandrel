@@ -446,6 +446,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
     def purpose(self) -> Literal["SR", "FaceSR", "Restoration"]:
         return self._purpose
 
+    @torch.inference_mode()
     def __call__(self, image: Tensor) -> Tensor:
         """
         Takes a single image tensor as input and returns a single image tensor as output.
@@ -466,11 +467,17 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         # satisfy size requirements
         did_pad, image = pad_tensor(image, self.size_requirements)
 
+        # Optimize for inference
+        for _, v in self.model.named_parameters():
+            v.requires_grad = False
+        self.model.eval()
+
         # call model
-        output = self._call_fn(self.model, image)
+        with torch.no_grad():
+            output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
-        ), f"Expected {type(self.model).__name__} model to returns a tensor, but got {type(output)}"
+        ), f"Expected {type(self.model).__name__} model to return a tensor, but got {type(output)}"
 
         # guarantee range
         output = output.clamp_(0, 1)
