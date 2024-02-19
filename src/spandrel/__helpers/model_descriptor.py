@@ -468,13 +468,10 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         did_pad, image = pad_tensor(image, self.size_requirements)
 
         # Optimize for inference
-        for _, v in self.model.named_parameters():
-            v.requires_grad = False
         self.model.eval()
 
         # call model
-        with torch.no_grad():
-            output = self._call_fn(self.model, image)
+        output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to return a tensor, but got {type(output)}"
