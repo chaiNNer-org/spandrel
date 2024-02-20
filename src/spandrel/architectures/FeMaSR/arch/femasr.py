@@ -7,6 +7,8 @@ import torch
 import torch.nn.functional as F
 from torch import nn as nn
 
+from spandrel.util import with_hyperparameters
+
 from ...SwinIR.arch.SwinIR import RSTB
 from .fema_utils import CombineQuantBlock, ResBlock
 from .vgg_arch import VGGFeatureExtractor
@@ -235,7 +237,10 @@ class DecoderBlock(nn.Module):
         return self.block(input)
 
 
+@with_hyperparameters()
 class FeMaSRNet(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         *,

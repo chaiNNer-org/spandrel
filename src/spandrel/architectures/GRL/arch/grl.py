@@ -11,6 +11,8 @@ from typing import Literal
 import torch
 import torch.nn as nn
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -182,6 +184,7 @@ class TransformerStage(nn.Module):
         pass
 
 
+@with_hyperparameters()
 class GRL(nn.Module):
     r"""Image restoration transformer with global, non-local, and local connections
     Args:
@@ -225,6 +228,8 @@ class GRL(nn.Module):
         euclidean_dist (bool): use Euclidean distance or inner product as the similarity metric. An ablation study.
 
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

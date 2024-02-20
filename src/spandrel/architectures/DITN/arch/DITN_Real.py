@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 
 
@@ -257,7 +259,10 @@ class UFONE(nn.Module):
         return global_features
 
 
+@with_hyperparameters()
 class DITN_Real(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         inp_channels=3,

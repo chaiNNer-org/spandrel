@@ -5,6 +5,8 @@ from typing import Literal
 import torch
 import torch.nn as nn
 
+from spandrel.util import with_hyperparameters
+
 from .convnext import ConvNeXt
 from .position_encoding import PositionEmbeddingSine
 from .transformer import Transformer
@@ -23,7 +25,10 @@ from .unet import (
 )
 
 
+@with_hyperparameters()
 class DDColor(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         encoder_name="convnext-l",

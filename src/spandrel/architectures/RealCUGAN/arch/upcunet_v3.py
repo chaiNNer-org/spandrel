@@ -11,6 +11,8 @@ from torch import Tensor
 from torch import nn as nn
 from torch.nn import functional as F
 
+from spandrel.util import with_hyperparameters
+
 
 def q(inp, cache_mode):
     maxx = inp.max()
@@ -284,7 +286,10 @@ class UNet2(nn.Module):
         return z
 
 
+@with_hyperparameters(extra_parameters={"scale": 2})
 class UpCunet2x(nn.Module):
+    hyperparameters = {}
+
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None
@@ -323,7 +328,10 @@ class UpCunet2x(nn.Module):
         return x
 
 
+@with_hyperparameters(extra_parameters={"scale": 3})
 class UpCunet3x(nn.Module):
+    hyperparameters = {}
+
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None
@@ -362,7 +370,10 @@ class UpCunet3x(nn.Module):
         return x
 
 
+@with_hyperparameters(extra_parameters={"scale": 4})
 class UpCunet4x(nn.Module):
+    hyperparameters = {}
+
     def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None

@@ -8,6 +8,8 @@ import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 from einops import rearrange, repeat
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.timm.drop import DropPath
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -1345,9 +1347,13 @@ class BasicUformerLayer(nn.Module):
         return flops
 
 
+@with_hyperparameters()
 class Uformer(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
+        *,
         img_size=256,
         in_chans=3,
         dd_in=3,

@@ -4,8 +4,9 @@ A module containing commonly-used functionality to implement architectures.
 
 from __future__ import annotations
 
+import functools
 import math
-from typing import Any, Literal
+from typing import Any, Literal, Mapping, Protocol, TypeVar
 
 
 class KeyCondition:
@@ -109,9 +110,43 @@ def get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, int
     )
 
 
+def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
+    """
+    Stores the hyperparameters of a class in a `hyperparameters` attribute.
+    """
+
+    class WithHyperparameters(Protocol):
+        hyperparameters: dict[str, Any]
+
+    C = TypeVar("C", bound=WithHyperparameters)
+
+    def with_hyperparameters(cls: type[C]) -> type[C]:
+        old_init = cls.__init__
+
+        @functools.wraps(old_init)
+        def new_init(self: C, **kwargs):
+            # remove extra parameters from kwargs
+            for k, v in extra_parameters.items():
+                if k in kwargs:
+                    if kwargs[k] != v:
+                        raise ValueError(
+                            f"Expected hyperparameter {k} to be {v}, but got {kwargs[k]}"
+                        )
+                    del kwargs[k]
+
+            self.hyperparameters = {**extra_parameters, **kwargs}
+            old_init(self, **kwargs)
+
+        cls.__init__ = new_init
+        return cls
+
+    return with_hyperparameters
+
+
 __all__ = [
     "KeyCondition",
     "get_first_seq_index",
     "get_seq_len",
     "get_scale_and_output_channels",
+    "with_hyperparameters",
 ]

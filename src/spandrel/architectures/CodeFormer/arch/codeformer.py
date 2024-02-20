@@ -15,6 +15,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
 
+from spandrel.util import with_hyperparameters
+
 
 class VectorQuantizer(nn.Module):
     def __init__(self, codebook_size, emb_dim, beta):
@@ -602,7 +604,10 @@ class Fuse_sft_block(nn.Module):
         return out
 
 
+@with_hyperparameters()
 class CodeFormer(VQAutoEncoder):
+    hyperparameters = {}
+
     def __init__(
         self,
         dim_embd=512,
@@ -612,7 +617,6 @@ class CodeFormer(VQAutoEncoder):
         latent_size=256,
         connect_list=["32", "64", "128", "256"],
         fix_modules=["quantize", "generator"],
-        vqgan_path=None,
     ):
         super().__init__(512, 64, [1, 2, 2, 4, 4, 8], "nearest", 2, [16], codebook_size)
 

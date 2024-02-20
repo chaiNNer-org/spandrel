@@ -3,7 +3,10 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
+from spandrel.util import with_hyperparameters
 
+
+@with_hyperparameters()
 class SRVGGNetCompact(nn.Module):
     """A compact VGG-style network structure for super-resolution.
 
@@ -18,6 +21,8 @@ class SRVGGNetCompact(nn.Module):
         upscale (int): Upsampling factor. Default: 4.
         act_type (str): Activation type, options: 'relu', 'prelu', 'leakyrelu'. Default: prelu.
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

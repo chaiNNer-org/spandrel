@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from spandrel.util import with_hyperparameters
+
 
 # Layer Norm
 class LayerNorm(nn.Module):
@@ -156,7 +158,10 @@ class AttBlock(nn.Module):
         return x
 
 
+@with_hyperparameters()
 class SAFMN(nn.Module):
+    hyperparameters = {}
+
     def __init__(self, dim: int, n_blocks=8, ffn_scale=2.0, upscaling_factor=4):
         super().__init__()
         self.to_feat = nn.Conv2d(3, dim, 3, 1, 1)

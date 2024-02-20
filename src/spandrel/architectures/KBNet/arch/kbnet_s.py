@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from .kb_utils import KBAFunction, LayerNorm2d, SimpleGate
 
@@ -197,7 +199,10 @@ class KBBlock_s(nn.Module):
         return y + x * self.gamma
 
 
+@with_hyperparameters()
 class KBNet_s(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         img_channel=3,

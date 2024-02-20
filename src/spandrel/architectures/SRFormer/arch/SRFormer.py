@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -959,6 +961,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
+@with_hyperparameters()
 class SRFormer(nn.Module):
     r"""SRFormer
         A PyTorch implement of : `SRFormer: Permuted Self-Attention for Single Image Super-Resolution`, based on Swin Transformer.
@@ -986,6 +989,8 @@ class SRFormer(nn.Module):
         upsampler: The reconstruction reconstruction module. 'pixelshuffle'/'pixelshuffledirect'/'nearest+conv'/None
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

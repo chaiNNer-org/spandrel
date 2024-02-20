@@ -10,6 +10,8 @@ import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
+from spandrel.util import with_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 
 # Originally from the timm package
@@ -785,6 +787,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
+@with_hyperparameters()
 class SwinIR(nn.Module):
     r"""SwinIR
         A PyTorch impl of : `SwinIR: Image Restoration Using Swin Transformer`, based on Swin Transformer.
@@ -812,6 +815,8 @@ class SwinIR(nn.Module):
         upsampler: The reconstruction reconstruction module. 'pixelshuffle'/'pixelshuffledirect'/'nearest+conv'/None
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,
