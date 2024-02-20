@@ -5,6 +5,7 @@ A module containing commonly-used functionality to implement architectures.
 from __future__ import annotations
 
 import functools
+import inspect
 import math
 from typing import Any, Literal, Mapping, Protocol, TypeVar
 
@@ -115,6 +116,19 @@ def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
     Stores the hyperparameters of a class in a `hyperparameters` attribute.
     """
 
+    def get_arg_defaults(spec: inspect.FullArgSpec) -> dict[str, Any]:
+        defaults = {}
+        if spec.kwonlydefaults is not None:
+            defaults = spec.kwonlydefaults
+
+        if spec.defaults is not None:
+            defaults = {
+                **defaults,
+                **dict(zip(spec.args[-len(spec.defaults) :], spec.defaults)),
+            }
+
+        return defaults
+
     class WithHyperparameters(Protocol):
         hyperparameters: dict[str, Any]
 
@@ -122,6 +136,9 @@ def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
 
     def with_hyperparameters(cls: type[C]) -> type[C]:
         old_init = cls.__init__
+
+        spec = inspect.getfullargspec(old_init)
+        defaults = get_arg_defaults(spec)
 
         @functools.wraps(old_init)
         def new_init(self: C, **kwargs):
@@ -134,7 +151,7 @@ def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
                         )
                     del kwargs[k]
 
-            self.hyperparameters = {**extra_parameters, **kwargs}
+            self.hyperparameters = {**extra_parameters, **defaults, **kwargs}
             old_init(self, **kwargs)
 
         cls.__init__ = new_init
