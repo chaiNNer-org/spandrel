@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from .utils import (
     Conv2dLayer,
@@ -1586,7 +1586,7 @@ class Generator(nn.Module):
         return img
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class MAT(nn.Module):
     hyperparameters = {}
 

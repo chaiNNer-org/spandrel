@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
@@ -961,7 +961,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SRFormer(nn.Module):
     r"""SRFormer
         A PyTorch implement of : `SRFormer: Permuted Self-Attention for Single Image Super-Resolution`, based on Swin Transformer.

@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.transforms.functional import InterpolationMode, rotate
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 class LearnableSpatialTransformWrapper(nn.Module):
@@ -664,7 +664,7 @@ class FFCResNetGenerator(nn.Module):
         return self.model(torch.cat([image, mask], dim=1))
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class LaMa(nn.Module):
     hyperparameters = {}
 

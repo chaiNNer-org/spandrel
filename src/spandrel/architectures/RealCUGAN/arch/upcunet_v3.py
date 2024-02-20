@@ -11,7 +11,7 @@ from torch import Tensor
 from torch import nn as nn
 from torch.nn import functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 def q(inp, cache_mode):
@@ -286,7 +286,7 @@ class UNet2(nn.Module):
         return z
 
 
-@with_hyperparameters(extra_parameters={"scale": 2})
+@store_hyperparameters(extra_parameters={"scale": 2})
 class UpCunet2x(nn.Module):
     hyperparameters = {}
 
@@ -328,7 +328,7 @@ class UpCunet2x(nn.Module):
         return x
 
 
-@with_hyperparameters(extra_parameters={"scale": 3})
+@store_hyperparameters(extra_parameters={"scale": 3})
 class UpCunet3x(nn.Module):
     hyperparameters = {}
 
@@ -370,7 +370,7 @@ class UpCunet3x(nn.Module):
         return x
 
 
-@with_hyperparameters(extra_parameters={"scale": 4})
+@store_hyperparameters(extra_parameters={"scale": 4})
 class UpCunet4x(nn.Module):
     hyperparameters = {}
 

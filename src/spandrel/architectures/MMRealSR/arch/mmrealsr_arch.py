@@ -4,7 +4,7 @@ from torch.nn import functional as F
 from torch.nn import init
 from torch.nn.modules.batchnorm import _BatchNorm  # type: ignore
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 @torch.no_grad()  # type: ignore
@@ -530,7 +530,7 @@ class MMRRDBNet_decouple(nn.Module):
         return out, degrees
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class MMRRDBNet_test(nn.Module):
     """Networks consisting of Residual in Residual Dense Block, which is used in ESRGAN. v2.1
 

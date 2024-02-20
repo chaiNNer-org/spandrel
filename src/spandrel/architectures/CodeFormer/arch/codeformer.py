@@ -15,7 +15,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 class VectorQuantizer(nn.Module):
@@ -604,7 +604,7 @@ class Fuse_sft_block(nn.Module):
         return out
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class CodeFormer(VQAutoEncoder):
     hyperparameters = {}
 

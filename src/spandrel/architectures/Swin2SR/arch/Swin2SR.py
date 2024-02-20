@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 
@@ -880,7 +880,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class Swin2SR(nn.Module):
     r"""Swin2SR
         A PyTorch impl of : `Swin2SR: SwinV2 Transformer for Compressed Image Super-Resolution and Restoration`.

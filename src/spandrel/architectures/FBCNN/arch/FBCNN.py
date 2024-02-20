@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 """
 # --------------------------------------------
@@ -405,7 +405,7 @@ class QFAttention(nn.Module):
         return x + res
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class FBCNN(nn.Module):
     hyperparameters = {}
 

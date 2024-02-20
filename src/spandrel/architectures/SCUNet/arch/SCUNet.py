@@ -10,7 +10,7 @@ import torch.nn as nn
 from einops import rearrange
 from einops.layers.torch import Rearrange
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.drop import DropPath
@@ -274,7 +274,7 @@ class ConvTransBlock(nn.Module):
         return x
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SCUNet(nn.Module):
     hyperparameters = {}
 

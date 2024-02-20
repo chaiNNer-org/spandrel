@@ -11,7 +11,7 @@ from typing import Literal
 import torch
 import torch.nn as nn
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
@@ -184,7 +184,7 @@ class TransformerStage(nn.Module):
         pass
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class GRL(nn.Module):
     r"""Image restoration transformer with global, non-local, and local connections
     Args:

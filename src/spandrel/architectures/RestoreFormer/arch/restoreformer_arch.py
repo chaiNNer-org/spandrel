@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 class VectorQuantizer(nn.Module):
@@ -669,7 +669,7 @@ class MultiHeadDecoderTransformer(nn.Module):
         return h
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class RestoreFormer(nn.Module):
     hyperparameters = {}
 

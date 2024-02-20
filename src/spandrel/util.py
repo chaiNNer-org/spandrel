@@ -111,7 +111,7 @@ def get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, int
     )
 
 
-def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
+def store_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
     """
     Stores the hyperparameters of a class in a `hyperparameters` attribute.
     """
@@ -134,7 +134,7 @@ def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
 
     C = TypeVar("C", bound=WithHyperparameters)
 
-    def with_hyperparameters(cls: type[C]) -> type[C]:
+    def inner(cls: type[C]) -> type[C]:
         old_init = cls.__init__
 
         spec = inspect.getfullargspec(old_init)
@@ -157,7 +157,7 @@ def with_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
         cls.__init__ = new_init
         return cls
 
-    return with_hyperparameters
+    return inner
 
 
 __all__ = [
@@ -165,5 +165,5 @@ __all__ = [
     "get_first_seq_index",
     "get_seq_len",
     "get_scale_and_output_channels",
-    "with_hyperparameters",
+    "store_hyperparameters",
 ]

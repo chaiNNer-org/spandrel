@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
@@ -863,7 +863,7 @@ class Upsample(nn.Sequential):
         super().__init__(*m)
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class HAT(nn.Module):
     r"""Hybrid Attention Transformer
         A PyTorch implementation of : `Activating More Pixels in Image Super-Resolution Transformer`.

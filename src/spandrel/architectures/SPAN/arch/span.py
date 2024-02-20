@@ -7,7 +7,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn as nn
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 def _make_pair(value):
@@ -231,7 +231,7 @@ class SPAB(nn.Module):
         return out, out1, sim_att
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SPAN(nn.Module):
     """
     Swift Parameter-free Attention Network for Efficient Super-Resolution

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from .kb_utils import KBAFunction, LayerNorm2d, SimpleGate
@@ -199,7 +199,7 @@ class KBBlock_s(nn.Module):
         return y + x * self.gamma
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class KBNet_s(nn.Module):
     hyperparameters = {}
 

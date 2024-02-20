@@ -6,7 +6,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from .stylegan2_clean_arch import StyleGAN2GeneratorClean
 
@@ -174,7 +174,7 @@ class ResBlock(nn.Module):
         return out
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class GFPGANv1Clean(nn.Module):
     """The GFPGAN architecture: Unet + StyleGAN2 decoder with SFT.
     It is the clean version without custom compiled CUDA extensions used in StyleGAN2.

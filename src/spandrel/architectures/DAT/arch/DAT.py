@@ -10,7 +10,7 @@ from einops import rearrange
 from einops.layers.torch import Rearrange
 from torch.nn import functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.timm.drop import DropPath
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -895,7 +895,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class DAT(nn.Module):
     """Dual Aggregation Transformer
     Args:

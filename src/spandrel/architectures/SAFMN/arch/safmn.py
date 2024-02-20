@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 # Layer Norm
@@ -158,7 +158,7 @@ class AttBlock(nn.Module):
         return x
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SAFMN(nn.Module):
     hyperparameters = {}
 

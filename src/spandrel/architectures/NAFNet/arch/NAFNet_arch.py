@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from .arch_util import LayerNorm2d
 
@@ -135,7 +135,7 @@ class NAFBlock(nn.Module):
         return y + x * self.gamma
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class NAFNet(nn.Module):
     hyperparameters = {}
 

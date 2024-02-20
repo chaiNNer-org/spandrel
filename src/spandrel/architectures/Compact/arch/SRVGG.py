@@ -3,10 +3,10 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SRVGGNetCompact(nn.Module):
     """A compact VGG-style network structure for super-resolution.
 

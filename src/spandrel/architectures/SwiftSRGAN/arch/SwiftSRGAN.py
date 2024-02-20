@@ -6,7 +6,7 @@ import math
 import torch
 from torch import nn
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 class SeperableConv2d(nn.Module):
@@ -91,7 +91,7 @@ class ResidualBlock(nn.Module):
         return out + x
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class Generator(nn.Module):
     """Swift-SRGAN Generator
     Args:

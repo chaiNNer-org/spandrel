@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 
@@ -787,7 +787,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class SwinIR(nn.Module):
     r"""SwinIR
         A PyTorch impl of : `SwinIR: Image Restoration Using Swin Transformer`, based on Swin Transformer.

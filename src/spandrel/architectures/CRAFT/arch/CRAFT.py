@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from einops import rearrange
 from torch.nn.init import trunc_normal_
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 
 def img2windows(img, H_sp, W_sp):
@@ -727,7 +727,7 @@ class UpsampleOneStep(nn.Sequential):
         super().__init__(*m)
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class CRAFT(nn.Module):
     r"""Cross-Refinement Adaptive Fusion Transformer
         Some codes are based on SwinIR.

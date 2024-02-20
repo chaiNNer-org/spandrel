@@ -12,14 +12,14 @@
 import torch
 import torch.nn as nn
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from ...__arch_helpers.padding import pad_to_multiple
 from .OSAG import OSAG
 from .pixelshuffle import pixelshuffle_block
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class OmniSR(nn.Module):
     hyperparameters = {}
 

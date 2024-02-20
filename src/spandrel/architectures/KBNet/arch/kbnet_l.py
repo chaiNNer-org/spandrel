@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torch.nn.init as init
 from einops import rearrange
 
-from spandrel.util import with_hyperparameters
+from spandrel.util import store_hyperparameters
 
 from .kb_utils import KBAFunction, LayerNorm2d, SimpleGate
 
@@ -217,7 +217,7 @@ class KBBlock_l(nn.Module):
         return x
 
 
-@with_hyperparameters()
+@store_hyperparameters()
 class KBNet_l(nn.Module):
     hyperparameters = {}
 
