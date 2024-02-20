@@ -14,8 +14,6 @@ class UnsupportedModelError(Exception):
     An error that will be thrown by `ArchRegistry` and `ModelLoader` if a model architecture is not supported.
     """
 
-    pass
-
 
 @dataclass(frozen=True)
 class ArchSupport:

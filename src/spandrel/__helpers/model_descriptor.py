@@ -138,8 +138,6 @@ class UnsupportedDtypeError(Exception):
     See `ModelBase.to` for more information.
     """
 
-    pass
-
 
 class ModelBase(ABC, Generic[T]):
     """
