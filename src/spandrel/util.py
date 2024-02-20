@@ -140,6 +140,15 @@ def store_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
         spec = inspect.getfullargspec(old_init)
         defaults = get_arg_defaults(spec)
 
+        if spec.varargs is not None:
+            raise UserWarning(
+                "Class has *args, which is not allowed in combination with @store_hyperparameters"
+            )
+        if spec.varkw is not None:
+            raise UserWarning(
+                "Class has **kwargs, which is not allowed in combination with @store_hyperparameters"
+            )
+
         @functools.wraps(old_init)
         def new_init(self: C, **kwargs):
             # remove extra parameters from kwargs
