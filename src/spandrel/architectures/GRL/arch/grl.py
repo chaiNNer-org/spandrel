@@ -235,9 +235,9 @@ class GRL(nn.Module):
         self,
         img_size=64,
         in_channels: int = 3,
-        out_channels: int | None = None,
+        out_channels: int = 3,
         embed_dim=96,
-        upscale=2,
+        upscale=1,
         img_range=1.0,
         upsampler="",
         depths: list[int] = [6, 6, 6, 6, 6, 6],
@@ -269,7 +269,6 @@ class GRL(nn.Module):
     ):
         super().__init__()
         # Process the input arguments
-        out_channels = out_channels or in_channels
         self.in_channels = in_channels
         self.out_channels = out_channels
         num_out_feats = 64

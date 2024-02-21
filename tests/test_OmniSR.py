@@ -25,11 +25,6 @@ def test_load():
         lambda: OmniSR(window_size=5),
         lambda: OmniSR(res_num=3),
         lambda: OmniSR(up_scale=5),
-        condition=lambda a, b: (
-            a.res_num == b.res_num
-            and a.up_scale == b.up_scale
-            and a.window_size == b.window_size
-        ),
     )
 
 

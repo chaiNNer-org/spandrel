@@ -1011,7 +1011,7 @@ class SRFormer(nn.Module):
         ape=False,
         patch_norm=True,
         use_checkpoint=False,
-        upscale=2,
+        upscale=1,
         img_range=1.0,
         upsampler="",
         resi_connection="1conv",

@@ -16,19 +16,6 @@ def test_load():
         lambda: SwinIR(window_size=8),
         lambda: SwinIR(depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6], window_size=8),
         lambda: SwinIR(depths=[6, 6, 2, 1], num_heads=[6, 4, 6, 3], window_size=8),
-        condition=lambda a, b: (
-            a.img_range == b.img_range
-            and (not a.upsampler or a.upscale == b.upscale)
-            and a.upsampler == b.upsampler
-            and a.window_size == b.window_size
-            and a.num_layers == b.num_layers
-            and a.embed_dim == b.embed_dim
-            and a.ape == b.ape
-            and a.patch_norm == b.patch_norm
-            and a.num_features == b.num_features
-            and a.mlp_ratio == b.mlp_ratio
-            and a.patches_resolution == b.patches_resolution
-        ),
     )
 
 

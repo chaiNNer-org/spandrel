@@ -27,7 +27,6 @@ def test_load():
             enc_blk_nums=[1, 1, 1, 28],
             dec_blk_nums=[1, 1, 1, 1],
         ),
-        condition=lambda a, b: (a.padder_size == b.padder_size),
     )
 
 

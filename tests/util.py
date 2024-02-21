@@ -7,12 +7,13 @@ import random
 import re
 import sys
 import zipfile
+from collections.abc import Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
 from inspect import getsource
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Protocol, TypeVar, runtime_checkable
 from urllib.parse import unquote, urlencode, urlparse
 
 import cv2
@@ -279,34 +280,71 @@ def assert_image_inference(
 T = TypeVar("T", bound=torch.nn.Module)
 
 
-def _get_different_keys(a: Any, b: Any, keys: list[str]) -> str:
+def _get_diff(a: Mapping[str, object], b: Mapping[str, object]) -> str | None:
     lines: list[str] = []
 
-    keys = list(set(dir(a)).intersection(keys))
+    keys = list(set(a.keys()).union(b.keys()))
     keys.sort()
 
+    is_different = False
+
     for key in keys:
-        a_val = getattr(a, key)
-        b_val = getattr(b, key)
+        a_val = a.get(key, "<missing>")
+        b_val = b.get(key, "<missing>")
+
+        # make lists and tuples comparable
+        if (
+            type(a_val) != type(b_val)
+            and isinstance(a_val, (list, tuple))
+            and isinstance(b_val, (list, tuple))
+        ):
+            if isinstance(a_val, tuple):
+                a_val = list(a_val)
+            if isinstance(b_val, tuple):
+                b_val = list(b_val)
+
         if a_val == b_val:
-            lines.append(f"{key}: {a_val}")
+            lines.append(f"  {key}: {a_val}")
         else:
-            lines.append(f"{key}: {a_val} != {b_val}")
+            lines.append(f"> {key}: {a_val} != {b_val}")
+            is_different = True
+
+    if not is_different:
+        return None
 
     return "\n".join(lines)
-
-
-def _get_compare_keys(condition: Callable) -> list[str]:
-    pattern = re.compile(r"a\.(\w+)")
-    return [m.group(1) for m in pattern.finditer(getsource(condition))]
 
 
 def assert_loads_correctly(
     arch: Architecture[T],
     *models: Callable[[], T],
-    condition: Callable[[T, T], bool] = lambda _a, _b: True,
     check_safe_tensors: bool = True,
+    ignore_parameters: set[str] | None = None,
 ):
+    @runtime_checkable
+    class WithHyperparameters(Protocol):
+        hyperparameters: dict[str, Any]
+
+    def assert_same(model_name: str, a: T, b: T) -> None:
+        assert (
+            type(b) == type(a)
+        ), f"Expected {model_name} to be loaded correctly, but found a {type(b)} instead."
+
+        assert isinstance(a, WithHyperparameters)
+        assert isinstance(b, WithHyperparameters)
+
+        a_hp = {**a.hyperparameters}
+        b_hp = {**b.hyperparameters}
+
+        if ignore_parameters is not None:
+            for param in ignore_parameters:
+                a_hp.pop(param, None)
+                b_hp.pop(param, None)
+
+        diff = _get_diff(a_hp, b_hp)
+        if diff:
+            raise AssertionError(f"Failed condition for {model_name}. Keys:\n\n{diff}")
+
     for model_fn in models:
         model_name = getsource(model_fn)
         try:
@@ -320,14 +358,7 @@ def assert_loads_correctly(
         except Exception as e:
             raise AssertionError(f"Failed to load: {model_name}") from e
 
-        assert (
-            type(loaded.model) == type(model)
-        ), f"Expected {model_name} to be loaded correctly, but found a {type(loaded.model)} instead."
-
-        assert condition(model, loaded.model), (
-            f"Failed condition for {model_name}."
-            f" Keys:\n\n{_get_different_keys(model, loaded.model, _get_compare_keys(condition))}"
-        )
+        assert_same(model_name, model, loaded.model)
 
         if check_safe_tensors:
             try:
@@ -344,10 +375,7 @@ def assert_loads_correctly(
                     f"Failed to load from safetensors: {model_name}"
                 ) from e
 
-            assert condition(model, sf_loaded.model), (
-                f"Failed condition for {model_name}."
-                f" Keys:\n\n{_get_different_keys(model, sf_loaded.model, _get_compare_keys(condition))}"
-            )
+            assert_same(model_name, model, sf_loaded.model)
 
 
 def seed_rngs(seed: int) -> None:

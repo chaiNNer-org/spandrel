@@ -108,24 +108,15 @@ def test_load():
             conv_type="1conv",
             upsampler="pixelshuffle",
         ),
-        condition=lambda a, b: (
-            a.in_channels == b.in_channels
-            and a.out_channels == b.out_channels
-            and a.embed_dim == b.embed_dim
-            and a.upsampler == b.upsampler
-            # upscale is only defined if we have an upsampler
-            and (not a.upsampler or a.upscale == b.upscale)
-            and a.input_resolution == b.input_resolution
-            # those aren't supported right now
-            # and a.pad_size == b.pad_size
-            # and a.window_size == b.window_size
-            # and a.stripe_size == b.stripe_size
-            # and a.shift_size == b.shift_size
-            and a.stripe_groups == b.stripe_groups
-            and a.pretrained_window_size == b.pretrained_window_size
-            and a.pretrained_stripe_size == b.pretrained_stripe_size
-            # and a.anchor_window_down_factor == b.anchor_window_down_factor
-        ),
+        # those aren't supported yet
+        ignore_parameters={
+            "anchor_window_down_factor",
+            "pad_size",
+            "window_size",
+            "stripe_size",
+            "shift_size",
+            "stripe_shift",
+        },
     )
 
 

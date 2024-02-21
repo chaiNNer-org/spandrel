@@ -251,7 +251,7 @@ class FeMaSRNet(nn.Module):
         norm_type="gn",
         act_type="silu",
         use_quantize=True,
-        scale_factor=4,
+        scale_factor=1,
         use_semantic_loss=False,
         use_residual=True,
     ):

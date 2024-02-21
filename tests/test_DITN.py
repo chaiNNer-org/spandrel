@@ -25,13 +25,6 @@ def test_load():
         lambda: DITN(ffn_expansion_factor=3),
         lambda: DITN(bias=True),
         lambda: DITN(upscale=6),
-        condition=lambda a, b: (
-            a.patch_size == b.patch_size
-            and a.dim == b.dim
-            and a.scale == b.scale
-            and a.SAL_blocks == b.SAL_blocks
-            and a.ITL_blocks == b.ITL_blocks
-        ),
     )
 
 

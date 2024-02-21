@@ -27,16 +27,10 @@ def test_load():
         lambda: FeMaSR(codebook_params=[[32, 1024, 512]]),
         lambda: FeMaSR(codebook_params=[[32, 512, 256]]),
         lambda: FeMaSR(codebook_params=[[64, 512, 256], [32, 1024, 512]]),
-        condition=lambda a, b: (
-            a.in_channel == b.in_channel
-            and a.use_quantize == b.use_quantize
-            and a.gt_res == b.gt_res
-            and a.LQ_stage == b.LQ_stage
-            and a.scale_factor == b.scale_factor
-            and a.use_residual == b.use_residual
-            and a.max_depth == b.max_depth
-            and a.use_semantic_loss == b.use_semantic_loss
-        ),
+        ignore_parameters={
+            # there are multiple equivalent codebook_params for some models
+            "codebook_params"
+        },
     )
 
 

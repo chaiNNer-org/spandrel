@@ -39,6 +39,9 @@ class SPSRArch(Architecture[SPSR]):
             upscale_blocks = (get_seq_len(state_dict, "model") - 3) // 3
             upscale = 2**upscale_blocks
 
+        if upscale == 1:
+            upsample_mode = "upconv"
+
         model = SPSR(
             in_nc=in_nc,
             out_nc=out_nc,

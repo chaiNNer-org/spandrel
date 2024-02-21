@@ -36,18 +36,6 @@ def test_load():
         lambda: SRFormer(window_size=8, upscale=3, upsampler="pixelshuffledirect"),
         lambda: SRFormer(window_size=8, upscale=4, upsampler="pixelshuffledirect"),
         lambda: SRFormer(window_size=8, upscale=4, upsampler="nearest+conv"),
-        condition=lambda a, b: (
-            a.num_layers == b.num_layers
-            and a.upsampler == b.upsampler
-            and (not a.upsampler or a.upscale == b.upscale)
-            and a.window_size == b.window_size
-            and a.embed_dim == b.embed_dim
-            and a.ape == b.ape
-            and a.patch_norm == b.patch_norm
-            and a.num_features == b.num_features
-            and a.mlp_ratio == b.mlp_ratio
-            and a.patches_resolution == b.patches_resolution
-        ),
     )
 
 
