@@ -29,7 +29,7 @@ class KeyCondition:
     def has_any(*keys: str | KeyCondition) -> KeyCondition:
         return KeyCondition("any", keys)
 
-    def __call__(self, state_dict: dict[str, Any]) -> bool:
+    def __call__(self, state_dict: Mapping[str, object]) -> bool:
         def _detect(key: str | KeyCondition) -> bool:
             if isinstance(key, KeyCondition):
                 return key(state_dict)
@@ -41,7 +41,7 @@ class KeyCondition:
             return any(_detect(key) for key in self._keys)
 
 
-def get_first_seq_index(state: dict, key_pattern: str) -> int:
+def get_first_seq_index(state_dict: Mapping[str, object], key_pattern: str) -> int:
     """
     Returns the maximum index `i` such that `key_pattern.format(str(i))` is in `state`.
 
@@ -52,12 +52,12 @@ def get_first_seq_index(state: dict, key_pattern: str) -> int:
         get_first_seq_index(state, "body.{}.weight") -> 3
     """
     for i in range(100):
-        if key_pattern.format(str(i)) in state:
+        if key_pattern.format(str(i)) in state_dict:
             return i
     return -1
 
 
-def get_seq_len(state: dict[str, Any], seq_key: str) -> int:
+def get_seq_len(state_dict: Mapping[str, object], seq_key: str) -> int:
     """
     Returns the length of a sequence in the state dict.
 
@@ -70,7 +70,7 @@ def get_seq_len(state: dict[str, Any], seq_key: str) -> int:
     prefix = seq_key + "."
 
     keys: set[int] = set()
-    for k in state.keys():
+    for k in state_dict.keys():
         if k.startswith(prefix):
             index = k[len(prefix) :].split(".", maxsplit=1)[0]
             keys.add(int(index))
@@ -111,7 +111,7 @@ def get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, int
     )
 
 
-def store_hyperparameters(*, extra_parameters: Mapping[str, Any] = {}):
+def store_hyperparameters(*, extra_parameters: Mapping[str, object] = {}):
     """
     Stores the hyperparameters of a class in a `hyperparameters` attribute.
     """
