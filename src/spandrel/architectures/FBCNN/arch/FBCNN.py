@@ -4,6 +4,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from spandrel.util import store_hyperparameters
+
 """
 # --------------------------------------------
 # Advanced nn.Sequential
@@ -403,7 +405,10 @@ class QFAttention(nn.Module):
         return x + res
 
 
+@store_hyperparameters()
 class FBCNN(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         in_nc=3,

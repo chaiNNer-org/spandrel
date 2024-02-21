@@ -6,6 +6,8 @@ import math
 import torch
 from torch import nn
 
+from spandrel.util import store_hyperparameters
+
 
 class SeperableConv2d(nn.Module):
     def __init__(
@@ -89,6 +91,7 @@ class ResidualBlock(nn.Module):
         return out + x
 
 
+@store_hyperparameters()
 class Generator(nn.Module):
     """Swift-SRGAN Generator
     Args:
@@ -99,6 +102,8 @@ class Generator(nn.Module):
     Returns:
         torch.Tensor: super resolution image
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

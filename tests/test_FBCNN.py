@@ -23,7 +23,6 @@ def test_load():
         lambda: FBCNN(upsample_mode="convtranspose"),
         lambda: FBCNN(upsample_mode="upconv"),
         lambda: FBCNN(upsample_mode="pixelshuffle"),
-        condition=lambda a, b: (a.nb == b.nb and a.nc == b.nc),
     )
 
 

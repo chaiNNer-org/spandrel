@@ -10,6 +10,8 @@ from einops import rearrange
 from einops.layers.torch import Rearrange
 from torch.nn import functional as F
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.timm.drop import DropPath
 from ...__arch_helpers.timm.weight_init import trunc_normal_
 
@@ -893,6 +895,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
+@store_hyperparameters()
 class DAT(nn.Module):
     """Dual Aggregation Transformer
     Args:
@@ -915,6 +918,8 @@ class DAT(nn.Module):
         img_range: Image range. 1. or 255.
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

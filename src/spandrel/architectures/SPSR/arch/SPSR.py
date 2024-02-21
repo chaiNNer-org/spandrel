@@ -7,6 +7,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers import block as B
 
 
@@ -35,7 +37,10 @@ class Get_gradient_nopadding(nn.Module):
         return x
 
 
+@store_hyperparameters()
 class SPSRNet(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         in_nc,

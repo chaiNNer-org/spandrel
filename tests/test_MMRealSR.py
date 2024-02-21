@@ -59,11 +59,11 @@ def test_load():
             num_blocks=[2, 2, 2, 2],
             downscales=[1, 1, 2, 1],
         ),
-        condition=lambda a, b: (
-            a.scale == b.scale
-            and a.num_degradation == b.num_degradation
-            and a.num_block == b.num_block
-        ),
+        # "downscales", "num_blocks", and "num_feats" are not uniquely determined by
+        # the state dict. The issue is that there are certain configurations of those
+        # parameters that are equivalent. What we detect is simple *a* configuration,
+        # that is equivalent to the one used for the model.
+        ignore_parameters={"downscales", "num_blocks", "num_feats"},
     )
 
 

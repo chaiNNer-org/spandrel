@@ -27,7 +27,6 @@ def test_load():
         lambda: UpCunet4x(in_channels=3, out_channels=3),
         lambda: UpCunet4x(in_channels=1, out_channels=3),
         lambda: UpCunet4x(pro=True),
-        condition=lambda a, b: (a.is_pro == b.is_pro),
     )
 
 

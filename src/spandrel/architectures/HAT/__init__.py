@@ -111,7 +111,6 @@ class HATArch(Architecture[HAT]):
         else:
             # 1x model
             upsampler = ""
-            num_feat = 0  # only used for upscaling
 
             upscale = 1
 

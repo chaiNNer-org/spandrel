@@ -13,6 +13,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 
 # Originally from the timm package
@@ -878,6 +880,7 @@ class UpsampleOneStep(nn.Sequential):
         return flops
 
 
+@store_hyperparameters()
 class Swin2SR(nn.Module):
     r"""Swin2SR
         A PyTorch impl of : `Swin2SR: SwinV2 Transformer for Compressed Image Super-Resolution and Restoration`.
@@ -904,6 +907,8 @@ class Swin2SR(nn.Module):
         upsampler: The reconstruction reconstruction module. 'pixelshuffle'/'pixelshuffledirect'/'nearest+conv'/None
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

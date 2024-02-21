@@ -35,13 +35,6 @@ def test_load():
         lambda: DAT(qkv_bias=False),
         lambda: DAT(split_size=[4, 4]),
         lambda: DAT(split_size=[2, 8]),
-        condition=lambda a, b: (
-            a.num_layers == b.num_layers
-            and a.upscale == b.upscale
-            and a.upsampler == b.upsampler
-            and a.embed_dim == b.embed_dim
-            and a.num_features == b.num_features
-        ),
     )
 
 

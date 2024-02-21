@@ -24,12 +24,6 @@ def test_load():
         lambda: SPAN(num_in_ch=3, num_out_ch=3, upscale=4),
         lambda: SPAN(num_in_ch=3, num_out_ch=3, upscale=8),
         lambda: SPAN(num_in_ch=3, num_out_ch=3, norm=False),
-        condition=lambda a, b: (
-            a.in_channels == b.in_channels
-            and a.out_channels == b.out_channels
-            and a.img_range == b.img_range
-            and a.is_norm == b.is_norm
-        ),
     )
 
 

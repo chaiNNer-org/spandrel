@@ -29,13 +29,6 @@ def test_load():
         lambda: CRAFT(split_size_0=4, split_size_1=16),
         lambda: CRAFT(split_size_0=10, split_size_1=12),
         lambda: CRAFT(resi_connection="identity"),
-        condition=lambda a, b: (
-            a.num_layers == b.num_layers
-            and a.upscale == b.upscale
-            and a.embed_dim == b.embed_dim
-            and a.split_size == b.split_size
-            and a.window_size == b.window_size
-        ),
     )
 
 

@@ -4,8 +4,10 @@ A module containing commonly-used functionality to implement architectures.
 
 from __future__ import annotations
 
+import functools
+import inspect
 import math
-from typing import Literal, Mapping
+from typing import Any, Literal, Mapping, Protocol, TypeVar
 
 
 class KeyCondition:
@@ -109,9 +111,68 @@ def get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, int
     )
 
 
+def store_hyperparameters(*, extra_parameters: Mapping[str, object] = {}):
+    """
+    Stores the hyperparameters of a class in a `hyperparameters` attribute.
+    """
+
+    def get_arg_defaults(spec: inspect.FullArgSpec) -> dict[str, Any]:
+        defaults = {}
+        if spec.kwonlydefaults is not None:
+            defaults = spec.kwonlydefaults
+
+        if spec.defaults is not None:
+            defaults = {
+                **defaults,
+                **dict(zip(spec.args[-len(spec.defaults) :], spec.defaults)),
+            }
+
+        return defaults
+
+    class WithHyperparameters(Protocol):
+        hyperparameters: dict[str, Any]
+
+    C = TypeVar("C", bound=WithHyperparameters)
+
+    def inner(cls: type[C]) -> type[C]:
+        old_init = cls.__init__
+
+        spec = inspect.getfullargspec(old_init)
+        defaults = get_arg_defaults(spec)
+
+        if spec.varargs is not None:
+            raise UserWarning(
+                "Class has *args, which is not allowed in combination with @store_hyperparameters"
+            )
+        if spec.varkw is not None:
+            raise UserWarning(
+                "Class has **kwargs, which is not allowed in combination with @store_hyperparameters"
+            )
+
+        @functools.wraps(old_init)
+        def new_init(self: C, **kwargs):
+            # remove extra parameters from kwargs
+            for k, v in extra_parameters.items():
+                if k in kwargs:
+                    if kwargs[k] != v:
+                        raise ValueError(
+                            f"Expected hyperparameter {k} to be {v}, but got {kwargs[k]}"
+                        )
+                    del kwargs[k]
+
+            self.hyperparameters = {**extra_parameters, **defaults, **kwargs}
+            old_init(self, **kwargs)
+
+        cls.__init__ = new_init
+        return cls
+
+    return inner
+
+
 __all__ = [
     "KeyCondition",
     "get_first_seq_index",
     "get_seq_len",
     "get_scale_and_output_channels",
+    "store_hyperparameters",
 ]

@@ -8,6 +8,8 @@ import torch.nn.functional as F
 from einops import rearrange
 from torch.nn.init import trunc_normal_
 
+from spandrel.util import store_hyperparameters
+
 
 def img2windows(img, H_sp, W_sp):
     """
@@ -725,6 +727,7 @@ class UpsampleOneStep(nn.Sequential):
         super().__init__(*m)
 
 
+@store_hyperparameters()
 class CRAFT(nn.Module):
     r"""Cross-Refinement Adaptive Fusion Transformer
         Some codes are based on SwinIR.
@@ -741,6 +744,8 @@ class CRAFT(nn.Module):
         img_range: Image range. 1. or 255.
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

@@ -11,6 +11,8 @@ from typing import Literal
 import torch
 import torch.nn as nn
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -182,6 +184,7 @@ class TransformerStage(nn.Module):
         pass
 
 
+@store_hyperparameters()
 class GRL(nn.Module):
     r"""Image restoration transformer with global, non-local, and local connections
     Args:
@@ -226,13 +229,15 @@ class GRL(nn.Module):
 
     """
 
+    hyperparameters = {}
+
     def __init__(
         self,
         img_size=64,
         in_channels: int = 3,
-        out_channels: int | None = None,
+        out_channels: int = 3,
         embed_dim=96,
-        upscale=2,
+        upscale=1,
         img_range=1.0,
         upsampler="",
         depths: list[int] = [6, 6, 6, 6, 6, 6],
@@ -264,7 +269,6 @@ class GRL(nn.Module):
     ):
         super().__init__()
         # Process the input arguments
-        out_channels = out_channels or in_channels
         self.in_channels = in_channels
         self.out_channels = out_channels
         num_out_feats = 64
