@@ -51,13 +51,13 @@ class FFTformerArch(Architecture[FFTformer]):
 
     @override
     def load(self, state_dict: StateDict) -> ImageModelDescriptor[FFTformer]:
-        # inp_channels=3
-        # out_channels = 3
-        # dim=48
+        inp_channels = 3
+        out_channels = 3
+        dim = 48
         num_blocks = [6, 6, 12]
-        # num_refinement_blocks=4
-        # ffn_expansion_factor = 3
-        # bias = False
+        num_refinement_blocks = 4
+        ffn_expansion_factor = 3
+        bias = False
 
         inp_channels = state_dict["patch_embed.proj.weight"].shape[1]
         out_channels = state_dict["output.weight"].shape[0]
