@@ -19,6 +19,7 @@ class DATArch(Architecture[DAT]):
             id="DAT",
             detect=KeyCondition.has_all(
                 "layers.0.blocks.2.attn.attn_mask_0",
+                "layers.0.blocks.0.ffn.fc1.weight",
                 "conv_first.weight",
             ),
         )
