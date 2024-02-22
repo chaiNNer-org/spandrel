@@ -112,7 +112,7 @@ class RestormerArch(Architecture[Restormer]):
             state_dict,
             architecture=self,
             purpose="Restoration",
-            tags=[],
+            tags=[f"{dim}dim"],
             supports_half=False,  # TODO: verify
             supports_bfloat16=True,
             scale=1,
