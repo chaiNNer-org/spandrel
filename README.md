@@ -103,6 +103,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [NAFNet](https://github.com/megvii-research/NAFNet) | [Models](https://github.com/megvii-research/NAFNet#results-and-pre-trained-models)
 - [Restormer](https://github.com/swz30/Restormer) | [Models](https://github.com/swz30/Restormer/releases/tag/v1.0)
 - [FFTformer](https://github.com/kkkls/FFTformer) | [Models](https://github.com/kkkls/FFTformer/releases/tag/pretrain_model)
+- [M3SNet](https://github.com/Tombs98/M3SNet) | [Models](https://drive.google.com/drive/folders/1y4BEX7LagtXVO98ZItSbJJl7WWM3gnbD)
 
 #### DeJPEG
 
