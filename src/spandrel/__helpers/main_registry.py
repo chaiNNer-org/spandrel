@@ -20,6 +20,7 @@ from ..architectures import (
     FeMaSR,
     KBNet,
     LaMa,
+    M3SNet,
     MMRealSR,
     NAFNet,
     OmniSR,
@@ -71,5 +72,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DDColor.DDColorArch()),
     ArchSupport.from_architecture(SAFMN.SAFMNArch()),
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
+    ArchSupport.from_architecture(M3SNet.M3SNetArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
