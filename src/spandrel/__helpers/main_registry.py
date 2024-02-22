@@ -26,6 +26,7 @@ from ..architectures import (
     OmniSR,
     RealCUGAN,
     RestoreFormer,
+    Restormer,
     SCUNet,
     SRFormer,
     SwiftSRGAN,
@@ -73,5 +74,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(SAFMN.SAFMNArch()),
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
     ArchSupport.from_architecture(M3SNet.M3SNetArch()),
+    ArchSupport.from_architecture(Restormer.RestormerArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
