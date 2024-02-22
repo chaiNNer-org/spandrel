@@ -18,6 +18,7 @@ from ..architectures import (
     Compact,
     DDColor,
     FeMaSR,
+    FFTformer,
     KBNet,
     LaMa,
     MMRealSR,
@@ -70,6 +71,7 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(RealCUGAN.RealCUGANArch()),
     ArchSupport.from_architecture(DDColor.DDColorArch()),
     ArchSupport.from_architecture(SAFMN.SAFMNArch()),
+    ArchSupport.from_architecture(FFTformer.FFTformerArch()),
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
