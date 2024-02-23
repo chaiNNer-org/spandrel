@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_x4
   ImageModelDescriptor(
-    architecture='DCTLSA',
+    architecture=DCTLSAArch(
+      id='DCTLSA',
+      name='DCTLSA',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

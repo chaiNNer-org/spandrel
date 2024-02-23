@@ -1,4 +1,4 @@
-from spandrel.architectures.DCTLSA import DCTLSA, load
+from spandrel.architectures.DCTLSA import DCTLSA, DCTLSAArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_load():
     assert_loads_correctly(
-        load,
+        DCTLSAArch(),
         lambda: DCTLSA(in_nc=3, nf=55, num_modules=6, out_nc=3, upscale=4),
         lambda: DCTLSA(in_nc=3, nf=40, num_modules=6, out_nc=4, upscale=2),
         lambda: DCTLSA(in_nc=4, nf=20, num_modules=7, out_nc=3, upscale=1),

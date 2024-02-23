@@ -4,6 +4,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.timm.helpers import to_2tuple
 
 
@@ -454,7 +456,10 @@ class PatchUnEmbed(nn.Module):
         return flops
 
 
+@store_hyperparameters()
 class DCTLSA(nn.Module):
+    hyperparameters = {}
+
     def __init__(self, in_nc=3, nf=55, num_modules=6, out_nc=3, upscale=4, num_head=5):
         super().__init__()
         self.fea_conv = conv_layer(in_nc, nf, kernel_size=3)
