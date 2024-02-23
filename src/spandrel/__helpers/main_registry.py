@@ -3,6 +3,7 @@ from __future__ import annotations
 from ..architectures import (
     CRAFT,
     DAT,
+    DCTLSA,
     DITN,
     ESRGAN,
     FBCNN,
@@ -73,6 +74,7 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(RealCUGAN.RealCUGANArch()),
     ArchSupport.from_architecture(DDColor.DDColorArch()),
     ArchSupport.from_architecture(SAFMN.SAFMNArch()),
+    ArchSupport.from_architecture(DCTLSA.DCTLSAArch()),
     ArchSupport.from_architecture(FFTformer.FFTformerArch()),
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
     ArchSupport.from_architecture(M3SNet.M3SNetArch()),
