@@ -21,16 +21,37 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1EQ4rcOleDPSIACSdXKbZSlehyJM5sDKh/view?usp=drive_link",
-        name="4x_dctlsa_pretrained.pth",
+        "https://github.com/zengkun301/DCTLSA/raw/main/pretrained/X4.pt",
+        name="4x_dctlsa.pth",
     )
-    assert_size_requirements(file.load_model(), max_candidates=32)
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/zengkun301/DCTLSA/raw/main/pretrained/X2.pt",
+        name="2x_dctlsa.pth",
+    )
+    assert_size_requirements(file.load_model())
 
 
 def test_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1EQ4rcOleDPSIACSdXKbZSlehyJM5sDKh/view?usp=drive_link",
-        name="4x_dctlsa_pretrained.pth",
+        "https://github.com/zengkun301/DCTLSA/raw/main/pretrained/X4.pt",
+        name="4x_dctlsa.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DCTLSA)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_x2(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/zengkun301/DCTLSA/raw/main/pretrained/X2.pt",
+        name="2x_dctlsa.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)

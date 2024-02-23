@@ -1,4 +1,4 @@
-from typing import OrderedDict
+from collections import OrderedDict
 
 import torch
 import torch.nn as nn
@@ -460,7 +460,15 @@ class PatchUnEmbed(nn.Module):
 class DCTLSA(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_nc=3, nf=55, num_modules=6, out_nc=3, upscale=4, num_head=5):
+    def __init__(
+        self,
+        in_nc=3,
+        nf=55,
+        num_modules=6,
+        out_nc=3,
+        upscale=4,
+        num_head=5,
+    ):
         super().__init__()
         self.fea_conv = conv_layer(in_nc, nf, kernel_size=3)
         # self.dctb = DCTB(nf=nf,num_modules=num_modules)
