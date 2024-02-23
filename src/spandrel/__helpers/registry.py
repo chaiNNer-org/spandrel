@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, Literal
+from typing import Callable, Literal, Mapping, Sequence
 
 import torch
 
@@ -28,6 +28,8 @@ class ArchSupport:
     detect: Callable[[StateDict], bool]
     """
     Inspects the given state dict and returns True if this architecture is detected.
+
+    For most architectures, this will be the architecture's `detect` method.
     """
     before: tuple[ArchId, ...] = ()
     """
@@ -54,18 +56,19 @@ class ArchRegistry:
     """
 
     def __init__(self):
-        self._architectures: list[ArchSupport] = []
-        self._ordered: list[ArchSupport] = []
-        self._by_id: dict[ArchId, ArchSupport] = {}
+        # the registry is copy on write internally
+        self._architectures: Sequence[ArchSupport] = []
+        self._ordered: Sequence[ArchSupport] = []
+        self._by_id: Mapping[ArchId, ArchSupport] = {}
 
     def copy(self) -> ArchRegistry:
         """
         Returns a copy of the registry.
         """
         new = ArchRegistry()
-        new._architectures = self._architectures.copy()
-        new._ordered = self._ordered.copy()
-        new._by_id = self._by_id.copy()
+        new._architectures = self._architectures
+        new._ordered = self._ordered
+        new._by_id = self._by_id
         return new
 
     def __contains__(self, id: ArchId | str) -> bool:
@@ -73,6 +76,15 @@ class ArchRegistry:
 
     def __getitem__(self, id: str | ArchId) -> ArchSupport:
         return self._by_id[ArchId(id)]
+
+    def __iter__(self):
+        """
+        Returns an iterator over all architectures in insertion order.
+        """
+        return iter(self.architectures("insertion"))
+
+    def __len__(self) -> int:
+        return len(self._architectures)
 
     def get(self, id: str | ArchId) -> ArchSupport | None:
         return self._by_id.get(ArchId(id), None)
@@ -103,8 +115,8 @@ class ArchRegistry:
         If an error is thrown, the registry is left unchanged.
         """
 
-        new_architectures = self._architectures.copy()
-        new_by_id = self._by_id.copy()
+        new_architectures = list(self._architectures)
+        new_by_id = dict(self._by_id)
         for arch in architectures:
             if arch.architecture.id in new_by_id:
                 raise ValueError(f"Duplicate architecture: {arch.architecture.id}")
