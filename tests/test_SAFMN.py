@@ -1,4 +1,4 @@
-from spandrel.architectures.SAFMN import SAFMN, load
+from spandrel.architectures.SAFMN import SAFMN, SAFMNArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_SAFMN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        SAFMNArch(),
         lambda: SAFMN(dim=36, n_blocks=8, ffn_scale=2.0, upscaling_factor=4),
         lambda: SAFMN(dim=36, n_blocks=8, ffn_scale=3.0, upscaling_factor=3),
         lambda: SAFMN(dim=8, n_blocks=3, ffn_scale=5.0, upscaling_factor=2),

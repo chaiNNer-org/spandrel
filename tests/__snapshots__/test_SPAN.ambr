@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SPAN_x4_ch48
   ImageModelDescriptor(
-    architecture='SPAN',
+    architecture=SPANArch(
+      id='SPAN',
+      name='SPAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

@@ -1,4 +1,4 @@
-from spandrel.architectures.MMRealSR import MMRealSR, load
+from spandrel.architectures.MMRealSR import MMRealSR, MMRealSRArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_MMRealSR_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        MMRealSRArch(),
         # num_block=2 is used everywhere to make tests faster
         lambda: MMRealSR(num_block=2, num_in_ch=3, num_out_ch=3),
         lambda: MMRealSR(num_block=2, num_in_ch=3, num_out_ch=3, scale=1),
@@ -59,11 +59,11 @@ def test_MMRealSR_load():
             num_blocks=[2, 2, 2, 2],
             downscales=[1, 1, 2, 1],
         ),
-        condition=lambda a, b: (
-            a.scale == b.scale
-            and a.num_degradation == b.num_degradation
-            and a.num_block == b.num_block
-        ),
+        # "downscales", "num_blocks", and "num_feats" are not uniquely determined by
+        # the state dict. The issue is that there are certain configurations of those
+        # parameters that are equivalent. What we detect is simple *a* configuration,
+        # that is equivalent to the one used for the model.
+        ignore_parameters={"downscales", "num_blocks", "num_feats"},
     )
 
 

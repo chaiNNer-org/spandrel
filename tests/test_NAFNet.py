@@ -1,4 +1,4 @@
-from spandrel.architectures.NAFNet import NAFNet, load
+from spandrel.architectures.NAFNet import NAFNet, NAFNetArch
 
 from .util import (
     ModelFile,
@@ -12,7 +12,7 @@ from .util import (
 
 def test_load():
     assert_loads_correctly(
-        load,
+        NAFNetArch(),
         lambda: NAFNet(
             img_channel=3,
             width=32,
@@ -27,7 +27,6 @@ def test_load():
             enc_blk_nums=[1, 1, 1, 28],
             dec_blk_nums=[1, 1, 1, 1],
         ),
-        condition=lambda a, b: (a.padder_size == b.padder_size),
     )
 
 

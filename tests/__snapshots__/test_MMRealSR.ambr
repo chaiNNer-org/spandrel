@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_MMRealSRGAN
   ImageModelDescriptor(
-    architecture='MMRealSR',
+    architecture=MMRealSRArch(
+      id='MMRealSR',
+      name='MMRealSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -18,7 +21,10 @@
 # ---
 # name: test_MMRealSRGAN_ModulationBest
   ImageModelDescriptor(
-    architecture='MMRealSR',
+    architecture=MMRealSRArch(
+      id='MMRealSR',
+      name='MMRealSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -35,7 +41,10 @@
 # ---
 # name: test_MMRealSRNet
   ImageModelDescriptor(
-    architecture='MMRealSR',
+    architecture=MMRealSRArch(
+      id='MMRealSR',
+      name='MMRealSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

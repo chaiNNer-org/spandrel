@@ -1,4 +1,4 @@
-from spandrel.architectures.SPAN import SPAN, load
+from spandrel.architectures.SPAN import SPAN, SPANArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_SPAN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        SPANArch(),
         lambda: SPAN(num_in_ch=3, num_out_ch=3),
         lambda: SPAN(num_in_ch=1, num_out_ch=3),
         lambda: SPAN(num_in_ch=1, num_out_ch=1),
@@ -23,11 +23,7 @@ def test_SPAN_load():
         lambda: SPAN(num_in_ch=3, num_out_ch=3, upscale=2),
         lambda: SPAN(num_in_ch=3, num_out_ch=3, upscale=4),
         lambda: SPAN(num_in_ch=3, num_out_ch=3, upscale=8),
-        condition=lambda a, b: (
-            a.in_channels == b.in_channels
-            and a.out_channels == b.out_channels
-            and a.img_range == b.img_range
-        ),
+        lambda: SPAN(num_in_ch=3, num_out_ch=3, norm=False),
     )
 
 

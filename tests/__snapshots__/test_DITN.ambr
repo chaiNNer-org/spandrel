@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_DITN_Real_GAN_x4
   ImageModelDescriptor(
-    architecture='DITN',
+    architecture=DITNArch(
+      id='DITN',
+      name='DITN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -17,7 +20,10 @@
 # ---
 # name: test_DITN_Real_x4
   ImageModelDescriptor(
-    architecture='DITN',
+    architecture=DITNArch(
+      id='DITN',
+      name='DITN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

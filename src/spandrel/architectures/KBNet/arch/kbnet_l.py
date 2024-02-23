@@ -7,6 +7,8 @@ import torch.nn.functional as F
 import torch.nn.init as init
 from einops import rearrange
 
+from spandrel.util import store_hyperparameters
+
 from .kb_utils import KBAFunction, LayerNorm2d, SimpleGate
 
 
@@ -215,7 +217,10 @@ class KBBlock_l(nn.Module):
         return x
 
 
+@store_hyperparameters()
 class KBNet_l(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         inp_channels=3,

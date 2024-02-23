@@ -10,6 +10,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 
+from spandrel.util import store_hyperparameters
+
 from .utils import (
     Conv2dLayer,
     FullyConnectedLayer,
@@ -1584,7 +1586,10 @@ class Generator(nn.Module):
         return img
 
 
+@store_hyperparameters()
 class MAT(nn.Module):
+    hyperparameters = {}
+
     def __init__(self):
         super().__init__()
 

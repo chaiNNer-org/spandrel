@@ -1,11 +1,11 @@
-from spandrel.architectures.KBNet import KBNet_l, KBNet_s, load
+from spandrel.architectures.KBNet import KBNet_l, KBNet_s, KBNetArch
 
 from .util import assert_loads_correctly
 
 
-def test_KBCNN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        KBNetArch(),
         lambda: KBNet_l(),
         lambda: KBNet_l(inp_channels=4, out_channels=1),
         lambda: KBNet_l(inp_channels=1, out_channels=4),

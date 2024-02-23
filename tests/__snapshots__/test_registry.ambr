@@ -1,9 +1,9 @@
 # serializer version: 1
 # name: test_registry_add_invalid
-  ValueError('Duplicate architecture ID: b')
+  ValueError('Duplicate architecture: b')
 # ---
 # name: test_registry_add_invalid.1
-  ValueError('Duplicate architecture ID: test')
+  ValueError('Duplicate architecture: test')
 # ---
 # name: test_registry_add_invalid.2
   ValueError('Circular dependency in architecture detection: 1 -> 2 -> 1')

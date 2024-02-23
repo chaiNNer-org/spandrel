@@ -7,6 +7,8 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.helpers import to_2tuple
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -861,6 +863,7 @@ class Upsample(nn.Sequential):
         super().__init__(*m)
 
 
+@store_hyperparameters()
 class HAT(nn.Module):
     r"""Hybrid Attention Transformer
         A PyTorch implementation of : `Activating More Pixels in Image Super-Resolution Transformer`.
@@ -889,6 +892,8 @@ class HAT(nn.Module):
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
 
+    hyperparameters = {}
+
     def __init__(
         self,
         img_size=64,
@@ -912,7 +917,7 @@ class HAT(nn.Module):
         ape=False,
         patch_norm=True,
         use_checkpoint=False,
-        upscale=2,
+        upscale=1,
         img_range=1.0,
         upsampler="",
         resi_connection="1conv",

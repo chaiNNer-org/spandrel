@@ -3,16 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Literal
 
+import torch
+
 from .canonicalize import canonicalize_state_dict
-from .model_descriptor import ModelDescriptor, StateDict
+from .model_descriptor import ArchId, Architecture, ModelDescriptor, StateDict
 
 
 class UnsupportedModelError(Exception):
     """
     An error that will be thrown by `ArchRegistry` and `ModelLoader` if a model architecture is not supported.
     """
-
-    pass
 
 
 @dataclass(frozen=True)
@@ -21,26 +21,29 @@ class ArchSupport:
     An entry in an `ArchRegistry` that describes how to detect and load a model architecture.
     """
 
-    id: str
+    architecture: Architecture[torch.nn.Module]
     """
-    The ID of the architecture.
-
-    For built-in architectures, this is the same as the module name. E.g. `spandrel.architectures.RestoreFormer` has the ID `RestoreFormer`.
+    The architecture.
     """
     detect: Callable[[StateDict], bool]
     """
     Inspects the given state dict and returns True if this architecture is detected.
     """
-    load: Callable[[StateDict], ModelDescriptor]
-    """
-    Loads a model descriptor for this architecture from the given state dict.
-    """
-    before: tuple[str, ...] = ()
+    before: tuple[ArchId, ...] = ()
     """
     This architecture is detected before the architectures with the given IDs.
 
     See the documentation of `ArchRegistry` for more information on ordering.
     """
+
+    @staticmethod
+    def from_architecture(
+        arch: Architecture[torch.nn.Module], before: tuple[ArchId, ...] = ()
+    ) -> ArchSupport:
+        """
+        Creates an `ArchSupport` from an `Architecture` by using the architecture's ``detect`` method.
+        """
+        return ArchSupport(arch, arch.detect, before)
 
 
 class ArchRegistry:
@@ -53,7 +56,7 @@ class ArchRegistry:
     def __init__(self):
         self._architectures: list[ArchSupport] = []
         self._ordered: list[ArchSupport] = []
-        self._by_id: dict[str, ArchSupport] = {}
+        self._by_id: dict[ArchId, ArchSupport] = {}
 
     def copy(self) -> ArchRegistry:
         """
@@ -65,14 +68,14 @@ class ArchRegistry:
         new._by_id = self._by_id.copy()
         return new
 
-    def __contains__(self, id: str) -> bool:
+    def __contains__(self, id: ArchId | str) -> bool:
         return id in self._by_id
 
-    def __getitem__(self, id: str) -> ArchSupport:
-        return self._by_id[id]
+    def __getitem__(self, id: str | ArchId) -> ArchSupport:
+        return self._by_id[ArchId(id)]
 
-    def get(self, id: str) -> ArchSupport | None:
-        return self._by_id.get(id, None)
+    def get(self, id: str | ArchId) -> ArchSupport | None:
+        return self._by_id.get(ArchId(id), None)
 
     def architectures(
         self,
@@ -103,11 +106,11 @@ class ArchRegistry:
         new_architectures = self._architectures.copy()
         new_by_id = self._by_id.copy()
         for arch in architectures:
-            if arch.id in new_by_id:
-                raise ValueError(f"Duplicate architecture ID: {arch.id}")
+            if arch.architecture.id in new_by_id:
+                raise ValueError(f"Duplicate architecture: {arch.architecture.id}")
 
             new_architectures.append(arch)
-            new_by_id[arch.id] = arch
+            new_by_id[arch.architecture.id] = arch
 
         new_ordered = ArchRegistry._get_ordered(new_architectures)
 
@@ -117,30 +120,30 @@ class ArchRegistry:
 
     @staticmethod
     def _get_ordered(architectures: list[ArchSupport]) -> list[ArchSupport]:
-        inv_before: dict[str, list[str]] = {}
-        by_id: dict[str, ArchSupport] = {}
+        inv_before: dict[ArchId, list[ArchId]] = {}
+        by_id: dict[ArchId, ArchSupport] = {}
         for arch in architectures:
-            by_id[arch.id] = arch
+            by_id[arch.architecture.id] = arch
             for before in arch.before:
                 if before not in inv_before:
                     inv_before[before] = []
-                inv_before[before].append(arch.id)
+                inv_before[before].append(arch.architecture.id)
 
         ordered: list[ArchSupport] = []
         seen: set[ArchSupport] = set()
-        stack: list[str] = []
+        stack: list[ArchId] = []
 
         def visit(arch: ArchSupport):
-            if arch.id in stack:
+            if arch.architecture.id in stack:
                 raise ValueError(
-                    f"Circular dependency in architecture detection: {' -> '.join([*stack, arch.id])}"
+                    f"Circular dependency in architecture detection: {' -> '.join([*stack, arch.architecture.id])}"
                 )
             if arch in seen:
                 return
             seen.add(arch)
-            stack.append(arch.id)
+            stack.append(arch.architecture.id)
 
-            for before in inv_before.get(arch.id, []):
+            for before in inv_before.get(arch.architecture.id, []):
                 visit(by_id[before])
 
             ordered.append(arch)
@@ -164,6 +167,6 @@ class ArchRegistry:
 
         for arch in self._ordered:
             if arch.detect(state_dict):
-                return arch.load(state_dict)
+                return arch.architecture.load(state_dict)
 
         raise UnsupportedModelError

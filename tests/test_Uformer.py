@@ -1,11 +1,11 @@
-from spandrel.architectures.Uformer import Uformer, load
+from spandrel.architectures.Uformer import Uformer, UformerArch
 
 from .util import assert_loads_correctly
 
 
-def test_Uformer_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        UformerArch(),
         lambda: Uformer(),
         lambda: Uformer(in_chans=1),
         lambda: Uformer(dd_in=1),
@@ -25,13 +25,4 @@ def test_Uformer_load():
         lambda: Uformer(embed_dim=4, token_projection="conv"),
         lambda: Uformer(embed_dim=4, modulator=True),
         lambda: Uformer(embed_dim=4, cross_modulator=True),
-        condition=lambda a, b: (
-            a.embed_dim == b.embed_dim
-            and a.mlp_ratio == b.mlp_ratio
-            and a.token_projection == b.token_projection
-            and a.win_size == b.win_size
-            and a.reso == b.reso
-            and a.dd_in == b.dd_in
-            and a.embed_dim == b.embed_dim
-        ),
     )

@@ -2,6 +2,8 @@
 import pickle
 from types import SimpleNamespace
 
+from typing_extensions import override
+
 safe_list = {
     ("collections", "OrderedDict"),
     ("typing", "OrderedDict"),
@@ -16,6 +18,7 @@ safe_list = {
 
 
 class RestrictedUnpickler(pickle.Unpickler):
+    @override
     def find_class(self, module: str, name: str):
         # Only allow required classes to load state dict
         if (module, name) not in safe_list:

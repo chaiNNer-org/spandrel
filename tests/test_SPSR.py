@@ -1,11 +1,11 @@
-from spandrel.architectures.SPSR import SPSR, load
+from spandrel.architectures.SPSR import SPSR, SPSRArch
 
 from .util import assert_loads_correctly
 
 
-def test_SPSR_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        SPSRArch(),
         lambda: SPSR(
             in_nc=3,
             out_nc=3,
@@ -31,7 +31,6 @@ def test_SPSR_load():
             num_filters=64,
             num_blocks=16,
             upscale=1,
-            upsample_mode="upconv",
         ),
         lambda: SPSR(
             in_nc=3,
@@ -63,7 +62,6 @@ def test_SPSR_load():
             num_filters=64,
             num_blocks=16,
             upscale=1,
-            upsample_mode="pixelshuffle",
         ),
         lambda: SPSR(
             in_nc=3,
@@ -89,4 +87,5 @@ def test_SPSR_load():
             upscale=8,
             upsample_mode="pixelshuffle",
         ),
+        check_safe_tensors=False,
     )

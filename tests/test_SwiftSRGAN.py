@@ -1,4 +1,4 @@
-from spandrel.architectures.SwiftSRGAN import SwiftSRGAN, load
+from spandrel.architectures.SwiftSRGAN import SwiftSRGAN, SwiftSRGANArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_SwiftSRGAN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        SwiftSRGANArch(),
         lambda: SwiftSRGAN(),
         lambda: SwiftSRGAN(in_channels=1),
         lambda: SwiftSRGAN(num_channels=32),

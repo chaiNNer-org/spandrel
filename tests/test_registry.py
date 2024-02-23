@@ -1,35 +1,42 @@
-from spandrel import ArchRegistry, ArchSupport
+from typing_extensions import override
+
+from spandrel import Architecture, ArchRegistry, ArchSupport
+from spandrel.__helpers.model_descriptor import ArchId
 
 from .util import expect_error
 
 
-def throw(*args):
-    raise ValueError
+class TestArch(Architecture):
+    def __init__(self, id: str) -> None:
+        super().__init__(
+            id=id,
+            detect=lambda _: False,
+        )
 
-
-def f(*args):
-    return False
+    @override
+    def load(self, state_dict):
+        raise ValueError
 
 
 def mock_registry():
     r = ArchRegistry()
     r.add(
-        ArchSupport(id="a", detect=f, load=throw),
-        ArchSupport(id="b", detect=f, load=throw),
-        ArchSupport(id="c", detect=f, load=throw),
-        ArchSupport(id="d", detect=f, load=throw),
-        ArchSupport(id="e", detect=f, load=throw),
-        ArchSupport(id="f", detect=f, load=throw),
+        ArchSupport.from_architecture(TestArch(id="a")),
+        ArchSupport.from_architecture(TestArch(id="b")),
+        ArchSupport.from_architecture(TestArch(id="c")),
+        ArchSupport.from_architecture(TestArch(id="d")),
+        ArchSupport.from_architecture(TestArch(id="e")),
+        ArchSupport.from_architecture(TestArch(id="f")),
     )
     return r
 
 
 def test_registry_order(snapshot):
     r = mock_registry()
-    r.add(ArchSupport(id="test", detect=f, load=throw, before=("d",)))
+    r.add(ArchSupport.from_architecture(TestArch(id="test"), before=(ArchId("d"),)))
 
-    assert [a.id for a in r.architectures(order="insertion")] == snapshot
-    assert [a.id for a in r.architectures(order="detection")] == snapshot
+    assert [a.architecture.id for a in r.architectures(order="insertion")] == snapshot
+    assert [a.architecture.id for a in r.architectures(order="detection")] == snapshot
 
 
 def test_registry_add_invalid(snapshot):
@@ -38,15 +45,15 @@ def test_registry_add_invalid(snapshot):
 
     with expect_error(snapshot):
         # Duplicate ID
-        r.add(ArchSupport(id="b", detect=f, load=throw))
+        r.add(ArchSupport.from_architecture(TestArch(id="b")))
 
     assert original == r.architectures()
 
     with expect_error(snapshot):
         # Duplicate ID
         r.add(
-            ArchSupport(id="test", detect=f, load=throw),
-            ArchSupport(id="test", detect=f, load=throw),
+            ArchSupport.from_architecture(TestArch(id="test")),
+            ArchSupport.from_architecture(TestArch(id="test")),
         )
 
     assert original == r.architectures()
@@ -54,8 +61,8 @@ def test_registry_add_invalid(snapshot):
     with expect_error(snapshot):
         # Circular dependency
         r.add(
-            ArchSupport(id="1", detect=f, load=throw, before=("2",)),
-            ArchSupport(id="2", detect=f, load=throw, before=("1",)),
+            ArchSupport.from_architecture(TestArch(id="1"), before=(ArchId("2"),)),
+            ArchSupport.from_architecture(TestArch(id="2"), before=(ArchId("1"),)),
         )
 
     assert original == r.architectures()

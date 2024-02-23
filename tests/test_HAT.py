@@ -1,4 +1,4 @@
-from spandrel.architectures.HAT import HAT, load
+from spandrel.architectures.HAT import HAT, HATArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_HAT_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        HATArch(),
         lambda: HAT(),
         lambda: HAT(in_chans=1),
         lambda: HAT(in_chans=4),
@@ -34,18 +34,9 @@ def test_HAT_load():
         lambda: HAT(upsampler="pixelshuffle", upscale=4),
         lambda: HAT(upsampler="pixelshuffle", upscale=8),
         lambda: HAT(upsampler="pixelshuffle", num_feat=32),
-        condition=lambda a, b: (
-            a.window_size == b.window_size
-            and a.overlap_ratio == b.overlap_ratio
-            and a.upsampler == b.upsampler
-            # upscale is only defined if we have an upsampler
-            and (not a.upsampler or a.upscale == b.upscale)
-            and a.num_layers == b.num_layers
-            and a.embed_dim == b.embed_dim
-            and a.ape == b.ape
-            and a.patch_norm == b.patch_norm
-            and a.mlp_ratio == b.mlp_ratio
-        ),
+        # there are multiple equivalent squeeze_factor values for each models,
+        # so we cannot test for equal value
+        ignore_parameters={"squeeze_factor"},
     )
 
 

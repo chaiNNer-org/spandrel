@@ -10,6 +10,8 @@ import torch.nn as nn
 from einops import rearrange
 from einops.layers.torch import Rearrange
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers.padding import pad_to_multiple
 from ...__arch_helpers.timm.drop import DropPath
 from ...__arch_helpers.timm.weight_init import trunc_normal_
@@ -48,6 +50,7 @@ class WMSA(nn.Module):
             )
             .transpose(1, 2)
             .transpose(0, 1)
+            .contiguous()
         )
 
     def generate_mask(self, h, w, p, shift):
@@ -271,7 +274,10 @@ class ConvTransBlock(nn.Module):
         return x
 
 
+@store_hyperparameters()
 class SCUNet(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         in_nc=3,

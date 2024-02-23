@@ -1,4 +1,5 @@
-from spandrel.architectures.GFPGAN import GFPGANv1Clean
+from spandrel.architectures.GFPGAN import GFPGANArch, GFPGANv1Clean
+from tests.test_CodeFormer import assert_loads_correctly
 
 from .util import (
     ModelFile,
@@ -6,6 +7,13 @@ from .util import (
     assert_image_inference,
     disallowed_props,
 )
+
+
+def test_load():
+    assert_loads_correctly(
+        GFPGANArch(),
+        lambda: GFPGANv1Clean(),
+    )
 
 
 def test_GFPGAN_1_2(snapshot):

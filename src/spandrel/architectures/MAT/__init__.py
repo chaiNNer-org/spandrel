@@ -1,4 +1,9 @@
+from typing_extensions import override
+
+from spandrel.util import KeyCondition
+
 from ...__helpers.model_descriptor import (
+    Architecture,
     MaskedImageModelDescriptor,
     SizeRequirements,
     StateDict,
@@ -6,26 +11,40 @@ from ...__helpers.model_descriptor import (
 from .arch.MAT import MAT
 
 
-def load(state_dict: StateDict) -> MaskedImageModelDescriptor[MAT]:
-    in_nc = 3
-    out_nc = 3
+class MATArch(Architecture[MAT]):
+    def __init__(self) -> None:
+        super().__init__(
+            id="MAT",
+            detect=KeyCondition.has_all(
+                "synthesis.first_stage.conv_first.conv.resample_filter",
+            ),
+        )
 
-    state = {
-        k.replace("synthesis", "model.synthesis").replace("mapping", "model.mapping"): v
-        for k, v in state_dict.items()
-    }
+    @override
+    def load(self, state_dict: StateDict) -> MaskedImageModelDescriptor[MAT]:
+        in_nc = 3
+        out_nc = 3
 
-    model = MAT()
+        state = {
+            k.replace("synthesis", "model.synthesis").replace(
+                "mapping", "model.mapping"
+            ): v
+            for k, v in state_dict.items()
+        }
 
-    return MaskedImageModelDescriptor(
-        model,
-        state,
-        architecture="MAT",
-        purpose="Inpainting",
-        tags=[],
-        supports_half=False,
-        supports_bfloat16=True,
-        input_channels=in_nc,
-        output_channels=out_nc,
-        size_requirements=SizeRequirements(minimum=512, multiple_of=512, square=True),
-    )
+        model = MAT()
+
+        return MaskedImageModelDescriptor(
+            model,
+            state,
+            architecture=self,
+            purpose="Inpainting",
+            tags=[],
+            supports_half=False,
+            supports_bfloat16=True,
+            input_channels=in_nc,
+            output_channels=out_nc,
+            size_requirements=SizeRequirements(
+                minimum=512, multiple_of=512, square=True
+            ),
+        )

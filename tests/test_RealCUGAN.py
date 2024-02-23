@@ -1,4 +1,9 @@
-from spandrel.architectures.RealCUGAN import UpCunet2x, UpCunet3x, UpCunet4x, load
+from spandrel.architectures.RealCUGAN import (
+    RealCUGANArch,
+    UpCunet2x,
+    UpCunet3x,
+    UpCunet4x,
+)
 
 from .util import (
     ModelFile,
@@ -10,9 +15,9 @@ from .util import (
 )
 
 
-def test_RealCUGAN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        RealCUGANArch(),
         lambda: UpCunet2x(in_channels=3, out_channels=3),
         lambda: UpCunet2x(in_channels=1, out_channels=4),
         lambda: UpCunet2x(pro=True),
@@ -22,7 +27,6 @@ def test_RealCUGAN_load():
         lambda: UpCunet4x(in_channels=3, out_channels=3),
         lambda: UpCunet4x(in_channels=1, out_channels=3),
         lambda: UpCunet4x(pro=True),
-        condition=lambda a, b: (a.is_pro == b.is_pro),
     )
 
 

@@ -1,4 +1,4 @@
-from spandrel.architectures.OmniSR import OmniSR, load
+from spandrel.architectures.OmniSR import OmniSR, OmniSRArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_OmniSR_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        OmniSRArch(),
         lambda: OmniSR(),
         lambda: OmniSR(num_in_ch=1, num_out_ch=1),
         lambda: OmniSR(num_in_ch=3, num_out_ch=3),
@@ -25,11 +25,6 @@ def test_OmniSR_load():
         lambda: OmniSR(window_size=5),
         lambda: OmniSR(res_num=3),
         lambda: OmniSR(up_scale=5),
-        condition=lambda a, b: (
-            a.res_num == b.res_num
-            and a.up_scale == b.up_scale
-            and a.window_size == b.window_size
-        ),
     )
 
 

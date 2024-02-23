@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 from collections import OrderedDict
 from typing import Literal
 
 import torch
 import torch.nn.functional as F
 from torch import nn as nn
+
+from spandrel.util import store_hyperparameters
 
 
 def _make_pair(value):
@@ -180,8 +184,8 @@ class Conv3XC(nn.Module):
         self.weight_concat = self.weight_concat + sk_w
         self.bias_concat = self.bias_concat + sk_b
 
-        self.eval_conv.weight.data = self.weight_concat
-        self.eval_conv.bias.data = self.bias_concat  # type: ignore
+        self.eval_conv.weight.data = self.weight_concat.contiguous()
+        self.eval_conv.bias.data = self.bias_concat.contiguous()  # type: ignore
 
     def forward(self, x):
         if self.training:
@@ -227,10 +231,13 @@ class SPAB(nn.Module):
         return out, out1, sim_att
 
 
+@store_hyperparameters()
 class SPAN(nn.Module):
     """
     Swift Parameter-free Attention Network for Efficient Super-Resolution
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,
@@ -239,6 +246,7 @@ class SPAN(nn.Module):
         feature_channels=48,
         upscale=4,
         bias=True,
+        norm=True,
         img_range=255.0,
         rgb_mean=(0.4488, 0.4371, 0.4040),
     ):
@@ -248,6 +256,12 @@ class SPAN(nn.Module):
         self.out_channels = num_out_ch
         self.img_range = img_range
         self.mean = torch.Tensor(rgb_mean).view(1, 3, 1, 1)
+
+        self.no_norm: torch.Tensor | None
+        if not norm:
+            self.register_buffer("no_norm", torch.zeros(1))
+        else:
+            self.no_norm = None
 
         self.conv_1 = Conv3XC(self.in_channels, feature_channels, gain1=2, s=1)
         self.block_1 = SPAB(feature_channels, bias=bias)
@@ -266,9 +280,14 @@ class SPAN(nn.Module):
             feature_channels, self.out_channels, upscale_factor=upscale
         )
 
+    @property
+    def is_norm(self):
+        return self.no_norm is None
+
     def forward(self, x):
-        self.mean = self.mean.type_as(x)
-        x = (x - self.mean) * self.img_range
+        if self.is_norm:
+            self.mean = self.mean.type_as(x)
+            x = (x - self.mean) * self.img_range
 
         out_feature = self.conv_1(x)
 

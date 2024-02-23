@@ -7,11 +7,16 @@ import math
 import torch
 import torch.nn as nn
 
+from spandrel.util import store_hyperparameters
+
 from ...__arch_helpers import block as B
 from ...__arch_helpers.padding import pad_to_multiple
 
 
+@store_hyperparameters()
 class RRDBNet(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         in_nc: int = 3,

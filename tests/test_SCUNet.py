@@ -1,4 +1,4 @@
-from spandrel.architectures.SCUNet import SCUNet, load
+from spandrel.architectures.SCUNet import SCUNet, SCUNetArch
 
 from .util import (
     ModelFile,
@@ -8,16 +8,16 @@ from .util import (
 )
 
 
-def test_SCUNet_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        SCUNetArch(),
         lambda: SCUNet(),
         lambda: SCUNet(in_nc=1),
         lambda: SCUNet(in_nc=4),
         lambda: SCUNet(dim=32),
         lambda: SCUNet(dim=24),
         lambda: SCUNet(config=[5, 3, 7, 2, 3, 1, 3]),
-        condition=lambda a, b: a.dim == b.dim and a.config == b.config,
+        check_safe_tensors=False,
     )
 
 

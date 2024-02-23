@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_FeMaSR_1x
   ImageModelDescriptor(
-    architecture='FeMaSR',
+    architecture=FeMaSRArch(
+      id='FeMaSR',
+      name='FeMaSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='Restoration',
@@ -16,7 +19,10 @@
 # ---
 # name: test_FeMaSR_2x
   ImageModelDescriptor(
-    architecture='FeMaSR',
+    architecture=FeMaSRArch(
+      id='FeMaSR',
+      name='FeMaSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -31,7 +37,10 @@
 # ---
 # name: test_FeMaSR_4x
   ImageModelDescriptor(
-    architecture='FeMaSR',
+    architecture=FeMaSRArch(
+      id='FeMaSR',
+      name='FeMaSR',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

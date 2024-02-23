@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_SwiftSRGAN_2x
   ImageModelDescriptor(
-    architecture='Swift-SRGAN',
+    architecture=SwiftSRGANArch(
+      id='SwiftSRGAN',
+      name='Swift-SRGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -18,7 +21,10 @@
 # ---
 # name: test_SwiftSRGAN_4x
   ImageModelDescriptor(
-    architecture='Swift-SRGAN',
+    architecture=SwiftSRGANArch(
+      id='SwiftSRGAN',
+      name='Swift-SRGAN',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

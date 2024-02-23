@@ -1,7 +1,10 @@
 # serializer version: 1
 # name: test_CRAFT_x2
   ImageModelDescriptor(
-    architecture='CRAFT',
+    architecture=CRAFTArch(
+      id='CRAFT',
+      name='CRAFT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -19,7 +22,10 @@
 # ---
 # name: test_CRAFT_x3
   ImageModelDescriptor(
-    architecture='CRAFT',
+    architecture=CRAFTArch(
+      id='CRAFT',
+      name='CRAFT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',
@@ -37,7 +43,10 @@
 # ---
 # name: test_CRAFT_x4
   ImageModelDescriptor(
-    architecture='CRAFT',
+    architecture=CRAFTArch(
+      id='CRAFT',
+      name='CRAFT',
+    ),
     input_channels=3,
     output_channels=3,
     purpose='SR',

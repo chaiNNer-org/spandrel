@@ -1,4 +1,4 @@
-from spandrel.architectures.Compact import SRVGGNetCompact, load
+from spandrel.architectures.Compact import CompactArch, SRVGGNetCompact
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_Compact_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        CompactArch(),
         lambda: SRVGGNetCompact(),
         lambda: SRVGGNetCompact(num_in_ch=1, num_out_ch=1),
         lambda: SRVGGNetCompact(num_in_ch=3, num_out_ch=3),
@@ -21,13 +21,6 @@ def test_Compact_load():
         lambda: SRVGGNetCompact(num_feat=32),
         lambda: SRVGGNetCompact(num_conv=5),
         lambda: SRVGGNetCompact(upscale=3),
-        condition=lambda a, b: (
-            a.upscale == b.upscale
-            and a.num_in_ch == b.num_in_ch
-            and a.num_out_ch == b.num_out_ch
-            and a.num_feat == b.num_feat
-            and a.num_conv == b.num_conv
-        ),
     )
 
 

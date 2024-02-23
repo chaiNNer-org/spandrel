@@ -4,6 +4,8 @@ from torch.nn import functional as F
 from torch.nn import init
 from torch.nn.modules.batchnorm import _BatchNorm  # type: ignore
 
+from spandrel.util import store_hyperparameters
+
 
 @torch.no_grad()  # type: ignore
 def default_init_weights(module_list, scale: float = 1, bias_fill: float = 0, **kwargs):
@@ -528,6 +530,7 @@ class MMRRDBNet_decouple(nn.Module):
         return out, degrees
 
 
+@store_hyperparameters()
 class MMRRDBNet_test(nn.Module):
     """Networks consisting of Residual in Residual Dense Block, which is used in ESRGAN. v2.1
 
@@ -546,6 +549,8 @@ class MMRRDBNet_test(nn.Module):
         num_block (int): Block number in the trunk network. Defaults: 23
         num_grow_ch (int): Channels for each growth. Default: 32.
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,

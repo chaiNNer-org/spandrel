@@ -1,4 +1,4 @@
-from spandrel.architectures.DDColor import DDColor, load
+from spandrel.architectures.DDColor import DDColor, DDColorArch
 
 from .util import (
     ModelFile,
@@ -9,9 +9,9 @@ from .util import (
 )
 
 
-def test_DDColor_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        DDColorArch(),
         lambda: DDColor(
             nf=64,
             num_queries=20,
@@ -56,13 +56,7 @@ def test_DDColor_load():
             num_scales=3,
             dec_layers=9,
         ),
-        condition=lambda a, b: (
-            a.do_normalize == b.do_normalize
-            and a.num_output_channels == b.num_output_channels
-            and a.encoder.encoder_name == b.encoder.encoder_name
-            and a.decoder.nf == b.decoder.nf
-            and a.decoder.decoder_name == b.decoder.decoder_name
-        ),
+        ignore_parameters={"input_size"},
     )
 
 

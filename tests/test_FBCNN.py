@@ -1,4 +1,4 @@
-from spandrel.architectures.FBCNN import FBCNN, load
+from spandrel.architectures.FBCNN import FBCNN, FBCNNArch
 
 from .util import (
     ModelFile,
@@ -10,9 +10,9 @@ from .util import (
 )
 
 
-def test_FBCNN_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        FBCNNArch(),
         lambda: FBCNN(),
         lambda: FBCNN(in_nc=1),
         lambda: FBCNN(out_nc=4),
@@ -23,7 +23,6 @@ def test_FBCNN_load():
         lambda: FBCNN(upsample_mode="convtranspose"),
         lambda: FBCNN(upsample_mode="upconv"),
         lambda: FBCNN(upsample_mode="pixelshuffle"),
-        condition=lambda a, b: (a.nb == b.nb and a.nc == b.nc),
     )
 
 

@@ -1,5 +1,5 @@
 from spandrel import ModelLoader
-from spandrel.architectures.DAT import DAT, load
+from spandrel.architectures.DAT import DAT, DATArch
 
 from .util import (
     ModelFile,
@@ -11,9 +11,9 @@ from .util import (
 )
 
 
-def test_DAT_load():
+def test_load():
     assert_loads_correctly(
-        load,
+        DATArch(),
         lambda: DAT(),
         lambda: DAT(embed_dim=60),
         lambda: DAT(in_chans=1),
@@ -35,13 +35,6 @@ def test_DAT_load():
         lambda: DAT(qkv_bias=False),
         lambda: DAT(split_size=[4, 4]),
         lambda: DAT(split_size=[2, 8]),
-        condition=lambda a, b: (
-            a.num_layers == b.num_layers
-            and a.upscale == b.upscale
-            and a.upsampler == b.upsampler
-            and a.embed_dim == b.embed_dim
-            and a.num_features == b.num_features
-        ),
     )
 
 
