@@ -14,7 +14,6 @@ from ..architectures import (
     RGT,
     SAFMN,
     SPAN,
-    SPSR,
     CodeFormer,
     Compact,
     DDColor,
@@ -47,7 +46,6 @@ Modifying this registry will affect all `ModelLoader` instances without a custom
 
 MAIN_REGISTRY.add(
     ArchSupport.from_architecture(Compact.CompactArch()),
-    ArchSupport.from_architecture(SPSR.SPSRArch()),
     ArchSupport.from_architecture(SwiftSRGAN.SwiftSRGANArch()),
     ArchSupport.from_architecture(SRFormer.SRFormerArch()),
     ArchSupport.from_architecture(HAT.HATArch()),
