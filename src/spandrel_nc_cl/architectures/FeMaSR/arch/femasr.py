@@ -7,9 +7,9 @@ import torch
 import torch.nn.functional as F
 from torch import nn as nn
 
+from spandrel.architectures.SwinIR.arch.SwinIR import RSTB
 from spandrel.util import store_hyperparameters
 
-from ...SwinIR.arch.SwinIR import RSTB
 from .fema_utils import CombineQuantBlock, ResBlock
 from .vgg_arch import VGGFeatureExtractor
 

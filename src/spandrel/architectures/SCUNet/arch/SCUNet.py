@@ -11,10 +11,9 @@ from einops import rearrange
 from einops.layers.torch import Rearrange
 
 from spandrel.util import store_hyperparameters
+from spandrel.util.timm import DropPath, trunc_normal_
 
 from ...__arch_helpers.padding import pad_to_multiple
-from ...__arch_helpers.timm.drop import DropPath
-from ...__arch_helpers.timm.weight_init import trunc_normal_
 
 
 # Borrowed from https://github.com/cszn/SCUNet/blob/main/models/network_scunet.py

@@ -25,11 +25,15 @@ from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
 from spandrel import (
+    MAIN_REGISTRY,
     Architecture,
     ImageModelDescriptor,
     ModelDescriptor,
     ModelLoader,
 )
+from spandrel_nc_cl import NC_CL_REGISTRY
+
+MAIN_REGISTRY.add(*NC_CL_REGISTRY)
 
 MODEL_DIR = Path("./tests/models/")
 ZIP_DIR = Path("./tests/zips/")

@@ -8,8 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ...__arch_helpers.timm.drop import DropPath
-from ...__arch_helpers.timm.helpers import to_2tuple
+from spandrel.util.timm import DropPath, to_2tuple
+
 from .config import GRLConfig
 from .mixed_attn_block import (
     CAB,

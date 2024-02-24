@@ -5,10 +5,12 @@ import torch
 from torch.nn.init import _calculate_fan_in_and_fan_out  # type: ignore
 
 
-def _no_grad_trunc_normal_(tensor, mean, std, a, b):
+def _no_grad_trunc_normal_(
+    tensor: torch.Tensor, mean: float, std: float, a: float, b: float
+):
     # Cut & paste from PyTorch official master until it's in a few official releases - RW
     # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
-    def norm_cdf(x):
+    def norm_cdf(x: float):
         # Computes standard normal cumulative distribution function
         return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
 
@@ -44,7 +46,11 @@ def _no_grad_trunc_normal_(tensor, mean, std, a, b):
 
 
 def trunc_normal_(
-    tensor: torch.Tensor, mean=0.0, std=1.0, a=-2.0, b=2.0
+    tensor: torch.Tensor,
+    mean: float = 0.0,
+    std: float = 1.0,
+    a: float = -2.0,
+    b: float = 2.0,
 ) -> torch.Tensor:
     r"""
     Fills the input Tensor with values drawn from a truncated
@@ -72,7 +78,11 @@ def trunc_normal_(
 
 
 def trunc_normal_tf_(
-    tensor: torch.Tensor, mean=0.0, std=1.0, a=-2.0, b=2.0
+    tensor: torch.Tensor,
+    mean: float = 0.0,
+    std: float = 1.0,
+    a: float = -2.0,
+    b: float = 2.0,
 ) -> torch.Tensor:
     r"""Fills the input Tensor with values drawn from a truncated
     normal distribution. The values are effectively drawn from the
@@ -101,7 +111,12 @@ def trunc_normal_tf_(
     return tensor
 
 
-def variance_scaling_(tensor, scale=1.0, mode="fan_in", distribution="normal"):
+def variance_scaling_(
+    tensor: torch.Tensor,
+    scale: float = 1.0,
+    mode: str = "fan_in",
+    distribution: str = "normal",
+):
     fan_in, fan_out = _calculate_fan_in_and_fan_out(tensor)
     if mode == "fan_in":
         denom = fan_in
@@ -125,5 +140,5 @@ def variance_scaling_(tensor, scale=1.0, mode="fan_in", distribution="normal"):
         raise ValueError(f"invalid distribution {distribution}")
 
 
-def lecun_normal_(tensor):
+def lecun_normal_(tensor: torch.Tensor):
     variance_scaling_(tensor, mode="fan_in", distribution="truncated_normal")

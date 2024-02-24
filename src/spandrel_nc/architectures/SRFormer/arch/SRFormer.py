@@ -1,6 +1,6 @@
-# type: ignore
 # model: SRFormer
 # SRFormer: Permuted Self-Attention for Single Image Super-Resolution
+from __future__ import annotations
 
 import math
 
@@ -9,10 +9,34 @@ import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
 from spandrel.util import store_hyperparameters
+from spandrel.util.timm import to_2tuple, trunc_normal_
 
-from ...__arch_helpers.padding import pad_to_multiple
-from ...__arch_helpers.timm.helpers import to_2tuple
-from ...__arch_helpers.timm.weight_init import trunc_normal_
+
+def pad_to_multiple(
+    tensor: torch.Tensor,
+    multiple: int,
+    *,
+    mode: str,
+    value: float = 0.0,
+) -> torch.Tensor:
+    """
+    Pad a tensor's size to a multiple of a number.
+
+    Args:
+        tensor: Tensor to pad.
+        multiple: Size multiple to pad to.
+        mode: Padding mode; see `torch.nn.functional.pad`.
+        value: Padding value; see `torch.nn.functional.pad`.
+
+    Returns:
+        Padded tensor, or the original tensor if no padding was needed.
+    """
+    _, _, h, w = tensor.size()
+    pad_h = (multiple - h % multiple) % multiple
+    pad_w = (multiple - w % multiple) % multiple
+    if pad_h or pad_w:
+        return nn.functional.pad(tensor, (0, pad_w, 0, pad_h), mode, value)
+    return tensor
 
 
 class emptyModule(nn.Module):
@@ -46,7 +70,7 @@ class DropPath(nn.Module):
     From: https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/drop.py
     """
 
-    def __init__(self, drop_prob=None):
+    def __init__(self, drop_prob: float):
         super().__init__()
         self.drop_prob = drop_prob
 
@@ -947,7 +971,13 @@ class UpsampleOneStep(nn.Sequential):
 
     """
 
-    def __init__(self, scale, num_feat, num_out_ch, input_resolution=None):
+    def __init__(
+        self,
+        scale: int,
+        num_feat: int,
+        num_out_ch: int,
+        input_resolution: tuple[int, int],
+    ):
         self.num_feat = num_feat
         self.input_resolution = input_resolution
         m = []
@@ -1093,7 +1123,7 @@ class SRFormer(nn.Module):
                 attn_drop=attn_drop_rate,
                 drop_path=dpr[
                     sum(depths[:i_layer]) : sum(depths[: i_layer + 1])
-                ],  # no impact on SR results
+                ],  # no impact on SR results # type: ignore
                 norm_layer=norm_layer,
                 downsample=None,
                 use_checkpoint=use_checkpoint,
@@ -1153,17 +1183,17 @@ class SRFormer(nn.Module):
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
+            if isinstance(m, nn.Linear) and m.bias is not None:  # type: ignore
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    @torch.jit.ignore
+    @torch.jit.ignore  # type: ignore
     def no_weight_decay(self):
         return {"absolute_pos_embed"}
 
-    @torch.jit.ignore
+    @torch.jit.ignore  # type: ignore
     def no_weight_decay_keywords(self):
         return {"relative_position_bias_table"}
 

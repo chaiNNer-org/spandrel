@@ -17,11 +17,11 @@ Hacked together by / Copyright 2020 Ross Wightman
 """
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as F  # noqa: N812
 
 
 def drop_block_2d(
-    x,
+    x: torch.Tensor,
     drop_prob: float = 0.1,
     block_size: int = 7,
     gamma_scale: float = 1.0,
@@ -34,7 +34,7 @@ def drop_block_2d(
     DropBlock with an experimental gaussian noise option. This layer has been tested on a few training
     runs with success, but needs further validation and possibly optimization for lower runtime impact.
     """
-    _, C, H, W = x.shape
+    _, C, H, W = x.shape  # noqa: N806
     total_size = W * H
     clipped_block_size = min(block_size, min(W, H))
     # seed_drop_rate, the gamma parameter
@@ -102,7 +102,7 @@ def drop_block_fast_2d(
     DropBlock with an experimental gaussian noise option. Simplied from above without concern for valid
     block mask at edges.
     """
-    _, _, H, W = x.shape
+    _, _, H, W = x.shape  # noqa: N806
     total_size = W * H
     clipped_block_size = min(block_size, min(W, H))
     gamma = (
@@ -161,7 +161,7 @@ class DropBlock2d(nn.Module):
         self.batchwise = batchwise
         self.fast = fast  # FIXME finish comparisons of fast vs not
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         if not self.training or not self.drop_prob:
             return x
         if self.fast:
@@ -186,7 +186,10 @@ class DropBlock2d(nn.Module):
 
 
 def drop_path(
-    x, drop_prob: float = 0.0, training: bool = False, scale_by_keep: bool = True
+    x: torch.Tensor,
+    drop_prob: float = 0.0,
+    training: bool = False,
+    scale_by_keep: bool = True,
 ):
     """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
 
@@ -217,7 +220,7 @@ class DropPath(nn.Module):
         self.drop_prob = drop_prob
         self.scale_by_keep = scale_by_keep
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         return drop_path(x, self.drop_prob, self.training, self.scale_by_keep)
 
     def extra_repr(self):

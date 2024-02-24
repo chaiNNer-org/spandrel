@@ -1,4 +1,4 @@
-from spandrel.architectures.SRFormer import SRFormer, SRFormerArch
+from spandrel_nc.architectures.SRFormer import SRFormer, SRFormerArch
 
 from .util import (
     ModelFile,

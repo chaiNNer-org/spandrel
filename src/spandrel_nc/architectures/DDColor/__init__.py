@@ -5,16 +5,16 @@ import torch.nn.functional as F  # noqa: N812
 from torch import Tensor
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
-
-from ...__helpers.model_descriptor import (
+from spandrel import (
     Architecture,
     ImageModelDescriptor,
     ModelTiling,
     StateDict,
 )
-from ..__arch_helpers.color import lab_to_rgb, linear_rgb_to_lab, rgb_to_linear_rgb
+from spandrel.util import KeyCondition, get_seq_len
+
 from .arch.ddcolor import DDColor
+from .color import lab_to_rgb, linear_rgb_to_lab, rgb_to_linear_rgb
 
 
 def _call(model: DDColor, input: Tensor) -> Tensor:

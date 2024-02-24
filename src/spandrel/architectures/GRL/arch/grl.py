@@ -12,10 +12,9 @@ import torch
 import torch.nn as nn
 
 from spandrel.util import store_hyperparameters
+from spandrel.util.timm import to_2tuple, trunc_normal_
 
 from ...__arch_helpers.padding import pad_to_multiple
-from ...__arch_helpers.timm.helpers import to_2tuple
-from ...__arch_helpers.timm.weight_init import trunc_normal_
 from .config import GRLConfig
 from .mixed_attn_block_efficient import (
     EfficientMixAttnTransformerBlock,

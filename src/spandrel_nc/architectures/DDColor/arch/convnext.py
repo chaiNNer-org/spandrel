@@ -10,8 +10,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ...__arch_helpers.timm.drop import DropPath
-from ...__arch_helpers.timm.weight_init import trunc_normal_
+from spandrel.util.timm import DropPath, trunc_normal_
 
 
 class Block(nn.Module):

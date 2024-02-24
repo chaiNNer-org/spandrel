@@ -1,13 +1,13 @@
 from typing_extensions import override
 
-from spandrel.util import KeyCondition
-
-from ...__helpers.model_descriptor import (
+from spandrel import (
     Architecture,
     MaskedImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
+from spandrel.util import KeyCondition
+
 from .arch.MAT import MAT
 
 

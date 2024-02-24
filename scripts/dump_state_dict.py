@@ -54,7 +54,10 @@ from torch import Tensor
 # This hack is necessary to make our module import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from spandrel import ModelLoader  # noqa: E402
+from spandrel import MAIN_REGISTRY, ModelLoader  # noqa: E402
+from spandrel_nc_cl import NC_CL_REGISTRY  # noqa: E402
+
+MAIN_REGISTRY.add(*NC_CL_REGISTRY)
 
 State = Dict[str, object]
 

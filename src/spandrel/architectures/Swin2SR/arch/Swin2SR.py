@@ -14,13 +14,9 @@ import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 
 from spandrel.util import store_hyperparameters
+from spandrel.util.timm import DropPath, to_2tuple, trunc_normal_
 
 from ...__arch_helpers.padding import pad_to_multiple
-
-# Originally from the timm package
-from ...__arch_helpers.timm.drop import DropPath
-from ...__arch_helpers.timm.helpers import to_2tuple
-from ...__arch_helpers.timm.weight_init import trunc_normal_
 
 
 class Mlp(nn.Module):

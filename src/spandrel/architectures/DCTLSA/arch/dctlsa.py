@@ -5,8 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from spandrel.util import store_hyperparameters
-
-from ...__arch_helpers.timm.helpers import to_2tuple
+from spandrel.util.timm import to_2tuple
 
 
 class LSAB(nn.Module):

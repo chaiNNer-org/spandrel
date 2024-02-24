@@ -9,8 +9,7 @@ from einops.layers.torch import Rearrange
 from torch.nn import functional as F
 
 from spandrel.util import store_hyperparameters
-
-from ...__arch_helpers.timm.drop import DropPath
+from spandrel.util.timm import DropPath
 
 
 def img2windows(img, H_sp, W_sp):

@@ -2,14 +2,14 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
-
-from ...__helpers.model_descriptor import (
+from spandrel import (
     Architecture,
     ImageModelDescriptor,
     SizeRequirements,
     StateDict,
 )
+from spandrel.util import KeyCondition, get_seq_len
+
 from .arch.SRFormer import SRFormer
 
 

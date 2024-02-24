@@ -44,7 +44,7 @@ def linear_rgb_to_lab(image: torch.Tensor) -> torch.Tensor:
     y: torch.Tensor = xyz_int[..., 1, :, :]
     z: torch.Tensor = xyz_int[..., 2, :, :]
 
-    L: torch.Tensor = (116.0 * y) - 16.0
+    L: torch.Tensor = (116.0 * y) - 16.0  # noqa: N806
     a: torch.Tensor = 500.0 * (x - y)
     b: torch.Tensor = 200.0 * (y - z)
 
@@ -78,7 +78,7 @@ def lab_to_linear_rgb(image: torch.Tensor, clip: bool = True) -> torch.Tensor:
             f"Input size must have a shape of (*, 3, H, W). Got {image.shape}"
         )
 
-    L: torch.Tensor = image[..., 0, :, :]
+    L: torch.Tensor = image[..., 0, :, :]  # noqa: N806
     a: torch.Tensor = image[..., 1, :, :]
     b: torch.Tensor = image[..., 2, :, :]
 

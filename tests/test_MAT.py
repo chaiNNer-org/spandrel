@@ -1,4 +1,4 @@
-from spandrel.architectures.MAT import MAT
+from spandrel_nc.architectures.MAT import MAT
 
 from .util import ModelFile, disallowed_props
 
