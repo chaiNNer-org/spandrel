@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=46.4.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spandrel"
+authors = [{ name = "chaiNNer team" }]
+description = "Give your project support for a variety of PyTorch model architectures, including auto-detecting model architecture from just .pth files. spandrel gives you arch support."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = [
+    "spandrel",
+    "pytorch architecture",
+    "pytorch arch",
+    "model arch",
+    "model architecture",
+]
+license = { text = "MIT" }
+classifiers = [
+    # see https://pypi.org/classifiers/
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "torch",
+    "torchvision",
+    "safetensors",
+    "numpy",
+    "einops",
+    "typing_extensions",
+]
+dynamic = ["version"]
+
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.dynamic]
+version = { attr = "spandrel.__version__" }
