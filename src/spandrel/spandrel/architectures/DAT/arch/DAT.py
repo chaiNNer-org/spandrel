@@ -444,7 +444,7 @@ class Adaptive_Spatial_Attention(nn.Module):
         mask_windows_0 = img_mask_0.view(-1, self.split_size[0] * self.split_size[1])
         attn_mask_0 = mask_windows_0.unsqueeze(1) - mask_windows_0.unsqueeze(2)
         attn_mask_0 = attn_mask_0.masked_fill(
-            attn_mask_0 != 0, float(-100.0)
+            attn_mask_0 != 0, -100.0
         ).masked_fill(attn_mask_0 == 0, 0.0)
 
         # calculate mask for window-1
@@ -464,7 +464,7 @@ class Adaptive_Spatial_Attention(nn.Module):
         mask_windows_1 = img_mask_1.view(-1, self.split_size[1] * self.split_size[0])
         attn_mask_1 = mask_windows_1.unsqueeze(1) - mask_windows_1.unsqueeze(2)
         attn_mask_1 = attn_mask_1.masked_fill(
-            attn_mask_1 != 0, float(-100.0)
+            attn_mask_1 != 0, -100.0
         ).masked_fill(attn_mask_1 == 0, 0.0)
 
         return attn_mask_0, attn_mask_1
@@ -961,9 +961,9 @@ class DAT(nn.Module):
         # ------------------------- 2, Deep Feature Extraction ------------------------- #
         self.num_layers = len(depth)
         self.use_chk = use_chk
-        self.num_features = (
-            self.embed_dim
-        ) = embed_dim  # num_features for consistency with other models
+        self.num_features = self.embed_dim = (
+            embed_dim  # num_features for consistency with other models
+        )
         heads = num_heads
 
         self.before_RG = nn.Sequential(

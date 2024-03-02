@@ -12,6 +12,7 @@ Simple Baselines for Image Restoration
   year={2022}
 }
 """
+
 from __future__ import annotations
 
 import torch

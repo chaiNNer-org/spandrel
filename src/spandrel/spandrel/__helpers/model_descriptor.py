@@ -268,12 +268,10 @@ class ModelBase(ABC, Generic[T]):
         self,
         device: torch.device | str | None = None,
         dtype: torch.dtype | None = None,
-    ) -> Self:
-        ...
+    ) -> Self: ...
 
     @overload
-    def to(self, dtype: torch.dtype) -> Self:
-        ...
+    def to(self, dtype: torch.dtype) -> Self: ...
 
     def to(self, *args: object, **kwargs) -> Self:
         """

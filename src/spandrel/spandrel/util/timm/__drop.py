@@ -1,4 +1,4 @@
-""" DropBlock, DropPath
+"""DropBlock, DropPath
 
 PyTorch implementations of DropBlock and DropPath (Stochastic Depth) regularization layers.
 
@@ -15,6 +15,7 @@ DropBlock impl inspired by two Tensorflow impl that I liked:
 
 Hacked together by / Copyright 2020 Ross Wightman
 """
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F  # noqa: N812
