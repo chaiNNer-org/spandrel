@@ -38,7 +38,7 @@ jobs:
               with:
                   python-version: '3.11'
                   cache: 'pip'
-            - run: pip install .[typecheck,test] --extra-index-url https://download.pytorch.org/whl/cpu
+            - run: sh scripts/install.sh
             - run: pyright src/
             - run: pyright tests/
             - run: pyright scripts/
