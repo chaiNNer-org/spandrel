@@ -1,4 +1,4 @@
-from spandrel.architectures.CodeFormer import CodeFormer, CodeFormerArch
+from spandrel_nc.architectures.CodeFormer import CodeFormer, CodeFormerArch
 
 from .util import (
     ModelFile,

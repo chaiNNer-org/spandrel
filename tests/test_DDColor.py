@@ -1,4 +1,4 @@
-from spandrel.architectures.DDColor import DDColor, DDColorArch
+from spandrel_nc.architectures.DDColor import DDColor, DDColorArch
 
 from .util import (
     ModelFile,

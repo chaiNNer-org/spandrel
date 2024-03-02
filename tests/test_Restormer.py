@@ -1,4 +1,4 @@
-from spandrel.architectures.Restormer import Restormer, RestormerArch
+from spandrel_nc_cl.architectures.Restormer import Restormer, RestormerArch
 
 from .util import (
     ModelFile,

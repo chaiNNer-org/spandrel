@@ -43,18 +43,21 @@ from __future__ import annotations
 
 import argparse
 import collections
-import os
-import sys
 import textwrap
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, Mapping, TypeVar
 
 from torch import Tensor
 
-# This hack is necessary to make our module import
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+try:
+    from spandrel import MAIN_REGISTRY, ModelLoader  # noqa: E402
+    from spandrel_nc_cl import NC_CL_REGISTRY  # noqa: E402
+except ImportError:
+    print("Unable to import spandrel.")
+    print("Follow the contributing guide to set up editable installs.")
+    raise
 
-from spandrel import ModelLoader  # noqa: E402
+MAIN_REGISTRY.add(*NC_CL_REGISTRY)
 
 State = Dict[str, object]
 

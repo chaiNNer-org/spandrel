@@ -1,74 +1,9 @@
-[build-system]
-requires = ["setuptools>=46.4.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "spandrel"
-authors = [{ name = "chaiNNer team" }]
-description = "Give your project support for a variety of PyTorch model architectures, including auto-detecting model architecture from just .pth files. spandrel gives you arch support."
-readme = "README.md"
-requires-python = ">=3.8"
-keywords = [
-    "spandrel",
-    "pytorch architecture",
-    "pytorch arch",
-    "model arch",
-    "model architecture",
-]
-license = { text = "MIT" }
-classifiers = [
-    # see https://pypi.org/classifiers/
-    "Development Status :: 2 - Pre-Alpha",
-    "Intended Audience :: Developers",
-    "Topic :: Software Development :: Libraries",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
-dependencies = [
-    "torch",
-    "torchvision",
-    "safetensors",
-    "numpy",
-    "einops",
-    "typing_extensions",
-]
-dynamic = ["version"]
-
-[project.optional-dependencies]
-build = ["build", "twine"]
-lint = ["ruff==0.1.11"]
-typecheck = ["pyright==1.1.342"]
-test = [
-    "pytest==7.4.0",
-    "syrupy==4.6.0",
-    "opencv-python==4.8.1.78",
-    "requests",
-    "beautifulsoup4",
-]
-docs = ["pydoctor==23.9.1"]
-
-[tool.setuptools]
-license-files = ["LICENSE"]
-
-[tool.setuptools.dynamic]
-version = { attr = "spandrel.__version__" }
-
 [tool.ruff]
 # Same as Black.
 line-length = 88
 indent-width = 4
 
-src = ["src"]
-
-# ignore vendored code
-# extend-exclude = ["src/architectures/**"]
+src = ["src/spandrel", "src/spandrel_nc", "src/spandrel_nc_cl"]
 
 extend-select = [
     "ANN001",
@@ -101,11 +36,11 @@ ignore = [
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
-pythonpath = ["src"]
+pythonpath = ["src/spandrel", "src/spandrel_nc", "src/spandrel_nc_cl"]
 
 [tool.pydoctor]
 project-name = "spandrel"
-add-package = ["src/spandrel"]
+add-package = ["src/spandrel/spandrel"]
 project-url = "https://github.com/chaiNNer-org/spandrel"
 docformat = "restructuredtext"
 warnings-as-errors = false

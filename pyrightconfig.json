@@ -2,6 +2,11 @@
     "include": [
         "src"
     ],
+    "extraPaths": [
+        "./src/spandrel",
+        "./src/spandrel_nc",
+        "./src/spandrel_nc_cl",
+    ],
     "exclude": [
         "**/__pycache__"
     ],
