@@ -1123,9 +1123,9 @@ class LeWinTransformerBlock(nn.Module):
             attn_mask = attn_mask.unsqueeze(2) * attn_mask.unsqueeze(
                 1
             )  # nW, win_size*win_size, win_size*win_size
-            attn_mask = attn_mask.masked_fill(
-                attn_mask != 0, -100.0
-            ).masked_fill(attn_mask == 0, 0.0)
+            attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
+                attn_mask == 0, 0.0
+            )
         else:
             attn_mask = None
 
