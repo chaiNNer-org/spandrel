@@ -9,7 +9,7 @@ This document will explain how to [get started](#getting-started) and give a gui
 Before you can start with the actual development, you need to set up the project.
 
 1. Fork and clone the repository. ([GitHub guide](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
-2. Install dependencies: `pip install -e .`. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
+2. Install dependencies: `pip install -e src/spandrel src/spandrel_nc src/spandrel_nc_cl`. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
 
 We recommend using [Visual Studio Code](https://code.visualstudio.com/) as your IDE. It has great support for Python and is easy to set up. If you do, please install the following extensions: PyLance, Ruff, and Code Spell Checker. VSCode should show you a notification when you first open the project to install these extensions.
 
