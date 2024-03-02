@@ -22,17 +22,10 @@ of the dummy model to `dump.yml`.
 For more detail on the dump itself, see the docs of `dump_state_dict.py`.
 """
 
-
 import inspect
-import os
-import sys
 from textwrap import dedent
 
 import torch
-
-# This hack is necessary to make our module import
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
-
 from dump_state_dict import dump
 
 from spandrel.architectures import SCUNet
