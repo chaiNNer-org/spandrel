@@ -9,7 +9,10 @@ This document will explain how to [get started](#getting-started) and give a gui
 Before you can start with the actual development, you need to set up the project.
 
 1. Fork and clone the repository. ([GitHub guide](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
-2. Install dependencies: `pip install -e src/spandrel src/spandrel_nc src/spandrel_nc_cl`. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
+2. Install our dev dependencies: `pip install -r requirements-dev.txt`.
+3. Install the packages of this repo as editable installs: `pip install -e src/spandrel -e src/spandrel_nc -e src/spandrel_nc_cl`.
+
+   This will also install their dependencies, so this might take a while. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
 
 We recommend using [Visual Studio Code](https://code.visualstudio.com/) as your IDE. It has great support for Python and is easy to set up. If you do, please install the following extensions: PyLance, Ruff, and Code Spell Checker. VSCode should show you a notification when you first open the project to install these extensions.
 
@@ -42,11 +45,11 @@ You can also run `pre-commit run --all-files` to run pre-commit on all files in 
 
 The project is structured as follows:
 
-- `src/spandrel/`: The code of the library.
-- `src/spandrel/__helpers/`: The internal implementation of private and public classes/constants/functions. This includes `ModelLoader`, `ModelDescriptor`, `MAIN_REGISTRY`, and much more.
-- `src/spandrel/__init__.py`: This file re-exports classes/constants/functions from `__helpers` to define the public API of the library.
-- `src/spandrel/architectures/`: The directory containing all architecture implementations. E.g. ESRGAN, SwinIR, etc.
-- `src/spandrel/architectures/<arch>/__init__.py`: The file containing the `load` method for that architecture. (A `load` method takes a state dict, detects the hyperparameters of the architecture, and returns a `ModelDescriptor` variant.)
+- `src/spandrel/spandrel/`: The code of the library.
+- `src/spandrel/spandrel/__helpers/`: The internal implementation of private and public classes/constants/functions. This includes `ModelLoader`, `ModelDescriptor`, `MAIN_REGISTRY`, and much more.
+- `src/spandrel/spandrel/__init__.py`: This file re-exports classes/constants/functions from `__helpers` to define the public API of the library.
+- `src/spandrel/spandrel/architectures/`: The directory containing all architecture implementations. E.g. ESRGAN, SwinIR, etc.
+- `src/spandrel/spandrel/architectures/<arch>/__init__.py`: The file containing the `load` method for that architecture. (A `load` method takes a state dict, detects the hyperparameters of the architecture, and returns a `ModelDescriptor` variant.)
 - `tests/`: The directory containing all tests for the library.
 - `scripts/`: The directory for scripts used in the development of the library.
 
@@ -65,7 +68,7 @@ The project is structured as follows:
 
 ##### Running inference tests with another Torch device
 
-You can set the `SPANDREL_TEST_DEVICE` environment variable to run inference tests using the specified Torch device.  The default is `cpu`.
+You can set the `SPANDREL_TEST_DEVICE` environment variable to run inference tests using the specified Torch device. The default is `cpu`.
 
 If you use that environment variable, it may be useful to set `SPANDREL_TEST_OUTPUTS_DIR` to (e.g.) `outputs-mps`; this will make the test suite output images to a directory named `outputs-mps` instead of `outputs`, so you can use your favorite comparison tool to compare the outputs of the tests run on different devices.
 
@@ -484,23 +487,23 @@ So `UFONE_blocks` controls the length of the sequence of the `UFONE`. Its defaul
 
 ```yaml
 UFONE.0
-  ITLs
-    ...
+ITLs
+...
 ```
 
 When you see a grouping called `<name>.0`, that's a sequence of length 1. If we modify `dump_dummy.py` to set `UFONE_blocks=3`, we'll get this instead:
 
 ```yaml
 UFONE
-  0
-    ITLs
-      ...
-  1
-    ITLs
-      ...
-  2
-    TLs
-      ..
+0
+ITLs
+...
+1
+ITLs
+...
+2
+TLs
+..
 ```
 
 So we can clearly see the length of sequences using the groupings in `dump.yml`. However, we cannot access this length directly from state dict. To get around this, we'll use a helper function called `get_seq_len`. As the name suggests, it determines the length of a sequence in a state dict. Adding this to DITN's `load` function looks like this:
