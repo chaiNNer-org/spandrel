@@ -5,7 +5,7 @@ indent-width = 4
 
 src = ["src/spandrel", "src/spandrel_nc", "src/spandrel_nc_cl"]
 
-extend-select = [
+lint.extend-select = [
     "ANN001",
     "ANN002",
     "B",      # bugbear
@@ -19,7 +19,7 @@ extend-select = [
     "UP",     # pyupgrade
     "W",      # pycodestyle
 ]
-ignore = [
+lint.ignore = [
     "E501",   # Line too long
     "N814",   # Camelcase imported as constant
     "N999",   # Invalid module name

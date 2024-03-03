@@ -363,7 +363,7 @@ class SwinTransformerBlock(nn.Module):
         )  # nW, window_size, window_size, 1
         mask_windows = mask_windows.view(-1, self.window_size * self.window_size)
         attn_mask = mask_windows.unsqueeze(1) - mask_windows.unsqueeze(2)
-        attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(
+        attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
             attn_mask == 0, 0.0
         )
 

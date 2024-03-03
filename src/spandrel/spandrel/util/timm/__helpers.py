@@ -1,6 +1,7 @@
-""" Layer/Module Helpers
+"""Layer/Module Helpers
 Hacked together by / Copyright 2020 Ross Wightman
 """
+
 from __future__ import annotations
 
 import collections.abc

@@ -125,7 +125,7 @@ def calculate_mask(input_resolution, window_size, shift_size):
     mask_windows = _fill_window(input_resolution, window_size, shift_size)
 
     attn_mask = mask_windows.unsqueeze(1) - mask_windows.unsqueeze(2)
-    attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(
+    attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
         attn_mask == 0, 0.0
     )  # nW, window_size**2, window_size**2
 
@@ -156,7 +156,7 @@ def calculate_mask_all(
         attn_mask = mask_windows.unsqueeze(2) - mask_anchor.unsqueeze(1)
     else:
         attn_mask = mask_anchor.unsqueeze(2) - mask_windows.unsqueeze(1)
-    attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(
+    attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
         attn_mask == 0, 0.0
     )  # nW, Wh**Ww, AWh*AWw
 
@@ -177,7 +177,7 @@ def calculate_win_mask(
     mask_windows2 = _fill_window(input_resolution2, window_size2)
 
     attn_mask = mask_windows1.unsqueeze(2) - mask_windows2.unsqueeze(1)
-    attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(
+    attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
         attn_mask == 0, 0.0
     )  # nW, Wh**Ww, AWh*AWw
 

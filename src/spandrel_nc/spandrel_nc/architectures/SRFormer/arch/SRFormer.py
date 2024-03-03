@@ -477,7 +477,7 @@ class PSA_Block(nn.Module):
         )
         # calculate attention mask
         attn_mask = mask_windows.unsqueeze(2) - permuted_windows.unsqueeze(1)
-        attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(
+        attn_mask = attn_mask.masked_fill(attn_mask != 0, -100.0).masked_fill(
             attn_mask == 0, 0.0
         )
 

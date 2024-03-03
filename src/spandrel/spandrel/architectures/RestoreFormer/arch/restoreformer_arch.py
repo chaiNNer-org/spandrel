@@ -1,6 +1,6 @@
 # type: ignore
-"""Modified from https://github.com/wzhouxiff/RestoreFormer
-"""
+"""Modified from https://github.com/wzhouxiff/RestoreFormer"""
+
 import numpy as np
 import torch
 import torch.nn as nn
