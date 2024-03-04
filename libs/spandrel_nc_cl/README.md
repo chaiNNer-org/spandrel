@@ -1,6 +1,6 @@
 # Spandrel NC CL
 
-This library implements various PyTorch architecture with non-commercial and copyleft licenses for [spandrel](https://github.com/chaiNNer-org/spandrel).
+This library implements various PyTorch architectures with non-commercial and copyleft licenses for [spandrel](https://github.com/chaiNNer-org/spandrel).
 
 > NOTE: This library contains all architectures implemented by `spandrel_nc`. Consequently, you do *not* need to install `spandrel_nc` if you install `spandrel_nc_cl`.
 
