@@ -53,6 +53,8 @@ Note that `model` is a [`ModelDescriptor`](https://chainner.app/spandrel/#ModelD
 
 ### Architectures with restrictive licenses
 
+*TLDR:* If you want all architectures, no matter their license, you need to install `spandrel` and `spandrel_nc_cl`. See the code block below.
+
 While all architectures supported by the `spandrel` package are licensed with permissive licenses (MIT, Apache 2.0, BSD, public domain), some architectures have restrictive licenses that *prohibit* certain use cases (e.g. commercial use). Architectures with restrictive licenses are implemented in separate packages, and have to be installed separately.
 
 - `spandrel_nc`: This package contains (nc) non-commercial architectures.
@@ -65,13 +67,13 @@ from spandrel import ImageModelDescriptor, MAIN_REGISTRY, ModelLoader
 from spandrel_nc_cl import NC_CL_REGISTRY
 import torch
 
-# add nc and cl architectures
+# add nc and cl architectures before `ModelLoader` is used
 MAIN_REGISTRY.add(NC_CL_REGISTRY)
 
 # load a model from disk
 model = ModelLoader().load_from_file(r"path/to/model.pth")
 
-... # business as usual
+... # use model
 ```
 
 ## Supported File Types
@@ -153,6 +155,6 @@ Here are some cool projects that use Spandrel:
 - [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
 - [dgenerate](https://github.com/Teriks/dgenerate)
 
-## License Notice
+## License
 
 This repo is bounded by the MIT license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses (which are included in their respective `arch/` directories).
