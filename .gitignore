@@ -143,3 +143,6 @@ tests/zips/
 
 # docs
 docs/
+
+# build
+libs/spandrel/README.md
