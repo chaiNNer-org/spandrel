@@ -39,6 +39,6 @@ jobs:
                   python-version: '3.11'
                   cache: 'pip'
             - run: sh scripts/install.sh
-            - run: pyright src/
+            - run: pyright libs/
             - run: pyright tests/
             - run: pyright scripts/
