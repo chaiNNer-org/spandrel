@@ -13,9 +13,9 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.upcunet_v3 import UpCunet2x, UpCunet3x, UpCunet4x
+from .arch.upcunet_v3 import UpCunet2x, UpCunet2x_fast, UpCunet3x, UpCunet4x
 
-_RealCUGAN = Union[UpCunet2x, UpCunet3x, UpCunet4x]
+_RealCUGAN = Union[UpCunet2x, UpCunet3x, UpCunet4x, UpCunet2x_fast]
 
 
 class RealCUGANArch(Architecture[_RealCUGAN]):
@@ -58,10 +58,20 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
             tags.append("pro")
             state_dict["pro"] = torch.zeros(1)
 
-        if "conv_final.weight" in state_dict:
+        in_channels = state_dict["unet1.conv1.conv.0.weight"].shape[1]
+        size_requirements = SizeRequirements(minimum=32)
+
+        if "conv_final.weight" in state_dict and in_channels == 12:
+            # UpCunet2x_fast
+            scale = 2
+            in_channels = 3  # hard coded in UpCunet2x_fast
+            out_channels = 3  # hard coded in UpCunet2x_fast
+            model = UpCunet2x_fast(in_channels=in_channels, out_channels=out_channels)
+            size_requirements = SizeRequirements(minimum=40, multiple_of=4)
+            tags.append("fast")
+        elif "conv_final.weight" in state_dict:
             # UpCunet4x
             scale = 4
-            in_channels = state_dict["unet1.conv1.conv.0.weight"].shape[1]
             out_channels = 3  # hard coded in UpCunet4x
             model = UpCunet4x(
                 in_channels=in_channels, out_channels=out_channels, pro=pro
@@ -69,7 +79,6 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
         elif state_dict["unet1.conv_bottom.weight"].shape[2] == 5:
             # UpCunet3x
             scale = 3
-            in_channels = state_dict["unet1.conv1.conv.0.weight"].shape[1]
             out_channels = state_dict["unet2.conv_bottom.weight"].shape[0]
             model = UpCunet3x(
                 in_channels=in_channels, out_channels=out_channels, pro=pro
@@ -77,7 +86,6 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
         else:
             # UpCunet2x
             scale = 2
-            in_channels = state_dict["unet1.conv1.conv.0.weight"].shape[1]
             out_channels = state_dict["unet2.conv_bottom.weight"].shape[0]
             model = UpCunet2x(
                 in_channels=in_channels, out_channels=out_channels, pro=pro
@@ -94,5 +102,5 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
             scale=scale,
             input_channels=in_channels,
             output_channels=out_channels,
-            size_requirements=SizeRequirements(minimum=32),
+            size_requirements=size_requirements,
         )
