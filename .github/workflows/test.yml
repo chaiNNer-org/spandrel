@@ -12,6 +12,7 @@ on:
             - closed
         paths:
             - 'libs/**'
+            - '!libs/**/*.md'
             - 'tests/**'
             - '.github/workflows/**'
             - 'pyproject.toml'
