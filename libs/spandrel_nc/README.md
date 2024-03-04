@@ -1,6 +1,6 @@
 # Spandrel NC
 
-This library implements various AI architecture with non-commercial licenses for [spandrel](https://github.com/chaiNNer-org/spandrel).
+This library implements various PyTorch architecture with non-commercial licenses for [spandrel](https://github.com/chaiNNer-org/spandrel).
 
 ## Installation
 
