@@ -3,7 +3,7 @@
 line-length = 88
 indent-width = 4
 
-src = ["src/spandrel", "src/spandrel_nc", "src/spandrel_nc_cl"]
+src = ["libs/spandrel", "libs/spandrel_nc", "libs/spandrel_nc_cl"]
 
 lint.extend-select = [
     "ANN001",
@@ -36,11 +36,11 @@ lint.ignore = [
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
-pythonpath = ["src/spandrel", "src/spandrel_nc", "src/spandrel_nc_cl"]
+pythonpath = ["libs/spandrel", "libs/spandrel_nc", "libs/spandrel_nc_cl"]
 
 [tool.pydoctor]
 project-name = "spandrel"
-add-package = ["src/spandrel/spandrel"]
+add-package = ["libs/spandrel/spandrel"]
 project-url = "https://github.com/chaiNNer-org/spandrel"
 docformat = "restructuredtext"
 warnings-as-errors = false

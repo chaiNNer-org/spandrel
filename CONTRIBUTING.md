@@ -10,7 +10,7 @@ Before you can start with the actual development, you need to set up the project
 
 1. Fork and clone the repository. ([GitHub guide](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
 2. Install our dev dependencies: `pip install -r requirements-dev.txt`.
-3. Install the packages of this repo as editable installs: `pip install -e src/spandrel -e src/spandrel_nc -e src/spandrel_nc_cl`.
+3. Install the packages of this repo as editable installs: `pip install -e libs/spandrel -e libs/spandrel_nc -e libs/spandrel_nc_cl`.
 
    This will also install their dependencies, so this might take a while. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
 
@@ -31,9 +31,9 @@ Updating/adding snapshots has to be done via the command line. Use the command: 
 
 We use [ruff](https://docs.astral.sh/ruff/) for formatting and linting and [pyright](https://microsoft.github.io/pyright/#/type-concepts) for static type checking. If you are using VSCode with the recommended extensions, everything is already set up and configured for you. If you are using a different IDE, you will have to set up these tools yourself or use them through the command line:
 
-- Ruff linting + auto fix: `ruff check src tests --fix --unsafe-fixes`
-- Ruff formatting: `ruff format src tests`
-- PyRight: `pyright src tests`
+- Ruff linting + auto fix: `ruff check libs tests --fix --unsafe-fixes`
+- Ruff formatting: `ruff format libs tests`
+- PyRight: `pyright libs tests`
 
 #### `pre-commit`
 
@@ -45,11 +45,11 @@ You can also run `pre-commit run --all-files` to run pre-commit on all files in 
 
 The project is structured as follows:
 
-- `src/spandrel/spandrel/`: The code of the library.
-- `src/spandrel/spandrel/__helpers/`: The internal implementation of private and public classes/constants/functions. This includes `ModelLoader`, `ModelDescriptor`, `MAIN_REGISTRY`, and much more.
-- `src/spandrel/spandrel/__init__.py`: This file re-exports classes/constants/functions from `__helpers` to define the public API of the library.
-- `src/spandrel/spandrel/architectures/`: The directory containing all architecture implementations. E.g. ESRGAN, SwinIR, etc.
-- `src/spandrel/spandrel/architectures/<arch>/__init__.py`: The file containing the `load` method for that architecture. (A `load` method takes a state dict, detects the hyperparameters of the architecture, and returns a `ModelDescriptor` variant.)
+- `libs/spandrel/spandrel/`: The code of the library.
+- `libs/spandrel/spandrel/__helpers/`: The internal implementation of private and public classes/constants/functions. This includes `ModelLoader`, `ModelDescriptor`, `MAIN_REGISTRY`, and much more.
+- `libs/spandrel/spandrel/__init__.py`: This file re-exports classes/constants/functions from `__helpers` to define the public API of the library.
+- `libs/spandrel/spandrel/architectures/`: The directory containing all architecture implementations. E.g. ESRGAN, SwinIR, etc.
+- `libs/spandrel/spandrel/architectures/<arch>/__init__.py`: The file containing the `load` method for that architecture. (A `load` method takes a state dict, detects the hyperparameters of the architecture, and returns a `ModelDescriptor` variant.)
 - `tests/`: The directory containing all tests for the library.
 - `scripts/`: The directory for scripts used in the development of the library.
 
@@ -57,7 +57,7 @@ The project is structured as follows:
 
 #### Type checking
 
-- `pyright src`: Check for type errors.
+- `pyright libs`: Check for type errors.
 
 #### Testing
 
@@ -110,9 +110,9 @@ Of course, the copy this code, we first have to find it! Unfortunately, project 
 
 In the case of DITN, the file is called [`models/DITN_Real.py`](https://github.com/yongliuy/DITN/blob/3438e429c0538ee5061a7cfca587df0c4097703f/models/DITN_Real.py#L197).
 
-Once you have found the file, create a new directory `src/spandrel/architectures/<arch name>/arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
+Once you have found the file, create a new directory `libs/spandrel/architectures/<arch name>/arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
 
-In the case of DITN, we copy `models/DITN_Real.py` to `src/spandrel/architectures/DITN/arch/DITN_Real.py` and add the `LICENSE` file of the repo.
+In the case of DITN, we copy `models/DITN_Real.py` to `libs/spandrel/architectures/DITN/arch/DITN_Real.py` and add the `LICENSE` file of the repo.
 
 The main model file might also reference other files in the repo. You have to copy those files into your `arch/` directory as well.
 
@@ -146,7 +146,7 @@ The model files might have dependencies to external packages. We generally try t
 
 We allow models to have the following external dependencies: `torch`, `torchvision`, `numpy`, and `einops`.
 
-`timm` is a special dependency for us, because we have vendored the most important code from `timm`. So instead of using the `timm` package, we should use the vendored code from `src/spandrel/architectures/__arch_helpers/timm/`.
+`timm` is a special dependency for us, because we have vendored the most important code from `timm`. So instead of using the `timm` package, we should use the vendored code from `libs/spandrel/architectures/__arch_helpers/timm/`.
 
 In the case of DITN, its model file has no external dependencies, except for `torch` and `einops`, so we are done.
 
@@ -156,7 +156,7 @@ With the architecture code in place, we can start integrating it into spandrel. 
 
 We will worry about parameter detection later, for now, we'll just return a dummy model.
 
-Create a file `src/spandrel/architectures/<arch name>/__init__.py` and add the following code:
+Create a file `libs/spandrel/architectures/<arch name>/__init__.py` and add the following code:
 
 ```python
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
@@ -630,7 +630,7 @@ def test_ARCH_model_name(snapshot):
 
 Fill in the details as usual and run the test. It should download the model successfully and then fail with an `UnsupportedModelError`. Let's fix this error my registering the architecture.
 
-Open `src\spandrel\__helpers\main_registry.py` and start by importing your architecture in the `from ..architectures import (...)` state. Then get read to scroll all the way down and add a new `ArchSupport` object at the end of `MAIN_REGISTRY.add(...)`. The `ArchSupport` object will tell spandrel how to detect whether an arbitrary state dict (so a state dict of any architecture) is from your architecture. We do this by simply detecting the presence of a particular key. Each architecture has a few keys that are always present in the state dict, and we'll use those for detection.
+Open `libs\spandrel\__helpers\main_registry.py` and start by importing your architecture in the `from ..architectures import (...)` state. Then get read to scroll all the way down and add a new `ArchSupport` object at the end of `MAIN_REGISTRY.add(...)`. The `ArchSupport` object will tell spandrel how to detect whether an arbitrary state dict (so a state dict of any architecture) is from your architecture. We do this by simply detecting the presence of a particular key. Each architecture has a few keys that are always present in the state dict, and we'll use those for detection.
 
 In the case of DITN, its `ArchSupport` object looks like this:
 

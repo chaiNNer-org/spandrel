@@ -1,11 +1,11 @@
 {
     "include": [
-        "src"
+        "libs"
     ],
     "extraPaths": [
-        "./src/spandrel",
-        "./src/spandrel_nc",
-        "./src/spandrel_nc_cl",
+        "./libs/spandrel",
+        "./libs/spandrel_nc",
+        "./libs/spandrel_nc_cl",
     ],
     "exclude": [
         "**/__pycache__"

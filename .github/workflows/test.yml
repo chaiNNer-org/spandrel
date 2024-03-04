@@ -11,7 +11,7 @@ on:
             - synchronize
             - closed
         paths:
-            - 'src/**'
+            - 'libs/**'
             - 'tests/**'
             - '.github/workflows/**'
             - 'pyproject.toml'
