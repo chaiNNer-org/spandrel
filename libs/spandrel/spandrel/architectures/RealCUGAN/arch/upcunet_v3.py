@@ -421,26 +421,6 @@ class UpCunet4x(nn.Module):
         return x
 
 
-class pixel_unshuffle(nn.Module):
-    def __init__(self, ratio=2):
-        super().__init__()
-        self.ratio = ratio
-
-    def forward(self, tensor: Tensor):
-        ratio = self.ratio
-        b = tensor.size(0)
-        ch = tensor.size(1)
-        y = tensor.size(2)
-        x = tensor.size(3)
-        assert x % ratio == 0 and y % ratio == 0, f"x, y, ratio : {x}, {y}, {ratio}"
-        return (
-            tensor.view(b, ch, y // ratio, ratio, x // ratio, ratio)
-            .permute(0, 1, 3, 5, 2, 4)
-            .contiguous()
-            .view(b, -1, y // ratio, x // ratio)
-        )
-
-
 @store_hyperparameters(extra_parameters={"scale": 2, "fast": True})
 class UpCunet2x_fast(nn.Module):
     hyperparameters = {}
@@ -451,7 +431,7 @@ class UpCunet2x_fast(nn.Module):
         self.unet2 = UNet2(64, 64, deconv=False)
         self.ps = nn.PixelShuffle(2)
         self.conv_final = nn.Conv2d(64, 12, 3, 1, padding=0, bias=True)
-        self.inv = pixel_unshuffle(2)
+        self.inv = nn.PixelUnshuffle(2)
 
     def forward(self, x: Tensor):
         _, _, h0, w0 = x.shape
