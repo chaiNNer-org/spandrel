@@ -287,7 +287,7 @@ class UNet2(nn.Module):
         return z
 
 
-@store_hyperparameters(extra_parameters={"scale": 2})
+@store_hyperparameters(extra_parameters={"scale": 2, "fast": False})
 class UpCunet2x(nn.Module):
     hyperparameters = {}
 
@@ -418,4 +418,36 @@ class UpCunet4x(nn.Module):
         if self.is_pro:
             x = (x - 0.15) / 0.7
 
+        return x
+
+
+@store_hyperparameters(extra_parameters={"scale": 2, "fast": True})
+class UpCunet2x_fast(nn.Module):
+    hyperparameters = {}
+
+    def __init__(self, in_channels=3, out_channels=3):
+        super().__init__()
+        self.unet1 = UNet1(12, 64, deconv=True)
+        self.unet2 = UNet2(64, 64, deconv=False)
+        self.ps = nn.PixelShuffle(2)
+        self.conv_final = nn.Conv2d(64, 12, 3, 1, padding=0, bias=True)
+        self.inv = nn.PixelUnshuffle(2)
+
+    def forward(self, x: Tensor):
+        _, _, h0, w0 = x.shape
+        x00 = x
+        ph = ((h0 - 1) // 2 + 1) * 2
+        pw = ((w0 - 1) // 2 + 1) * 2
+        x = F.pad(x, (38, 38 + pw - w0, 38, 38 + ph - h0), "reflect")  # 需要保证被2整除
+        x = self.inv(x)  # +18
+        x = self.unet1.forward(x)
+        x0 = self.unet2.forward(x)
+        x1 = F.pad(x, (-20, -20, -20, -20))
+        x = torch.add(x0, x1)
+        x = self.conv_final(x)
+        x = F.pad(x, (-1, -1, -1, -1))
+        x = self.ps(x)
+        if w0 != pw or h0 != ph:
+            x = x[:, :, : h0 * 2, : w0 * 2]
+        x += F.interpolate(x00, scale_factor=2, mode="nearest")
         return x
