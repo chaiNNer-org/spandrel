@@ -16,20 +16,41 @@ class KeyCondition:
     """
 
     def __init__(
-        self, kind: Literal["all", "any"], keys: tuple[str | KeyCondition, ...]
+        self,
+        kind: Literal["all", "any"],
+        keys: tuple[str | KeyCondition, ...],
+        *,
+        min_key_count: int | None = None,
+        max_key_count: int | None = None,
     ):
         self._keys = keys
         self._kind = kind
+        self._min_key_count = min_key_count
+        self._max_key_count = max_key_count
 
     @staticmethod
     def has_all(*keys: str | KeyCondition) -> KeyCondition:
         return KeyCondition("all", keys)
 
     @staticmethod
+    def exactly(*keys: str) -> KeyCondition:
+        return KeyCondition(
+            "all",
+            keys,
+            min_key_count=len(keys),
+            max_key_count=len(keys),
+        )
+
+    @staticmethod
     def has_any(*keys: str | KeyCondition) -> KeyCondition:
         return KeyCondition("any", keys)
 
     def __call__(self, state_dict: Mapping[str, object]) -> bool:
+        if self._min_key_count is not None and len(state_dict) < self._min_key_count:
+            return False
+        if self._max_key_count is not None and len(state_dict) > self._max_key_count:
+            return False
+
         def _detect(key: str | KeyCondition) -> bool:
             if isinstance(key, KeyCondition):
                 return key(state_dict)
