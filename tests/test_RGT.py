@@ -32,28 +32,24 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1uSgjg5ipivuEz6AlS6jhEH3oF6tuudUb/view?usp=drive_link",
-        name="RGT_x2.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/2x-RGT.pth"
     )
     assert_size_requirements(file.load_model())
 
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1F_mr-bjYtP5FQLEEo_MOthj9Bk6kQLgu/view?usp=drive_link",
-        name="RGT_x3.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/3x-RGT.pth"
     )
     assert_size_requirements(file.load_model())
 
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1uULArtV1EcPbS3ujVbZvJIRMogldRMHr/view?usp=drive_link",
-        name="RGT_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/4x-RGT.pth"
     )
     assert_size_requirements(file.load_model())
 
 
 def test_RGT_x2(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1uSgjg5ipivuEz6AlS6jhEH3oF6tuudUb/view?usp=drive_link",
-        name="RGT_x2.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/2x-RGT.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -67,8 +63,7 @@ def test_RGT_x2(snapshot):
 
 def test_RGT_x3(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1F_mr-bjYtP5FQLEEo_MOthj9Bk6kQLgu/view?usp=drive_link",
-        name="RGT_x3.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/3x-RGT.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -82,8 +77,7 @@ def test_RGT_x3(snapshot):
 
 def test_RGT_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1uULArtV1EcPbS3ujVbZvJIRMogldRMHr/view?usp=drive_link",
-        name="RGT_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/4x-RGT.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -97,8 +91,7 @@ def test_RGT_x4(snapshot):
 
 def test_RGT_S_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1NNaj3UH5smEylwVabQLMEdey-FoaqnM_/view?usp=drive_link",
-        name="RGT_S_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/rgt/4x-RGT_S.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
