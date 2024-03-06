@@ -51,24 +51,17 @@ Note that `model` is a [`ModelDescriptor`](https://chainner.app/spandrel/#ModelD
 
 > **_NOTE: `ImageModelDescriptor` will NOT convert an image to a tensor for you. It is purely making the forward passes of these models more convenient to use, since the actual forward passes are not always as simple as image in/image out._**
 
-### Architectures with restrictive licenses
+### More architectures
 
-*TLDR:* If you want all architectures, no matter their license, you need to install `spandrel` and `spandrel_nc_cl`. See the code block below.
-
-While all architectures supported by the `spandrel` package are licensed with permissive licenses (MIT, Apache 2.0, BSD, public domain), some architectures have restrictive licenses that *prohibit* certain use cases (e.g. commercial use). Architectures with restrictive licenses are implemented in separate packages, and have to be installed separately.
-
-- `spandrel_nc`: This package contains (nc) non-commercial architectures.
-- `spandrel_nc_cl`: This package contains (nc) non-commercial and (cl) copyleft architectures. (This includes everything from `spandrel_nc`.)
-
-So if you want all architectures spandrel supports, you need to install `spandrel` and `spandrel_nc_cl`, and use it like this:
+If you are working on a non-commercial open-source project or a private project, you should use `spandrel` and `spandrel_extra_arches` to get everything spandrel has to offer. The `spandrel` package only contains architectures with [permissive and public domain licenses](https://en.wikipedia.org/wiki/Permissive_software_license) (MIT, Apache 2.0, public domain), so it is fit for every use case. Architectures with restrictive licenses (e.g. non-commercial) are implemented in the `spandrel_extra_arches` package.
 
 ```python
 from spandrel import ImageModelDescriptor, MAIN_REGISTRY, ModelLoader
-from spandrel_nc_cl import NC_CL_REGISTRY
+from spandrel_extra_arches import EXTRA_REGISTRY
 import torch
 
-# add nc and cl architectures before `ModelLoader` is used
-MAIN_REGISTRY.add(NC_CL_REGISTRY)
+# add extra architectures before `ModelLoader` is used
+MAIN_REGISTRY.add(*EXTRA_REGISTRY)
 
 # load a model from disk
 model = ModelLoader().load_from_file(r"path/to/model.pth")
@@ -97,9 +90,9 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [Swin2SR](https://github.com/mv-lab/swin2sr) | [Models](https://github.com/mv-lab/swin2sr/releases/tag/v0.0.1)
 - [HAT](https://github.com/XPixelGroup/HAT) | [Models](https://drive.google.com/drive/folders/1HpmReFfoUqUbnAOQ7rvOeNU3uf_m69w0)
 - [Omni-SR](https://github.com/Francis0625/Omni-SR) | [Models](https://github.com/Francis0625/Omni-SR#preparation)
-- [SRFormer](https://github.com/HVision-NKU/SRFormer) (nc) | [Models](https://github.com/HVision-NKU/SRFormer#pretrain-models)
+- [SRFormer](https://github.com/HVision-NKU/SRFormer) (+) | [Models](https://github.com/HVision-NKU/SRFormer#pretrain-models)
 - [DAT](https://github.com/zhengchen1999/DAT) | [Models](https://github.com/zhengchen1999/DAT#testing)
-- [FeMaSR](https://github.com/chaofengc/FeMaSR) (nc cl) | [Models](https://github.com/chaofengc/FeMaSR/releases/tag/v0.1-pretrain_models)
+- [FeMaSR](https://github.com/chaofengc/FeMaSR) (+) | [Models](https://github.com/chaofengc/FeMaSR/releases/tag/v0.1-pretrain_models)
 - [GRL](https://github.com/ofsoundof/GRL-Image-Restoration) | [Models](https://github.com/ofsoundof/GRL-Image-Restoration/releases/tag/v1.0.0)
 - [DITN](https://github.com/yongliuy/DITN) | [Models](https://drive.google.com/drive/folders/1XpHW27H5j2S4IH8t4lccgrgHkIjqrS-X)
 - [MM-RealSR](https://github.com/TencentARC/MM-RealSR) | [Models](https://github.com/TencentARC/MM-RealSR/releases/tag/v1.0.0)
@@ -114,12 +107,12 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 
 - [GFPGAN](https://github.com/TencentARC/GFPGAN) | [1.2](https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.2.pth), [1.3](https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth), [1.4](https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth)
 - [RestoreFormer](https://github.com/wzhouxiff/RestoreFormer) | [Model](https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/RestoreFormer.pth)
-- [CodeFormer](https://github.com/sczhou/CodeFormer) (nc) | [Model](https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth)
+- [CodeFormer](https://github.com/sczhou/CodeFormer) (+) | [Model](https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth)
 
 #### Inpainting
 
 - [LaMa](https://github.com/advimman/lama) | [Model](https://github.com/Sanster/models/releases/download/add_big_lama/big-lama.pt)
-- [MAT](https://github.com/fenglinglwb/MAT) (nc) | [Model](https://github.com/Sanster/models/releases/download/add_mat/Places_512_FullData_G.pth)
+- [MAT](https://github.com/fenglinglwb/MAT) (+) | [Model](https://github.com/Sanster/models/releases/download/add_mat/Places_512_FullData_G.pth)
 
 #### Denoising
 
@@ -127,9 +120,9 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [Uformer](https://github.com/ZhendongWang6/Uformer) | [Denoise SIDD Model](https://mailustceducn-my.sharepoint.com/:u:/g/personal/zhendongwang_mail_ustc_edu_cn/Ea7hMP82A0xFlOKPlQnBJy0B9gVP-1MJL75mR4QKBMGc2w?e=iOz0zz) | [Deblur GoPro Model](https://mailustceducn-my.sharepoint.com/:u:/g/personal/zhendongwang_mail_ustc_edu_cn/EfCPoTSEKJRAshoE6EAC_3YB7oNkbLUX6AUgWSCwoJe0oA?e=jai90x)
 - [KBNet](https://github.com/zhangyi-3/KBNet) | [Models](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155135732_link_cuhk_edu_hk/EofsV3eVcAxNlrW72JXqzRUBhkM1Mzw50pJ3BHlAyMYnVw?e=MeMB5H)
 - [NAFNet](https://github.com/megvii-research/NAFNet) | [Models](https://github.com/megvii-research/NAFNet#results-and-pre-trained-models)
-- [Restormer](https://github.com/swz30/Restormer) (nc cl) | [Models](https://github.com/swz30/Restormer/releases/tag/v1.0)
+- [Restormer](https://github.com/swz30/Restormer) (+) | [Models](https://github.com/swz30/Restormer/releases/tag/v1.0)
 - [FFTformer](https://github.com/kkkls/FFTformer) | [Models](https://github.com/kkkls/FFTformer/releases/tag/pretrain_model)
-- [M3SNet](https://github.com/Tombs98/M3SNet) (nc cl) | [Models](https://drive.google.com/drive/folders/1y4BEX7LagtXVO98ZItSbJJl7WWM3gnbD)
+- [M3SNet](https://github.com/Tombs98/M3SNet) (+) | [Models](https://drive.google.com/drive/folders/1y4BEX7LagtXVO98ZItSbJJl7WWM3gnbD)
 
 #### DeJPEG
 
@@ -137,9 +130,9 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 
 #### Colorization
 
-- [DDColor](https://github.com/piddnad/DDColor) (nc) | [Models](https://github.com/piddnad/DDColor/blob/master/MODEL_ZOO.md)
+- [DDColor](https://github.com/piddnad/DDColor) (+) | [Models](https://github.com/piddnad/DDColor/blob/master/MODEL_ZOO.md)
 
-(nc = non-commercial, cl = copyleft)
+(All architectures marked with a `+` are only part of `spandrel_extra_arches`.)
 
 ## Security
 

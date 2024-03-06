@@ -31,9 +31,9 @@ from spandrel import (
     ModelDescriptor,
     ModelLoader,
 )
-from spandrel_nc_cl import NC_CL_REGISTRY
+from spandrel_extra_arches import EXTRA_REGISTRY
 
-MAIN_REGISTRY.add(*NC_CL_REGISTRY)
+MAIN_REGISTRY.add(*EXTRA_REGISTRY)
 
 MODEL_DIR = Path("./tests/models/")
 ZIP_DIR = Path("./tests/zips/")

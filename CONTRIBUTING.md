@@ -10,7 +10,7 @@ Before you can start with the actual development, you need to set up the project
 
 1. Fork and clone the repository. ([GitHub guide](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
 2. Install our dev dependencies: `pip install -r requirements-dev.txt`.
-3. Install the packages of this repo as editable installs: `pip install -e libs/spandrel -e libs/spandrel_nc -e libs/spandrel_nc_cl`.
+3. Install the packages of this repo as editable installs: `pip install -e libs/spandrel -e libs/spandrel_extra_arches`.
 
    This will also install their dependencies, so this might take a while. (One of our dependencies, `torch`, is huge (>2GB) and might need a few minutes to download depending on your internet speed.)
 

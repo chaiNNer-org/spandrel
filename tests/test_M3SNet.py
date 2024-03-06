@@ -1,4 +1,4 @@
-from spandrel_nc_cl.architectures.M3SNet import M3SNet, M3SNetArch
+from spandrel_extra_arches.architectures.M3SNet import M3SNet, M3SNetArch
 
 from .util import (
     ModelFile,
