@@ -29,14 +29,14 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/4x-spanx4-ch48.pth"
+        "https://github.com/OpenModelDB/model-hub/releases/download/span/4x-spanx4_ch48.pth"
     )
     assert_size_requirements(file.load_model())
 
 
 def test_SPAN_x4_ch48(snapshot):
     file = ModelFile.from_url(
-        "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/4x-spanx4-ch48.pth"
+        "https://github.com/OpenModelDB/model-hub/releases/download/span/4x-spanx4_ch48.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
