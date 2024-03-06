@@ -29,10 +29,8 @@ def test_load():
 
 
 def test_size_requirements():
-    file = ModelFile.from_url_zip(
-        "https://drive.google.com/file/d/17rJXJHBYt4Su8cMDMh-NOWMBdE6ki5em/view",
-        rel_model_path="OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth",
-        name="epoch994_OmniSR_x4.pth",
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/omnisr/4x-OmniSR-DF2K.pth"
     )
     assert_size_requirements(file.load_model())
 
@@ -43,10 +41,8 @@ def test_size_requirements():
 
 
 def test_OmniSR_official_x4(snapshot):
-    file = ModelFile.from_url_zip(
-        "https://drive.google.com/file/d/17rJXJHBYt4Su8cMDMh-NOWMBdE6ki5em/view",
-        rel_model_path="OmniSR_X4_DF2K/checkpoints/epoch994_OmniSR.pth",
-        name="epoch994_OmniSR_x4.pth",
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/omnisr/4x-OmniSR-DF2K.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -54,10 +50,8 @@ def test_OmniSR_official_x4(snapshot):
 
 
 def test_OmniSR_official_x3(snapshot):
-    file = ModelFile.from_url_zip(
-        "https://drive.google.com/file/d/1Rwg6o-RGC-TEiyVSVT9FS1iHjx5n948h/view",
-        rel_model_path="OmniSR_X3_DIV2K/checkpoints/epoch919_OmniSR.pth",
-        name="epoch919_OmniSR_x3.pth",
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/omnisr/3x-OmniSR-DIV2K.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -65,10 +59,8 @@ def test_OmniSR_official_x3(snapshot):
 
 
 def test_OmniSR_official_x2(snapshot):
-    file = ModelFile.from_url_zip(
-        "https://drive.google.com/file/d/18lSvJq9CGCwDomkas2gh8K6UOq8qRLIw/view",
-        rel_model_path="OmniSR_X2_DIV2K/checkpoints/epoch896_OmniSR.pth",
-        name="epoch896_OmniSR_x2.pth",
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/omnisr/2x-OmniSR-DIV2K.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
