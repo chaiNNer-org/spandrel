@@ -3,9 +3,9 @@ requires = ["setuptools>=46.4.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spandrel_nc_cl"
+name = "spandrel_extra_arches"
 authors = [{ name = "chaiNNer team" }]
-description = "Give your project support for a variety of PyTorch model architectures, including auto-detecting model architecture from just .pth files. spandrel gives you arch support."
+description = "Implements extra model architectures for spandrel"
 readme = "README.md"
 requires-python = ">=3.8"
 keywords = [
@@ -33,7 +33,6 @@ classifiers = [
 ]
 dependencies = [
     "spandrel",
-    "spandrel_nc",
     "torch",
     "torchvision",
     "numpy",
@@ -46,4 +45,4 @@ dynamic = ["version"]
 license-files = ["LICENSE"]
 
 [tool.setuptools.dynamic]
-version = { attr = "spandrel_nc_cl.__version__" }
+version = { attr = "spandrel_extra_arches.__version__" }

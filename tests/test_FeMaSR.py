@@ -1,4 +1,4 @@
-from spandrel_nc_cl.architectures.FeMaSR import FeMaSR, FeMaSRArch
+from spandrel_extra_arches.architectures.FeMaSR import FeMaSR, FeMaSRArch
 from tests.test_GFPGAN import disallowed_props
 
 from .util import (
