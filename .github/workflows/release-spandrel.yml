@@ -1,11 +1,10 @@
-name: Release
+name: Release `spandrel`
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  publish-to-pypi:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,10 +14,10 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: sh scripts/install.sh
-      - name: Build and publish
+      - name: Build packages
+        run: sh scripts/build.sh
+      - name: Publish
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          python -m build . --wheel
-          twine upload --repository pypi dist/*
+        run: twine upload --repository pypi libs/spandrel/dist/*

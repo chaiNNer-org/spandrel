@@ -1,11 +1,6 @@
 name: Publish docs
 
 on:
-  # we want to publish docs per release
-  release:
-    types: [created]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
