@@ -11,7 +11,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=8, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=True,
+    supports_half=False,
     tags=list([
       '210dim',
       '16w',
@@ -32,7 +32,7 @@
     scale=2,
     size_requirements=SizeRequirements(minimum=8, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=True,
+    supports_half=False,
     tags=list([
       'light',
       '48dim',
@@ -54,7 +54,7 @@
     scale=3,
     size_requirements=SizeRequirements(minimum=8, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=True,
+    supports_half=False,
     tags=list([
       'light',
       '48dim',
@@ -76,7 +76,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=8, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=True,
+    supports_half=False,
     tags=list([
       'light',
       '48dim',
