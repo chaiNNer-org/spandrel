@@ -281,7 +281,17 @@ def assert_image_inference(
             write_image(expected_path, output)
             continue
 
-        assert close_enough, f"Failed on {test_image.value}"
+        if not close_enough:
+            diff = cv2.absdiff(
+                output.astype(np.float32), expected.astype(np.float32)
+            ).astype(np.float32)
+
+            raise AssertionError(
+                f"Failed on {test_image.value}."
+                f"\nDiff mean: {np.mean(diff)}"
+                f"\nDiff max: {np.max(diff)}"
+                f"\nDiff min: {np.min(diff)}"
+            )
 
 
 T = TypeVar("T", bound=torch.nn.Module)
