@@ -39,6 +39,8 @@ MODEL_DIR = Path("./tests/models/")
 ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
 
+IS_CI = os.environ.get("CI") == "true"
+
 logger = logging.getLogger(__name__)
 
 
@@ -86,7 +88,7 @@ def download_file(url: str, filename: Path | str) -> None:
     filename.parent.mkdir(exist_ok=True)
     url = convert_google_drive_link(url)
     logger.info("Downloading %s to %s", url, filename)
-    torch.hub.download_url_to_file(url, str(filename))
+    torch.hub.download_url_to_file(url, str(filename), progress=not IS_CI)
 
 
 def extract_file_from_zip(
