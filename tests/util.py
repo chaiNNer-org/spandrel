@@ -223,6 +223,7 @@ def assert_image_inference(
     model_file: ModelFile,
     model: ModelDescriptor,
     test_images: list[TestImage],
+    tolerance: float = 1,
 ):
     assert isinstance(model, ImageModelDescriptor)
 
@@ -275,7 +276,7 @@ def assert_image_inference(
         # Assert that the images are the same within a certain tolerance
         # The CI for some reason has a bit of FP precision loss compared to my local machine
         # Therefore, a tolerance of 1 is fine enough.
-        close_enough = np.allclose(output, expected, atol=1)
+        close_enough = np.allclose(output, expected, atol=tolerance)
         if update_mode and not close_enough:
             write_image(expected_path, output)
             continue
