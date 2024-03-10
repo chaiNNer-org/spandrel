@@ -283,14 +283,20 @@ def assert_image_inference(
 
         if not close_enough:
             diff = cv2.absdiff(
-                output.astype(np.float32), expected.astype(np.float32)
-            ).astype(np.float32)
+                output.astype(np.int32), expected.astype(np.int32)
+            ).astype(np.int32)
+
+            diff_max = int(np.max(diff))
+            diff_dist = "Diff distribution:"
+            for i in range(diff_max + 1):
+                diff_dist += f"\n  {i}: {np.sum(diff == i)}"
 
             raise AssertionError(
                 f"Failed on {test_image.value}."
                 f"\nDiff mean: {np.mean(diff)}"
                 f"\nDiff max: {np.max(diff)}"
                 f"\nDiff min: {np.min(diff)}"
+                f"\n{diff_dist}"
             )
 
 
