@@ -217,6 +217,7 @@ class TestImage(Enum):
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
     BLURRY_FACE = "blurry-face.jpg"
+    HAZE = "haze.jpg"
 
 
 def assert_image_inference(

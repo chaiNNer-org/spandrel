@@ -133,6 +133,10 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 
 - [DDColor](https://github.com/piddnad/DDColor) (+) | [Models](https://github.com/piddnad/DDColor/blob/master/MODEL_ZOO.md)
 
+#### Dehazing
+
+- [MixDehazeNet](https://github.com/AmeryXiong/MixDehazeNet) | [Models](https://drive.google.com/drive/folders/1ep6W4H3vNxshYjq71Tb3MzxrXGgaiM6C?usp=drive_link)
+
 (All architectures marked with a `+` are only part of `spandrel_extra_arches`.)
 
 ## Security
