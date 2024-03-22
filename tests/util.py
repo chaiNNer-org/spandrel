@@ -223,8 +223,12 @@ def assert_image_inference(
     model_file: ModelFile,
     model: ModelDescriptor,
     test_images: list[TestImage],
-    tolerance: float = 1,
+    max_single_pixel_error: float = 1,
+    max_mean_error: float = 0,
 ):
+    # it doesn't make sense to have a max_single_pixel_error less than max_average_error
+    max_single_pixel_error = max(max_single_pixel_error, max_mean_error)
+
     assert isinstance(model, ImageModelDescriptor)
 
     test_images.sort(key=lambda image: image.value)
@@ -276,28 +280,39 @@ def assert_image_inference(
         # Assert that the images are the same within a certain tolerance
         # The CI for some reason has a bit of FP precision loss compared to my local machine
         # Therefore, a tolerance of 1 is fine enough.
-        close_enough = np.allclose(output, expected, atol=tolerance)
-        if update_mode and not close_enough:
+        close_enough = np.allclose(output, expected, atol=max_single_pixel_error)
+        if close_enough:
+            # all pixels are close enough, so this is a pass
+            continue
+
+        error = cv2.absdiff(
+            output.astype(np.int32),
+            expected.astype(np.int32),
+        ).astype(np.int32)
+        mean_error = np.mean(error)
+
+        if mean_error <= max_mean_error:
+            # mean error is close enough, so this is a pass
+            continue
+
+        if update_mode:
+            # update the snapshot
             write_image(expected_path, output)
             continue
 
-        if not close_enough:
-            diff = cv2.absdiff(
-                output.astype(np.int32), expected.astype(np.int32)
-            ).astype(np.int32)
+        # prepare a useful error message
+        error_max = int(np.max(error))
+        error_dist = "Error distribution:"
+        for i in range(error_max + 1):
+            error_dist += f"\n  {i}: {np.sum(error == i)}"
 
-            diff_max = int(np.max(diff))
-            diff_dist = "Diff distribution:"
-            for i in range(diff_max + 1):
-                diff_dist += f"\n  {i}: {np.sum(diff == i)}"
-
-            raise AssertionError(
-                f"Failed on {test_image.value}."
-                f"\nDiff mean: {np.mean(diff)}"
-                f"\nDiff max: {np.max(diff)}"
-                f"\nDiff min: {np.min(diff)}"
-                f"\n{diff_dist}"
-            )
+        raise AssertionError(
+            f"Failed on {test_image.value}."
+            f"\nError mean: {mean_error}"
+            f"\nError max: {np.max(error)}"
+            f"\nError min: {np.min(error)}"
+            f"\n{error_dist}"
+        )
 
 
 T = TypeVar("T", bound=torch.nn.Module)

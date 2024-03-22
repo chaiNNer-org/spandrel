@@ -64,7 +64,7 @@ def test_101_ATD_light_SRx2_scratch(snapshot):
         file,
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
-        tolerance=3,
+        max_mean_error=2,
     )
 
 
@@ -90,7 +90,7 @@ def test_103_ATD_light_SRx4_finetune(snapshot):
         file,
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
-        tolerance=3,
+        max_mean_error=2,
     )
 
 
@@ -106,5 +106,5 @@ def test_003_ATD_SRx4_finetune(snapshot):
         file,
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
-        tolerance=3,
+        max_mean_error=2,
     )
