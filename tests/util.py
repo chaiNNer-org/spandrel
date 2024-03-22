@@ -39,6 +39,8 @@ MODEL_DIR = Path("./tests/models/")
 ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
 
+IS_CI = os.environ.get("CI") == "true"
+
 logger = logging.getLogger(__name__)
 
 
@@ -86,7 +88,7 @@ def download_file(url: str, filename: Path | str) -> None:
     filename.parent.mkdir(exist_ok=True)
     url = convert_google_drive_link(url)
     logger.info("Downloading %s to %s", url, filename)
-    torch.hub.download_url_to_file(url, str(filename))
+    torch.hub.download_url_to_file(url, str(filename), progress=not IS_CI)
 
 
 def extract_file_from_zip(
@@ -222,7 +224,12 @@ def assert_image_inference(
     model_file: ModelFile,
     model: ModelDescriptor,
     test_images: list[TestImage],
+    max_single_pixel_error: float = 1,
+    max_mean_error: float = 0,
 ):
+    # it doesn't make sense to have a max_single_pixel_error less than max_average_error
+    max_single_pixel_error = max(max_single_pixel_error, max_mean_error)
+
     assert isinstance(model, ImageModelDescriptor)
 
     test_images.sort(key=lambda image: image.value)
@@ -274,12 +281,39 @@ def assert_image_inference(
         # Assert that the images are the same within a certain tolerance
         # The CI for some reason has a bit of FP precision loss compared to my local machine
         # Therefore, a tolerance of 1 is fine enough.
-        close_enough = np.allclose(output, expected, atol=1)
-        if update_mode and not close_enough:
+        close_enough = np.allclose(output, expected, atol=max_single_pixel_error)
+        if close_enough:
+            # all pixels are close enough, so this is a pass
+            continue
+
+        error = cv2.absdiff(
+            output.astype(np.int32),
+            expected.astype(np.int32),
+        ).astype(np.int32)
+        mean_error = np.mean(error)
+
+        if mean_error <= max_mean_error:
+            # mean error is close enough, so this is a pass
+            continue
+
+        if update_mode:
+            # update the snapshot
             write_image(expected_path, output)
             continue
 
-        assert close_enough, f"Failed on {test_image.value}"
+        # prepare a useful error message
+        error_max = int(np.max(error))
+        error_dist = "Error distribution:"
+        for i in range(error_max + 1):
+            error_dist += f"\n  {i}: {np.sum(error == i)}"
+
+        raise AssertionError(
+            f"Failed on {test_image.value}."
+            f"\nError mean: {mean_error}"
+            f"\nError max: {np.max(error)}"
+            f"\nError min: {np.min(error)}"
+            f"\n{error_dist}"
+        )
 
 
 T = TypeVar("T", bound=torch.nn.Module)
