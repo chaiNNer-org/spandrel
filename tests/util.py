@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import os
 import random
@@ -11,6 +12,7 @@ from collections.abc import Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, Protocol, TypeVar, runtime_checkable
@@ -18,6 +20,7 @@ from urllib.parse import unquote, urlencode, urlparse
 
 import cv2
 import numpy as np
+import pytest
 import requests
 import safetensors.torch
 import torch
@@ -495,3 +498,75 @@ def assert_size_requirements(
         raise AssertionError(
             "Failed size requirement test for non-square models"
         ) from failed_non_square
+
+
+@lru_cache
+def _get_changed_files() -> list[str] | None:
+    repository = os.getenv("GITHUB_REPOSITORY") or "chaiNNer-org/spandrel"
+    pull_request_ref = os.getenv("GITHUB_REF")
+
+    if not repository or not pull_request_ref:
+        logger.warn("Missing required environment variables.")
+        return None
+
+    # Extract pull request number from GITHUB_REF
+    pull_request_number = pull_request_ref.split("/")[-2]
+    logger.info(f"Checking for changes in PR {pull_request_number}")
+
+    try:
+        response = requests.get(
+            f"https://api.github.com/repos/{repository}/pulls/{pull_request_number}/files"
+        )
+        response.raise_for_status()
+
+        return [file["filename"] for file in json.loads(response.text)]
+    except Exception as e:
+        print(f"Error making request: {e}")
+        return None
+
+
+def _did_change(arch_name: str) -> bool:
+    changed = _get_changed_files()
+    if changed is None:
+        # something went wrong, so we'll conservatively assume it changed
+        return True
+
+    if any(f"architectures/{arch_name.lower()}/" in file.lower() for file in changed):
+        # the architecture was changed
+        return True
+
+    if any(f"tests/test_{arch_name}.py" in file for file in changed):
+        # the test itself was changed
+        return True
+
+    important_files = [
+        r"/spandrel/__helpers/(?!main_registry\.py)",
+        r"/spandrel/util/",
+        r"tests/util.py",
+        r"pyproject.toml",
+        r"requirements-dev.txt",
+    ]
+    pattern = re.compile("|".join(important_files))
+    if any(pattern.match(file) for file in changed):
+        # some important files were changed
+        return True
+
+    return False
+
+
+def skip_if_unchanged(file: str):
+    if not IS_CI or os.getenv("GITHUB_EVENT_NAME") != "pull_request":
+        # only skip tests on pull requests CI
+        return
+
+    match = re.search(re.compile(r"\btest_(\w+)\.py$"), file)
+    if not match:
+        # not a test file
+        return
+    arch_name = match.group(1)
+
+    if _did_change(arch_name):
+        # test changed, so we have to run it
+        return
+
+    pytest.skip("No changes detected in file: " + file, allow_module_level=True)

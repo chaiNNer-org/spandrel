@@ -1,6 +1,8 @@
 from spandrel.architectures.RestoreFormer import RestoreFormer, RestoreFormerArch
 
-from .util import ModelFile, assert_loads_correctly, disallowed_props
+from .util import ModelFile, assert_loads_correctly, disallowed_props, skip_if_unchanged
+
+skip_if_unchanged(__file__)
 
 
 def test_load():
