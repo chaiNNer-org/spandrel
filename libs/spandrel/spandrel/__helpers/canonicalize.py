@@ -36,6 +36,12 @@ def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
             state_dict = state_dict[unwrap_key]
             break
 
+    # unwrap single key
+    if len(state_dict) == 1:
+        single = next(iter(state_dict.values()))
+        if isinstance(single, dict):
+            state_dict = single
+
     # remove known common prefixes
     state_dict = remove_common_prefix(state_dict, ["module.", "netG."])
 
