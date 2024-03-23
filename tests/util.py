@@ -562,12 +562,8 @@ def _did_change(arch_name: str) -> bool:
 
 
 def skip_if_unchanged(file: str):
-    if not IS_CI:
-        # we only skip tests to save time on CI
-        return
-
-    if os.getenv("GITHUB_EVENT_NAME") != "pull_request":
-        # only skip tests on pull requests
+    if not IS_CI or os.getenv("GITHUB_EVENT_NAME") != "pull_request":
+        # only skip tests on pull requests CI
         return
 
     match = re.match(r"/test_(\w+)\.py$", file)
