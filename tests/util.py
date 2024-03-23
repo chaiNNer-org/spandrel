@@ -500,17 +500,9 @@ def assert_size_requirements(
         ) from failed_non_square
 
 
-call_count = 0
-
-
 @lru_cache
 def _get_changed_files() -> list[str] | None:
-    global call_count
-    call_count += 1
-    if call_count > 1:
-        raise ValueError("get_changed_files should only be called once")
-
-    repository = os.getenv("GITHUB_REPOSITORY")
+    repository = os.getenv("GITHUB_REPOSITORY") or "chaiNNer-org/spandrel"
     pull_request_ref = os.getenv("GITHUB_REF")
 
     if not repository or not pull_request_ref:
@@ -518,7 +510,8 @@ def _get_changed_files() -> list[str] | None:
         return None
 
     # Extract pull request number from GITHUB_REF
-    pull_request_number = pull_request_ref.split("/")[-1]
+    pull_request_number = pull_request_ref.split("/")[-2]
+    logger.info(f"Checking for changes in PR {pull_request_number}")
 
     try:
         response = requests.get(
@@ -566,13 +559,14 @@ def skip_if_unchanged(file: str):
         # only skip tests on pull requests CI
         return
 
-    match = re.match(r"/test_(\w+)\.py$", file)
+    match = re.search(re.compile(r"\btest_(\w+)\.py$"), file)
     if not match:
         # not a test file
         return
     arch_name = match.group(1)
 
-    if not _did_change(arch_name):
+    if _did_change(arch_name):
+        # test changed, so we have to run it
         return
 
-    pytest.skip("No changes detected in file: " + file)
+    pytest.skip("No changes detected in file: " + file, allow_module_level=True)
