@@ -42,10 +42,7 @@ jobs:
               with:
                   path: tests/models
                   key: update-2023-11-29
-            - name: Run tests
-              env:
-                EVENT_NAME: ${{ github.event_name }}
-              run: pytest tests
+            - run: pytest tests
 
     docs:
         runs-on: ubuntu-latest

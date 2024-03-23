@@ -566,7 +566,7 @@ def skip_if_unchanged(file: str):
         # we only skip tests to save time on CI
         return
 
-    if os.getenv("EVENT_NAME") != "pull_request":
+    if os.getenv("GITHUB_EVENT_NAME") != "pull_request":
         # only skip tests on pull requests
         return
 
