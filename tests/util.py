@@ -535,14 +535,14 @@ def _did_change(arch_name: str) -> bool:
         # the architecture was changed
         return True
 
-    # if any(f"tests/test_{arch_name}.py" in file for file in changed):
-    #     # the test itself was changed
-    #     return True
+    if any(f"tests/test_{arch_name}.py" in file for file in changed):
+        # the test itself was changed
+        return True
 
     important_files = [
         r"/spandrel/__helpers/(?!main_registry\.py)",
         r"/spandrel/util/",
-        # r"tests/util.py",
+        r"tests/util.py",
         r"pyproject.toml",
         r"requirements-dev.txt",
     ]
