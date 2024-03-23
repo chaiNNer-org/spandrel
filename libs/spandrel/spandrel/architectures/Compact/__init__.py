@@ -5,6 +5,8 @@ from spandrel.util import KeyCondition, get_scale_and_output_channels, get_seq_l
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
 from .arch.SRVGG import SRVGGNetCompact
 
+# Single Change
+
 
 class CompactArch(Architecture[SRVGGNetCompact]):
     def __init__(
