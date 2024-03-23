@@ -28,7 +28,14 @@ def _clean_state_dict(state_dict: StateDict):
 
     keys = list(state_dict.keys())
     for k in keys:
-        if k.startswith(("sft_fusion_group.", "multiscale_encoder.upsampler.")):
+        if k.startswith(
+            (
+                "sft_fusion_group.",
+                "multiscale_encoder.upsampler.",
+                "conv_semantic.",
+                "vgg_feat_extractor.",
+            )
+        ):
             del state_dict[k]
 
 
@@ -57,11 +64,9 @@ class FeMaSRArch(Architecture[FeMaSR]):
         act_type = "silu"
         use_quantize = True  # cannot be deduced from state_dict
         # scale_factor = 4
-        # use_semantic_loss = False
         use_residual = True  # cannot be deduced from state_dict
 
         in_channel = state_dict["multiscale_encoder.in_conv.weight"].shape[1]
-        use_semantic_loss = "conv_semantic.0.weight" in state_dict
 
         # gt_resolution can be derived from the decoders
         # we assume that gt_resolution is a power of 2
@@ -123,7 +128,6 @@ class FeMaSRArch(Architecture[FeMaSR]):
             act_type=act_type,
             use_quantize=use_quantize,
             scale_factor=scale_factor,
-            use_semantic_loss=use_semantic_loss,
             use_residual=use_residual,
         )
 
@@ -141,5 +145,4 @@ class FeMaSRArch(Architecture[FeMaSR]):
             input_channels=in_channel,
             output_channels=in_channel,
             size_requirements=SizeRequirements(multiple_of=multiple_of),
-            call_fn=lambda model, image: model(image)[0],
         )
