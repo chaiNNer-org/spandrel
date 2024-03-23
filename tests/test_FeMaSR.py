@@ -1,5 +1,4 @@
 from spandrel_extra_arches.architectures.FeMaSR import FeMaSR, FeMaSRArch
-from tests.test_GFPGAN import disallowed_props
 
 from .util import (
     ModelFile,
@@ -7,7 +6,11 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():

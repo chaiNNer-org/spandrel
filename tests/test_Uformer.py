@@ -1,6 +1,8 @@
 from spandrel.architectures.Uformer import Uformer, UformerArch
 
-from .util import assert_loads_correctly
+from .util import assert_loads_correctly, skip_if_unchanged
+
+skip_if_unchanged(__file__)
 
 
 def test_load():
