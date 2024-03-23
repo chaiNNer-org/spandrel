@@ -517,15 +517,12 @@ def _get_changed_files() -> list[str] | None:
         logger.warn("Missing required environment variables.")
         return None
 
-    # Extract owner and repo from GITHUB_REPOSITORY
-    owner, repo = repository.split("/")
-
     # Extract pull request number from GITHUB_REF
     pull_request_number = pull_request_ref.split("/")[-1]
 
     try:
         response = requests.get(
-            f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_request_number}/files"
+            f"https://api.github.com/repos/{repository}/pulls/{pull_request_number}/files"
         )
         response.raise_for_status()
 
@@ -567,6 +564,10 @@ def _did_change(arch_name: str) -> bool:
 def skip_if_unchanged(file: str):
     if not IS_CI:
         # we only skip tests to save time on CI
+        return
+
+    if os.getenv("EVENT_NAME") != "pull_request":
+        # only skip tests on pull requests
         return
 
     match = re.match(r"/test_(\w+)\.py$", file)
