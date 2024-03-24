@@ -48,7 +48,7 @@ def test_deblurring(snapshot):
     assert_image_inference(
         file,
         model,
-        [TestImage.SR_32],
+        [TestImage.BLURRY_FACE],
     )
 
 
