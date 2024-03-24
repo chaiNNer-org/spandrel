@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import math
 import os
 import random
 import re
@@ -33,6 +34,7 @@ from spandrel import (
     ImageModelDescriptor,
     ModelDescriptor,
     ModelLoader,
+    SizeRequirements,
 )
 from spandrel_extra_arches import EXTRA_REGISTRY
 
@@ -452,14 +454,20 @@ def assert_size_requirements(
             ) from e
 
     req = model.size_requirements
-    candidates: list[int] = []
 
-    # fill candidates
-    current = req.minimum // req.multiple_of * req.multiple_of
-    while current <= max_size and len(candidates) < max_candidates:
-        if req.check(current, current) and current > 0:
-            candidates.append(current)
-        current += req.multiple_of
+    def get_candidates(max_size: int, max_candidates: int) -> list[int]:
+        candidates: list[int] = []
+
+        # fill candidates
+        current = req.minimum // req.multiple_of * req.multiple_of
+        while current <= max_size and len(candidates) < max_candidates:
+            if req.check(current, current) and current > 0:
+                candidates.append(current)
+            current += req.multiple_of
+
+        return candidates
+
+    candidates = get_candidates(max_size, max_candidates)
 
     # fast path for non-square models
     failed_non_square = None
@@ -478,6 +486,10 @@ def assert_size_requirements(
             # fall through and let the below code handle it
             failed_non_square = e
 
+    # collect some candidates, just we have some data to work with
+    if max(candidates) < 32:
+        candidates = get_candidates(max_size=32, max_candidates=32)
+
     valid: list[int] = []
     invalid: list[tuple[int, Exception]] = []
     for width in candidates:
@@ -487,11 +499,46 @@ def assert_size_requirements(
         except Exception as e:
             invalid.append((width, e))
 
+    def guess_size_requirements() -> SizeRequirements | None:
+        if len(valid) < 2:
+            # not enough data
+            return None
+
+        square: bool
+        try:
+            test_size(valid[0], valid[1])
+            square = False
+        except:  # noqa: E722
+            square = True
+
+        min_valid = min(valid)
+        max_valid = max(valid)
+
+        candidate_multiples: set[int] = {
+            *range(1, 16),
+            *(2**i for i in range(math.floor(math.log2(max_valid)) + 1)),
+        }
+        for multiple in sorted(candidate_multiples):
+            guess = SizeRequirements(
+                minimum=min_valid,
+                multiple_of=multiple,
+                square=square,
+            )
+            # the condition for success is NOT that all valid sizes pass,
+            # but that all invalid sizes fail and any valid sizes pass
+            invalid_fail = all(not guess.check(size, size) for size, _ in invalid)
+            valid_pass = any(guess.check(size, size) for size in valid)
+            if invalid_fail and valid_pass:
+                return guess
+
+        return None
+
     if len(invalid) > 0:
         raise AssertionError(
             f"Failed size requirement test.\n"
             f"Valid sizes: {valid}\n"
-            f"Invalid sizes: {[size for size, _ in invalid]}"
+            f"Invalid sizes: {[size for size, _ in invalid]}\n\n"
+            f"Based on the above data, the following size requirement is suggested:\n{guess_size_requirements() or 'Insufficient data to guess'}\n"
         ) from invalid[0][1]
 
     if failed_non_square is not None:
