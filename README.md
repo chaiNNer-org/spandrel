@@ -125,6 +125,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [Restormer](https://github.com/swz30/Restormer) (+) | [Models](https://github.com/swz30/Restormer/releases/tag/v1.0)
 - [FFTformer](https://github.com/kkkls/FFTformer) | [Models](https://github.com/kkkls/FFTformer/releases/tag/pretrain_model)
 - [M3SNet](https://github.com/Tombs98/M3SNet) (+) | [Models](https://drive.google.com/drive/folders/1y4BEX7LagtXVO98ZItSbJJl7WWM3gnbD)
+- [MPRNet](https://github.com/swz30/MPRNet) (+) | [Deblurring](https://drive.google.com/file/d/1QwQUVbk6YVOJViCsOKYNykCsdJSVGRtb/view?usp=sharing), [Deraining](https://drive.google.com/file/d/1O3WEJbcat7eTY6doXWeorAbQ1l_WmMnM/view?usp=sharing), [Denoising](https://drive.google.com/file/d/1LODPt9kYmxwU98g96UrRA0_Eh5HYcsRw/view?usp=sharing)
 
 #### DeJPEG
 
