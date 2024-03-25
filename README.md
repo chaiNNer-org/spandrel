@@ -126,6 +126,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [FFTformer](https://github.com/kkkls/FFTformer) | [Models](https://github.com/kkkls/FFTformer/releases/tag/pretrain_model)
 - [M3SNet](https://github.com/Tombs98/M3SNet) (+) | [Models](https://drive.google.com/drive/folders/1y4BEX7LagtXVO98ZItSbJJl7WWM3gnbD)
 - [MPRNet](https://github.com/swz30/MPRNet) (+) | [Deblurring](https://drive.google.com/file/d/1QwQUVbk6YVOJViCsOKYNykCsdJSVGRtb/view?usp=sharing), [Deraining](https://drive.google.com/file/d/1O3WEJbcat7eTY6doXWeorAbQ1l_WmMnM/view?usp=sharing), [Denoising](https://drive.google.com/file/d/1LODPt9kYmxwU98g96UrRA0_Eh5HYcsRw/view?usp=sharing)
+- [MIRNet2](https://github.com/swz30/MIRNetv2) (+) | [Models](https://github.com/swz30/MIRNetv2/releases/tag/v1.0.0) (SR not supported)
 
 #### DeJPEG
 
