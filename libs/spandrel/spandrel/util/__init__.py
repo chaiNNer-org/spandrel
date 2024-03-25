@@ -16,9 +16,7 @@ class KeyCondition:
     """
 
     def __init__(
-        self,
-        kind: Literal["all", "any"],
-        keys: tuple[str | KeyCondition, ...],
+        self, kind: Literal["all", "any"], keys: tuple[str | KeyCondition, ...]
     ):
         self._keys = keys
         self._kind: Literal["all", "any"] = kind
