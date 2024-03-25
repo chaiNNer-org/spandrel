@@ -8,7 +8,10 @@ from .util import (
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():
@@ -40,16 +43,14 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1iY30DyLYjar-2DjrJtAv2chCOlw4xiOj/view",
-        name="DAT_S_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/dat/4x-DAT_S.pth"
     )
     assert_size_requirements(file.load_model())
 
 
 def test_DAT_S_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1iY30DyLYjar-2DjrJtAv2chCOlw4xiOj/view",
-        name="DAT_S_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/dat/4x-DAT_S.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -63,8 +64,7 @@ def test_DAT_S_x4(snapshot):
 
 def test_DAT_S_x3(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1Fmj7VFKznbak-atd6pEu59UTZxKTXYVi/view",
-        name="DAT_S_x3.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/dat/3x-DAT_S.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -78,8 +78,7 @@ def test_DAT_S_x3(snapshot):
 
 def test_DAT_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1pEhXmg--IWHaZOwHUFdh7TEJqt2qeuYg/view",
-        name="DAT_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/dat/4x-DAT.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
@@ -93,8 +92,7 @@ def test_DAT_x4(snapshot):
 
 def test_DAT_2_x4(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1sfB15jklXRjGiZZWgYXZAYc2Ut4TuKOz/view",
-        name="DAT_2_x4.pth",
+        "https://github.com/OpenModelDB/model-hub/releases/download/dat/4x-DAT_2.pth"
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)

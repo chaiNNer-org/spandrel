@@ -51,13 +51,13 @@ from torch import Tensor
 
 try:
     from spandrel import MAIN_REGISTRY, ModelLoader  # noqa: E402
-    from spandrel_nc_cl import NC_CL_REGISTRY  # noqa: E402
+    from spandrel_extra_arches import EXTRA_REGISTRY  # noqa: E402
 except ImportError:
     print("Unable to import spandrel.")
     print("Follow the contributing guide to set up editable installs.")
     raise
 
-MAIN_REGISTRY.add(*NC_CL_REGISTRY)
+MAIN_REGISTRY.add(*EXTRA_REGISTRY)
 
 State = Dict[str, object]
 

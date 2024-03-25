@@ -4,8 +4,7 @@
     ],
     "extraPaths": [
         "./libs/spandrel",
-        "./libs/spandrel_nc",
-        "./libs/spandrel_nc_cl",
+        "./libs/spandrel_extra_arches",
     ],
     "exclude": [
         "**/__pycache__"

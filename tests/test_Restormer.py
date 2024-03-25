@@ -1,11 +1,14 @@
-from spandrel_nc_cl.architectures.Restormer import Restormer, RestormerArch
+from spandrel_extra_arches.architectures.Restormer import Restormer, RestormerArch
 
 from .util import (
     ModelFile,
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():

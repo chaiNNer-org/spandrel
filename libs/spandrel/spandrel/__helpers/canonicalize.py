@@ -22,11 +22,25 @@ def canonicalize_state_dict(state_dict: StateDict) -> StateDict:
     """
 
     # the real state dict might be inside a dict with a known key
-    unwrap_keys = ["state_dict", "params_ema", "params-ema", "params", "model", "net"]
+    unwrap_keys = [
+        "model_state_dict",
+        "state_dict",
+        "params_ema",
+        "params-ema",
+        "params",
+        "model",
+        "net",
+    ]
     for unwrap_key in unwrap_keys:
         if unwrap_key in state_dict and isinstance(state_dict[unwrap_key], dict):
             state_dict = state_dict[unwrap_key]
             break
+
+    # unwrap single key
+    if len(state_dict) == 1:
+        single = next(iter(state_dict.values()))
+        if isinstance(single, dict):
+            state_dict = single
 
     # remove known common prefixes
     state_dict = remove_common_prefix(state_dict, ["module.", "netG."])

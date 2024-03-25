@@ -1,4 +1,4 @@
-from spandrel_nc.architectures.SRFormer import SRFormer, SRFormerArch
+from spandrel_extra_arches.architectures.SRFormer import SRFormer, SRFormerArch
 
 from .util import (
     ModelFile,
@@ -7,7 +7,10 @@ from .util import (
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():

@@ -1,0 +1,23 @@
+name: Release `spandrel_extra_arches`
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-to-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: sh scripts/install.sh
+      - name: Build packages
+        run: sh scripts/build.sh
+      - name: Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN_EXTRAS }}
+        run: twine upload --repository pypi libs/spandrel_extra_arches/dist/*

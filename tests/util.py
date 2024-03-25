@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
+import math
 import os
 import random
 import re
@@ -11,6 +13,7 @@ from collections.abc import Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from inspect import getsource
 from pathlib import Path
 from typing import Any, Callable, Protocol, TypeVar, runtime_checkable
@@ -18,6 +21,7 @@ from urllib.parse import unquote, urlencode, urlparse
 
 import cv2
 import numpy as np
+import pytest
 import requests
 import safetensors.torch
 import torch
@@ -30,14 +34,17 @@ from spandrel import (
     ImageModelDescriptor,
     ModelDescriptor,
     ModelLoader,
+    SizeRequirements,
 )
-from spandrel_nc_cl import NC_CL_REGISTRY
+from spandrel_extra_arches import EXTRA_REGISTRY
 
-MAIN_REGISTRY.add(*NC_CL_REGISTRY)
+MAIN_REGISTRY.add(*EXTRA_REGISTRY)
 
 MODEL_DIR = Path("./tests/models/")
 ZIP_DIR = Path("./tests/zips/")
 IMAGE_DIR = Path("./tests/images/")
+
+IS_CI = os.environ.get("CI") == "true"
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +93,7 @@ def download_file(url: str, filename: Path | str) -> None:
     filename.parent.mkdir(exist_ok=True)
     url = convert_google_drive_link(url)
     logger.info("Downloading %s to %s", url, filename)
-    torch.hub.download_url_to_file(url, str(filename))
+    torch.hub.download_url_to_file(url, str(filename), progress=not IS_CI)
 
 
 def extract_file_from_zip(
@@ -215,13 +222,19 @@ class TestImage(Enum):
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
     BLURRY_FACE = "blurry-face.jpg"
+    HAZE = "haze.jpg"
 
 
 def assert_image_inference(
     model_file: ModelFile,
     model: ModelDescriptor,
     test_images: list[TestImage],
+    max_single_pixel_error: float = 1,
+    max_mean_error: float = 0,
 ):
+    # it doesn't make sense to have a max_single_pixel_error less than max_average_error
+    max_single_pixel_error = max(max_single_pixel_error, max_mean_error)
+
     assert isinstance(model, ImageModelDescriptor)
 
     test_images.sort(key=lambda image: image.value)
@@ -273,12 +286,39 @@ def assert_image_inference(
         # Assert that the images are the same within a certain tolerance
         # The CI for some reason has a bit of FP precision loss compared to my local machine
         # Therefore, a tolerance of 1 is fine enough.
-        close_enough = np.allclose(output, expected, atol=1)
-        if update_mode and not close_enough:
+        close_enough = np.allclose(output, expected, atol=max_single_pixel_error)
+        if close_enough:
+            # all pixels are close enough, so this is a pass
+            continue
+
+        error = cv2.absdiff(
+            output.astype(np.int32),
+            expected.astype(np.int32),
+        ).astype(np.int32)
+        mean_error = np.mean(error)
+
+        if mean_error <= max_mean_error:
+            # mean error is close enough, so this is a pass
+            continue
+
+        if update_mode:
+            # update the snapshot
             write_image(expected_path, output)
             continue
 
-        assert close_enough, f"Failed on {test_image.value}"
+        # prepare a useful error message
+        error_max = int(np.max(error))
+        error_dist = "Error distribution:"
+        for i in range(error_max + 1):
+            error_dist += f"\n  {i}: {np.sum(error == i)}"
+
+        raise AssertionError(
+            f"Failed on {test_image.value}."
+            f"\nError mean: {mean_error}"
+            f"\nError max: {np.max(error)}"
+            f"\nError min: {np.min(error)}"
+            f"\n{error_dist}"
+        )
 
 
 T = TypeVar("T", bound=torch.nn.Module)
@@ -414,14 +454,20 @@ def assert_size_requirements(
             ) from e
 
     req = model.size_requirements
-    candidates: list[int] = []
 
-    # fill candidates
-    current = req.minimum // req.multiple_of * req.multiple_of
-    while current <= max_size and len(candidates) < max_candidates:
-        if req.check(current, current) and current > 0:
-            candidates.append(current)
-        current += req.multiple_of
+    def get_candidates(max_size: int, max_candidates: int) -> list[int]:
+        candidates: list[int] = []
+
+        # fill candidates
+        current = req.minimum // req.multiple_of * req.multiple_of
+        while current <= max_size and len(candidates) < max_candidates:
+            if req.check(current, current) and current > 0:
+                candidates.append(current)
+            current += req.multiple_of
+
+        return candidates
+
+    candidates = get_candidates(max_size, max_candidates)
 
     # fast path for non-square models
     failed_non_square = None
@@ -440,6 +486,10 @@ def assert_size_requirements(
             # fall through and let the below code handle it
             failed_non_square = e
 
+    # collect some candidates, just we have some data to work with
+    if max(candidates) < 32:
+        candidates = get_candidates(max_size=32, max_candidates=32)
+
     valid: list[int] = []
     invalid: list[tuple[int, Exception]] = []
     for width in candidates:
@@ -449,14 +499,121 @@ def assert_size_requirements(
         except Exception as e:
             invalid.append((width, e))
 
+    def guess_size_requirements() -> SizeRequirements | None:
+        if len(valid) < 2:
+            # not enough data
+            return None
+
+        square: bool
+        try:
+            test_size(valid[0], valid[1])
+            square = False
+        except:  # noqa: E722
+            square = True
+
+        min_valid = min(valid)
+        max_valid = max(valid)
+
+        candidate_multiples: set[int] = {
+            *range(1, 16),
+            *(2**i for i in range(math.floor(math.log2(max_valid)) + 1)),
+        }
+        for multiple in sorted(candidate_multiples):
+            guess = SizeRequirements(
+                minimum=min_valid,
+                multiple_of=multiple,
+                square=square,
+            )
+            # the condition for success is NOT that all valid sizes pass,
+            # but that all invalid sizes fail and any valid sizes pass
+            invalid_fail = all(not guess.check(size, size) for size, _ in invalid)
+            valid_pass = any(guess.check(size, size) for size in valid)
+            if invalid_fail and valid_pass:
+                return guess
+
+        return None
+
     if len(invalid) > 0:
         raise AssertionError(
             f"Failed size requirement test.\n"
             f"Valid sizes: {valid}\n"
-            f"Invalid sizes: {[size for size, _ in invalid]}"
+            f"Invalid sizes: {[size for size, _ in invalid]}\n\n"
+            f"Based on the above data, the following size requirement is suggested:\n{guess_size_requirements() or 'Insufficient data to guess'}\n"
         ) from invalid[0][1]
 
     if failed_non_square is not None:
         raise AssertionError(
             "Failed size requirement test for non-square models"
         ) from failed_non_square
+
+
+@lru_cache
+def _get_changed_files() -> list[str] | None:
+    repository = os.getenv("GITHUB_REPOSITORY") or "chaiNNer-org/spandrel"
+    pull_request_ref = os.getenv("GITHUB_REF")
+
+    if not repository or not pull_request_ref:
+        logger.warn("Missing required environment variables.")
+        return None
+
+    # Extract pull request number from GITHUB_REF
+    pull_request_number = pull_request_ref.split("/")[-2]
+    logger.info(f"Checking for changes in PR {pull_request_number}")
+
+    try:
+        response = requests.get(
+            f"https://api.github.com/repos/{repository}/pulls/{pull_request_number}/files"
+        )
+        response.raise_for_status()
+
+        return [file["filename"] for file in json.loads(response.text)]
+    except Exception as e:
+        print(f"Error making request: {e}")
+        return None
+
+
+def _did_change(arch_name: str) -> bool:
+    changed = _get_changed_files()
+    if changed is None:
+        # something went wrong, so we'll conservatively assume it changed
+        return True
+
+    if any(f"architectures/{arch_name.lower()}/" in file.lower() for file in changed):
+        # the architecture was changed
+        return True
+
+    if any(f"tests/test_{arch_name}.py" in file for file in changed):
+        # the test itself was changed
+        return True
+
+    important_files = [
+        r"/spandrel/__helpers/(?!main_registry\.py)",
+        r"/spandrel/util/",
+        r"tests/util.py",
+        r"pyproject.toml",
+        r"requirements-dev.txt",
+    ]
+    pattern = re.compile("|".join(important_files))
+    if any(pattern.match(file) for file in changed):
+        # some important files were changed
+        return True
+
+    return False
+
+
+def skip_if_unchanged(file: str):
+    if not IS_CI or os.getenv("GITHUB_EVENT_NAME") != "pull_request":
+        # only skip tests on pull requests CI
+        return
+
+    match = re.search(re.compile(r"\btest_(\w+)\.py$"), file)
+    if not match:
+        # not a test file
+        return
+    arch_name = match.group(1)
+
+    if _did_change(arch_name):
+        # test changed, so we have to run it
+        return
+
+    pytest.skip("No changes detected in file: " + file, allow_module_level=True)

@@ -13,7 +13,10 @@ from .util import (
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():

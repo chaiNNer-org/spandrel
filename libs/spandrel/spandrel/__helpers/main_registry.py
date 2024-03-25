@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ..architectures import (
+    ATD,
     CRAFT,
     DAT,
     DCTLSA,
@@ -18,6 +19,7 @@ from ..architectures import (
     FFTformer,
     KBNet,
     LaMa,
+    MixDehazeNet,
     MMRealSR,
     NAFNet,
     OmniSR,
@@ -64,6 +66,8 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DCTLSA.DCTLSAArch()),
     ArchSupport.from_architecture(FFTformer.FFTformerArch()),
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
+    ArchSupport.from_architecture(ATD.ATDArch()),
+    ArchSupport.from_architecture(MixDehazeNet.MixDehazeNetArch()),
     ArchSupport.from_architecture(DPIR.DPIRArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )

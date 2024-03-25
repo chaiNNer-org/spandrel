@@ -6,7 +6,10 @@ from .util import (
     TestImage,
     assert_image_inference,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():

@@ -1,4 +1,4 @@
-from spandrel_nc.architectures.DDColor import DDColor, DDColorArch
+from spandrel_extra_arches.architectures.DDColor import DDColor, DDColorArch
 
 from .util import (
     ModelFile,
@@ -6,7 +6,10 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     disallowed_props,
+    skip_if_unchanged,
 )
+
+skip_if_unchanged(__file__)
 
 
 def test_load():
