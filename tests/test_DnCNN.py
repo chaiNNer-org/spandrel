@@ -13,8 +13,9 @@ from .util import (
 def test_load():
     assert_loads_correctly(
         DnCNNArch(),
-        lambda: DnCNN(in_nc=1, out_nc=3, nc=64, nb=17, act_mode="BR"),
-        lambda: DnCNN(in_nc=3, out_nc=4, nc=32, nb=15, act_mode="R"),
+        lambda: DnCNN(in_nc=1, out_nc=1, nc=64, nb=17, act_mode="BR"),
+        lambda: DnCNN(in_nc=3, out_nc=3, nc=32, nb=15, act_mode="R"),
+        lambda: DnCNN(in_nc=4, out_nc=3, nc=32, nb=15, act_mode="R", mode="FDnCNN"),
     )
 
 
@@ -46,3 +47,17 @@ def test_dncnn_50(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, DnCNN)
+
+
+def test_fdncnn_color(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/cszn/KAIR/releases/download/v1.0/fdncnn_color.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, DnCNN)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.JPEG_15],
+    )

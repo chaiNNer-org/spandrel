@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from typing import Literal
+
+import torch
 from typing_extensions import override
 
 from spandrel.util import KeyCondition, get_seq_len
@@ -64,6 +67,7 @@ class DnCNNArch(Architecture[DnCNN]):
         # nc = 64
         # nb = 17
         # act_mode = "BR"
+        mode: Literal["DnCNN", "FDnCNN"] = "DnCNN"
 
         in_nc = state_dict["model.0.weight"].shape[1]
         nc = state_dict["model.0.weight"].shape[0]
@@ -78,24 +82,46 @@ class DnCNNArch(Architecture[DnCNN]):
             act_mode = "R"
             nb = (layers - 3) // 2 + 2
 
+        if in_nc != out_nc:
+            mode = "FDnCNN"
+
         model = DnCNN(
             in_nc=in_nc,
             out_nc=out_nc,
             nc=nc,
             nb=nb,
             act_mode=act_mode,
+            mode=mode,
         )
+
+        tags = [f"{nc}nc", f"{nb}nb"]
+        if mode == "FDnCNN":
+            tags.insert(0, "FDnCNN")
+            in_nc -= 1
+
+        def call(model: DnCNN, image: torch.Tensor) -> torch.Tensor:
+            if model.mode == "FDnCNN":
+                # add noise level map
+                _, _, H, W = image.shape  # noqa: N806
+
+                noise_level = 15 / 255  # default from repo
+                noise_map = torch.zeros(1, 1, H, W).to(image) + noise_level
+
+                return model(torch.cat([image, noise_map], dim=1))
+            else:
+                return model(image)
 
         return ImageModelDescriptor(
             model,
             state_dict,
             architecture=self,
             purpose="Restoration",
-            tags=[f"{nc}nc", f"{nb}nb"],
+            tags=tags,
             supports_half=False,  # TODO: verify
             supports_bfloat16=True,
             scale=1,
             input_channels=in_nc,
             output_channels=out_nc,
             size_requirements=SizeRequirements(),
+            call_fn=call,
         )

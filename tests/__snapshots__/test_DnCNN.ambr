@@ -39,3 +39,24 @@
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
 # ---
+# name: test_fdncnn_color
+  ImageModelDescriptor(
+    architecture=DnCNNArch(
+      id='DnCNN',
+      name='DnCNN',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='Restoration',
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'FDnCNN',
+      '64nc',
+      '20nb',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---

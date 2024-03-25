@@ -1,3 +1,5 @@
+from typing import Literal
+
 import torch.nn as nn
 
 from spandrel.util import store_hyperparameters
@@ -11,24 +13,24 @@ from ...__arch_helpers.dpir_basic_block import conv, sequential
 # --------------------------------------------
 # References:
 @article{zhang2017beyond,
-  title={Beyond a gaussian denoiser: Residual learning of deep cnn for image denoising},
-  author={Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang, Lei},
-  journal={IEEE Transactions on Image Processing},
-  volume={26},
-  number={7},
-  pages={3142--3155},
-  year={2017},
-  publisher={IEEE}
+    title={Beyond a gaussian denoiser: Residual learning of deep cnn for image   denoising},
+    author={Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang,   Lei},
+    journal={IEEE Transactions on Image Processing},
+    volume={26},
+    number={7},
+    pages={3142--3155},
+    year={2017},
+    publisher={IEEE}
 }
 @article{zhang2018ffdnet,
-  title={FFDNet: Toward a fast and flexible solution for CNN-based image denoising},
-  author={Zhang, Kai and Zuo, Wangmeng and Zhang, Lei},
-  journal={IEEE Transactions on Image Processing},
-  volume={27},
-  number={9},
-  pages={4608--4622},
-  year={2018},
-  publisher={IEEE}
+    title={FFDNet: Toward a fast and flexible solution for CNN-based image denoising},
+    author={Zhang, Kai and Zuo, Wangmeng and Zhang, Lei},
+    journal={IEEE Transactions on Image Processing},
+    volume={27},
+    number={9},
+    pages={4608--4622},
+    year={2018},
+    publisher={IEEE}
 }
 # --------------------------------------------
 """
@@ -41,7 +43,15 @@ from ...__arch_helpers.dpir_basic_block import conv, sequential
 class DnCNN(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_nc=1, out_nc=1, nc=64, nb=17, act_mode="BR"):
+    def __init__(
+        self,
+        in_nc=1,
+        out_nc=1,
+        nc=64,
+        nb=17,
+        act_mode="BR",
+        mode: Literal["DnCNN", "FDnCNN"] = "DnCNN",
+    ):
         """
         # ------------------------------------
         in_nc: channel number of input
@@ -65,6 +75,10 @@ class DnCNN(nn.Module):
         ), "Examples of activation function: R, L, BR, BL, IR, IL"
         bias = True
 
+        self.mode = mode
+        if mode == "DnCNN":
+            assert in_nc == out_nc, "DnCNN only supports in_nc == out_nc"
+
         m_head = conv(in_nc, nc, mode="C" + act_mode[-1], bias=bias)
         m_body = [conv(nc, nc, mode="C" + act_mode, bias=bias) for _ in range(nb - 2)]
         m_tail = conv(nc, out_nc, mode="C", bias=bias)
@@ -72,5 +86,8 @@ class DnCNN(nn.Module):
         self.model = sequential(m_head, *m_body, m_tail)
 
     def forward(self, x):
-        n = self.model(x)
-        return x - n
+        if self.mode == "DnCNN":
+            n = self.model(x)
+            return x - n
+        else:
+            return self.model(x)
