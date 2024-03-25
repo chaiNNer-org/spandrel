@@ -16,6 +16,7 @@ from ..architectures import (
     SAFMN,
     SPAN,
     Compact,
+    DRUNet,
     FFTformer,
     KBNet,
     LaMa,
@@ -68,6 +69,7 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(NAFNet.NAFNetArch()),
     ArchSupport.from_architecture(ATD.ATDArch()),
     ArchSupport.from_architecture(MixDehazeNet.MixDehazeNetArch()),
+    ArchSupport.from_architecture(DRUNet.DRUNetArch()),
     ArchSupport.from_architecture(DPIR.DPIRArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
