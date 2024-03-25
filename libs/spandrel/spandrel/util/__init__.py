@@ -24,7 +24,7 @@ class KeyCondition:
         max_key_count: int | None = None,
     ):
         self._keys = keys
-        self._kind = kind
+        self._kind: Literal["all", "any"] = kind
         self._min_key_count = min_key_count
         self._max_key_count = max_key_count
 
