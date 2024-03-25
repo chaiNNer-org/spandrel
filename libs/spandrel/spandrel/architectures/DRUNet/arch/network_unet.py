@@ -2,7 +2,7 @@ import torch.nn as nn
 
 from spandrel.util import store_hyperparameters
 
-from ..arch.basicblock import (
+from ...__arch_helpers.dpir_basic_block import (
     ResBlock,
     conv,
     downsample_avgpool,
@@ -16,7 +16,7 @@ from ..arch.basicblock import (
 
 
 @store_hyperparameters()
-class UNetRes(nn.Module):
+class DRUNet(nn.Module):
     hyperparameters = {}
 
     def __init__(

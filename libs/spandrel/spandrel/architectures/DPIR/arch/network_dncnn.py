@@ -2,7 +2,7 @@ import torch.nn as nn
 
 from spandrel.util import store_hyperparameters
 
-from .basicblock import conv, sequential
+from ...__arch_helpers.dpir_basic_block import conv, sequential
 
 """
 # --------------------------------------------

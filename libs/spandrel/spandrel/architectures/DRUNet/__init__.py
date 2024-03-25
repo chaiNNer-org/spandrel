@@ -11,7 +11,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.network_unet import UNetRes as DRUNet
+from .arch.network_unet import DRUNet
 
 
 class DRUNetArch(Architecture[DRUNet]):
