@@ -57,11 +57,24 @@ class ModelLoader:
 
         state_dict: StateDict
         if extension == ".pt":
-            state_dict = self._load_torchscript(path)
-        elif extension == ".pth":
+            try:
+                state_dict = self._load_torchscript(path)
+            except RuntimeError:
+                # If torchscript loading fails, try loading as a normal state dict
+                try:
+                    pth_state_dict = self._load_pth(path)
+                except Exception:
+                    pth_state_dict = None
+
+                if pth_state_dict is None:
+                    # the file was likely a torchscript file, but failed to load
+                    # re-raise the original error, so the user knows what went wrong
+                    raise
+
+                state_dict = pth_state_dict
+
+        elif extension == ".pth" or extension == ".ckpt":
             state_dict = self._load_pth(path)
-        elif extension == ".ckpt":
-            state_dict = self._load_ckpt(path)
         elif extension == ".safetensors":
             state_dict = self._load_safetensors(path)
         else:
@@ -94,10 +107,3 @@ class ModelLoader:
 
     def _load_safetensors(self, path: str | Path) -> StateDict:
         return load_file(path, device=str(self.device))
-
-    def _load_ckpt(self, path: str | Path) -> StateDict:
-        return torch.load(
-            path,
-            map_location=self.device,
-            pickle_module=RestrictedUnpickle,  # type: ignore
-        )
