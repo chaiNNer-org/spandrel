@@ -64,7 +64,7 @@ class MIRNet2Arch(Architecture[MIRNet2]):
         n_feat = state_dict["conv_in.weight"].shape[0]
         bias = "conv_in.bias" in state_dict
 
-        n_MRB = get_seq_len(state_dict, "body.0.body") - 1
+        n_MRB = get_seq_len(state_dict, "body.0.body") - 1  # noqa: N806
         chan_factor = (
             state_dict["body.0.body.0.dau_mid.body.0.weight"].shape[0] / n_feat
         )
