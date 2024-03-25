@@ -1,0 +1,490 @@
+# MIRNet2.MIRNet2(
+#     inp_channels=3,
+#     out_channels=3,
+#     n_feat=80,
+#     chan_factor=2,
+#     n_MRB=2,
+#     bias=False,
+#     task=None,
+# )
+conv_in
+  conv_in.weight: Tensor float32 Size([80, 3, 3, 3])
+body
+  0.body
+    0
+      dau_top
+        body
+          body.0.body.0.dau_top.body.0.weight: Tensor float32 Size([80, 80, 3, 3])
+          body.0.body.0.dau_top.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.0.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.0.body.0.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.0.body.0.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.0.body.0.dau_mid.body.0.weight: Tensor float32 Size([160, 160, 3, 3])
+          body.0.body.0.dau_mid.body.2.weight: Tensor float32 Size([160, 160, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.0.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.0.body.0.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.0.body.0.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.0.body.0.dau_bot.body.0.weight: Tensor float32 Size([320, 320, 3, 3])
+          body.0.body.0.dau_bot.body.2.weight: Tensor float32 Size([320, 320, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.0.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.0.body.0.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.0.body.0.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.0.body.0.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.0.body.0.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.0.body.0.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.0.body.0.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.0.body.0.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.0.body.0.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.0.body.0.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.0.body.0.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.0.body.0.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.0.body.0.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.0.body.0.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.0.body.0.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.0.body.0.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.0.body.0.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    1
+      dau_top
+        body
+          body.0.body.1.dau_top.body.0.weight: Tensor float32 Size([80, 80, 3, 3])
+          body.0.body.1.dau_top.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.1.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.0.body.1.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.0.body.1.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.0.body.1.dau_mid.body.0.weight: Tensor float32 Size([160, 160, 3, 3])
+          body.0.body.1.dau_mid.body.2.weight: Tensor float32 Size([160, 160, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.1.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.0.body.1.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.0.body.1.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.0.body.1.dau_bot.body.0.weight: Tensor float32 Size([320, 320, 3, 3])
+          body.0.body.1.dau_bot.body.2.weight: Tensor float32 Size([320, 320, 3, 3])
+        gcnet
+          conv_mask
+            body.0.body.1.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.0.body.1.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.0.body.1.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.0.body.1.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.0.body.1.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.0.body.1.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.0.body.1.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.0.body.1.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.0.body.1.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.0.body.1.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.0.body.1.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.0.body.1.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.0.body.1.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.0.body.1.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.0.body.1.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.0.body.1.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.0.body.1.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    2
+      body.0.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+  1.body
+    0
+      dau_top
+        body
+          body.1.body.0.dau_top.body.0.weight: Tensor float32 Size([80, 40, 3, 3])
+          body.1.body.0.dau_top.body.2.weight: Tensor float32 Size([80, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.0.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.1.body.0.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.1.body.0.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.1.body.0.dau_mid.body.0.weight: Tensor float32 Size([160, 80, 3, 3])
+          body.1.body.0.dau_mid.body.2.weight: Tensor float32 Size([160, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.0.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.1.body.0.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.1.body.0.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.1.body.0.dau_bot.body.0.weight: Tensor float32 Size([320, 160, 3, 3])
+          body.1.body.0.dau_bot.body.2.weight: Tensor float32 Size([320, 160, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.0.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.1.body.0.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.1.body.0.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.1.body.0.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.1.body.0.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.1.body.0.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.1.body.0.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.1.body.0.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.1.body.0.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.1.body.0.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.1.body.0.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.1.body.0.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.1.body.0.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.1.body.0.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.1.body.0.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.1.body.0.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.1.body.0.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    1
+      dau_top
+        body
+          body.1.body.1.dau_top.body.0.weight: Tensor float32 Size([80, 40, 3, 3])
+          body.1.body.1.dau_top.body.2.weight: Tensor float32 Size([80, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.1.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.1.body.1.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.1.body.1.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.1.body.1.dau_mid.body.0.weight: Tensor float32 Size([160, 80, 3, 3])
+          body.1.body.1.dau_mid.body.2.weight: Tensor float32 Size([160, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.1.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.1.body.1.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.1.body.1.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.1.body.1.dau_bot.body.0.weight: Tensor float32 Size([320, 160, 3, 3])
+          body.1.body.1.dau_bot.body.2.weight: Tensor float32 Size([320, 160, 3, 3])
+        gcnet
+          conv_mask
+            body.1.body.1.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.1.body.1.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.1.body.1.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.1.body.1.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.1.body.1.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.1.body.1.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.1.body.1.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.1.body.1.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.1.body.1.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.1.body.1.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.1.body.1.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.1.body.1.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.1.body.1.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.1.body.1.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.1.body.1.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.1.body.1.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.1.body.1.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    2
+      body.1.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+  2.body
+    0
+      dau_top
+        body
+          body.2.body.0.dau_top.body.0.weight: Tensor float32 Size([80, 20, 3, 3])
+          body.2.body.0.dau_top.body.2.weight: Tensor float32 Size([80, 20, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.0.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.2.body.0.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.2.body.0.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.2.body.0.dau_mid.body.0.weight: Tensor float32 Size([160, 40, 3, 3])
+          body.2.body.0.dau_mid.body.2.weight: Tensor float32 Size([160, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.0.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.2.body.0.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.2.body.0.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.2.body.0.dau_bot.body.0.weight: Tensor float32 Size([320, 80, 3, 3])
+          body.2.body.0.dau_bot.body.2.weight: Tensor float32 Size([320, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.0.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.2.body.0.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.2.body.0.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.2.body.0.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.2.body.0.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.2.body.0.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.2.body.0.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.2.body.0.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.2.body.0.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.2.body.0.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.2.body.0.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.2.body.0.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.2.body.0.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.2.body.0.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.2.body.0.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.2.body.0.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.2.body.0.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    1
+      dau_top
+        body
+          body.2.body.1.dau_top.body.0.weight: Tensor float32 Size([80, 20, 3, 3])
+          body.2.body.1.dau_top.body.2.weight: Tensor float32 Size([80, 20, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.1.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.2.body.1.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.2.body.1.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.2.body.1.dau_mid.body.0.weight: Tensor float32 Size([160, 40, 3, 3])
+          body.2.body.1.dau_mid.body.2.weight: Tensor float32 Size([160, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.1.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.2.body.1.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.2.body.1.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.2.body.1.dau_bot.body.0.weight: Tensor float32 Size([320, 80, 3, 3])
+          body.2.body.1.dau_bot.body.2.weight: Tensor float32 Size([320, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.2.body.1.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.2.body.1.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.2.body.1.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.2.body.1.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.2.body.1.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.2.body.1.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.2.body.1.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.2.body.1.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.2.body.1.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.2.body.1.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.2.body.1.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.2.body.1.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.2.body.1.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.2.body.1.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.2.body.1.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.2.body.1.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.2.body.1.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    2
+      body.2.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+  3.body
+    0
+      dau_top
+        body
+          body.3.body.0.dau_top.body.0.weight: Tensor float32 Size([80, 20, 3, 3])
+          body.3.body.0.dau_top.body.2.weight: Tensor float32 Size([80, 20, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.0.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.3.body.0.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.3.body.0.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.3.body.0.dau_mid.body.0.weight: Tensor float32 Size([160, 40, 3, 3])
+          body.3.body.0.dau_mid.body.2.weight: Tensor float32 Size([160, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.0.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.3.body.0.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.3.body.0.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.3.body.0.dau_bot.body.0.weight: Tensor float32 Size([320, 80, 3, 3])
+          body.3.body.0.dau_bot.body.2.weight: Tensor float32 Size([320, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.0.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.3.body.0.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.3.body.0.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.3.body.0.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.3.body.0.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.3.body.0.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.3.body.0.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.3.body.0.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.3.body.0.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.3.body.0.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.3.body.0.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.3.body.0.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.3.body.0.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.3.body.0.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.3.body.0.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.3.body.0.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.3.body.0.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    1
+      dau_top
+        body
+          body.3.body.1.dau_top.body.0.weight: Tensor float32 Size([80, 20, 3, 3])
+          body.3.body.1.dau_top.body.2.weight: Tensor float32 Size([80, 20, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.1.dau_top.gcnet.conv_mask.weight: Tensor float32 Size([1, 80, 1, 1])
+          channel_add_conv
+            body.3.body.1.dau_top.gcnet.channel_add_conv.0.weight: Tensor float32 Size([80, 80, 1, 1])
+            body.3.body.1.dau_top.gcnet.channel_add_conv.2.weight: Tensor float32 Size([80, 80, 1, 1])
+      dau_mid
+        body
+          body.3.body.1.dau_mid.body.0.weight: Tensor float32 Size([160, 40, 3, 3])
+          body.3.body.1.dau_mid.body.2.weight: Tensor float32 Size([160, 40, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.1.dau_mid.gcnet.conv_mask.weight: Tensor float32 Size([1, 160, 1, 1])
+          channel_add_conv
+            body.3.body.1.dau_mid.gcnet.channel_add_conv.0.weight: Tensor float32 Size([160, 160, 1, 1])
+            body.3.body.1.dau_mid.gcnet.channel_add_conv.2.weight: Tensor float32 Size([160, 160, 1, 1])
+      dau_bot
+        body
+          body.3.body.1.dau_bot.body.0.weight: Tensor float32 Size([320, 80, 3, 3])
+          body.3.body.1.dau_bot.body.2.weight: Tensor float32 Size([320, 80, 3, 3])
+        gcnet
+          conv_mask
+            body.3.body.1.dau_bot.gcnet.conv_mask.weight: Tensor float32 Size([1, 320, 1, 1])
+          channel_add_conv
+            body.3.body.1.dau_bot.gcnet.channel_add_conv.0.weight: Tensor float32 Size([320, 320, 1, 1])
+            body.3.body.1.dau_bot.gcnet.channel_add_conv.2.weight: Tensor float32 Size([320, 320, 1, 1])
+      down2
+        body.3.body.1.down2.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+      down4
+        body.3.body.1.down4.0.body.0.bot.1.weight: Tensor float32 Size([160, 80, 1, 1])
+        body.3.body.1.down4.1.body.0.bot.1.weight: Tensor float32 Size([320, 160, 1, 1])
+      up21_1
+        body.3.body.1.up21_1.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up21_2
+        body.3.body.1.up21_2.body.0.bot.0.weight: Tensor float32 Size([80, 160, 1, 1])
+      up32_1
+        body.3.body.1.up32_1.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      up32_2
+        body.3.body.1.up32_2.body.0.bot.0.weight: Tensor float32 Size([160, 320, 1, 1])
+      conv_out
+        body.3.body.1.conv_out.weight: Tensor float32 Size([80, 80, 1, 1])
+      skff_top
+        conv_du
+          body.3.body.1.skff_top.conv_du.0.weight: Tensor float32 Size([10, 80, 1, 1])
+        fcs
+          body.3.body.1.skff_top.fcs.0.weight: Tensor float32 Size([80, 10, 1, 1])
+          body.3.body.1.skff_top.fcs.1.weight: Tensor float32 Size([80, 10, 1, 1])
+      skff_mid
+        conv_du
+          body.3.body.1.skff_mid.conv_du.0.weight: Tensor float32 Size([20, 160, 1, 1])
+        fcs
+          body.3.body.1.skff_mid.fcs.0.weight: Tensor float32 Size([160, 20, 1, 1])
+          body.3.body.1.skff_mid.fcs.1.weight: Tensor float32 Size([160, 20, 1, 1])
+    2
+      body.3.body.2.weight: Tensor float32 Size([80, 80, 3, 3])
+conv_out
+  conv_out.weight: Tensor float32 Size([3, 80, 3, 3])
