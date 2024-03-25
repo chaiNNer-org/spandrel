@@ -13,9 +13,9 @@ from ...__helpers.model_descriptor import (
     StateDict,
 )
 from .arch.network_dncnn import IRCNN, DnCNN, FDnCNN
-from .arch.network_unet import UNetRes
+from .arch.network_unet import UNetRes as DRUNet
 
-_DPIR = Union[DnCNN, FDnCNN, IRCNN, UNetRes]
+_DPIR = Union[DnCNN, FDnCNN, IRCNN, DRUNet]
 
 _is_ircnn = KeyCondition.exactly(
     "model.0.weight",

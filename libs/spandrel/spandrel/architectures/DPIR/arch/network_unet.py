@@ -1,9 +1,14 @@
 import torch.nn as nn
 
+from spandrel.util import store_hyperparameters
+
 from ..arch import basicblock as B
 
 
+@store_hyperparameters()
 class UNetRes(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         in_nc=1,
