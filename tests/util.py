@@ -35,7 +35,9 @@ from spandrel import (
     ModelDescriptor,
     ModelLoader,
     SizeRequirements,
+    UnsupportedModelError,
 )
+from spandrel.util import KeyCondition
 from spandrel_extra_arches import EXTRA_REGISTRY
 
 MAIN_REGISTRY.add(*EXTRA_REGISTRY)
@@ -123,8 +125,35 @@ class ModelFile:
     def exists(self) -> bool:
         return self.path.exists()
 
-    def load_model(self) -> ModelDescriptor:
-        return ModelLoader().load_from_file(self.path)
+    def load_model(self, expected_arch: Architecture | None = None) -> ModelDescriptor:
+        loader = ModelLoader()
+        state_dict = loader.load_state_dict_from_file(self.path)
+        try:
+            model = loader.load_from_state_dict(state_dict)
+            if expected_arch is not None and model.architecture.id != expected_arch.id:
+                raise AssertionError(
+                    f"Expected architecture {expected_arch.id}, but got {model.architecture.id}"
+                )
+            return model
+        except UnsupportedModelError as e:
+            if expected_arch is not None:
+                if expected_arch.id not in loader.registry:
+                    raise AssertionError(
+                        f"Expected architecture {expected_arch.id} to be in the registry"
+                    ) from e
+
+                cond = expected_arch._detect  # type: ignore
+                if isinstance(cond, KeyCondition):
+                    kind = cond._kind  # type: ignore
+                    keys = cond._keys  # type: ignore
+                    if kind == "all":
+                        missing: set[str] = set()
+                        for key in keys:
+                            if isinstance(key, str) and key not in state_dict:
+                                missing.add(key)
+                        if len(missing) > 0:
+                            raise AssertionError(f"Missing keys: {missing}") from e
+            raise
 
     @staticmethod
     def from_url(url: str, name: str | None = None):

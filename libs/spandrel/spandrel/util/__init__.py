@@ -19,7 +19,7 @@ class KeyCondition:
         self, kind: Literal["all", "any"], keys: tuple[str | KeyCondition, ...]
     ):
         self._keys = keys
-        self._kind = kind
+        self._kind: Literal["all", "any"] = kind
 
     @staticmethod
     def has_all(*keys: str | KeyCondition) -> KeyCondition:
