@@ -6,7 +6,6 @@ from ..architectures import (
     DAT,
     DCTLSA,
     DITN,
-    DPIR,
     ESRGAN,
     FBCNN,
     GFPGAN,
@@ -72,6 +71,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(MixDehazeNet.MixDehazeNetArch()),
     ArchSupport.from_architecture(DRUNet.DRUNetArch()),
     ArchSupport.from_architecture(DnCNN.DnCNNArch()),
-    ArchSupport.from_architecture(DPIR.DPIRArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
