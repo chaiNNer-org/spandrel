@@ -22,15 +22,15 @@ class IPT(nn.Module):
 
     def __init__(
         self,
-        patch_size: int,
-        patch_dim: int,
+        patch_size: int = 48,
+        patch_dim: int = 3,
         n_feats: int = 64,
-        rgb_range: float = 1,
+        rgb_range: float = 255,
         n_colors: int = 3,
         scale: Sequence[int] = [1],
-        num_heads: int,
+        num_heads: int = 12,
         num_layers: int = 12,
-        num_queries: int,
+        num_queries: int = 1,
         dropout_rate: float = 0,
         mlp=True,
         pos_every=False,
@@ -41,6 +41,7 @@ class IPT(nn.Module):
         super().__init__()
 
         self.scale_idx = 0
+        self.rgb_range = rgb_range
 
         kernel_size = 3
         act = nn.ReLU(True)
@@ -139,7 +140,7 @@ class VisionTransformer(nn.Module):
 
         self.no_pos = no_pos
 
-        if  self.mlp:
+        if self.mlp:
             self.linear_encoding = nn.Linear(self.flatten_dim, embedding_dim)
             self.mlp_head = nn.Sequential(
                 nn.Linear(embedding_dim, hidden_dim),
@@ -183,7 +184,7 @@ class VisionTransformer(nn.Module):
             .contiguous()
         )
 
-        if  self.mlp:
+        if self.mlp:
             x = self.dropout_layer1(self.linear_encoding(x)) + x
 
             query_embed = (
@@ -207,7 +208,7 @@ class VisionTransformer(nn.Module):
                 x = self.encoder(x + pos)
                 x = self.decoder(x, x, query_pos=query_embed)
 
-        if  self.mlp:
+        if self.mlp:
             x = self.mlp_head(x) + x
 
         x = x.transpose(0, 1).contiguous().view(x.size(1), -1, self.flatten_dim)
@@ -270,8 +271,8 @@ class TransformerEncoder(nn.Module):
 class TransformerEncoderLayer(nn.Module):
     def __init__(
         self,
-        d_model,
-        nhead,
+        d_model: int,
+        nhead: int,
         dim_feedforward=2048,
         dropout=0.1,
         no_norm=False,
