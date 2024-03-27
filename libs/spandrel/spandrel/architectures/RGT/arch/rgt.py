@@ -165,8 +165,7 @@ class WindowAttention(nn.Module):
         elif idx == 1:
             W_sp, H_sp = self.split_size[0], self.split_size[1]
         else:
-            print("ERROR MODE", idx)
-            exit(0)
+            raise ValueError(f"ERROR MODE: {idx}")
         self.H_sp = H_sp
         self.W_sp = W_sp
 
