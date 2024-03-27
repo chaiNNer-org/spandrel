@@ -11,16 +11,8 @@ import torch.nn.functional as F
 from spandrel.util.timm import DropPath, to_2tuple
 
 from .config import GRLConfig
-from .mixed_attn_block import (
-    CAB,
-    CPB_MLP,
-    AnchorProjection,
-    QKVProjection,
-)
-from .ops import (
-    window_partition,
-    window_reverse,
-)
+from .mixed_attn_block import CAB, CPB_MLP, AnchorProjection, QKVProjection
+from .ops import window_partition, window_reverse
 from .swin_v1_block import Mlp
 
 
