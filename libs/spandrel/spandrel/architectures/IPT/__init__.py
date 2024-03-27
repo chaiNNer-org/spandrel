@@ -15,6 +15,7 @@ from ...__helpers.model_descriptor import (
     StateDict,
 )
 from .arch.ipt import IPT
+from .arch.model import Model
 
 
 class IPTArch(Architecture[IPT]):
@@ -126,6 +127,12 @@ class IPTArch(Architecture[IPT]):
 
         single_scale = max(scale)
 
+        def call(model: IPT, x: torch.Tensor):
+            m = Model(model)
+
+            scale_idx = model.scale.index(max(model.scale))
+            return m.forward(x * model.rgb_range, scale_idx) / model.rgb_range
+
         return ImageModelDescriptor(
             model,
             state_dict,
@@ -143,5 +150,5 @@ class IPTArch(Architecture[IPT]):
             input_channels=3,  # only supports RGB
             output_channels=3,
             size_requirements=SizeRequirements(minimum=patch_size),
-            call_fn=lambda model, x: model(x * model.rgb_range) / model.rgb_range,
+            call_fn=call,
         )

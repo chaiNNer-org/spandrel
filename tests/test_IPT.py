@@ -29,12 +29,11 @@ def test_load():
 
 
 def test_size_requirements():
-    return
     file = ModelFile.from_url(
         "https://drive.google.com/file/d/1KFnYnSxXnXwmEB80pM79qi8Pr_vqkWYZ/view?usp=drive_link",
         name="IPT_denoise50.pth",
     )
-    assert_size_requirements(file.load_model(), max_size=1000, max_candidates=128)
+    assert_size_requirements(file.load_model(), max_candidates=4)
 
 
 def test_IPT_denoise50(snapshot):

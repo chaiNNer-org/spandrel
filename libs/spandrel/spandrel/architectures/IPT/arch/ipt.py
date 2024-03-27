@@ -41,7 +41,9 @@ class IPT(nn.Module):
         super().__init__()
 
         self.scale_idx = 0
+        self.scale = scale
         self.rgb_range = rgb_range
+        self.patch_size = patch_size
 
         kernel_size = 3
         act = nn.ReLU(True)
