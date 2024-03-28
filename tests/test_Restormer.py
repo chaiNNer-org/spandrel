@@ -2,6 +2,8 @@ from spandrel_extra_arches.architectures.Restormer import Restormer, RestormerAr
 
 from .util import (
     ModelFile,
+    TestImage,
+    assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
@@ -82,6 +84,7 @@ def test_gaussian_color_denoising_blind(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, Restormer)
+    assert_image_inference(file, model, [TestImage.JPEG_15])
 
 
 def test_gaussian_gray_denoising_sigma25(snapshot):

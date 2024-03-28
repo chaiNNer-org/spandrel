@@ -91,7 +91,7 @@ class KBNetArch(Architecture[_KBNet]):
             state_dict,
             architecture=self,
             purpose="Restoration",
-            tags=["L"],
+            tags=["L", f"{dim}dim"],
             supports_half=False,
             supports_bfloat16=True,
             scale=1,
@@ -117,12 +117,12 @@ class KBNetArch(Architecture[_KBNet]):
         enc_count = get_seq_len(state_dict, "encoders")
         enc_blk_nums = [1] * enc_count
         for i in range(enc_count):
-            enc_blk_nums[i] = get_seq_len(state_dict, "encoders." + str(i))
+            enc_blk_nums[i] = get_seq_len(state_dict, f"encoders.{i}")
 
         dec_count = get_seq_len(state_dict, "decoders")
         dec_blk_nums = [1] * dec_count
         for i in range(dec_count):
-            dec_blk_nums[i] = get_seq_len(state_dict, "decoders." + str(i))
+            dec_blk_nums[i] = get_seq_len(state_dict, f"decoders.{i}")
 
         # in code: ffn_ch = int(c * ffn_scale)
         temp_c = state_dict["middle_blks.0.conv4.weight"].shape[1]
@@ -148,7 +148,11 @@ class KBNetArch(Architecture[_KBNet]):
             state_dict,
             architecture=self,
             purpose="Restoration",
-            tags=["S"],
+            tags=[
+                "S",
+                f"{width}w",
+                *(["lightweight"] if lightweight else []),
+            ],
             supports_half=False,
             supports_bfloat16=True,
             scale=1,
