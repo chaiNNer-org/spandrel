@@ -2,6 +2,8 @@ from spandrel.architectures.SCUNet import SCUNet, SCUNetArch
 
 from .util import (
     ModelFile,
+    TestImage,
+    assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
@@ -43,6 +45,7 @@ def test_SCUNet_color_GAN(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, SCUNet)
+    assert_image_inference(file, model, [TestImage.JPEG_15])
 
 
 def test_SCUNet_color_RSNR(snapshot):

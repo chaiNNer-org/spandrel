@@ -2,6 +2,8 @@ from spandrel.architectures.FFTformer import FFTformer, FFTformerArch
 
 from .util import (
     ModelFile,
+    TestImage,
+    assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
     disallowed_props,
@@ -38,3 +40,4 @@ def test_fftformer_GoPro(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, FFTformer)
+    assert_image_inference(file, model, [TestImage.SR_32])

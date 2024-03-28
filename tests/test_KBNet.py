@@ -1,6 +1,14 @@
 from spandrel.architectures.KBNet import KBNet_l, KBNet_s, KBNetArch
 
-from .util import assert_loads_correctly, skip_if_unchanged
+from .util import (
+    ModelFile,
+    TestImage,
+    assert_image_inference,
+    assert_loads_correctly,
+    assert_size_requirements,
+    disallowed_props,
+    skip_if_unchanged,
+)
 
 skip_if_unchanged(__file__)
 
@@ -27,3 +35,35 @@ def test_load():
         lambda: KBNet_s(width=32, ffn_scale=3),
         lambda: KBNet_s(width=32, lightweight=True),
     )
+
+
+def test_size_requirements():
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/kbnet/1x-KBNet_derain.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/kbnet/1x-KBNet_sidd.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+
+def test_derain(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/kbnet/1x-KBNet_derain.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, KBNet_l)
+    assert_image_inference(file, model, [TestImage.SR_32])
+
+
+def test_sidd(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/OpenModelDB/model-hub/releases/download/kbnet/1x-KBNet_sidd.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, KBNet_s)
+    assert_image_inference(file, model, [TestImage.JPEG_15])
