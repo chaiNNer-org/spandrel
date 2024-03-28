@@ -129,6 +129,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [MIRNet2](https://github.com/swz30/MIRNetv2) (+) | [Models](https://github.com/swz30/MIRNetv2/releases/tag/v1.0.0) (SR not supported)
 - [DnCNN, FDnCNN](https://github.com/cszn/DPIR) | [Models](https://github.com/cszn/KAIR/releases/tag/v1.0)
 - [DRUNet](https://github.com/cszn/DPIR) | [Models](https://github.com/cszn/KAIR/releases/tag/v1.0)
+- [IPT](https://github.com/huawei-noah/Pretrained-IPT) | [Models](https://drive.google.com/drive/folders/1MVSdUX0YBExauG0fFz4ANiWTrq9xZEj7?usp=sharing)
 
 #### DeJPEG
 
