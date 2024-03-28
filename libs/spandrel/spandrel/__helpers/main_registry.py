@@ -11,6 +11,7 @@ from ..architectures import (
     GFPGAN,
     GRL,
     HAT,
+    IPT,
     RGT,
     SAFMN,
     SPAN,
@@ -71,5 +72,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(MixDehazeNet.MixDehazeNetArch()),
     ArchSupport.from_architecture(DRUNet.DRUNetArch()),
     ArchSupport.from_architecture(DnCNN.DnCNNArch()),
+    ArchSupport.from_architecture(IPT.IPTArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
