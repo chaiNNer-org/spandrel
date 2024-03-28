@@ -29,9 +29,7 @@ from .ops import (
     get_relative_coords_table_all,
     get_relative_position_index_simple,
 )
-from .swin_v1_block import (
-    build_last_conv,
-)
+from .swin_v1_block import build_last_conv
 from .upsample import Upsample, UpsampleOneStep
 
 
@@ -151,11 +149,11 @@ class TransformerStage(nn.Module):
         for n, m in self.named_modules():
             if self.init_method == "w":
                 if isinstance(m, (nn.Linear, nn.Conv2d)) and n.find("cpb_mlp") < 0:
-                    print("nn.Linear and nn.Conv2d weight initilization")
+                    # print("nn.Linear and nn.Conv2d weight initilization")
                     m.weight.data *= 0.1
             elif self.init_method == "l":
                 if isinstance(m, nn.LayerNorm):
-                    print("nn.LayerNorm initialization")
+                    # print("nn.LayerNorm initialization")
                     nn.init.constant_(m.bias, 0)
                     nn.init.constant_(m.weight, 0)
             elif self.init_method.find("t") >= 0:
@@ -164,9 +162,9 @@ class TransformerStage(nn.Module):
                     trunc_normal_(m.weight, std=scale)
                 elif isinstance(m, nn.Conv2d):
                     m.weight.data *= 0.1
-                print(
-                    "Initialization nn.Linear - trunc_normal; nn.Conv2d - weight rescale."
-                )
+                # print(
+                #     "Initialization nn.Linear - trunc_normal; nn.Conv2d - weight rescale."
+                # )
             else:
                 raise NotImplementedError(
                     f"Parameter initialization method {self.init_method} not implemented in TransformerStage."

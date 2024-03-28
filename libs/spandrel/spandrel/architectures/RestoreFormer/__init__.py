@@ -1,3 +1,5 @@
+import torch
+from torchvision.transforms.functional import normalize as tv_normalize
 from typing_extensions import override
 
 from spandrel.util import KeyCondition, get_seq_len
@@ -80,6 +82,11 @@ class RestoreFormerArch(Architecture[RestoreFormer]):
             head_size=head_size,
         )
 
+        def call(model: RestoreFormer, x: torch.Tensor) -> torch.Tensor:
+            x = tv_normalize(x, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            result = model(x)[0]
+            return (result + 1) / 2
+
         return ImageModelDescriptor(
             model,
             state_dict,
@@ -88,8 +95,9 @@ class RestoreFormerArch(Architecture[RestoreFormer]):
             tags=[],
             supports_half=False,
             supports_bfloat16=True,
-            scale=8,
+            scale=1,
             input_channels=in_channels,
             output_channels=out_ch,
-            size_requirements=SizeRequirements(minimum=16),
+            size_requirements=SizeRequirements(multiple_of=32),
+            call_fn=call,
         )

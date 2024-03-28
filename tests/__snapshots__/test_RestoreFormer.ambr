@@ -8,8 +8,8 @@
     input_channels=3,
     output_channels=3,
     purpose='FaceSR',
-    scale=8,
-    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=32, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([

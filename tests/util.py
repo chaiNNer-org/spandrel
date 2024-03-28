@@ -251,6 +251,7 @@ class TestImage(Enum):
     JPEG_15 = "jpeg-15.jpg"
     GRAY_EINSTEIN = "einstein.png"
     BLURRY_FACE = "blurry-face.jpg"
+    LR_FACE = "lr-face.jpg"
     HAZE = "haze.jpg"
 
 
@@ -311,6 +312,11 @@ def assert_image_inference(
 
         assert expected_path.exists(), f"Expected {expected_path} to exist."
         expected = read_image(expected_path)
+
+        if expected.shape != output.shape and update_mode:
+            # update the snapshot
+            write_image(expected_path, output)
+            continue
 
         # Assert that the images are the same within a certain tolerance
         # The CI for some reason has a bit of FP precision loss compared to my local machine
@@ -474,9 +480,15 @@ def assert_size_requirements(
             with torch.no_grad():
                 output_tensor = model(input_tensor.to(device))
 
-            assert output_tensor.shape[1] == model.output_channels, "Incorrect channels"
-            assert output_tensor.shape[2] == height * model.scale, "Incorrect height"
-            assert output_tensor.shape[3] == width * model.scale, "Incorrect width"
+            expected_shape = (
+                1,
+                model.output_channels,
+                height * model.scale,
+                width * model.scale,
+            )
+            assert (
+                output_tensor.shape == expected_shape
+            ), f"Expected {expected_shape}, but got {output_tensor.shape}"
         except Exception as e:
             raise AssertionError(
                 f"Failed size requirement test for {width=} {height=}"

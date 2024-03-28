@@ -1,7 +1,6 @@
 # type: ignore
 """Modified from https://github.com/wzhouxiff/RestoreFormer"""
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -444,12 +443,12 @@ class MultiHeadDecoder(nn.Module):
         # compute in_ch_mult, block_in and curr_res at lowest res
         block_in = ch * ch_mult[self.num_resolutions - 1]
         curr_res = resolution // 2 ** (self.num_resolutions - 1)
-        self.z_shape = (1, z_channels, curr_res, curr_res)
-        print(
-            "Working with z of shape {} = {} dimensions.".format(
-                self.z_shape, np.prod(self.z_shape)
-            )
-        )
+        # self.z_shape = (1, z_channels, curr_res, curr_res)
+        # print(
+        #     "Working with z of shape {} = {} dimensions.".format(
+        #         self.z_shape, np.prod(self.z_shape)
+        #     )
+        # )
 
         # z to block_in
         self.conv_in = torch.nn.Conv2d(
@@ -507,7 +506,7 @@ class MultiHeadDecoder(nn.Module):
 
     def forward(self, z):
         # assert z.shape[1:] == self.z_shape[1:]
-        self.last_z_shape = z.shape
+        # self.last_z_shape = z.shape
 
         # timestep embedding
         temb = None
@@ -570,7 +569,7 @@ class MultiHeadDecoderTransformer(nn.Module):
         # compute in_ch_mult, block_in and curr_res at lowest res
         block_in = ch * ch_mult[self.num_resolutions - 1]
         curr_res = resolution // 2 ** (self.num_resolutions - 1)
-        self.z_shape = (1, z_channels, curr_res, curr_res)
+        # self.z_shape = (1, z_channels, curr_res, curr_res)
         # print(
         #     "Working with z of shape {} = {} dimensions.".format(
         #         self.z_shape, np.prod(self.z_shape)
