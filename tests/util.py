@@ -399,6 +399,7 @@ def assert_loads_correctly(
     *models: Callable[[], T],
     check_safe_tensors: bool = True,
     ignore_parameters: set[str] | None = None,
+    detect: bool = True,
 ):
     @runtime_checkable
     class WithHyperparameters(Protocol):
@@ -455,6 +456,9 @@ def assert_loads_correctly(
                 ) from e
 
             assert_same(model_name, model, sf_loaded.model)
+
+        if detect:
+            assert arch.detect(state_dict), f"Failed to detect: {model_name}"
 
 
 def seed_rngs(seed: int) -> None:
