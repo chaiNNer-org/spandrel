@@ -16,6 +16,7 @@ from enum import Enum
 from functools import lru_cache
 from inspect import getsource
 from pathlib import Path
+from textwrap import indent
 from typing import Any, Callable, Protocol, TypeVar, runtime_checkable
 from urllib.parse import unquote, urlencode, urlparse
 
@@ -37,6 +38,7 @@ from spandrel import (
     SizeRequirements,
     UnsupportedModelError,
 )
+from spandrel.__helpers.model_descriptor import StateDict
 from spandrel.util import KeyCondition
 from spandrel_extra_arches import EXTRA_REGISTRY
 
@@ -141,18 +143,7 @@ class ModelFile:
                     raise AssertionError(
                         f"Expected architecture {expected_arch.id} to be in the registry"
                     ) from e
-
-                cond = expected_arch._detect  # type: ignore
-                if isinstance(cond, KeyCondition):
-                    kind = cond._kind  # type: ignore
-                    keys = cond._keys  # type: ignore
-                    if kind == "all":
-                        missing: set[str] = set()
-                        for key in keys:
-                            if isinstance(key, str) and key not in state_dict:
-                                missing.add(key)
-                        if len(missing) > 0:
-                            raise AssertionError(f"Missing keys: {missing}") from e
+                _assert_detect(expected_arch, self.name, state_dict)
             raise
 
     @staticmethod
@@ -394,6 +385,120 @@ def _get_diff(a: Mapping[str, object], b: Mapping[str, object]) -> str | None:
     return "\n".join(lines)
 
 
+@dataclass(frozen=True)
+class _ResultAccept:
+    cond: KeyCondition
+
+
+@dataclass(frozen=True)
+class _ResultReject:
+    cond: KeyCondition
+    errors: int
+    trace: str
+
+
+def _debug_key_condition(
+    state_dict: StateDict, cond: KeyCondition
+) -> _ResultAccept | _ResultReject:
+    if cond(state_dict):
+        return _ResultAccept(cond)
+
+    kind = cond._kind  # type: ignore
+    keys = cond._keys  # type: ignore
+
+    if kind == "any":
+        if len(keys) == 0:
+            return _ResultReject(
+                cond,
+                errors=1,
+                trace="`KeyCondition.has_any()` always rejects. Add at least one key.",
+            )
+        if all(isinstance(key, str) for key in keys):
+            return _ResultReject(
+                cond,
+                errors=1,
+                trace=(
+                    "Expected any of the following keys to be present, but none were:\n"
+                    + "\n".join("  - " + str(key) for key in keys)
+                ),
+            )
+
+        def format_variant(key: str | KeyCondition) -> str:
+            if isinstance(key, str):
+                return "  - Contains key " + key
+            reason = _debug_key_condition(state_dict, key)
+            assert isinstance(reason, _ResultReject)
+
+            kind = key._kind  # type: ignore
+            return f"  - KeyCondition.has_{kind}(...) rejected:\n" + indent(
+                reason.trace, "    "
+            )
+
+        return _ResultReject(
+            cond,
+            errors=1,
+            trace=(
+                "Expected any of the following to accept, but none did:\n"
+                + "\n".join(map(format_variant, keys))
+            ),
+        )
+
+    if kind == "all":
+        if len(keys) == 0:
+            return _ResultAccept(cond)
+
+        missing: list[str] = []
+        rejected: list[_ResultReject] = []
+        for key in keys:
+            if isinstance(key, str):
+                if key not in state_dict:
+                    missing.append(key)
+            else:
+                reason = _debug_key_condition(state_dict, key)
+                if isinstance(reason, _ResultReject):
+                    rejected.append(reason)
+
+        accepted = len(keys) - len(missing) - len(rejected)
+        if accepted == 0:
+            return _ResultReject(
+                cond,
+                errors=len(rejected),
+                trace="All keys rejected/were missing.",
+            )
+
+        trace = f"{accepted}/{len(keys)} keys accepted.\n"
+        if len(missing) > 0:
+            trace += f"{len(missing)} missing key(s):\n" + "\n".join(
+                "  - " + key for key in missing
+            )
+        if len(rejected) > 0:
+            trace += f"{len(rejected)} rejected condition(s):\n" + "\n".join(
+                "  - " + indent(reason.trace, "    ").lstrip() for reason in rejected
+            )
+
+        return _ResultReject(
+            cond,
+            errors=len(missing) + len(rejected),
+            trace=trace,
+        )
+
+    raise AssertionError(f"Unknown kind: {kind}")
+
+
+def _assert_detect(arch: Architecture[T], model_name: str, state_dict: StateDict):
+    cond = arch._detect  # type: ignore
+    if isinstance(cond, KeyCondition):
+        result = _debug_key_condition(state_dict, cond)
+        if isinstance(result, _ResultReject):
+            raise AssertionError(f"Failed to detect {model_name}\n{result.trace}")
+    assert arch.detect(state_dict), f"Failed to detect {model_name}"
+
+
+@runtime_checkable
+class WithHyperparameters(Protocol):
+    hyperparameters: dict[str, Any]
+
+
 def assert_loads_correctly(
     arch: Architecture[T],
     *models: Callable[[], T],
@@ -401,10 +506,6 @@ def assert_loads_correctly(
     ignore_parameters: set[str] | None = None,
     detect: bool = True,
 ):
-    @runtime_checkable
-    class WithHyperparameters(Protocol):
-        hyperparameters: dict[str, Any]
-
     def assert_same(model_name: str, a: T, b: T) -> None:
         assert (
             type(b) == type(a)
@@ -458,7 +559,7 @@ def assert_loads_correctly(
             assert_same(model_name, model, sf_loaded.model)
 
         if detect:
-            assert arch.detect(state_dict), f"Failed to detect: {model_name}"
+            _assert_detect(arch, model_name, state_dict)
 
 
 def seed_rngs(seed: int) -> None:
