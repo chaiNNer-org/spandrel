@@ -18,9 +18,47 @@ class DATArch(Architecture[DAT]):
         super().__init__(
             id="DAT",
             detect=KeyCondition.has_all(
-                "layers.0.blocks.2.attn.attn_mask_0",
-                "layers.0.blocks.0.ffn.fc1.weight",
                 "conv_first.weight",
+                "before_RG.1.weight",
+                "before_RG.1.bias",
+                "layers.0.blocks.0.norm1.weight",
+                "layers.0.blocks.0.norm2.weight",
+                "layers.0.blocks.0.ffn.fc1.weight",
+                "layers.0.blocks.0.ffn.sg.norm.weight",
+                "layers.0.blocks.0.ffn.sg.conv.weight",
+                "layers.0.blocks.0.ffn.fc2.weight",
+                "layers.0.blocks.0.attn.qkv.weight",
+                "layers.0.blocks.0.attn.proj.weight",
+                "layers.0.blocks.0.attn.dwconv.0.weight",
+                "layers.0.blocks.0.attn.dwconv.1.running_mean",
+                "layers.0.blocks.0.attn.channel_interaction.1.weight",
+                "layers.0.blocks.0.attn.channel_interaction.2.running_mean",
+                "layers.0.blocks.0.attn.channel_interaction.4.weight",
+                "layers.0.blocks.0.attn.spatial_interaction.0.weight",
+                "layers.0.blocks.0.attn.spatial_interaction.1.running_mean",
+                "layers.0.blocks.0.attn.spatial_interaction.3.weight",
+                "layers.0.blocks.0.attn.attns.0.rpe_biases",
+                "layers.0.blocks.0.attn.attns.0.relative_position_index",
+                "layers.0.blocks.0.attn.attns.0.pos.pos_proj.weight",
+                "layers.0.blocks.0.attn.attns.0.pos.pos1.0.weight",
+                "layers.0.blocks.0.attn.attns.0.pos.pos3.0.weight",
+                "norm.weight",
+                KeyCondition.has_any(
+                    # resi_connection="1conv"
+                    "conv_after_body.weight",
+                    # resi_connection="3conv"
+                    "conv_after_body.4.weight",
+                ),
+                KeyCondition.has_any(
+                    # upsampler="pixelshuffle"
+                    KeyCondition.has_all(
+                        "conv_after_body.weight",
+                        "conv_before_upsample.0.weight",
+                        "conv_last.weight",
+                    ),
+                    # upsampler="pixelshuffledirect"
+                    "upsample.0.weight",
+                ),
             ),
         )
 

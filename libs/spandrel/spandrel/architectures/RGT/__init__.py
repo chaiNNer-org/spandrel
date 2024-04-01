@@ -63,7 +63,12 @@ class RGTArch(Architecture[RGT]):
                 "layers.0.blocks.0.mlp.fc2.weight",
                 "layers.0.blocks.0.norm2.weight",
                 "norm.weight",
-                "conv_after_body.weight",
+                KeyCondition.has_any(
+                    # 1conv
+                    "conv_after_body.weight",
+                    # 3conv
+                    "conv_after_body.0.weight",
+                ),
                 "conv_before_upsample.0.weight",
                 "conv_last.weight",
             ),

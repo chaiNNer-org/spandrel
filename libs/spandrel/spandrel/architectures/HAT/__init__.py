@@ -60,12 +60,21 @@ class HATArch(Architecture[HAT]):
         super().__init__(
             id="HAT",
             detect=KeyCondition.has_all(
+                "relative_position_index_SA",
+                "conv_first.weight",
                 "layers.0.residual_group.blocks.0.norm1.weight",
                 "layers.0.residual_group.blocks.0.conv_block.cab.0.weight",
-                "conv_last.weight",
-                "conv_first.weight",
+                "layers.0.residual_group.blocks.0.conv_block.cab.2.weight",
+                "layers.0.residual_group.blocks.0.conv_block.cab.3.attention.1.weight",
+                "layers.0.residual_group.blocks.0.conv_block.cab.3.attention.3.weight",
                 "layers.0.residual_group.blocks.0.mlp.fc1.bias",
-                "relative_position_index_SA",
+                "layers.0.residual_group.blocks.0.mlp.fc2.weight",
+                "layers.0.residual_group.overlap_attn.relative_position_bias_table",
+                "layers.0.residual_group.overlap_attn.qkv.weight",
+                "layers.0.residual_group.overlap_attn.proj.weight",
+                "layers.0.residual_group.overlap_attn.mlp.fc1.weight",
+                "layers.0.residual_group.overlap_attn.mlp.fc2.weight",
+                "conv_last.weight",
             ),
         )
 
@@ -92,27 +101,18 @@ class HATArch(Architecture[HAT]):
         patch_norm = True
         upscale = 2
         img_range = 1.0  # cannot be deduced from state dict
-        upsampler = ""
+        upsampler = "pixelshuffle"  # it's the only possible value
         resi_connection = "1conv"
         num_feat = 64
 
         in_chans = state_dict["conv_first.weight"].shape[1]
         embed_dim = state_dict["conv_first.weight"].shape[0]
 
-        if "conv_last.weight" in state_dict:
-            # upscaling model
-            upsampler = "pixelshuffle"
-            num_feat = state_dict["conv_last.weight"].shape[1]
-
-            upscale = 1
-            for i in range(0, get_seq_len(state_dict, "upsample"), 2):
-                shape = state_dict[f"upsample.{i}.weight"].shape[0]
-                upscale *= int(math.sqrt(shape // num_feat))
-        else:
-            # 1x model
-            upsampler = ""
-
-            upscale = 1
+        num_feat = state_dict["conv_last.weight"].shape[1]
+        upscale = 1
+        for i in range(0, get_seq_len(state_dict, "upsample"), 2):
+            shape = state_dict[f"upsample.{i}.weight"].shape[0]
+            upscale *= int(math.sqrt(shape // num_feat))
 
         window_size = int(math.sqrt(state_dict["relative_position_index_SA"].shape[0]))
         overlap_ratio = _get_overlap_ratio(
