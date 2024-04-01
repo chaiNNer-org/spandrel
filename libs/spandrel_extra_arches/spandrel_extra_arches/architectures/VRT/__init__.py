@@ -71,7 +71,53 @@ class VRTArch(Architecture[VRT]):
     def __init__(self) -> None:
         super().__init__(
             id="VRT",
-            detect=KeyCondition.has_all(),
+            detect=KeyCondition.has_all(
+                "conv_first.weight",
+                "conv_first.bias",
+                "norm.weight",
+                "conv_after_body.weight",
+                KeyCondition.has_any(
+                    # with pa_frames
+                    KeyCondition.has_all(
+                        "spynet.mean",
+                        "spynet.std",
+                        "spynet.basic_module.0.basic_module.0.weight",
+                        "spynet.basic_module.0.basic_module.0.bias",
+                        "spynet.basic_module.0.basic_module.8.bias",
+                        "spynet.basic_module.5.basic_module.8.bias",
+                        "conv_last.weight",
+                    ),
+                    # without pa_frames
+                    KeyCondition.has_all(
+                        "linear_fuse.weight",
+                        "conv_last.weight",
+                    ),
+                ),
+                "stage1.reshape.1.weight",
+                "stage1.linear1.weight",
+                "stage1.linear2.weight",
+                "stage1.residual_group1.blocks.0.norm1.weight",
+                "stage1.residual_group1.blocks.0.attn.relative_position_bias_table",
+                "stage1.residual_group1.blocks.0.attn.relative_position_index",
+                "stage1.residual_group1.blocks.0.attn.qkv_self.weight",
+                "stage1.residual_group1.blocks.0.attn.proj.weight",
+                "stage1.residual_group1.blocks.0.mlp.fc11.weight",
+                "stage1.residual_group1.blocks.0.mlp.fc12.weight",
+                "stage1.residual_group1.blocks.0.mlp.fc2.weight",
+                "stage2.reshape.2.weight",
+                "stage7.reshape.2.weight",
+                "stage8.0.1.weight",
+                "stage8.0.2.weight",
+                "stage8.1.linear.weight",
+                "stage8.1.residual_group.blocks.0.norm1.weight",
+                "stage8.1.residual_group.blocks.0.attn.relative_position_bias_table",
+                "stage8.1.residual_group.blocks.0.attn.relative_position_index",
+                "stage8.1.residual_group.blocks.0.attn.qkv_self.weight",
+                "stage8.1.residual_group.blocks.0.attn.proj.weight",
+                "stage8.1.residual_group.blocks.0.mlp.fc11.weight",
+                "stage8.1.residual_group.blocks.0.mlp.fc12.weight",
+                "stage8.1.residual_group.blocks.0.mlp.fc2.weight",
+            ),
         )
 
     @override
