@@ -47,8 +47,14 @@ class FeMaSRArch(Architecture[FeMaSR]):
                 "multiscale_encoder.in_conv.weight",
                 "multiscale_encoder.blocks.0.0.weight",
                 "decoder_group.0.block.1.weight",
+                "decoder_group.0.block.2.conv.2.weight",
+                "decoder_group.0.block.2.conv.5.weight",
+                "decoder_group.0.block.3.conv.2.weight",
+                "decoder_group.0.block.3.conv.5.weight",
                 "out_conv.weight",
+                "quantize_group.0.embedding.weight",
                 "before_quant_group.0.weight",
+                "after_quant_group.0.conv.weight",
             ),
         )
 
