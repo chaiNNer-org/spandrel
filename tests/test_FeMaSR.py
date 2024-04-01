@@ -23,7 +23,7 @@ def test_load():
         lambda: FeMaSR(gt_resolution=128),
         lambda: FeMaSR(LQ_stage=True, scale_factor=2),
         lambda: FeMaSR(LQ_stage=True, scale_factor=4),
-        lambda: FeMaSR(LQ_stage=True, scale_factor=8),
+        lambda: FeMaSR(LQ_stage=True, scale_factor=8, codebook_params=[[8, 32, 32]]),
         lambda: FeMaSR(norm_type="gn"),
         lambda: FeMaSR(norm_type="bn"),
         lambda: FeMaSR(norm_type="in"),

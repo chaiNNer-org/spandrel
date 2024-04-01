@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import math
+from typing import Literal
 
 import torch
 import torch.nn as nn
@@ -918,7 +919,7 @@ class HAT(nn.Module):
         use_checkpoint=False,
         upscale=1,
         img_range=1.0,
-        upsampler="",
+        upsampler: Literal["pixelshuffle"] = "pixelshuffle",
         resi_connection="1conv",
         num_feat=64,
     ):

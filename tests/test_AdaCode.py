@@ -23,7 +23,7 @@ def test_load():
         lambda: AdaCode(gt_resolution=128),
         lambda: AdaCode(LQ_stage=True, scale_factor=2),
         lambda: AdaCode(LQ_stage=True, scale_factor=4),
-        lambda: AdaCode(LQ_stage=True, scale_factor=8),
+        lambda: AdaCode(LQ_stage=True, scale_factor=8, codebook_params=[[8, 32, 32]]),
         lambda: AdaCode(norm_type="gn"),
         lambda: AdaCode(norm_type="bn"),
         lambda: AdaCode(norm_type="in"),
