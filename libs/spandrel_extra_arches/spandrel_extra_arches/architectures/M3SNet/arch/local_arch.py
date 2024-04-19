@@ -27,9 +27,7 @@ class AvgPool2d(nn.Module):
         self.train_size = train_size
 
     def extra_repr(self) -> str:
-        return "kernel_size={}, base_size={}, stride={}, fast_imp={}".format(
-            self.kernel_size, self.base_size, self.kernel_size, self.fast_imp
-        )
+        return f"kernel_size={self.kernel_size}, base_size={self.base_size}, stride={self.kernel_size}, fast_imp={self.fast_imp}"
 
     def forward(self, x):
         if self.kernel_size is None and self.base_size:
