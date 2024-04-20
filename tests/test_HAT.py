@@ -45,13 +45,13 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1Y7-3IgWfIAui9BMQIsFT9CzZXVMlx__e/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/2x-HAT-S_SR.pth",
         name="HAT-S_SRx2.pth",
     )
     assert_size_requirements(file.load_model())
 
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1pdhaO1fJq3tgSqDIbymdDiGxu4S0nqVq/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/4x-HAT_SR.pth",
         name="HAT_SRx4.pth",
     )
     assert_size_requirements(file.load_model())
@@ -59,7 +59,7 @@ def test_size_requirements():
 
 def test_HAT_S_2x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1Y7-3IgWfIAui9BMQIsFT9CzZXVMlx__e/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/2x-HAT-S_SR.pth",
         name="HAT-S_SRx2.pth",
     )
     model = file.load_model()
@@ -74,7 +74,7 @@ def test_HAT_S_2x(snapshot):
 
 def test_HAT_S_3x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1yBoJkvvvQ5GcPxV8cF0z6KGgOF5pMclX/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/3x-HAT-S_SR.pth",
         name="HAT-S_SRx3.pth",
     )
     model = file.load_model()
@@ -89,7 +89,7 @@ def test_HAT_S_3x(snapshot):
 
 def test_HAT_S_4x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1YvU9PF1XqlP8TVzH7P0bg-YlfP1TKDPC/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/4x-HAT-S_SR.pth",
         name="HAT-S_SRx4.pth",
     )
     model = file.load_model()
@@ -104,7 +104,7 @@ def test_HAT_S_4x(snapshot):
 
 def test_HAT_3x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1dWG4X_6VUSi1hhIwX0zEwddWI9M0tFmI/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/3x-HAT_SR.pth",
         name="HAT_SRx3.pth",
     )
     model = file.load_model()
@@ -119,7 +119,7 @@ def test_HAT_3x(snapshot):
 
 def test_HAT_4x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1pdhaO1fJq3tgSqDIbymdDiGxu4S0nqVq/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/4x-HAT_SR.pth",
         name="HAT_SRx4.pth",
     )
     model = file.load_model()
@@ -134,7 +134,7 @@ def test_HAT_4x(snapshot):
 
 def test_HAT_L_4x(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1uefIctjoNE3Tg6GTzelesTTshVogQdUf/view?usp=drive_link",
+        "https://github.com/OpenModelDB/model-hub/releases/download/hat/4x-HAT-L_SR_ImageNet-pretrain.pth",
         name="HAT-L_SRx4_ImageNet-pretrain.pth",
     )
     model = file.load_model()
