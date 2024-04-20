@@ -5,6 +5,8 @@ Advanced Super-Resolution Transformer with Adaptive Token Dictionary`.
 Arxiv: 'https://arxiv.org/abs/2401.08209'
 """
 
+from __future__ import annotations
+
 import math
 
 import numpy as np
@@ -927,12 +929,20 @@ class ATD(nn.Module):
         img_range=1.0,
         upsampler="",
         resi_connection="1conv",
+        norm=True,
     ):
         super().__init__()
         num_in_ch = in_chans
         num_out_ch = in_chans
         num_feat = 64
         self.img_range = img_range
+
+        self.no_norm: torch.Tensor | None
+        if not norm:
+            self.register_buffer("no_norm", torch.zeros(1))
+        else:
+            self.no_norm = None
+
         if in_chans == 3:
             rgb_mean = (0.4488, 0.4371, 0.4040)
             self.mean = torch.Tensor(rgb_mean).view(1, 3, 1, 1)
@@ -1136,6 +1146,10 @@ class ATD(nn.Module):
 
         return attn_mask
 
+    @property
+    def is_norm(self):
+        return self.no_norm is None
+
     def forward(self, x):
         # padding
         h_ori, w_ori = x.size()[-2], x.size()[-1]
@@ -1146,8 +1160,10 @@ class ATD(nn.Module):
         x = torch.cat([x, torch.flip(x, [2])], 2)[:, :, :h, :]
         x = torch.cat([x, torch.flip(x, [3])], 3)[:, :, :, :w]
 
-        self.mean = self.mean.type_as(x)
-        x = (x - self.mean) * self.img_range
+        # rgb norm
+        if self.is_norm:
+            self.mean = self.mean.type_as(x)
+            x = (x - self.mean) * self.img_range
 
         attn_mask = self.calculate_mask([h, w]).to(x.device)
         params = {"attn_mask": attn_mask, "rpi_sa": self.relative_position_index_SA}
@@ -1181,7 +1197,8 @@ class ATD(nn.Module):
             res = self.conv_after_body(self.forward_features(x_first, params)) + x_first
             x = x + self.conv_last(res)
 
-        x = x / self.img_range + self.mean
+        if self.is_norm:
+            x = x / self.img_range + self.mean
 
         # unpadding
         x = x[..., : h_ori * self.upscale, : w_ori * self.upscale]
