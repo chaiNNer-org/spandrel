@@ -28,9 +28,5 @@ jobs:
           key: update-2023-11-29
       - run: pytest tests
       - name: Remove models downloaded from GitHub
-        run: |
-          touch tests/_github_files.txt
-          echo "Files removed from cache:"
-          cat tests/_github_files.txt
-          xargs rm < tests/_github_files.txt
+        run: python scripts/remove_github_files.py
 
