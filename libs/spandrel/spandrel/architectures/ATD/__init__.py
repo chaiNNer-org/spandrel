@@ -74,6 +74,7 @@ class ATDArch(Architecture[ATD]):
         img_range = 1.0  # cannot be deduced from state dict
         upsampler = ""
         resi_connection = "1conv"
+        norm = True
 
         in_chans = state_dict["conv_first.weight"].shape[1]
         embed_dim = state_dict["conv_first.weight"].shape[0]
@@ -129,6 +130,8 @@ class ATDArch(Architecture[ATD]):
             upsampler = "pixelshuffledirect"
             upscale = math.isqrt(state_dict["upsample.0.weight"].shape[0] // in_chans)
 
+        norm = "no_norm" not in state_dict
+
         is_light = upsampler == "pixelshuffledirect" and embed_dim == 48
         # use a heuristic for category_size
         category_size = 128 if is_light else 256
@@ -157,6 +160,7 @@ class ATDArch(Architecture[ATD]):
             img_range=img_range,
             upsampler=upsampler,
             resi_connection=resi_connection,
+            norm=norm,
         )
 
         return ImageModelDescriptor(
