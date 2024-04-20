@@ -4,62 +4,67 @@ name: Test
 
 # Controls when the workflow will run
 on:
-    pull_request:
-        branches: ['*']
-        types:
-            - opened
-            - synchronize
-            - closed
-        paths:
-            - 'libs/**'
-            - '!libs/**/*.md'
-            - 'tests/**'
-            - '.github/workflows/**'
-            - 'pyproject.toml'
-    push:
-        branches: [main]
+  pull_request:
+    branches: ["*"]
+    types:
+      - opened
+      - synchronize
+      - closed
+    paths:
+      - "libs/**"
+      - "!libs/**/*.md"
+      - "tests/**"
+      - ".github/workflows/**"
+      - "pyproject.toml"
+  push:
+    branches: [main]
 
-    # Allows you to run this workflow manually from the Actions tab
-    workflow_dispatch:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                python-version: ['3.8', '3.9', '3.10', '3.11']
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v5
-              with:
-                  python-version: ${{ matrix.python-version }}
-            - run: sh scripts/install.sh
-            - name: Cache models
-              id: cache-models
-              uses: actions/cache@v3
-              with:
-                  path: tests/models
-                  key: update-2023-11-29
-            - run: pytest tests
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: sh scripts/install.sh
+      - name: Cache models
+        id: cache-models
+        uses: actions/cache@v3
+        with:
+          path: tests/models
+          key: update-2023-11-29
+      - run: pytest tests
+      - name: Remove models downloaded from GitHub
+        run: |
+          touch tests/_github_files.txt
+          echo "Files removed from cache:"
+          cat tests/_github_files.txt
+          xargs rm < tests/_github_files.txt
 
-    docs:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v5
-              with:
-                  python-version: '3.11'
-            - run: sh scripts/install.sh
-            - run: pydoctor
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: sh scripts/install.sh
+      - run: pydoctor
 
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v5
-              with:
-                  python-version: '3.11'
-            - run: sh scripts/install.sh
-            - run: sh scripts/build.sh
-
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: sh scripts/install.sh
+      - run: sh scripts/build.sh

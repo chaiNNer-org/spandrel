@@ -44,9 +44,11 @@ from spandrel_extra_arches import EXTRA_REGISTRY
 
 MAIN_REGISTRY.add(*EXTRA_REGISTRY)
 
-MODEL_DIR = Path("./tests/models/")
-ZIP_DIR = Path("./tests/zips/")
-IMAGE_DIR = Path("./tests/images/")
+TEST_DIR = Path("./tests/").resolve()
+MODEL_DIR = TEST_DIR / "models"
+ZIP_DIR = TEST_DIR / "zips"
+IMAGE_DIR = TEST_DIR / "images"
+GITHUB_FILE_LOG = TEST_DIR / "_github_files.txt"
 
 IS_CI = os.environ.get("CI") == "true"
 
@@ -93,11 +95,16 @@ def convert_google_drive_link(url: str) -> str:
 
 
 def download_file(url: str, filename: Path | str) -> None:
-    filename = Path(filename)
+    filename = Path(filename).resolve()
     filename.parent.mkdir(exist_ok=True)
     url = convert_google_drive_link(url)
     logger.info("Downloading %s to %s", url, filename)
     torch.hub.download_url_to_file(url, str(filename), progress=not IS_CI)
+
+    # remember github files for later
+    if IS_CI and url.startswith("https://github.com/") and filename.parent == MODEL_DIR:
+        with open(GITHUB_FILE_LOG, "a") as f:
+            f.write(f"{filename.resolve()}\n")
 
 
 def extract_file_from_zip(
