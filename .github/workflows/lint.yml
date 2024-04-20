@@ -25,7 +25,6 @@ jobs:
             - uses: actions/setup-python@v5
               with:
                   python-version: '3.11'
-                  cache: 'pip'
             - uses: pre-commit/action@v3.0.0
               env:
                 RUFF_OUTPUT_FORMAT: github
@@ -37,7 +36,6 @@ jobs:
             - uses: actions/setup-python@v5
               with:
                   python-version: '3.11'
-                  cache: 'pip'
             - run: sh scripts/install.sh
             - run: pyright libs/
             - run: pyright tests/
