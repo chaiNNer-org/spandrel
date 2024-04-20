@@ -1,0 +1,32 @@
+name: Keep cache alive
+
+on:
+  schedule:
+    # run every day at midnight
+    - cron: "0 0 * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: sh scripts/install.sh
+      - name: Cache models
+        id: cache-models
+        uses: actions/cache@v3
+        with:
+          path: tests/models
+          key: update-2023-11-29
+      - run: pytest tests
+      - name: Remove models downloaded from GitHub
+        run: python scripts/remove_github_files.py
+
