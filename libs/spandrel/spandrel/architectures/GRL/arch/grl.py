@@ -555,21 +555,3 @@ class GRL(nn.Module):
         x = x / self.img_range + self.mean
 
         return x[:, :, : H * self.upscale, : W * self.upscale]
-
-    def flops(self):
-        pass
-
-    def convert_checkpoint(self, state_dict):
-        for k in list(state_dict.keys()):
-            if (
-                k.find("relative_coords_table") >= 0
-                or k.find("relative_position_index") >= 0
-                or k.find("attn_mask") >= 0
-                or k.find("model.table_") >= 0
-                or k.find("model.index_") >= 0
-                or k.find("model.mask_") >= 0
-                # or k.find(".upsample.") >= 0
-            ):
-                state_dict.pop(k)
-                print(k)
-        return state_dict
