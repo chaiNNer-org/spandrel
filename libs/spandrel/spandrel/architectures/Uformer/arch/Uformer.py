@@ -53,7 +53,6 @@ class FastLeFF(nn.Module):
         flops += H * W * self.hidden_dim * 3 * 3
         # fc2
         flops += H * W * self.hidden_dim * self.dim
-        print("LeFF:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -418,7 +417,6 @@ class SepConv2d(torch.nn.Module):
         flops = 0
         flops += HW * self.in_channels * self.kernel_size**2 / self.stride**2
         flops += HW * self.in_channels * self.out_channels
-        print("SeqConv2d:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -628,7 +626,6 @@ class WindowAttention(nn.Module):
 
         # x = self.proj(x)
         flops += nW * N * self.dim * self.dim
-        print("W-MSA:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -711,7 +708,6 @@ class Attention(nn.Module):
 
         # x = self.proj(x)
         flops += q_num * self.dim * self.dim
-        print("MCA:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -751,7 +747,6 @@ class Mlp(nn.Module):
         flops += H * W * self.in_features * self.hidden_features
         # fc2
         flops += H * W * self.hidden_features * self.out_features
-        print("MLP:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -806,7 +801,6 @@ class LeFF(nn.Module):
         flops += H * W * self.hidden_dim * 3 * 3
         # fc2
         flops += H * W * self.hidden_dim * self.dim
-        print("LeFF:{%.2f}" % (flops / 1e9))
         # eca
         if hasattr(self.eca, "flops"):
             flops += self.eca.flops()
@@ -882,7 +876,6 @@ class Downsample(nn.Module):
         flops = 0
         # conv
         flops += H / 2 * W / 2 * self.in_channel * self.out_channel * 4 * 4
-        print("Downsample:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -908,7 +901,6 @@ class Upsample(nn.Module):
         flops = 0
         # conv
         flops += H * 2 * W * 2 * self.in_channel * self.out_channel * 2 * 2
-        print("Upsample:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -954,7 +946,6 @@ class InputProj(nn.Module):
 
         if self.norm is not None:
             flops += H * W * self.out_channel
-        print("Input_proj:{%.2f}" % (flops / 1e9))
         return flops
 
 
@@ -1005,7 +996,6 @@ class OutputProj(nn.Module):
 
         if self.norm is not None:
             flops += H * W * self.out_channel
-        print("Output_proj:{%.2f}" % (flops / 1e9))
         return flops
 
 
