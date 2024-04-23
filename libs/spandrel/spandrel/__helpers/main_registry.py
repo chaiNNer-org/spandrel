@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from ..architectures import (
     ATD,
+    CAIN,
     CRAFT,
     DAT,
     DCTLSA,
@@ -75,5 +76,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DRUNet.DRUNetArch()),
     ArchSupport.from_architecture(DnCNN.DnCNNArch()),
     ArchSupport.from_architecture(IPT.IPTArch()),
+    ArchSupport.from_architecture(CAIN.CAINArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
