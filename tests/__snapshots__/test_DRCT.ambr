@@ -9,7 +9,7 @@
     output_channels=3,
     purpose='SR',
     scale=4,
-    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    size_requirements=SizeRequirements(minimum=0, multiple_of=16, square=False),
     supports_bfloat16=True,
     supports_half=False,
     tags=list([

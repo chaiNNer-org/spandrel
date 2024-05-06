@@ -170,5 +170,5 @@ class DRCTArch(Architecture[DRCT]):
             scale=upscale,
             input_channels=in_chans,
             output_channels=in_chans,
-            size_requirements=SizeRequirements(),
+            size_requirements=SizeRequirements(multiple_of=16),
         )
