@@ -32,7 +32,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "spandrel>=0.3.0",
+    "spandrel>=0.3.2",
     "torch",
     "torchvision",
     "numpy",
