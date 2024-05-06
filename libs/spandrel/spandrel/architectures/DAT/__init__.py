@@ -2,7 +2,7 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -107,11 +107,7 @@ class DATArch(Architecture[DAT]):
         resi_connection = "1conv" if "conv_after_body.weight" in state_dict else "3conv"
 
         if upsampler == "pixelshuffle":
-            upscale = 1
-            for i in range(0, get_seq_len(state_dict, "upsample"), 2):
-                num_feat = state_dict[f"upsample.{i}.weight"].shape[1]
-                shape = state_dict[f"upsample.{i}.weight"].shape[0]
-                upscale *= int(math.sqrt(shape // num_feat))
+            upscale, num_feat = get_pixelshuffle_params(state_dict, "upsample")
         elif upsampler == "pixelshuffledirect":
             num_feat = state_dict["upsample.0.weight"].shape[1]
             upscale = int(

@@ -111,6 +111,35 @@ def get_scale_and_output_channels(x: int, input_channels: int) -> tuple[int, int
     )
 
 
+def get_pixelshuffle_params(
+    state_dict: Mapping[str, object],
+    upsample_key: str = "upsample",
+    default_nf: int = 64,
+) -> tuple[int, int]:
+    """
+    This will detect the upscale factor and number of features of a pixelshuffle module in the state dict.
+
+    A pixelshuffle module is a sequence of alternating up convolutions and pixelshuffle.
+    The class of this module is commonyl called `Upsample`.
+    Examples of such modules can be found in most SISR architectures, such as SwinIR, HAT, RGT, and many more.
+    """
+    upscale = 1
+    num_feat = default_nf
+
+    for i in range(0, 10, 2):
+        key = f"{upsample_key}.{i}.weight"
+        if key not in state_dict:
+            break
+
+        tensor = state_dict[key]
+        # we'll assume that the state dict contains tensors
+        shape: tuple[int, ...] = tensor.shape  # type: ignore
+        num_feat = shape[1]
+        upscale *= math.isqrt(shape[0] // num_feat)
+
+    return upscale, num_feat
+
+
 def store_hyperparameters(*, extra_parameters: Mapping[str, object] = {}):
     """
     Stores the hyperparameters of a class in a `hyperparameters` attribute.
@@ -170,9 +199,10 @@ def store_hyperparameters(*, extra_parameters: Mapping[str, object] = {}):
 
 
 __all__ = [
-    "KeyCondition",
     "get_first_seq_index",
-    "get_seq_len",
+    "get_pixelshuffle_params",
     "get_scale_and_output_channels",
+    "get_seq_len",
+    "KeyCondition",
     "store_hyperparameters",
 ]

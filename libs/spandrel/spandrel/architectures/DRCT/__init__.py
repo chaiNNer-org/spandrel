@@ -2,7 +2,7 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -11,23 +11,6 @@ from ...__helpers.model_descriptor import (
     StateDict,
 )
 from .arch.drct_arch import DRCT
-
-
-def _get_upscale_pixelshuffle(
-    state_dict: StateDict, key_prefix: str = "upsample"
-) -> int:
-    upscale = 1
-
-    for i in range(0, 10, 2):
-        key = f"{key_prefix}.{i}.weight"
-        if key not in state_dict:
-            break
-
-        shape = state_dict[key].shape
-        num_feat = shape[1]
-        upscale *= math.isqrt(shape[0] // num_feat)
-
-    return upscale
 
 
 class DRCTArch(Architecture[DRCT]):
@@ -105,7 +88,7 @@ class DRCTArch(Architecture[DRCT]):
 
         if "conv_last.weight" in state_dict:
             upsampler = "pixelshuffle"
-            upscale = _get_upscale_pixelshuffle(state_dict, "upsample")
+            upscale, _ = get_pixelshuffle_params(state_dict, "upsample")
         else:
             upsampler = ""
             upscale = 1

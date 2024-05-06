@@ -6,7 +6,12 @@ from typing import Literal
 import torch
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_scale_and_output_channels, get_seq_len
+from spandrel.util import (
+    KeyCondition,
+    get_pixelshuffle_params,
+    get_scale_and_output_channels,
+    get_seq_len,
+)
 
 from ...__helpers.canonicalize import remove_common_prefix
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
@@ -50,7 +55,6 @@ def _get_output_params(state_dict: StateDict, in_channels: int):
     upsampler: str
     upscale: int
 
-    num_out_feats = 64  # hard-coded
     if (
         "conv_before_upsample.0.weight" in state_dict
         and "upsample.up.0.weight" in state_dict
@@ -58,10 +62,7 @@ def _get_output_params(state_dict: StateDict, in_channels: int):
         upsampler = "pixelshuffle"
         out_channels = state_dict["conv_last.weight"].shape[0]
 
-        upscale = 1
-        for i in range(0, get_seq_len(state_dict, "upsample.up"), 2):
-            shape = state_dict[f"upsample.up.{i}.weight"].shape[0]
-            upscale *= int(math.sqrt(shape // num_out_feats))
+        upscale, _ = get_pixelshuffle_params(state_dict, "upsample.up")
     elif "upsample.up.0.weight" in state_dict:
         upsampler = "pixelshuffledirect"
         upscale, out_channels = get_scale_and_output_channels(

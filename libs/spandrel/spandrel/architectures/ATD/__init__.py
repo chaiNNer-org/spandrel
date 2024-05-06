@@ -2,7 +2,7 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -114,15 +114,7 @@ class ATDArch(Architecture[ATD]):
             upscale = 4
         elif "conv_before_upsample.0.weight" in state_dict:
             upsampler = "pixelshuffle"
-            upscale = 1
-            for i in range(0, 10, 2):
-                if f"upsample.{i}.weight" not in state_dict:
-                    break
-                num_feat = state_dict[f"upsample.{i}.weight"].shape[1]
-
-                upscale *= math.isqrt(
-                    state_dict[f"upsample.{i}.weight"].shape[0] // num_feat
-                )
+            upscale, _ = get_pixelshuffle_params(state_dict, "upsample")
         elif "conv_last.weight" in state_dict:
             upsampler = ""
             upscale = 1
