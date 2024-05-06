@@ -8,7 +8,7 @@ from spandrel import (
     SizeRequirements,
     StateDict,
 )
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from .arch.SRFormer import SRFormer
 
@@ -76,12 +76,7 @@ class SRFormerArch(Architecture[SRFormer]):
             upscale = 4  # only supported scale
         elif "conv_before_upsample.0.weight" in state_dict:
             upsampler = "pixelshuffle"
-
-            num_feat = 64  # hard-coded constant
-            upscale = 1
-            for i in range(0, get_seq_len(state_dict, "upsample"), 2):
-                shape = state_dict[f"upsample.{i}.weight"].shape[0]
-                upscale *= int(math.sqrt(shape // num_feat))
+            upscale, _ = get_pixelshuffle_params(state_dict, "upsample")
         elif "upsample.0.weight" in state_dict:
             upsampler = "pixelshuffledirect"
             upscale = int(

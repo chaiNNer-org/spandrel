@@ -3,7 +3,7 @@ import math
 from torch import nn
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -84,15 +84,7 @@ class SwinIRArch(Architecture[SwinIR]):
             for _upsample_key in upsample_keys:
                 upscale *= 2
         elif upsampler == "pixelshuffle":
-            upsample_keys = [
-                x
-                for x in state_dict
-                if "upsample" in x and "conv" not in x and "bias" not in x
-            ]
-            for upsample_key in upsample_keys:
-                shape = state_dict[upsample_key].shape[0]
-                upscale *= math.sqrt(shape // num_feat)
-            upscale = int(upscale)
+            upscale, num_feat = get_pixelshuffle_params(state_dict, "upsample")
         elif upsampler == "pixelshuffledirect":
             upscale = int(
                 math.sqrt(state_dict["upsample.0.bias"].shape[0] // num_out_ch)

@@ -2,7 +2,7 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -102,11 +102,7 @@ class Swin2SRArch(Architecture[Swin2SR]):
                 math.sqrt(state_dict["upsample.0.weight"].shape[0] // in_chans)
             )
         else:
-            num_feat = 64  # hard-coded constant
-            upscale = 1
-            for i in range(0, get_seq_len(state_dict, "upsample"), 2):
-                shape = state_dict[f"upsample.{i}.weight"].shape[0]
-                upscale *= int(math.sqrt(shape // num_feat))
+            upscale, _ = get_pixelshuffle_params(state_dict, "upsample")
 
         window_size = int(
             math.sqrt(

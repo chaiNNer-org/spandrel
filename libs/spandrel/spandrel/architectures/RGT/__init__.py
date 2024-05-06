@@ -4,7 +4,7 @@ import math
 
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -133,13 +133,7 @@ class RGTArch(Architecture[RGT]):
                 )
                 break
 
-        upscale = 1
-        for i in range(0, 10, 2):
-            key = f"upsample.{i}.weight"
-            if key in state_dict:
-                shape = state_dict[key].shape
-                num_feat = shape[1]
-                upscale *= math.isqrt(shape[0] // num_feat)
+        upscale, _ = get_pixelshuffle_params(state_dict, "upsample")
 
         split_size = _get_split_size(state_dict)
 
