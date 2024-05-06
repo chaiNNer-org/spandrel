@@ -6,6 +6,7 @@ from ..architectures import (
     DAT,
     DCTLSA,
     DITN,
+    DRCT,
     ESRGAN,
     FBCNN,
     GFPGAN,
@@ -75,5 +76,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DRUNet.DRUNetArch()),
     ArchSupport.from_architecture(DnCNN.DnCNNArch()),
     ArchSupport.from_architecture(IPT.IPTArch()),
+    ArchSupport.from_architecture(DRCT.DRCTArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )

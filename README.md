@@ -104,6 +104,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [DCTLSA](https://github.com/zengkun301/DCTLSA) | [Models](https://github.com/zengkun301/DCTLSA/tree/main/pretrained)
 - [ATD](https://github.com/LabShuHangGU/Adaptive-Token-Dictionary) | [Models](https://drive.google.com/drive/folders/1D3BvTS1xBcaU1mp50k3pBzUWb7qjRvmB?usp=sharing)
 - [AdaCode](https://github.com/kechunl/AdaCode) | [Models](https://github.com/kechunl/AdaCode/releases/tag/v0-pretrain_models)
+- [DRCT](https://github.com/ming053l/DRCT)
 
 #### Face Restoration
 
