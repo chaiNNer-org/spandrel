@@ -158,6 +158,7 @@ Here are some cool projects that use Spandrel:
 
 - [AUTOMATIC1111's SD WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 - [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
+- [imaginAIry](https://github.com/brycedrennan/imaginAIry)
 - [dgenerate](https://github.com/Teriks/dgenerate)
 
 ## License
