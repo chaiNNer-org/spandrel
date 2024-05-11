@@ -36,9 +36,6 @@ class PLKSRArch(Architecture[_PLKSR]):
 
     @override
     def load(self, state_dict: StateDict) -> ImageModelDescriptor[_PLKSR]:
-        scale: int
-        in_channels = 3
-        out_channels = 3
         dim = 64
         n_blocks = 28
         scale = 4
@@ -62,19 +59,21 @@ class PLKSRArch(Architecture[_PLKSR]):
         upscale_key = list(state_dict.keys())[-2]
         if upscale_key in state_dict:
             scale_shape = state_dict[upscale_key].shape[0]
-            scale = math.isqrt(scale_shape // out_channels)
+            scale = math.isqrt(scale_shape // 3)
 
         if "feats.1.lk.conv.weight" in state_dict:
             kernel_size = state_dict["feats.1.lk.conv.weight"].shape[2]
             after_split = state_dict["feats.1.lk.conv.weight"].shape[0]
             split_ratio = after_split / dim
 
-        if "feats.1.attn.f.0.weight" not in state_dict:
-            use_ea = False
+        use_ea = "feats.1.attn.f.0.weight" in state_dict
+
+        tags.append(f"{dim}dim")
+        tags.append(f"{n_blocks}nb")
+        tags.append(f"{kernel_size}ks")
 
         # Yes, the normal version has this typo.
         if "feats.1.channe_mixer.0.weight" in state_dict:
-            self._name = "PLKSR"
             n_blocks = total_feat_layers - 2
             ccm_type = "CCM"
             if "feats.1.channe_mixer.2.weight" in state_dict:
@@ -83,10 +82,13 @@ class PLKSRArch(Architecture[_PLKSR]):
 
                 if mixer_0_shape == 3 and mixer_2_shape == 1:
                     ccm_type = "CCM"
+                    tags.append("CCM")
                 elif mixer_0_shape == 3 and mixer_2_shape == 3:
                     ccm_type = "DCCM"
+                    tags.append("DCCM")
                 elif mixer_0_shape == 1 and mixer_2_shape == 3:
                     ccm_type = "ICCM"
+                    tags.append("ICCM")
                 else:
                     raise ValueError("Unknown CCM type")
 
@@ -101,7 +103,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             )
         # and RealPLKSR doesn't. This makes it really convenient to detect.
         elif "feats.1.channel_mixer.0.weight" in state_dict:
-            self._name = "RealPLKSR"
+            tags.append("Real")
             n_blocks = total_feat_layers - 3
             model = RealPLKSR(
                 dim=dim,
@@ -125,7 +127,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             supports_half=False,
             supports_bfloat16=True,
             scale=scale,
-            input_channels=in_channels,
-            output_channels=out_channels,
+            input_channels=3,
+            output_channels=3,
             size_requirements=size_requirements,
         )
