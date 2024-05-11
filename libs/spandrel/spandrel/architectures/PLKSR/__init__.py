@@ -24,12 +24,15 @@ class PLKSRArch(Architecture[_PLKSR]):
         super().__init__(
             id="PLKSR",
             detect=KeyCondition.has_all(
-                "feats.0.weight",
-                "feats.1.lk.conv.weight",
-                "feats.1.refine.weight",
-            ).has_any(
-                "feats.1.channe_mixer.0.weight",
-                "feats.1.channel_mixer.0.weight",
+                KeyCondition.has_all(
+                    "feats.0.weight",
+                    "feats.1.lk.conv.weight",
+                    "feats.1.refine.weight",
+                ),
+                KeyCondition.has_any(
+                    "feats.1.channe_mixer.0.weight",
+                    "feats.1.channel_mixer.0.weight",
+                ),
             ),
         )
 
