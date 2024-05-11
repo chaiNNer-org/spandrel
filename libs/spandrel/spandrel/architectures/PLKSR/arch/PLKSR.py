@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.init import trunc_normal_
 
+from spandrel.util import store_hyperparameters
+
 
 # Since Pytorch's interleave is not supported by CoreML, we use this function instead for mobile conversion
 def repeat_interleave(x, n):
@@ -275,7 +277,10 @@ class PLKBlock(nn.Module):
         return x + x_skip
 
 
+@store_hyperparameters()
 class PLKSR(nn.Module):
+    hyperparameters = {}
+
     def __init__(
         self,
         dim: int = 64,

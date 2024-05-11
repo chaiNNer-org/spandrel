@@ -52,7 +52,7 @@ class PLKSRArch(Architecture[_PLKSR]):
 
         tags: list[str] = []
 
-        size_requirements = SizeRequirements(minimum=8)
+        size_requirements = SizeRequirements(minimum=1)
 
         if "feats.0.weight" in state_dict:
             dim = state_dict["feats.0.weight"].shape[0]
@@ -115,17 +115,6 @@ class PLKSRArch(Architecture[_PLKSR]):
             )
         else:
             raise ValueError("Unknown model type")
-
-        config = {
-            "dim": dim,
-            "n_blocks": n_blocks,
-            "upscaling_factor": scale,
-            "kernel_size": kernel_size,
-            "split_ratio": split_ratio,
-            "use_ea": use_ea,
-        }
-
-        print(config)
 
         return ImageModelDescriptor(
             model,

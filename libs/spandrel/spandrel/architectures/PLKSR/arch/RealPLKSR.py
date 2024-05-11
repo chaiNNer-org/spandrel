@@ -4,6 +4,8 @@ import torch
 from torch import nn
 from torch.nn.init import trunc_normal_
 
+from spandrel.util import store_hyperparameters
+
 
 class DCCM(nn.Sequential):
     "Doubled Convolutional Channel Mixer"
@@ -87,10 +89,13 @@ class PLKBlock(nn.Module):
         return x + x_skip
 
 
+@store_hyperparameters()
 class RealPLKSR(nn.Module):
     """Partial Large Kernel CNNs for Efficient Super-Resolution:
     https://arxiv.org/abs/2404.11848
     """
+
+    hyperparameters = {}
 
     def __init__(
         self,
