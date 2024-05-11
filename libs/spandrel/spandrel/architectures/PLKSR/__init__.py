@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from typing import Union
 
 from typing_extensions import override
@@ -58,9 +59,10 @@ class PLKSRArch(Architecture[_PLKSR]):
 
         total_feat_layers = get_seq_len(state_dict, "feats")
 
-        upscale_key = f"feats.{total_feat_layers}.weight"
+        upscale_key = list(state_dict.keys())[-2]
         if upscale_key in state_dict:
-            scale = state_dict[upscale_key].shape[0]
+            scale_shape = state_dict[upscale_key].shape[0]
+            scale = math.isqrt(scale_shape // out_channels)
 
         if "feats.1.lk.conv.weight" in state_dict:
             kernel_size = state_dict["feats.1.lk.conv.weight"].shape[2]
@@ -73,7 +75,7 @@ class PLKSRArch(Architecture[_PLKSR]):
         # Yes, the normal version has this typo.
         if "feats.1.channe_mixer.0.weight" in state_dict:
             self._name = "PLKSR"
-            n_blocks = total_feat_layers - 1
+            n_blocks = total_feat_layers - 2
             ccm_type = "CCM"
             if "feats.1.channe_mixer.2.weight" in state_dict:
                 mixer_0_shape = state_dict["feats.1.channe_mixer.0.weight"].shape[2]
@@ -81,7 +83,7 @@ class PLKSRArch(Architecture[_PLKSR]):
 
                 if mixer_0_shape == 3 and mixer_2_shape == 1:
                     ccm_type = "CCM"
-                elif mixer_0_shape == 1 and mixer_2_shape == 1:
+                elif mixer_0_shape == 3 and mixer_2_shape == 3:
                     ccm_type = "DCCM"
                 elif mixer_0_shape == 1 and mixer_2_shape == 3:
                     ccm_type = "ICCM"
@@ -100,7 +102,7 @@ class PLKSRArch(Architecture[_PLKSR]):
         # and RealPLKSR doesn't. This makes it really convenient to detect.
         elif "feats.1.channel_mixer.0.weight" in state_dict:
             self._name = "RealPLKSR"
-            n_blocks = total_feat_layers - 2
+            n_blocks = total_feat_layers - 3
             model = RealPLKSR(
                 dim=dim,
                 upscaling_factor=scale,
@@ -113,6 +115,17 @@ class PLKSRArch(Architecture[_PLKSR]):
             )
         else:
             raise ValueError("Unknown model type")
+
+        config = {
+            "dim": dim,
+            "n_blocks": n_blocks,
+            "upscaling_factor": scale,
+            "kernel_size": kernel_size,
+            "split_ratio": split_ratio,
+            "use_ea": use_ea,
+        }
+
+        print(config)
 
         return ImageModelDescriptor(
             model,

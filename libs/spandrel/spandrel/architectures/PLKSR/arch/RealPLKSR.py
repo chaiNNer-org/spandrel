@@ -102,7 +102,6 @@ class RealPLKSR(nn.Module):
         use_ea: bool = True,
         norm_groups: int = 4,
         dropout: float = 0,
-        **kwargs,
     ):
         super().__init__()
         dropout = 0

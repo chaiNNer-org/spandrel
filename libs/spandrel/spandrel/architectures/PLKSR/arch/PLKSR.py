@@ -278,14 +278,14 @@ class PLKBlock(nn.Module):
 class PLKSR(nn.Module):
     def __init__(
         self,
-        dim: int,
-        n_blocks: int,
-        upscaling_factor: int,
+        dim: int = 64,
+        n_blocks: int = 28,
+        upscaling_factor: int = 4,
         # CCM options
-        ccm_type: Literal["CCM", "ICCM", "DCCM"],
+        ccm_type: Literal["CCM", "ICCM", "DCCM"] = "CCM",
         # LK Options
-        kernel_size: int,
-        split_ratio: float,
+        kernel_size: int = 17,
+        split_ratio: float = 0.25,
         lk_type: Literal["PLK", "SparsePLK", "RectSparsePLK"] = "PLK",
         # LK Rep options
         use_max_kernel: bool = False,
