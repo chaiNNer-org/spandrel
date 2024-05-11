@@ -122,7 +122,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             architecture=self,
             purpose="Restoration" if scale == 1 else "SR",
             tags=tags,
-            supports_half=True,
+            supports_half=False,
             supports_bfloat16=True,
             scale=scale,
             input_channels=in_channels,
