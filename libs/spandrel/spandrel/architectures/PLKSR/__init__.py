@@ -27,8 +27,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 "feats.0.weight",
                 "feats.1.lk.conv.weight",
                 "feats.1.refine.weight",
-            )
-            and KeyCondition.has_any(
+            ).has_any(
                 "feats.1.channe_mixer.0.weight",
                 "feats.1.channel_mixer.0.weight",
             ),
@@ -55,8 +54,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             dim = state_dict["feats.0.weight"].shape[0]
 
         total_feat_layers = get_seq_len(state_dict, "feats")
-
-        upscale_key = list(state_dict.keys())[-2]
+        upscale_key = f"feats.{total_feat_layers - 1}.weight"
         if upscale_key in state_dict:
             scale_shape = state_dict[upscale_key].shape[0]
             scale = math.isqrt(scale_shape // 3)
