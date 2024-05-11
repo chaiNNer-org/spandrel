@@ -161,7 +161,7 @@ class SparsePLKConv2d(nn.Module):
 
     @staticmethod
     def _get_origin_kernel(kernel, dilation=1, p=0):
-        I = torch.ones((1, 1, 1, 1)).to(kernel.device)
+        I = torch.ones((1, 1, 1, 1)).to(kernel.device)  # noqa: E741
         if kernel.size(1) == 1:  # Depth-wise Convolution
             dilated = F.conv_transpose2d(kernel, I, stride=dilation)
         else:
