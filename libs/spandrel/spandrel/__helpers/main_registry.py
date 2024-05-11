@@ -13,6 +13,7 @@ from ..architectures import (
     GRL,
     HAT,
     IPT,
+    LUDVAE,
     RGT,
     SAFMN,
     SAFMNBCIE,
@@ -77,5 +78,6 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DnCNN.DnCNNArch()),
     ArchSupport.from_architecture(IPT.IPTArch()),
     ArchSupport.from_architecture(DRCT.DRCTArch()),
+    ArchSupport.from_architecture(LUDVAE.LUDVAEArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
 )
