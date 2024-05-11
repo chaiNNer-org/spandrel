@@ -13,6 +13,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      '64dim',
+      '28nb',
+      '17ks',
+      'DCCM',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
@@ -31,6 +35,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      '64dim',
+      '28nb',
+      '17ks',
+      'DCCM',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
@@ -49,6 +57,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      '64dim',
+      '28nb',
+      '17ks',
+      'DCCM',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
@@ -57,7 +69,7 @@
   ImageModelDescriptor(
     architecture=PLKSRArch(
       id='PLKSR',
-      name='RealPLKSR',
+      name='PLKSR',
     ),
     input_channels=3,
     output_channels=3,
@@ -67,6 +79,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      '64dim',
+      '28nb',
+      '17ks',
+      'Real',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
@@ -75,7 +91,7 @@
   ImageModelDescriptor(
     architecture=PLKSRArch(
       id='PLKSR',
-      name='RealPLKSR',
+      name='PLKSR',
     ),
     input_channels=3,
     output_channels=3,
@@ -85,6 +101,10 @@
     supports_bfloat16=True,
     supports_half=False,
     tags=list([
+      '64dim',
+      '28nb',
+      '17ks',
+      'Real',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
