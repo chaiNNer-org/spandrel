@@ -13,6 +13,7 @@ from ..architectures import (
     GRL,
     HAT,
     IPT,
+    PLKSR,
     RGT,
     SAFMN,
     SAFMNBCIE,
@@ -78,4 +79,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(IPT.IPTArch()),
     ArchSupport.from_architecture(DRCT.DRCTArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
+    ArchSupport.from_architecture(PLKSR.PLKSRArch()),
 )
