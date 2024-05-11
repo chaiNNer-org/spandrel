@@ -6,6 +6,7 @@ from typing import (
     Any,
     Callable,
     Dict,
+    Final,
     Generic,
     Literal,
     NewType,
@@ -49,8 +50,8 @@ class Architecture(ABC, Generic[T]):
     ) -> None:
         super().__init__()
 
-        self._id = ArchId(id)
-        self._name = name or id
+        self._id: Final[ArchId] = ArchId(id)
+        self._name: Final[str] = name or id
         self._detect = detect
 
     @property
