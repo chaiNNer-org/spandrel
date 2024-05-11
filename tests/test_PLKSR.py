@@ -52,6 +52,11 @@ def test_PLKSR_official_x4(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, PLKSR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_PLKSR_official_x3(snapshot):
@@ -62,6 +67,11 @@ def test_PLKSR_official_x3(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, PLKSR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_PLKSR_official_x2(snapshot):
@@ -72,6 +82,11 @@ def test_PLKSR_official_x2(snapshot):
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
     assert isinstance(model.model, PLKSR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
 
 
 def test_RealPLKSR_4x(snapshot):
@@ -81,7 +96,7 @@ def test_RealPLKSR_4x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, PLKSR)
+    assert isinstance(model.model, RealPLKSR)
     assert_image_inference(
         file,
         model,
@@ -96,7 +111,7 @@ def test_RealPLKSR_2x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, PLKSR)
+    assert isinstance(model.model, RealPLKSR)
     assert_image_inference(
         file,
         model,
