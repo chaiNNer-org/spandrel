@@ -1,4 +1,26 @@
 # serializer version: 1
+# name: test_PLKSR_official_tiny_x4
+  ImageModelDescriptor(
+    architecture=PLKSRArch(
+      id='PLKSR',
+      name='PLKSR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=1, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '64dim',
+      '28nb',
+      '13ks',
+      'DCCM',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
 # name: test_PLKSR_official_x2
   ImageModelDescriptor(
     architecture=PLKSRArch(

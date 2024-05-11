@@ -75,6 +75,21 @@ def test_PLKSR_official_x4(snapshot):
     )
 
 
+def test_PLKSR_official_tiny_x4(snapshot):
+    file = ModelFile.from_url(
+        "https://drive.google.com/file/d/1d8d_6TF0SrEMiX1jrnLqKnPdKjDJahOK/view",
+        name="PLKSR_tiny_X4_DIV2K.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, PLKSR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
 def test_PLKSR_official_x3(snapshot):
     file = ModelFile.from_url(
         "https://drive.google.com/file/d/1W8phbKFTOYL-AnlMJnjx2NWDHZY8jVWW/view",
