@@ -54,8 +54,6 @@ class PLKSRArch(Architecture[_PLKSR]):
 
         use_ea = "feats.1.attn.f.0.weight" in state_dict
 
-        tags = [f"{dim}dim", f"{n_blocks}nb", f"{kernel_size}ks"]
-
         # Yes, the normal version has this typo.
         if "feats.1.channe_mixer.0.weight" in state_dict:
             n_blocks = total_feat_layers - 2
@@ -70,7 +68,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 ccm_type = "ICCM"
             else:
                 raise ValueError("Unknown CCM type")
-            tags.append(ccm_type)
+            more_tags = [ccm_type]
 
             model = PLKSR(
                 dim=dim,
@@ -83,7 +81,8 @@ class PLKSRArch(Architecture[_PLKSR]):
             )
         # and RealPLKSR doesn't. This makes it really convenient to detect.
         elif "feats.1.channel_mixer.0.weight" in state_dict:
-            tags.append("Real")
+            more_tags = ["Real"]
+
             n_blocks = total_feat_layers - 3
             model = RealPLKSR(
                 dim=dim,
@@ -103,7 +102,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             state_dict,
             architecture=self,
             purpose="Restoration" if scale == 1 else "SR",
-            tags=tags,
+            tags=[f"{dim}dim", f"{n_blocks}nb", f"{kernel_size}ks", *more_tags],
             supports_half=False,
             supports_bfloat16=True,
             scale=scale,
