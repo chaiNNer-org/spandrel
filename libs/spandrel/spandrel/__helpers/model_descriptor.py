@@ -465,7 +465,8 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         did_pad, image = pad_tensor(image, self.size_requirements)
 
         # Optimize for inference
-        self.model.eval()
+        if self.model.training:
+            self.model.eval()
 
         # call model
         output = self._call_fn(self.model, image)
