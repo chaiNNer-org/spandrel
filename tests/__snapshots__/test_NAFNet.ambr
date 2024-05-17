@@ -6,7 +6,7 @@
       name='NAFNet',
     ),
     input_channels=3,
-    model_bytes=68447628,
+    bytes=68447628,
     output_channels=3,
     purpose='Restoration',
     scale=1,

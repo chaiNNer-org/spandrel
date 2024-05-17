@@ -6,7 +6,7 @@
       name='MAT',
     ),
     input_channels=3,
-    model_bytes=246250028,
+    bytes=246250028,
     output_channels=3,
     purpose='Inpainting',
     scale=1,

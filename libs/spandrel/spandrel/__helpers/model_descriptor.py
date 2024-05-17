@@ -214,9 +214,9 @@ class ModelBase(ABC, Generic[T]):
         on how to best use the model.
         """
 
-        self.model_bytes: int = sum(p.numel() * 4 for p in model.parameters())
+        self.bytes: int = sum(p.numel() * 4 for p in model.parameters())
         """
-        The number of bytes the model uses in fp32.
+        The number of bytes the model uses in fp32 mode.
         """
 
         self.model.load_state_dict(state_dict)  # type: ignore

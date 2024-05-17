@@ -6,7 +6,7 @@
       name='SAFMN BCIE',
     ),
     input_channels=3,
-    model_bytes=73656332,
+    bytes=73656332,
     output_channels=3,
     purpose='Restoration',
     scale=1,

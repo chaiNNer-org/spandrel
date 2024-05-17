@@ -6,7 +6,7 @@
       name='SPAN',
     ),
     input_channels=3,
-    model_bytes=8946912,
+    bytes=8946912,
     output_channels=3,
     purpose='SR',
     scale=4,

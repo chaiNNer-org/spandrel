@@ -6,7 +6,7 @@
       name='CodeFormer',
     ),
     input_channels=3,
-    model_bytes=376450828,
+    bytes=376450828,
     output_channels=3,
     purpose='FaceSR',
     scale=1,

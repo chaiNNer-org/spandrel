@@ -6,7 +6,7 @@
       name='DRCT',
     ),
     input_channels=3,
-    model_bytes=110322876,
+    bytes=110322876,
     output_channels=3,
     purpose='SR',
     scale=4,

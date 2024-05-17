@@ -6,7 +6,7 @@
       name='DDColor',
     ),
     input_channels=1,
-    model_bytes=220026560,
+    bytes=220026560,
     output_channels=3,
     purpose='Restoration',
     scale=1,
