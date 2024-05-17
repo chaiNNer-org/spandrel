@@ -6,6 +6,7 @@
       name='MixDehazeNet',
     ),
     input_channels=3,
+    model_bytes=24995728,
     output_channels=3,
     purpose='Restoration',
     scale=1,

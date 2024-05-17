@@ -6,6 +6,7 @@
       name='IPT',
     ),
     input_channels=3,
+    model_bytes=461250924,
     output_channels=3,
     purpose='Restoration',
     scale=1,

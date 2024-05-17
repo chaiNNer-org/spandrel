@@ -6,6 +6,7 @@
       name='LaMa',
     ),
     input_channels=4,
+    model_bytes=203903500,
     output_channels=3,
     purpose='Inpainting',
     scale=1,

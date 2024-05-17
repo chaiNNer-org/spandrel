@@ -6,6 +6,7 @@
       name='DRUNet',
     ),
     input_channels=3,
+    model_bytes=130563840,
     output_channels=3,
     purpose='Restoration',
     scale=1,

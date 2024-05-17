@@ -6,6 +6,7 @@
       name='RestoreFormer',
     ),
     input_channels=3,
+    model_bytes=290720012,
     output_channels=3,
     purpose='FaceSR',
     scale=1,
