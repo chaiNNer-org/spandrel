@@ -105,6 +105,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [ATD](https://github.com/LabShuHangGU/Adaptive-Token-Dictionary) | [Models](https://drive.google.com/drive/folders/1D3BvTS1xBcaU1mp50k3pBzUWb7qjRvmB?usp=sharing)
 - [AdaCode](https://github.com/kechunl/AdaCode) | [Models](https://github.com/kechunl/AdaCode/releases/tag/v0-pretrain_models)
 - [DRCT](https://github.com/ming053l/DRCT)
+- [PLKSR](https://github.com/dslisleedh/PLKSR) and [RealPLKSR](https://github.com/muslll/neosr/blob/master/neosr/archs/realplksr_arch.py) | [Models](https://drive.google.com/drive/u/1/folders/1lIkZ00y9cRQpLU9qmCIB2XtS-2ZoqKq8)
 
 #### Face Restoration
 
