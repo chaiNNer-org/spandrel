@@ -16,6 +16,7 @@ skip_if_unchanged(__file__)
 def test_load():
     assert_loads_correctly(
         PLKSRArch(),
+        # PLKSR
         lambda: PLKSR(),
         lambda: PLKSR(dim=32),
         lambda: PLKSR(dim=96),
@@ -26,11 +27,18 @@ def test_load():
         lambda: PLKSR(ccm_type="DCCM"),
         lambda: PLKSR(ccm_type="CCM"),
         lambda: PLKSR(ccm_type="ICCM"),
-        lambda: PLKSR(kernel_size=9),
-        lambda: PLKSR(kernel_size=27),
-        lambda: PLKSR(split_ratio=0.5),
-        lambda: PLKSR(split_ratio=0.75),
+        lambda: PLKSR(lk_type="PLK", kernel_size=9),
+        lambda: PLKSR(lk_type="PLK", kernel_size=27),
+        lambda: PLKSR(lk_type="PLK", split_ratio=0.5),
+        lambda: PLKSR(lk_type="PLK", split_ratio=0.75),
+        lambda: PLKSR(lk_type="RectSparsePLK", kernel_size=9),
+        lambda: PLKSR(lk_type="RectSparsePLK", kernel_size=27),
+        lambda: PLKSR(lk_type="RectSparsePLK", split_ratio=0.5),
+        lambda: PLKSR(lk_type="RectSparsePLK", split_ratio=0.75),
+        lambda: PLKSR(lk_type="SparsePLK", split_ratio=0.5),
+        lambda: PLKSR(lk_type="SparsePLK", split_ratio=0.75),
         lambda: PLKSR(use_ea=False),
+        # RealPLKSR
         lambda: RealPLKSR(),
         lambda: RealPLKSR(dim=32),
         lambda: RealPLKSR(dim=96),
