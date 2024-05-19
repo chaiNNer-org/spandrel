@@ -86,7 +86,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 split_ratio = state_dict["feats.1.lk.convs.0.weight"].shape[0] / dim
                 # Detecting other parameters for SparsePLKConv2d is praticaly impossible.
                 # We cannot detect the values of sparse_dilations at all, we only know it has the same length as sparse_kernels.
-                # Detecting the values of sparse_kernels is possible, but we don't know it's length exactly, because it's `len(sparse_kernels) = len(convs) - (1 if use_max_kernel else 0)`.
+                # Detecting the values of sparse_kernels is possible, but we don't know its length exactly, because it's `len(sparse_kernels) = len(convs) - (1 if use_max_kernel else 0)`.
                 # However, we cannot detect use_max_kernel, because the convolutions it adds when enabled look the same as the other convolutions.
                 # So I give up.
             elif "feats.1.lk.mn_conv.weight" in state_dict:
