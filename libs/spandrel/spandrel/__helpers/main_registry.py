@@ -35,6 +35,7 @@ from ..architectures import (
     Swin2SR,
     SwinIR,
     Uformer,
+    USRNet,
 )
 from .registry import ArchRegistry, ArchSupport
 
@@ -80,4 +81,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DRCT.DRCTArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
     ArchSupport.from_architecture(PLKSR.PLKSRArch()),
+    ArchSupport.from_architecture(USRNet.USRNetArch()),
 )
