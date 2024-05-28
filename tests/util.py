@@ -251,6 +251,7 @@ class TestImage(Enum):
     BLURRY_FACE = "blurry-face.jpg"
     LR_FACE = "lr-face.jpg"
     HAZE = "haze.jpg"
+    LOW_LIGHT_FIVE_K = "low-light-FiveK-a4501-DSC_0354.jpg"
 
 
 def assert_image_inference(

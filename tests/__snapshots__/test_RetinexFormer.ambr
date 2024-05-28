@@ -1,0 +1,43 @@
+# serializer version: 1
+# name: test_FiveK
+  ImageModelDescriptor(
+    architecture=RetinexFormerArch(
+      id='RetinexFormer',
+      name='RetinexFormer',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='Restoration',
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=8, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '40nf',
+      '1s',
+      '1x2x2b',
+    ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
+  )
+# ---
+# name: test_NTIRE
+  ImageModelDescriptor(
+    architecture=RetinexFormerArch(
+      id='RetinexFormer',
+      name='RetinexFormer',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='Restoration',
+    scale=1,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=8, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '40nf',
+      '1s',
+      '1x2x2b',
+    ]),
+    tiling=<ModelTiling.DISCOURAGED: 2>,
+  )
+# ---
