@@ -30,6 +30,7 @@ from ..architectures import (
     OmniSR,
     RealCUGAN,
     RestoreFormer,
+    RetinexFormer,
     SCUNet,
     SwiftSRGAN,
     Swin2SR,
@@ -80,4 +81,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(DRCT.DRCTArch()),
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
     ArchSupport.from_architecture(PLKSR.PLKSRArch()),
+    ArchSupport.from_architecture(RetinexFormer.RetinexFormerArch()),
 )
