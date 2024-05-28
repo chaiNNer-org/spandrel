@@ -102,6 +102,6 @@ class RetinexFormerArch(Architecture[RetinexFormer]):
             input_channels=in_channels,
             output_channels=out_channels,
             size_requirements=SizeRequirements(multiple_of=8),
-            tiling=ModelTiling.SUPPORTED,
+            tiling=ModelTiling.DISCOURAGED,
             call_fn=_call_fn,
         )
