@@ -22,6 +22,7 @@ from ..architectures import (
     DnCNN,
     DRUNet,
     FFTformer,
+    HVICIDNet,
     KBNet,
     LaMa,
     MixDehazeNet,
@@ -82,4 +83,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(ESRGAN.ESRGANArch()),
     ArchSupport.from_architecture(PLKSR.PLKSRArch()),
     ArchSupport.from_architecture(RetinexFormer.RetinexFormerArch()),
+    ArchSupport.from_architecture(HVICIDNet.HVICIDNetArch()),
 )

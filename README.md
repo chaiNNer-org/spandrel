@@ -144,6 +144,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 #### Dehazing
 
 - [MixDehazeNet](https://github.com/AmeryXiong/MixDehazeNet) | [Models](https://drive.google.com/drive/folders/1ep6W4H3vNxshYjq71Tb3MzxrXGgaiM6C?usp=drive_link)
+- [HVI-CIDNet](https://github.com/Fediory/HVI-CIDNet) | [Models](https://github.com/Fediory/HVI-CIDNet/tree/master?tab=readme-ov-file#weights-and-results-)
 
 #### Low-light Enhancement
 
