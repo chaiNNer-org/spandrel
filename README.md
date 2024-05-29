@@ -148,6 +148,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 #### Low-light Enhancement
 
 - [RetinexFormer](https://github.com/caiyuanhao1998/Retinexformer) | [Models](https://drive.google.com/drive/folders/1ynK5hfQachzc8y96ZumhkPPDXzHJwaQV?usp=drive_link)
+- [HVI-CIDNet](https://github.com/Fediory/HVI-CIDNet) | [Models](https://github.com/Fediory/HVI-CIDNet/#weights-and-results-)
 
 (All architectures marked with a `+` are only part of `spandrel_extra_arches`.)
 
