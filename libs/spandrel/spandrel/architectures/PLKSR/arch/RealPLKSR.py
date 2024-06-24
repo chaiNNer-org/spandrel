@@ -29,6 +29,10 @@ class PLKConv2d(nn.Module):
         self.idx = dim
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.training:
+            x1, x2 = torch.split(x, [self.idx, x.size(1) - self.idx], dim=1)
+            x1 = self.conv(x1)
+            return torch.cat([x1, x2], dim=1)
         x[:, : self.idx] = self.conv(x[:, : self.idx])
         return x
 
@@ -109,7 +113,9 @@ class RealPLKSR(nn.Module):
         dropout: float = 0,
     ):
         super().__init__()
-        dropout = 0
+
+        if not self.training:
+            dropout = 0
 
         self.feats = nn.Sequential(
             *[nn.Conv2d(3, dim, 3, 1, 1)]
