@@ -461,6 +461,7 @@ class DCTLSA(nn.Module):
 
     def __init__(
         self,
+        *,
         in_nc=3,
         nf=55,
         num_modules=6,

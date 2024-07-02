@@ -398,6 +398,7 @@ class MPRNet(nn.Module):
 
     def __init__(
         self,
+        *,
         in_c: int = 3,
         out_c: int = 3,
         n_feat: int = 40,

@@ -22,6 +22,7 @@ class IPT(nn.Module):
 
     def __init__(
         self,
+        *,
         patch_size: int = 48,
         patch_dim: int = 3,
         n_feats: int = 64,

@@ -26,6 +26,7 @@ class SRVGGNetCompact(nn.Module):
 
     def __init__(
         self,
+        *,
         num_in_ch=3,
         num_out_ch=3,
         num_feat=64,

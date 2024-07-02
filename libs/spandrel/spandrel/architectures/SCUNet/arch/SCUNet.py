@@ -279,6 +279,7 @@ class SCUNet(nn.Module):
 
     def __init__(
         self,
+        *,
         in_nc=3,
         config=[4, 4, 4, 4, 4, 4, 4],
         dim=64,
