@@ -9,6 +9,7 @@ pyright==1.1.342
 # test
 pytest==7.4.0
 syrupy==4.6.0
+numpy==1.26.4
 opencv-python==4.8.1.78
 requests
 beautifulsoup4
