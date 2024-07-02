@@ -64,11 +64,19 @@ class PLKConv2d(nn.Module):
         self.idx = dim
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        if self.with_idt:
-            x[:, : self.idx] = x[:, : self.idx] + self.conv(x[:, : self.idx])
+        if self.training:
+            x1, x2 = torch.split(x, [self.idx, x.size(1) - self.idx], dim=1)
+            if self.with_idt:
+                x1 = self.conv(x1) + x1
+            else:
+                x1 = self.conv(x1)
+            return torch.cat([x1, x2], dim=1)
         else:
-            x[:, : self.idx] = self.conv(x[:, : self.idx])
-        return x
+            if self.with_idt:
+                x[:, : self.idx] = x[:, : self.idx] + self.conv(x[:, : self.idx])
+            else:
+                x[:, : self.idx] = self.conv(x[:, : self.idx])
+            return x
 
 
 class RectSparsePLKConv2d(nn.Module):
