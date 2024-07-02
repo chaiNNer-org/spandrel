@@ -162,7 +162,7 @@ class AttBlock(nn.Module):
 class SAFMN(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, dim: int, n_blocks=8, ffn_scale=2.0, upscaling_factor=4):
+    def __init__(self, *, dim: int, n_blocks=8, ffn_scale=2.0, upscaling_factor=4):
         super().__init__()
         self.to_feat = nn.Conv2d(3, dim, 3, 1, 1)
 

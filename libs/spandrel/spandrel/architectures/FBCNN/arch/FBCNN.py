@@ -411,6 +411,7 @@ class FBCNN(nn.Module):
 
     def __init__(
         self,
+        *,
         in_nc=3,
         out_nc=3,
         nc=[64, 128, 256, 512],

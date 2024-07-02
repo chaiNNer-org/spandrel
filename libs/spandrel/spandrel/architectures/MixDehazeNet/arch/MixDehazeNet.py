@@ -208,6 +208,7 @@ class MixDehazeNet(nn.Module):
 
     def __init__(
         self,
+        *,
         in_chans=3,
         out_chans=4,
         embed_dims=[24, 48, 96, 48, 24],

@@ -920,6 +920,7 @@ class DAT(nn.Module):
 
     def __init__(
         self,
+        *,
         img_size=64,
         in_chans=3,
         embed_dim=180,

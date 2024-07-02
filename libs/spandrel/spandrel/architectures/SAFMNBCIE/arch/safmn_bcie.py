@@ -123,7 +123,7 @@ class SAFMN_BCIE(nn.Module):
     hyperparameters = {}
 
     def __init__(
-        self, dim: int, n_blocks=6, num_layers=6, ffn_scale=2.0, upscaling_factor=2
+        self, *, dim: int, n_blocks=6, num_layers=6, ffn_scale=2.0, upscaling_factor=2
     ):
         super().__init__()
 

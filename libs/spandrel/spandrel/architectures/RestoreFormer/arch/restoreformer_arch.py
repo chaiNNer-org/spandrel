@@ -674,6 +674,7 @@ class RestoreFormer(nn.Module):
 
     def __init__(
         self,
+        *,
         n_embed=1024,
         embed_dim=256,
         ch=64,

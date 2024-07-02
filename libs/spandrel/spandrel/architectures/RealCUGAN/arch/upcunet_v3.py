@@ -291,7 +291,7 @@ class UNet2(nn.Module):
 class UpCunet2x(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
+    def __init__(self, *, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None
         if pro:
@@ -333,7 +333,7 @@ class UpCunet2x(nn.Module):
 class UpCunet3x(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
+    def __init__(self, *, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None
         if pro:
@@ -375,7 +375,7 @@ class UpCunet3x(nn.Module):
 class UpCunet4x(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_channels=3, out_channels=3, pro: bool = False):
+    def __init__(self, *, in_channels=3, out_channels=3, pro: bool = False):
         super().__init__()
         self.pro: Tensor | None
         if pro:
@@ -425,7 +425,7 @@ class UpCunet4x(nn.Module):
 class UpCunet2x_fast(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_channels=3, out_channels=3):
+    def __init__(self, *, in_channels=3, out_channels=3):
         super().__init__()
         self.unet1 = UNet1(12, 64, deconv=True)
         self.unet2 = UNet2(64, 64, deconv=False)

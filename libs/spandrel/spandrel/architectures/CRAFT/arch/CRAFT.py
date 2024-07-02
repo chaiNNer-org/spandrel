@@ -748,6 +748,7 @@ class CRAFT(nn.Module):
 
     def __init__(
         self,
+        *,
         in_chans=3,
         # img_size=64,
         window_size=16,

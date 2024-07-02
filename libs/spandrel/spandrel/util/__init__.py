@@ -177,6 +177,12 @@ def store_hyperparameters(*, extra_parameters: Mapping[str, object] = {}):
             raise UserWarning(
                 "Class has **kwargs, which is not allowed in combination with @store_hyperparameters"
             )
+        if spec.args != ["self"]:
+            raise UserWarning(
+                "@store_hyperparameters requires all arguments of `"
+                + cls.__name__
+                + ".__init__` after `self` to be keyword arguments. Use `def __init__(self, *, a, b, c):`."
+            )
 
         @functools.wraps(old_init)
         def new_init(self: C, **kwargs):

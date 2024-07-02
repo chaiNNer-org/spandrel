@@ -243,6 +243,7 @@ class SPAN(nn.Module):
 
     def __init__(
         self,
+        *,
         num_in_ch: int,
         num_out_ch: int,
         feature_channels=48,

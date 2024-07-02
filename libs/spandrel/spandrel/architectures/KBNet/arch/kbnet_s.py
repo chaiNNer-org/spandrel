@@ -205,6 +205,7 @@ class KBNet_s(nn.Module):
 
     def __init__(
         self,
+        *,
         img_channel=3,
         width=64,
         middle_blk_num=12,

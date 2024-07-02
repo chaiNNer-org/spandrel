@@ -667,7 +667,7 @@ class FFCResNetGenerator(nn.Module):
 class LaMa(nn.Module):
     hyperparameters = {}
 
-    def __init__(self, in_nc=3, out_nc=3) -> None:
+    def __init__(self, *, in_nc=3, out_nc=3) -> None:
         super().__init__()
         self.model = FFCResNetGenerator(in_nc, out_nc)
 

@@ -610,6 +610,7 @@ class CodeFormer(VQAutoEncoder):
 
     def __init__(
         self,
+        *,
         dim_embd=512,
         n_head=8,
         n_layers=9,

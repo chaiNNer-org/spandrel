@@ -554,6 +554,7 @@ class MMRRDBNet_test(nn.Module):
 
     def __init__(
         self,
+        *,
         num_in_ch,
         num_out_ch,
         scale=4,

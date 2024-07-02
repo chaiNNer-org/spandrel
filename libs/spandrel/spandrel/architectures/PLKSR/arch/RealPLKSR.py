@@ -103,6 +103,7 @@ class RealPLKSR(nn.Module):
 
     def __init__(
         self,
+        *,
         dim: int = 64,
         n_blocks: int = 28,
         upscaling_factor: int = 4,

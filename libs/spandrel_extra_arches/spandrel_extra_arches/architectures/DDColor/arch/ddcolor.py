@@ -31,6 +31,7 @@ class DDColor(nn.Module):
 
     def __init__(
         self,
+        *,
         encoder_name="convnext-l",
         decoder_name="MultiScaleColorDecoder",
         num_input_channels=3,

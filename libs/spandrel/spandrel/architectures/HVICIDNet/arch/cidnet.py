@@ -14,6 +14,7 @@ class CIDNet(nn.Module):
 
     def __init__(
         self,
+        *,
         channels=[36, 36, 72, 144],
         heads=[1, 2, 4, 8],
         norm=False,

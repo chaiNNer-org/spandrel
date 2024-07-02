@@ -275,6 +275,7 @@ class FFTformer(nn.Module):
 
     def __init__(
         self,
+        *,
         inp_channels=3,
         out_channels=3,
         dim=48,

@@ -171,6 +171,7 @@ class M3SNet(nn.Module):
 
     def __init__(
         self,
+        *,
         img_channel=3,
         width=32,
         middle_blk_num=1,
