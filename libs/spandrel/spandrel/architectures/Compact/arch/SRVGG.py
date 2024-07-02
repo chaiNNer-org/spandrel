@@ -5,6 +5,8 @@ import torch.nn.functional as F
 
 from spandrel.util import store_hyperparameters
 
+# change
+
 
 @store_hyperparameters()
 class SRVGGNetCompact(nn.Module):
