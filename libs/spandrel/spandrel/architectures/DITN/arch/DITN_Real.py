@@ -265,6 +265,7 @@ class DITN_Real(nn.Module):
 
     def __init__(
         self,
+        *,
         inp_channels=3,
         dim=60,
         ITL_blocks=4,

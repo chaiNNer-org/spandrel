@@ -688,6 +688,7 @@ class DRCT(nn.Module):
 
     def __init__(
         self,
+        *,
         img_size=64,
         patch_size=1,
         in_chans=3,

@@ -196,6 +196,7 @@ class GFPGANv1Clean(nn.Module):
 
     def __init__(
         self,
+        *,
         out_size=512,
         num_style_feat=512,
         channel_multiplier=2,

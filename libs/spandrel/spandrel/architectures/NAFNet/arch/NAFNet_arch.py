@@ -142,6 +142,7 @@ class NAFNet(nn.Module):
 
     def __init__(
         self,
+        *,
         img_channel: int = 3,
         width: int = 16,
         middle_blk_num: int = 1,

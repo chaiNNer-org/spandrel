@@ -231,6 +231,7 @@ class GRL(nn.Module):
 
     def __init__(
         self,
+        *,
         img_size=64,
         in_channels: int = 3,
         out_channels: int = 3,

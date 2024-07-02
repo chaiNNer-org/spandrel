@@ -330,6 +330,7 @@ class RetinexFormer(nn.Module):
 
     def __init__(
         self,
+        *,
         in_channels=3,
         out_channels=3,
         n_feat=40,

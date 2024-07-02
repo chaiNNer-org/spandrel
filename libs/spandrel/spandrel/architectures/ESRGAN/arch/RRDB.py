@@ -19,6 +19,7 @@ class RRDBNet(nn.Module):
 
     def __init__(
         self,
+        *,
         in_nc: int = 3,
         out_nc: int = 3,
         num_filters: int = 64,

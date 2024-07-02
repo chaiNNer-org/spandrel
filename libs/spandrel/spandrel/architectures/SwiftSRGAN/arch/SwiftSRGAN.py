@@ -107,6 +107,7 @@ class Generator(nn.Module):
 
     def __init__(
         self,
+        *,
         in_channels: int = 3,
         num_channels: int = 64,
         num_blocks: int = 16,
