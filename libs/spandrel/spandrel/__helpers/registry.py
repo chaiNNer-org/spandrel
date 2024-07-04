@@ -15,6 +15,12 @@ class UnsupportedModelError(Exception):
     """
 
 
+class DuplicateArchitectureError(ValueError):
+    """
+    An error that will be thrown by `ArchRegistry` if the same architecture is added twice.
+    """
+
+
 @dataclass(frozen=True)
 class ArchSupport:
     """
@@ -119,7 +125,9 @@ class ArchRegistry:
         new_by_id = dict(self._by_id)
         for arch in architectures:
             if arch.architecture.id in new_by_id:
-                raise ValueError(f"Duplicate architecture: {arch.architecture.id}")
+                raise DuplicateArchitectureError(
+                    f"Duplicate architecture: {arch.architecture.id}"
+                )
 
             new_architectures.append(arch)
             new_by_id[arch.architecture.id] = arch
