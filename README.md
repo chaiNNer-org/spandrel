@@ -56,15 +56,14 @@ Note that `model` is a [`ModelDescriptor`](https://chainner.app/spandrel/#ModelD
 If you are working on a non-commercial open-source project or a private project, you should use `spandrel` and `spandrel_extra_arches` to get everything spandrel has to offer. The `spandrel` package only contains architectures with [permissive and public domain licenses](https://en.wikipedia.org/wiki/Permissive_software_license) (MIT, Apache 2.0, public domain), so it is fit for every use case. Architectures with restrictive licenses (e.g. non-commercial) are implemented in the `spandrel_extra_arches` package.
 
 ```python
-from spandrel import ImageModelDescriptor, MAIN_REGISTRY, ModelLoader
-from spandrel_extra_arches import EXTRA_REGISTRY
-import torch
+import spandrel
+import spandrel_extra_arches
 
 # add extra architectures before `ModelLoader` is used
-MAIN_REGISTRY.add(*EXTRA_REGISTRY)
+spandrel_extra_arches.install()
 
 # load a model from disk
-model = ModelLoader().load_from_file(r"path/to/model.pth")
+model = spandrel.ModelLoader().load_from_file(r"path/to/model.pth")
 
 ... # use model
 ```
