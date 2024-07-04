@@ -748,11 +748,8 @@ def _did_change(arch_name: str) -> bool:
         r"requirements-dev.txt",
     ]
     pattern = re.compile("|".join(important_files))
-    if any(pattern.match(file) for file in changed):
-        # some important files were changed
-        return True
-
-    return False
+    # some important files were changed?
+    return any(pattern.match(file) for file in changed)
 
 
 def skip_if_unchanged(file: str):
