@@ -13,8 +13,8 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.ddcolor import DDColor
-from .color import lab_to_rgb, linear_rgb_to_lab, rgb_to_linear_rgb
+from .__arch.ddcolor import DDColor
+from .__color import lab_to_rgb, linear_rgb_to_lab, rgb_to_linear_rgb
 
 
 def _call(model: DDColor, input: Tensor) -> Tensor:

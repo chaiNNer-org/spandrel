@@ -8,7 +8,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.M3SNet import M3SNet
+from .__arch.M3SNet import M3SNet
 
 
 class M3SNetArch(Architecture[M3SNet]):

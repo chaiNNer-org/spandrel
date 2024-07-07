@@ -13,7 +13,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.network_dncnn import DnCNN
+from .__arch.network_dncnn import DnCNN
 
 
 class DnCNNArch(Architecture[DnCNN]):

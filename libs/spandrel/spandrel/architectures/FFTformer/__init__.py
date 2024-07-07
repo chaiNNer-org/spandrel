@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.fftformer_arch import FFTformer
+from .__arch.fftformer_arch import FFTformer
 
 
 class FFTformerArch(Architecture[FFTformer]):

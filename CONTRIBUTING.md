@@ -110,11 +110,11 @@ Of course, the copy this code, we first have to find it! Unfortunately, project 
 
 In the case of DITN, the file is called [`models/DITN_Real.py`](https://github.com/yongliuy/DITN/blob/3438e429c0538ee5061a7cfca587df0c4097703f/models/DITN_Real.py#L197).
 
-Once you have found the file, create a new directory `libs/spandrel/architectures/<arch name>/arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
+Once you have found the file, create a new directory `libs/spandrel/architectures/<arch name>/__arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
 
-In the case of DITN, we copy `models/DITN_Real.py` to `libs/spandrel/architectures/DITN/arch/DITN_Real.py` and add the `LICENSE` file of the repo.
+In the case of DITN, we copy `models/DITN_Real.py` to `libs/spandrel/architectures/DITN/__arch/DITN_Real.py` and add the `LICENSE` file of the repo.
 
-The main model file might also reference other files in the repo. You have to copy those files into your `arch/` directory as well.
+The main model file might also reference other files in the repo. You have to copy those files into your `__arch/` directory as well.
 
 In the case of DITN, the main model file doesn't reference any other files, so we are done.
 
@@ -160,7 +160,7 @@ Create a file `libs/spandrel/architectures/<arch name>/__init__.py` and add the 
 
 ```python
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
-from .arch.ARCH_NAME import ARCH_NAME
+from .__arch.ARCH_NAME import ARCH_NAME
 
 
 def load(state_dict: StateDict) -> ImageModelDescriptor[ARCH_NAME]:
@@ -205,7 +205,7 @@ In the case of DITN, the filled in template looks like this:
 
 ```python
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
-from .arch.DITN_Real import DITN_Real as DITN
+from .__arch.DITN_Real import DITN_Real as DITN
 
 
 def load(state_dict: StateDict) -> ImageModelDescriptor[DITN]:

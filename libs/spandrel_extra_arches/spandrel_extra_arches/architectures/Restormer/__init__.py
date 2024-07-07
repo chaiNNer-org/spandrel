@@ -10,7 +10,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.restormer_arch import Restormer
+from .__arch.restormer_arch import Restormer
 
 
 class RestormerArch(Architecture[Restormer]):

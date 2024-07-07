@@ -32,7 +32,7 @@ lint.ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/__arch_helpers/**/*" = ["N", "ANN"]
-"**/arch/**/*" = ["B006", "B007", "B008", "N", "ANN", "SIM102", "SIM114"]
+"**/__arch/**/*" = ["B006", "B007", "B008", "N", "ANN", "SIM102", "SIM114"]
 "**/{tests,scripts}/**/*" = ["N802", "ANN", "T201"]
 
 [tool.pytest.ini_options]

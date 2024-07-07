@@ -12,7 +12,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.DITN_Real import DITN_Real as DITN
+from .__arch.DITN_Real import DITN_Real as DITN
 
 
 class DITNArch(Architecture[DITN]):

@@ -14,8 +14,8 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.ipt import IPT
-from .arch.model import Model
+from .__arch.ipt import IPT
+from .__arch.model import Model
 
 
 class IPTArch(Architecture[IPT]):

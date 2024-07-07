@@ -169,4 +169,4 @@ Here are some cool projects that use Spandrel:
 
 ## License
 
-This repo is bounded by the MIT license. However, the code of implemented architectures (everything inside an `arch/` directory) is bound by their original respective licenses (which are included in their respective `arch/` directories).
+This repo is bounded by the MIT license. However, the code of implemented architectures (everything inside an `__arch/` directory) is bound by their original respective licenses (which are included in their respective `__arch/` directories).

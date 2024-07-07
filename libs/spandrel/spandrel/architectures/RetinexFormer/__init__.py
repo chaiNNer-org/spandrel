@@ -12,7 +12,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.retinexformer_arch import RetinexFormer
+from .__arch.retinexformer_arch import RetinexFormer
 
 
 def _call_fn(model: RetinexFormer, t: torch.Tensor) -> torch.Tensor:

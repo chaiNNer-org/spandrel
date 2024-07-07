@@ -12,7 +12,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.mirnet_v2_arch import MIRNet_v2 as MIRNet2
+from .__arch.mirnet_v2_arch import MIRNet_v2 as MIRNet2
 
 
 class MIRNet2Arch(Architecture[MIRNet2]):

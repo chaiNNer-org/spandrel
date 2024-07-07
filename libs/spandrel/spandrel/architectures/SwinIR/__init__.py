@@ -11,7 +11,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.SwinIR import SwinIR
+from .__arch.SwinIR import SwinIR
 
 
 class SwinIRArch(Architecture[SwinIR]):

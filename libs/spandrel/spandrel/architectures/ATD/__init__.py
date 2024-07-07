@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.atd_arch import ATD
+from .__arch.atd_arch import ATD
 
 
 class ATDArch(Architecture[ATD]):

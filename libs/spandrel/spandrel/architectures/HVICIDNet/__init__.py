@@ -9,7 +9,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.cidnet import CIDNet as HVICIDNet
+from .__arch.cidnet import CIDNet as HVICIDNet
 
 
 class HVICIDNetArch(Architecture[HVICIDNet]):
