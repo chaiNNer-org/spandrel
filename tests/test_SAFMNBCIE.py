@@ -1,4 +1,4 @@
-from spandrel.architectures.SAFMNBCIE import SAFMN_BCIE, SAFMNBCIEArch
+from spandrel.architectures.SAFMNBCIE import SAFMNBCIE, SAFMNBCIEArch
 
 from .util import (
     ModelFile,
@@ -16,13 +16,13 @@ skip_if_unchanged(__file__)
 def test_load():
     assert_loads_correctly(
         SAFMNBCIEArch(),
-        lambda: SAFMN_BCIE(
+        lambda: SAFMNBCIE(
             dim=36, n_blocks=8, num_layers=1, ffn_scale=2.0, upscaling_factor=4
         ),
-        lambda: SAFMN_BCIE(
+        lambda: SAFMNBCIE(
             dim=36, n_blocks=8, num_layers=3, ffn_scale=3.0, upscaling_factor=3
         ),
-        lambda: SAFMN_BCIE(
+        lambda: SAFMNBCIE(
             dim=8, n_blocks=3, num_layers=4, ffn_scale=5.0, upscaling_factor=2
         ),
     )
@@ -41,5 +41,5 @@ def test_SAFMN_BCIE(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, SAFMN_BCIE)
+    assert isinstance(model.model, SAFMNBCIE)
     assert_image_inference(file, model, [TestImage.JPEG_15])

@@ -1,4 +1,4 @@
-from spandrel.architectures.ESRGAN import ESRGANArch, RRDBNet
+from spandrel.architectures.ESRGAN import ESRGAN, ESRGANArch
 
 from .util import (
     ModelFile,
@@ -16,11 +16,11 @@ skip_if_unchanged(__file__)
 def test_load():
     assert_loads_correctly(
         ESRGANArch(),
-        lambda: RRDBNet(in_nc=3, out_nc=3, num_filters=64, num_blocks=23, scale=4),
-        lambda: RRDBNet(in_nc=1, out_nc=3, num_filters=32, num_blocks=11, scale=2),
-        lambda: RRDBNet(in_nc=1, out_nc=1, num_filters=64, num_blocks=23, scale=1),
-        lambda: RRDBNet(in_nc=4, out_nc=4, num_filters=64, num_blocks=23, scale=8),
-        lambda: RRDBNet(scale=4, plus=True),
+        lambda: ESRGAN(in_nc=3, out_nc=3, num_filters=64, num_blocks=23, scale=4),
+        lambda: ESRGAN(in_nc=1, out_nc=3, num_filters=32, num_blocks=11, scale=2),
+        lambda: ESRGAN(in_nc=1, out_nc=1, num_filters=64, num_blocks=23, scale=1),
+        lambda: ESRGAN(in_nc=4, out_nc=4, num_filters=64, num_blocks=23, scale=8),
+        lambda: ESRGAN(scale=4, plus=True),
     )
 
 
@@ -47,7 +47,7 @@ def test_ESRGAN_community(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -61,7 +61,7 @@ def test_ESRGAN_community_2x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -75,7 +75,7 @@ def test_ESRGAN_community_4x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -89,7 +89,7 @@ def test_ESRGAN_community_8x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -103,7 +103,7 @@ def test_BSRGAN(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -117,7 +117,7 @@ def test_BSRGAN_2x(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -131,7 +131,7 @@ def test_RealSR_DPED(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -145,7 +145,7 @@ def test_RealSR_JPEG(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -159,7 +159,7 @@ def test_RealESRGAN_x4plus(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -173,7 +173,7 @@ def test_RealESRGAN_x2plus(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -187,7 +187,7 @@ def test_RealESRGAN_x4plus_anime_6B(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
@@ -201,7 +201,7 @@ def test_RealESRNet_x4plus(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, RRDBNet)
+    assert isinstance(model.model, ESRGAN)
     assert_image_inference(
         file,
         model,
