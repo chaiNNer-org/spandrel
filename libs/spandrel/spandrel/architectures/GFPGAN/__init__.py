@@ -8,10 +8,10 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .__arch.gfpganv1_clean_arch import GFPGANv1Clean
+from .__arch.gfpganv1_clean_arch import GFPGANv1Clean as GFPGAN
 
 
-class GFPGANArch(Architecture[GFPGANv1Clean]):
+class GFPGANArch(Architecture[GFPGAN]):
     def __init__(self) -> None:
         super().__init__(
             id="GFPGAN",
@@ -22,7 +22,7 @@ class GFPGANArch(Architecture[GFPGANv1Clean]):
         )
 
     @override
-    def load(self, state_dict: StateDict) -> ImageModelDescriptor[GFPGANv1Clean]:
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[GFPGAN]:
         out_size = 512
         num_style_feat = 512
         channel_multiplier = 2
@@ -34,7 +34,7 @@ class GFPGANArch(Architecture[GFPGANv1Clean]):
         narrow = 1
         sft_half = True
 
-        model = GFPGANv1Clean(
+        model = GFPGAN(
             out_size=out_size,
             num_style_feat=num_style_feat,
             channel_multiplier=channel_multiplier,
