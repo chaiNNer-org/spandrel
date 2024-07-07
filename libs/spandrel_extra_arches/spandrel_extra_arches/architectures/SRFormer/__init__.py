@@ -10,7 +10,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
-from .arch.SRFormer import SRFormer
+from .__arch.SRFormer import SRFormer
 
 
 class SRFormerArch(Architecture[SRFormer]):

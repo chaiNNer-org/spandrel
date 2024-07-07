@@ -12,8 +12,8 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.kbnet_l import KBNet_l
-from .arch.kbnet_s import KBNet_s
+from .__arch.kbnet_l import KBNet_l
+from .__arch.kbnet_s import KBNet_s
 
 # KBCNN is essentially 2 similar but different architectures: KBNet_l and KBNet_s.
 _KBNet = Union[KBNet_l, KBNet_s]

@@ -8,7 +8,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.LaMa import LaMa
+from .__arch.LaMa import LaMa
 
 
 class LaMaArch(Architecture[LaMa]):

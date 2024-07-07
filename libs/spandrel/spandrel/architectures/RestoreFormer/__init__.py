@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.restoreformer_arch import RestoreFormer
+from .__arch.restoreformer_arch import RestoreFormer
 
 
 class RestoreFormerArch(Architecture[RestoreFormer]):

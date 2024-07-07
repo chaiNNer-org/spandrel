@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.safmn_bcie import SAFMN_BCIE
+from .__arch.safmn_bcie import SAFMN_BCIE
 
 
 class SAFMNBCIEArch(Architecture[SAFMN_BCIE]):

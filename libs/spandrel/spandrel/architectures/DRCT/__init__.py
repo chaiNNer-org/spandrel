@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.drct_arch import DRCT
+from .__arch.drct_arch import DRCT
 
 
 class DRCTArch(Architecture[DRCT]):

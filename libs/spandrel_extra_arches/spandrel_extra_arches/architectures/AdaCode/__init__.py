@@ -10,7 +10,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_first_seq_index, get_seq_len
 
-from .arch.adacode_contrast_arch import AdaCodeSRNet_Contrast as AdaCode
+from .__arch.adacode_contrast_arch import AdaCodeSRNet_Contrast as AdaCode
 
 _inv_channel_query_dict = {
     256: [8, 16, 32, 64],

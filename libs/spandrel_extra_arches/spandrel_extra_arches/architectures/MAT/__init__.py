@@ -8,7 +8,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition
 
-from .arch.MAT import MAT
+from .__arch.MAT import MAT
 
 
 class MATArch(Architecture[MAT]):

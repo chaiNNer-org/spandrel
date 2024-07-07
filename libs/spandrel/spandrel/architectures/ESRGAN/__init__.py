@@ -15,7 +15,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.RRDB import RRDBNet
+from .__arch.RRDB import RRDBNet
 
 
 def _new_to_old_arch(state: StateDict, state_map: dict, num_blocks: int):

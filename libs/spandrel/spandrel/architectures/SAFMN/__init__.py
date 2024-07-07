@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.safmn import SAFMN
+from .__arch.safmn import SAFMN
 
 
 class SAFMNArch(Architecture[SAFMN]):

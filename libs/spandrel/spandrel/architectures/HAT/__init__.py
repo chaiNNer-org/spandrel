@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.HAT import HAT
+from .__arch.HAT import HAT
 
 
 def _get_overlap_ratio(window_size: int, with_overlap: int) -> float:

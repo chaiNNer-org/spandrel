@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.DAT import DAT
+from .__arch.DAT import DAT
 
 
 class DATArch(Architecture[DAT]):

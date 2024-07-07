@@ -12,7 +12,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.mmrealsr_arch import MMRRDBNet_test as MMRealSR
+from .__arch.mmrealsr_arch import MMRRDBNet_test as MMRealSR
 
 
 def _get_in_ch_and_scale(combined: int, num_out_ch: int) -> tuple[int, int]:

@@ -10,7 +10,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.OmniSR import OmniSR
+from .__arch.OmniSR import OmniSR
 
 
 class OmniSRArch(Architecture[OmniSR]):

@@ -10,7 +10,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.MPRNet import MPRNet
+from .__arch.MPRNet import MPRNet
 
 
 class MPRNetArch(Architecture[MPRNet]):

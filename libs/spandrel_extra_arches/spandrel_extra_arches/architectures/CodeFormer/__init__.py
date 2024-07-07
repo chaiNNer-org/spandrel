@@ -8,7 +8,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_seq_len
 
-from .arch.codeformer import CodeFormer
+from .__arch.codeformer import CodeFormer
 
 
 class CodeFormerArch(Architecture[CodeFormer]):

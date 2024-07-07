@@ -12,7 +12,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.rgt import RGT
+from .__arch.rgt import RGT
 
 
 def _get_split_size(state_dict: StateDict) -> tuple[int, int]:

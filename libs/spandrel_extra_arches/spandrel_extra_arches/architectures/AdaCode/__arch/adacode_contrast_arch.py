@@ -6,7 +6,7 @@ from torch import nn as nn
 
 from spandrel.util import store_hyperparameters
 
-from ...FeMaSR.arch.femasr import DecoderBlock, MultiScaleEncoder, SwinLayers
+from ...FeMaSR.__arch.femasr import DecoderBlock, MultiScaleEncoder, SwinLayers
 
 
 class VectorQuantizer(nn.Module):

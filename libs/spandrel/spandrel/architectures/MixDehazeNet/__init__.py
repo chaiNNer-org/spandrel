@@ -11,7 +11,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.MixDehazeNet import MixDehazeNet
+from .__arch.MixDehazeNet import MixDehazeNet
 
 
 class MixDehazeNetArch(Architecture[MixDehazeNet]):

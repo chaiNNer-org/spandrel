@@ -15,7 +15,7 @@ from spandrel.util import (
 
 from ...__helpers.canonicalize import remove_common_prefix
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
-from .arch.grl import GRL
+from .__arch.grl import GRL
 
 _NON_PERSISTENT_BUFFERS = [
     "table_w",

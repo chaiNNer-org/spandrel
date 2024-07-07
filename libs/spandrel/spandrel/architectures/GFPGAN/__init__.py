@@ -8,7 +8,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.gfpganv1_clean_arch import GFPGANv1Clean
+from .__arch.gfpganv1_clean_arch import GFPGANv1Clean
 
 
 class GFPGANArch(Architecture[GFPGANv1Clean]):

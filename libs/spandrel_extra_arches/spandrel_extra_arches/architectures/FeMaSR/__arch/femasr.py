@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torch import nn as nn
 
-from spandrel.architectures.SwinIR.arch.SwinIR import RSTB
+from spandrel.architectures.SwinIR.__arch.SwinIR import RSTB
 from spandrel.util import store_hyperparameters
 
 from .fema_utils import CombineQuantBlock, ResBlock

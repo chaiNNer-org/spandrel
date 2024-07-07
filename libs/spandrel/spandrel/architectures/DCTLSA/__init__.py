@@ -8,7 +8,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.dctlsa import DCTLSA
+from .__arch.dctlsa import DCTLSA
 
 
 class DCTLSAArch(Architecture[DCTLSA]):

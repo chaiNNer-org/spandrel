@@ -10,7 +10,7 @@ from spandrel import (
 )
 from spandrel.util import KeyCondition, get_first_seq_index, get_seq_len
 
-from .arch.femasr import FeMaSRNet as FeMaSR
+from .__arch.femasr import FeMaSRNet as FeMaSR
 
 _inv_channel_query_dict = {
     256: [8, 16, 32, 64],

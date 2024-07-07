@@ -13,7 +13,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .arch.upcunet_v3 import UpCunet2x, UpCunet2x_fast, UpCunet3x, UpCunet4x
+from .__arch.upcunet_v3 import UpCunet2x, UpCunet2x_fast, UpCunet3x, UpCunet4x
 
 _RealCUGAN = Union[UpCunet2x, UpCunet3x, UpCunet4x, UpCunet2x_fast]
 

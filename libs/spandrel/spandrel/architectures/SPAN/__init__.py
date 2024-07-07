@@ -4,7 +4,7 @@ from typing_extensions import override
 from spandrel.util import KeyCondition, get_scale_and_output_channels
 
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
-from .arch.span import SPAN
+from .__arch.span import SPAN
 
 
 class SPANArch(Architecture[SPAN]):
