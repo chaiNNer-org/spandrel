@@ -61,21 +61,27 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
         in_channels = state_dict["unet1.conv1.conv.0.weight"].shape[1]
         size_requirements = SizeRequirements(minimum=32)
 
-        if "conv_final.weight" in state_dict and in_channels == 12:
-            # UpCunet2x_fast
-            scale = 2
-            in_channels = 3  # hard coded in UpCunet2x_fast
-            out_channels = 3  # hard coded in UpCunet2x_fast
-            model = UpCunet2x_fast(in_channels=in_channels, out_channels=out_channels)
-            size_requirements = SizeRequirements(minimum=40, multiple_of=4)
-            tags.append("fast")
-        elif "conv_final.weight" in state_dict:
-            # UpCunet4x
-            scale = 4
-            out_channels = 3  # hard coded in UpCunet4x
-            model = UpCunet4x(
-                in_channels=in_channels, out_channels=out_channels, pro=pro
-            )
+        if "conv_final.weight" in state_dict:
+            # UpCunet4x or UpCunet2x_fast
+            # This is kinda wonky, because a UpCunet4x(in=4, out=k) and a
+            # UpCunet2x_fast(in=1, out=k) have the same state dict shapes,
+            # so we'll just assume that it's a UpCunet2x_fast
+            out_channels = state_dict["conv_final.weight"].shape[0] // 4
+            if out_channels * 4 == in_channels:
+                # UpCunet2x_fast
+                scale = 2
+                in_channels //= 4
+                model = UpCunet2x_fast(
+                    in_channels=in_channels, out_channels=out_channels
+                )
+                size_requirements = SizeRequirements(minimum=40, multiple_of=4)
+                tags.append("fast")
+            else:
+                # UpCunet4x
+                scale = 4
+                model = UpCunet4x(
+                    in_channels=in_channels, out_channels=out_channels, pro=pro
+                )
         elif state_dict["unet1.conv_bottom.weight"].shape[2] == 5:
             # UpCunet3x
             scale = 3
