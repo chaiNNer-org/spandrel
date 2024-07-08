@@ -52,3 +52,6 @@ class SwiftSRGANArch(Architecture[SwiftSRGAN]):
             input_channels=in_channels,
             output_channels=in_channels,
         )
+
+
+__all__ = ["SwiftSRGANArch", "SwiftSRGAN"]

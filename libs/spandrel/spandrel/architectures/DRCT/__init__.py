@@ -155,3 +155,6 @@ class DRCTArch(Architecture[DRCT]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(multiple_of=16),
         )
+
+
+__all__ = ["DRCTArch", "DRCT"]

@@ -96,3 +96,6 @@ class OmniSRArch(Architecture[OmniSR]):
             output_channels=num_out_ch,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["OmniSRArch", "OmniSR"]

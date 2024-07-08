@@ -71,3 +71,6 @@ class NAFNetArch(Architecture[NAFNet]):
             input_channels=img_channel,
             output_channels=img_channel,
         )
+
+
+__all__ = ["NAFNetArch", "NAFNet"]

@@ -120,3 +120,6 @@ class RestormerArch(Architecture[Restormer]):
             output_channels=out_channels,
             size_requirements=SizeRequirements(multiple_of=8),
         )
+
+
+__all__ = ["RestormerArch", "Restormer"]

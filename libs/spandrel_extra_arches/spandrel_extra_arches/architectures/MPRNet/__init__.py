@@ -106,3 +106,6 @@ class MPRNetArch(Architecture[MPRNet]):
             size_requirements=SizeRequirements(multiple_of=8),
             call_fn=lambda model, x: model(x)[0],
         )
+
+
+__all__ = ["MPRNetArch", "MPRNet"]

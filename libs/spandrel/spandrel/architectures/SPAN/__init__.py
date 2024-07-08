@@ -71,3 +71,6 @@ class SPANArch(Architecture[SPAN]):
             input_channels=num_in_ch,
             output_channels=num_out_ch,
         )
+
+
+__all__ = ["SPANArch", "SPAN"]

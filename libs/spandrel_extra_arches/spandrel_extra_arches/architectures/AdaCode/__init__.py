@@ -148,3 +148,6 @@ class AdaCodeArch(Architecture[AdaCode]):
             output_channels=in_channel,
             size_requirements=SizeRequirements(multiple_of=multiple_of),
         )
+
+
+__all__ = ["AdaCodeArch", "AdaCode"]

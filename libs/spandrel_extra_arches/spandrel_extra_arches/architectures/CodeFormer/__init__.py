@@ -73,3 +73,6 @@ class CodeFormerArch(Architecture[CodeFormer]):
             size_requirements=SizeRequirements(multiple_of=512, square=True),
             call_fn=lambda model, image: model(image)[0],
         )
+
+
+__all__ = ["CodeFormerArch", "CodeFormer"]

@@ -168,3 +168,6 @@ class ATDArch(Architecture[ATD]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=8),
         )
+
+
+__all__ = ["ATDArch", "ATD"]

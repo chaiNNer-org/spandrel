@@ -126,3 +126,6 @@ class CRAFTArch(Architecture[CRAFT]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=16, multiple_of=16),
         )
+
+
+__all__ = ["CRAFTArch", "CRAFT"]

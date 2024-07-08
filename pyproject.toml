@@ -41,7 +41,7 @@ pythonpath = ["libs/spandrel", "libs/spandrel_extra_arches"]
 
 [tool.pydoctor]
 project-name = "spandrel"
-add-package = ["libs/spandrel/spandrel"]
+add-package = ["libs/spandrel/spandrel", "libs/spandrel_extra_arches/spandrel_extra_arches"]
 project-url = "https://github.com/chaiNNer-org/spandrel"
 docformat = "restructuredtext"
 warnings-as-errors = false
@@ -51,5 +51,9 @@ theme = "readthedocs"
 privacy = [
     "HIDDEN:spandrel.__version__",
     "HIDDEN:spandrel.__helpers",
+    "HIDDEN:spandrel.architectures.*.__arch",
     "PRIVATE:spandrel.canonicalize_state_dict",
+    "HIDDEN:spandrel_extra_arches.__version__",
+    "HIDDEN:spandrel_extra_arches.__helper",
+    "HIDDEN:spandrel_extra_arches.architectures.*.__arch",
 ]

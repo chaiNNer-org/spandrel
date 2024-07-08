@@ -105,3 +105,6 @@ class RetinexFormerArch(Architecture[RetinexFormer]):
             tiling=ModelTiling.DISCOURAGED,
             call_fn=_call_fn,
         )
+
+
+__all__ = ["RetinexFormerArch", "RetinexFormer"]

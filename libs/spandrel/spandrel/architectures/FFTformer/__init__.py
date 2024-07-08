@@ -98,3 +98,6 @@ class FFTformerArch(Architecture[FFTformer]):
             output_channels=out_channels,
             size_requirements=SizeRequirements(multiple_of=32),
         )
+
+
+__all__ = ["FFTformerArch", "FFTformer"]

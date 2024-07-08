@@ -67,3 +67,6 @@ class SAFMNArch(Architecture[SAFMN]):
             output_channels=3,  # hard-coded in the arch
             size_requirements=SizeRequirements(multiple_of=8),
         )
+
+
+__all__ = ["SAFMNArch", "SAFMN"]

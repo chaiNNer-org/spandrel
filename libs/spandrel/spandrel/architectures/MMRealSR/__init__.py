@@ -193,3 +193,6 @@ class MMRealSRArch(Architecture[MMRealSR]):
             size_requirements=SizeRequirements(minimum=16),
             call_fn=lambda model, image: model(image)[0],
         )
+
+
+__all__ = ["MMRealSRArch", "MMRealSR"]

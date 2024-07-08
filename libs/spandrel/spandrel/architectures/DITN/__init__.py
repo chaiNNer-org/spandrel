@@ -85,3 +85,6 @@ class DITNArch(Architecture[DITN]):
             output_channels=3,  # hard-coded in the architecture
             size_requirements=SizeRequirements(multiple_of=patch_size),
         )
+
+
+__all__ = ["DITNArch", "DITN"]

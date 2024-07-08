@@ -166,3 +166,6 @@ class KBNetArch(Architecture[_KBNet]):
             return self._load_l(state_dict)
         else:
             return self._load_s(state_dict)
+
+
+__all__ = ["KBNetArch", "KBNet_s", "KBNet_l"]

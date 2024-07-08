@@ -95,3 +95,6 @@ class MIRNet2Arch(Architecture[MIRNet2]):
             output_channels=out_channels,
             size_requirements=SizeRequirements(multiple_of=4),
         )
+
+
+__all__ = ["MIRNet2Arch", "MIRNet2"]

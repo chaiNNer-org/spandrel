@@ -143,3 +143,6 @@ class PLKSRArch(Architecture[_PLKSR]):
             input_channels=3,
             output_channels=3,
         )
+
+
+__all__ = ["PLKSRArch", "PLKSR", "RealPLKSR"]

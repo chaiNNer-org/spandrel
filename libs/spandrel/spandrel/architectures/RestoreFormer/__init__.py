@@ -101,3 +101,6 @@ class RestoreFormerArch(Architecture[RestoreFormer]):
             size_requirements=SizeRequirements(multiple_of=32),
             call_fn=call,
         )
+
+
+__all__ = ["RestoreFormerArch", "RestoreFormer"]

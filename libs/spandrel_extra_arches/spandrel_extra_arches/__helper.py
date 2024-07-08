@@ -14,6 +14,11 @@ from .architectures import (
 )
 
 EXTRA_REGISTRY = ArchRegistry()
+"""
+The registry of all architectures in this library.
+
+Use ``MAIN_REGISTRY.add(*EXTRA_REGISTRY)`` to add all architectures to the main registry of `spandrel`.
+"""
 
 EXTRA_REGISTRY.add(
     ArchSupport.from_architecture(SRFormer.SRFormerArch()),

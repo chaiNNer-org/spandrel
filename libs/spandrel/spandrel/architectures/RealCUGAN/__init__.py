@@ -104,3 +104,6 @@ class RealCUGANArch(Architecture[_RealCUGAN]):
             output_channels=out_channels,
             size_requirements=size_requirements,
         )
+
+
+__all__ = ["RealCUGANArch", "UpCunet2x", "UpCunet3x", "UpCunet4x", "UpCunet2x_fast"]
