@@ -6,68 +6,12 @@ from torch import nn as nn
 
 from spandrel.util import store_hyperparameters
 
-from ...FeMaSR.__arch.femasr import DecoderBlock, MultiScaleEncoder, SwinLayers
-
-
-class VectorQuantizer(nn.Module):
-    """
-    see https://github.com/MishaLaskin/vqvae/blob/d761a999e2267766400dc646d82d3ac3657771d4/models/quantizer.py
-    ____________________________________________
-    Discretization bottleneck part of the VQ-VAE.
-    Inputs:
-    - n_e : number of embeddings
-    - e_dim : dimension of embedding
-    - beta : commitment cost used in loss term, beta * ||z_e(x)-sg[e]||^2
-    _____________________________________________
-    """
-
-    def __init__(self, n_e, e_dim):
-        super().__init__()
-        self.n_e = int(n_e)
-        self.e_dim = int(e_dim)
-        self.embedding = nn.Embedding(self.n_e, self.e_dim)
-        self.embedding.weight.data.uniform_(-1.0 / self.n_e, 1.0 / self.n_e)
-
-    def dist(self, x, y):
-        return (
-            torch.sum(x**2, dim=1, keepdim=True)
-            + torch.sum(y**2, dim=1)
-            - 2 * torch.matmul(x, y.t())
-        )
-
-    def forward(self, z: torch.Tensor):
-        """
-        Args:
-            z: input features to be quantized, z (continuous) -> z_q (discrete)
-               z.shape = (batch, channel, height, width)
-            gt_indices: feature map of given indices, used for visualization.
-        """
-        # reshape z -> (batch, height, width, channel) and flatten
-        z = z.permute(0, 2, 3, 1).contiguous()
-        z_flattened = z.view(-1, self.e_dim)
-
-        codebook = self.embedding.weight
-
-        d = self.dist(z_flattened, codebook)
-
-        # find closest encodings
-        min_encoding_indices = torch.argmin(d, dim=1).unsqueeze(1)
-        min_encodings = torch.zeros(
-            min_encoding_indices.shape[0], codebook.shape[0]
-        ).to(z)
-        min_encodings.scatter_(1, min_encoding_indices, 1)
-
-        # get quantized latent vectors
-        z_q = torch.matmul(min_encodings, codebook)
-        z_q = z_q.view(z.shape)
-
-        # preserve gradients
-        z_q = z + (z_q - z).detach()
-
-        # reshape back to match original input shape
-        z_q = z_q.permute(0, 3, 1, 2).contiguous()
-
-        return z_q
+from ...FeMaSR.__arch.femasr import (
+    DecoderBlock,
+    MultiScaleEncoder,
+    SwinLayers,
+    VectorQuantizer,
+)
 
 
 class WeightPredictor(nn.Module):

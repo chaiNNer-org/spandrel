@@ -2,16 +2,16 @@
 # Copyright (c) 2022 megvii-model. All Rights Reserved.
 # ------------------------------------------------------------------------
 
-"""
-Simple Baselines for Image Restoration
+# """
+# Simple Baselines for Image Restoration
 
-@article{chen2022simple,
-  title={Simple Baselines for Image Restoration},
-  author={Chen, Liangyu and Chu, Xiaojie and Zhang, Xiangyu and Sun, Jian},
-  journal={arXiv preprint arXiv:2204.04676},
-  year={2022}
-}
-"""
+# @article{chen2022simple,
+#   title={Simple Baselines for Image Restoration},
+#   author={Chen, Liangyu and Chu, Xiaojie and Zhang, Xiangyu and Sun, Jian},
+#   journal={arXiv preprint arXiv:2204.04676},
+#   year={2022}
+# }
+# """
 
 from __future__ import annotations
 

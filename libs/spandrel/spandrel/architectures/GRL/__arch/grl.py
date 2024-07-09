@@ -34,7 +34,9 @@ from .upsample import Upsample, UpsampleOneStep
 
 
 class TransformerStage(nn.Module):
-    """Transformer stage.
+    """
+    Transformer stage.
+
     Args:
         dim (int): Number of input channels.
         input_resolution (tuple[int]): Input resolution.
@@ -58,11 +60,13 @@ class TransformerStage(nn.Module):
         pretrained_stripe_size (list[int]): pretrained stripe size. This is actually not used. Default: [0, 0].
         conv_type: The convolutional block before residual connection.
         init_method: initialization method of the weight parameters used to train large scale models.
-            Choices: n, normal -- Swin V1 init method.
-                    l, layernorm -- Swin V2 init method. Zero the weight and bias in the post layer normalization layer.
-                    r, res_rescale -- EDSR rescale method. Rescale the residual blocks with a scaling factor 0.1
-                    w, weight_rescale -- MSRResNet rescale method. Rescale the weight parameter in residual blocks with a scaling factor 0.1
-                    t, trunc_normal_ -- nn.Linear, trunc_normal; nn.Conv2d, weight_rescale
+
+            Choices:
+                * n, normal -- Swin V1 init method.
+                * l, layernorm -- Swin V2 init method. Zero the weight and bias in the post layer normalization layer.
+                * r, res_rescale -- EDSR rescale method. Rescale the residual blocks with a scaling factor 0.1
+                * w, weight_rescale -- MSRResNet rescale method. Rescale the weight parameter in residual blocks with a scaling factor 0.1
+                * t, `trunc_normal_` -- nn.Linear, trunc_normal, nn.Conv2d, weight_rescale
         fairscale_checkpoint (bool): Whether to use fairscale checkpoint.
         offload_to_cpu (bool): used by fairscale_checkpoint
         args:
@@ -185,6 +189,7 @@ class TransformerStage(nn.Module):
 @store_hyperparameters()
 class GRL(nn.Module):
     r"""Image restoration transformer with global, non-local, and local connections
+
     Args:
         img_size (int | list[int]): Input image size. Default 64
         in_channels (int): Number of input image channels. Default: 3
@@ -216,11 +221,13 @@ class GRL(nn.Module):
         norm_layer (nn.Module): Normalization layer. Default: nn.LayerNorm.
         conv_type (str): The convolutional block before residual connection. Default: 1conv. Choices: 1conv, 3conv, 1conv1x1, linear
         init_method: initialization method of the weight parameters used to train large scale models.
-            Choices: n, normal -- Swin V1 init method.
-                    l, layernorm -- Swin V2 init method. Zero the weight and bias in the post layer normalization layer.
-                    r, res_rescale -- EDSR rescale method. Rescale the residual blocks with a scaling factor 0.1
-                    w, weight_rescale -- MSRResNet rescale method. Rescale the weight parameter in residual blocks with a scaling factor 0.1
-                    t, trunc_normal_ -- nn.Linear, trunc_normal; nn.Conv2d, weight_rescale
+
+            Choices:
+                * n, normal -- Swin V1 init method.
+                * l, layernorm -- Swin V2 init method. Zero the weight and bias in the post layer normalization layer.
+                * r, res_rescale -- EDSR rescale method. Rescale the residual blocks with a scaling factor 0.1
+                * w, weight_rescale -- MSRResNet rescale method. Rescale the weight parameter in residual blocks with a scaling factor 0.1
+                * t, `trunc_normal_` -- nn.Linear, trunc_normal, nn.Conv2d, weight_rescale
         fairscale_checkpoint (bool): Whether to use fairscale checkpoint.
         offload_to_cpu (bool): used by fairscale_checkpoint
         euclidean_dist (bool): use Euclidean distance or inner product as the similarity metric. An ablation study.

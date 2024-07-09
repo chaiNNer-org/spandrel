@@ -5,10 +5,10 @@ from torch.nn import functional as F
 
 class NormLayer(nn.Module):
     """Normalization Layers.
-    ------------
-    # Arguments
-        - channels: input channels, for batch norm and instance norm.
-        - input_size: input shape without batch size, for layer norm.
+
+    Args:
+        channels: input channels, for batch norm and instance norm.
+        input_size: input shape without batch size, for layer norm.
     """
 
     def __init__(self, channels, norm_type="bn"):
@@ -35,9 +35,9 @@ class NormLayer(nn.Module):
 
 class ActLayer(nn.Module):
     """activation layer.
-    ------------
-    # Arguments
-        - relu type: type of relu layer, candidates are
+
+    Args:
+        relu type: type of relu layer, candidates are
             - ReLU
             - LeakyReLU: default relu slope 0.2
             - PRelu
