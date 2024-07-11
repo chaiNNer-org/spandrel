@@ -20,7 +20,12 @@ from .__helpers.model_descriptor import (
     StateDict,
     UnsupportedDtypeError,
 )
-from .__helpers.registry import ArchRegistry, ArchSupport, UnsupportedModelError
+from .__helpers.registry import (
+    ArchRegistry,
+    ArchSupport,
+    DuplicateArchitectureError,
+    UnsupportedModelError,
+)
 
 __all__ = [
     "ArchId",
@@ -28,6 +33,7 @@ __all__ = [
     "ArchRegistry",
     "ArchSupport",
     "canonicalize_state_dict",
+    "DuplicateArchitectureError",
     "ImageModelDescriptor",
     "MAIN_REGISTRY",
     "MaskedImageModelDescriptor",

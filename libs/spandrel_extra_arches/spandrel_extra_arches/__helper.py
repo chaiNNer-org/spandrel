@@ -1,4 +1,10 @@
-from spandrel import ArchRegistry, ArchSupport
+from __future__ import annotations
+
+from spandrel import (
+    MAIN_REGISTRY,
+    ArchRegistry,
+    ArchSupport,
+)
 
 from .architectures import (
     MAT,
@@ -27,3 +33,20 @@ EXTRA_REGISTRY.add(
     ArchSupport.from_architecture(MPRNet.MPRNetArch()),
     ArchSupport.from_architecture(MIRNet2.MIRNet2Arch()),
 )
+
+
+def install(*, ignore_duplicates: bool = False) -> list[ArchSupport]:
+    """
+    Try to install the extra architectures into the main registry.
+
+    If `ignore_duplicates` is True, the function will not raise an error
+    if the installation fails due to any of the architectures having already
+    been installed (but they won't be replaced by ones from this package).
+    """
+    return MAIN_REGISTRY.add(*EXTRA_REGISTRY, ignore_duplicates=ignore_duplicates)
+
+
+__all__ = [
+    "EXTRA_REGISTRY",
+    "install",
+]
