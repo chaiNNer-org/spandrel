@@ -49,7 +49,7 @@ class LaMaArch(Architecture[LaMa]):
             tags=[],
             supports_half=False,
             supports_bfloat16=True,
-            input_channels=in_nc,
+            input_channels=in_nc - 1,
             output_channels=out_nc,
-            size_requirements=SizeRequirements(minimum=16),
+            size_requirements=SizeRequirements(minimum=16, multiple_of=8),
         )
