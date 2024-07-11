@@ -607,7 +607,6 @@ def assert_size_requirements(
                 output_tensor.shape == expected_shape
             ), f"Expected {expected_shape}, but got {output_tensor.shape}"
         except Exception as e:
-            print(str(e))
             raise AssertionError(
                 f"Failed size requirement test for {width=} {height=}"
             ) from e
