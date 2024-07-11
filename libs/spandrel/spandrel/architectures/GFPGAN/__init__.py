@@ -61,3 +61,6 @@ class GFPGANArch(Architecture[GFPGAN]):
             size_requirements=SizeRequirements(minimum=512),
             call_fn=lambda model, image: model(image)[0],
         )
+
+
+__all__ = ["GFPGANArch", "GFPGAN"]

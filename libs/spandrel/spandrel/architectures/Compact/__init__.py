@@ -52,3 +52,6 @@ class CompactArch(Architecture[Compact]):
             input_channels=in_nc,
             output_channels=out_nc,
         )
+
+
+__all__ = ["CompactArch", "Compact"]
