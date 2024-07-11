@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from spandrel import (
     MAIN_REGISTRY,
     ArchRegistry,
@@ -33,7 +35,7 @@ EXTRA_REGISTRY.add(
 )
 
 
-def install(*, ignore_duplicates: bool = False) -> list:
+def install(*, ignore_duplicates: bool = False) -> list[ArchSupport]:
     """
     Try to install the extra architectures into the main registry.
 

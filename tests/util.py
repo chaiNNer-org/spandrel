@@ -44,8 +44,9 @@ from spandrel.util import KeyCondition
 # The asserts check that the install function first does return
 # the newly installed architectures and then does not return them
 # when requested to ignore duplicates.
-assert spandrel_extra_arches.install()
-assert not spandrel_extra_arches.install(ignore_duplicates=True)
+_installed_extras = spandrel_extra_arches.install()
+assert len(_installed_extras) > 0
+assert len(spandrel_extra_arches.install(ignore_duplicates=True)) == 0
 
 TEST_DIR = Path("./tests/").resolve()
 MODEL_DIR = TEST_DIR / "models"
