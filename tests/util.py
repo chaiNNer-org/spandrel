@@ -29,8 +29,8 @@ import torch
 from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
+import spandrel_extra_arches
 from spandrel import (
-    MAIN_REGISTRY,
     Architecture,
     ImageModelDescriptor,
     ModelDescriptor,
@@ -40,9 +40,13 @@ from spandrel import (
 )
 from spandrel.__helpers.model_descriptor import StateDict
 from spandrel.util import KeyCondition
-from spandrel_extra_arches import EXTRA_REGISTRY
 
-MAIN_REGISTRY.add(*EXTRA_REGISTRY)
+# The asserts check that the install function first does return
+# the newly installed architectures and then does not return them
+# when requested to ignore duplicates.
+_installed_extras = spandrel_extra_arches.install()
+assert len(_installed_extras) > 0
+assert len(spandrel_extra_arches.install(ignore_duplicates=True)) == 0
 
 TEST_DIR = Path("./tests/").resolve()
 MODEL_DIR = TEST_DIR / "models"

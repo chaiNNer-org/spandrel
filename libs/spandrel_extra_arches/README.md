@@ -20,14 +20,14 @@ pip install spandrel spandrel_extra_arches
 ## Basic usage
 
 ```python
-from spandrel import MAIN_REGISTRY, ModelLoader
-from spandrel_extra_arches import EXTRA_REGISTRY
+import spandrel
+import spandrel_extra_arches
 
 # add extra architectures before `ModelLoader` is used
-MAIN_REGISTRY.add(*EXTRA_REGISTRY)
+spandrel_extra_arches.install()
 
 # load a model from disk
-model = ModelLoader().load_from_file(r"path/to/model.pth")
+model = spandrel.ModelLoader().load_from_file(r"path/to/model.pth")
 
 ... # use model
 ```
