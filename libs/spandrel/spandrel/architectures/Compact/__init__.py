@@ -3,10 +3,10 @@ from typing_extensions import override
 from spandrel.util import KeyCondition, get_scale_and_output_channels, get_seq_len
 
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
-from .__arch.SRVGG import SRVGGNetCompact
+from .__arch.SRVGG import SRVGGNetCompact as Compact
 
 
-class CompactArch(Architecture[SRVGGNetCompact]):
+class CompactArch(Architecture[Compact]):
     def __init__(
         self,
     ) -> None:
@@ -20,7 +20,7 @@ class CompactArch(Architecture[SRVGGNetCompact]):
         )
 
     @override
-    def load(self, state_dict: StateDict) -> ImageModelDescriptor[SRVGGNetCompact]:
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[Compact]:
         state = state_dict
 
         highest_num = get_seq_len(state, "body") - 1
@@ -32,7 +32,7 @@ class CompactArch(Architecture[SRVGGNetCompact]):
         pixelshuffle_shape = state[f"body.{highest_num}.bias"].shape[0]
         scale, out_nc = get_scale_and_output_channels(pixelshuffle_shape, in_nc)
 
-        model = SRVGGNetCompact(
+        model = Compact(
             num_in_ch=in_nc,
             num_out_ch=out_nc,
             num_feat=num_feat,

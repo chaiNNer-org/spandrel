@@ -10,10 +10,10 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .__arch.safmn_bcie import SAFMN_BCIE
+from .__arch.safmn_bcie import SAFMN_BCIE as SAFMNBCIE
 
 
-class SAFMNBCIEArch(Architecture[SAFMN_BCIE]):
+class SAFMNBCIEArch(Architecture[SAFMNBCIE]):
     def __init__(self) -> None:
         super().__init__(
             id="SAFMNBCIE",
@@ -37,7 +37,7 @@ class SAFMNBCIEArch(Architecture[SAFMN_BCIE]):
         )
 
     @override
-    def load(self, state_dict: StateDict) -> ImageModelDescriptor[SAFMN_BCIE]:
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[SAFMNBCIE]:
         dim: int
         n_blocks: int = 6
         num_layers: int = 6
@@ -55,7 +55,7 @@ class SAFMNBCIEArch(Architecture[SAFMN_BCIE]):
         hidden_dim = state_dict["feats.0.layers.0.ccm.ccm.0.weight"].shape[0]
         ffn_scale = hidden_dim / dim
 
-        model = SAFMN_BCIE(
+        model = SAFMNBCIE(
             dim=dim,
             n_blocks=n_blocks,
             num_layers=num_layers,
