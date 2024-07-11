@@ -1,4 +1,4 @@
-from spandrel.architectures.GFPGAN import GFPGANArch, GFPGANv1Clean
+from spandrel.architectures.GFPGAN import GFPGAN, GFPGANArch
 from tests.test_CodeFormer import assert_loads_correctly
 
 from .util import (
@@ -15,7 +15,7 @@ skip_if_unchanged(__file__)
 def test_load():
     assert_loads_correctly(
         GFPGANArch(),
-        lambda: GFPGANv1Clean(),
+        lambda: GFPGAN(),
     )
 
 
@@ -25,7 +25,7 @@ def test_GFPGAN_1_2(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GFPGANv1Clean)
+    assert isinstance(model.model, GFPGAN)
 
 
 def test_GFPGAN_1_3(snapshot):
@@ -34,7 +34,7 @@ def test_GFPGAN_1_3(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GFPGANv1Clean)
+    assert isinstance(model.model, GFPGAN)
 
 
 def test_GFPGAN_1_4(snapshot):
@@ -43,7 +43,7 @@ def test_GFPGAN_1_4(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, GFPGANv1Clean)
+    assert isinstance(model.model, GFPGAN)
     assert_image_inference(
         model_file=file,
         model=model,

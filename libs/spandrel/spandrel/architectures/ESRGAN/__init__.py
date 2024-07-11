@@ -15,7 +15,7 @@ from ...__helpers.model_descriptor import (
     SizeRequirements,
     StateDict,
 )
-from .__arch.RRDB import RRDBNet
+from .__arch.RRDB import RRDBNet as ESRGAN
 
 
 def _new_to_old_arch(state: StateDict, state_map: dict, num_blocks: int):
@@ -132,7 +132,7 @@ def _to_old_arch(state: StateDict) -> StateDict:
     return _new_to_old_arch(state, state_map, num_blocks)
 
 
-class ESRGANArch(Architecture[RRDBNet]):
+class ESRGANArch(Architecture[ESRGAN]):
     def __init__(self) -> None:
         super().__init__(
             id="ESRGAN",
@@ -163,7 +163,7 @@ class ESRGANArch(Architecture[RRDBNet]):
         )
 
     @override
-    def load(self, state_dict: StateDict) -> ImageModelDescriptor[RRDBNet]:
+    def load(self, state_dict: StateDict) -> ImageModelDescriptor[ESRGAN]:
         # default values
         in_nc: int = 3
         out_nc: int = 3
@@ -196,7 +196,7 @@ class ESRGANArch(Architecture[RRDBNet]):
         else:
             shuffle_factor = None
 
-        model = RRDBNet(
+        model = ESRGAN(
             in_nc=in_nc,
             out_nc=out_nc,
             num_filters=num_filters,

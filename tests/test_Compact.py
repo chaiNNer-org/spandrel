@@ -1,4 +1,4 @@
-from spandrel.architectures.Compact import CompactArch, SRVGGNetCompact
+from spandrel.architectures.Compact import Compact, CompactArch
 
 from .util import (
     ModelFile,
@@ -16,14 +16,14 @@ skip_if_unchanged(__file__)
 def test_load():
     assert_loads_correctly(
         CompactArch(),
-        lambda: SRVGGNetCompact(),
-        lambda: SRVGGNetCompact(num_in_ch=1, num_out_ch=1),
-        lambda: SRVGGNetCompact(num_in_ch=3, num_out_ch=3),
-        lambda: SRVGGNetCompact(num_in_ch=4, num_out_ch=4),
-        lambda: SRVGGNetCompact(num_in_ch=1, num_out_ch=3),
-        lambda: SRVGGNetCompact(num_feat=32),
-        lambda: SRVGGNetCompact(num_conv=5),
-        lambda: SRVGGNetCompact(upscale=3),
+        lambda: Compact(),
+        lambda: Compact(num_in_ch=1, num_out_ch=1),
+        lambda: Compact(num_in_ch=3, num_out_ch=3),
+        lambda: Compact(num_in_ch=4, num_out_ch=4),
+        lambda: Compact(num_in_ch=1, num_out_ch=3),
+        lambda: Compact(num_feat=32),
+        lambda: Compact(num_conv=5),
+        lambda: Compact(upscale=3),
     )
 
 
@@ -45,7 +45,7 @@ def test_Compact_realesr_general_x4v3(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, SRVGGNetCompact)
+    assert isinstance(model.model, Compact)
     assert_image_inference(
         file,
         model,
@@ -59,7 +59,7 @@ def test_Compact_community(snapshot):
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
-    assert isinstance(model.model, SRVGGNetCompact)
+    assert isinstance(model.model, Compact)
     assert_image_inference(
         file,
         model,
