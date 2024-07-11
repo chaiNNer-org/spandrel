@@ -581,17 +581,21 @@ def assert_size_requirements(
     max_size: int = 64,
     max_candidates: int = 8,
 ) -> None:
-    assert isinstance(model, ImageModelDescriptor)
-
     device = get_test_device()
 
     def test_size(width: int, height: int) -> None:
         try:
-            input_tensor = torch.rand(1, model.input_channels, height, width)
+            input_tensor = torch.rand(
+                1, model.input_channels, height, width, device=device
+            )
             model.to(device).eval()
 
             with torch.no_grad():
-                output_tensor = model(input_tensor.to(device))
+                if isinstance(model, ImageModelDescriptor):
+                    output_tensor = model(input_tensor)
+                else:
+                    mask = torch.rand(1, 1, height, width, device=device).round_()
+                    output_tensor = model(input_tensor, mask)
 
             expected_shape = (
                 1,
@@ -603,6 +607,7 @@ def assert_size_requirements(
                 output_tensor.shape == expected_shape
             ), f"Expected {expected_shape}, but got {output_tensor.shape}"
         except Exception as e:
+            print(str(e))
             raise AssertionError(
                 f"Failed size requirement test for {width=} {height=}"
             ) from e
