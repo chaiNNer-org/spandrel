@@ -386,7 +386,7 @@ class UpCunet4x(nn.Module):
         self.unet1 = UNet1(in_channels, 64, deconv=True)
         self.unet2 = UNet2(64, 64, deconv=False)
         self.ps = nn.PixelShuffle(2)
-        self.conv_final = nn.Conv2d(64, 12, 3, 1, padding=0, bias=True)
+        self.conv_final = nn.Conv2d(64, 4 * out_channels, 3, 1, padding=0, bias=True)
 
     @property
     def is_pro(self):
@@ -427,10 +427,10 @@ class UpCunet2x_fast(nn.Module):
 
     def __init__(self, *, in_channels=3, out_channels=3):
         super().__init__()
-        self.unet1 = UNet1(12, 64, deconv=True)
+        self.unet1 = UNet1(4 * in_channels, 64, deconv=True)
         self.unet2 = UNet2(64, 64, deconv=False)
         self.ps = nn.PixelShuffle(2)
-        self.conv_final = nn.Conv2d(64, 12, 3, 1, padding=0, bias=True)
+        self.conv_final = nn.Conv2d(64, 4 * out_channels, 3, 1, padding=0, bias=True)
         self.inv = nn.PixelUnshuffle(2)
 
     def forward(self, x: Tensor):
