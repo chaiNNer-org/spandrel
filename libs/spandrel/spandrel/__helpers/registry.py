@@ -111,32 +111,45 @@ class ArchRegistry:
         else:
             raise ValueError(f"Invalid order: {order}")
 
-    def add(self, *architectures: ArchSupport):
+    def add(
+        self,
+        *architectures: ArchSupport,
+        ignore_duplicates: bool = False,
+    ) -> list[ArchSupport]:
         """
         Adds the given architectures to the registry.
 
-        Throws an error if an architecture with the same ID already exists.
+        Throws an error if an architecture with the same ID already exists,
+        unless `ignore_duplicates` is True, in which case the old architecture is retained.
+
         Throws an error if a circular dependency of `before` references is detected.
 
         If an error is thrown, the registry is left unchanged.
+
+        Returns a list of architectures that were added.
         """
 
         new_architectures = list(self._architectures)
         new_by_id = dict(self._by_id)
+        added = []
         for arch in architectures:
             if arch.architecture.id in new_by_id:
+                if ignore_duplicates:
+                    continue
                 raise DuplicateArchitectureError(
                     f"Duplicate architecture: {arch.architecture.id}"
                 )
 
             new_architectures.append(arch)
             new_by_id[arch.architecture.id] = arch
+            added.append(arch)
 
         new_ordered = ArchRegistry._get_ordered(new_architectures)
 
         self._architectures = new_architectures
         self._ordered = new_ordered
         self._by_id = new_by_id
+        return added
 
     @staticmethod
     def _get_ordered(architectures: list[ArchSupport]) -> list[ArchSupport]:
