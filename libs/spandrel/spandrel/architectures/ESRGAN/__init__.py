@@ -233,3 +233,6 @@ class ESRGANArch(Architecture[ESRGAN]):
                 multiple_of=4 if shuffle_factor else 1,
             ),
         )
+
+
+__all__ = ["ESRGANArch", "ESRGAN"]

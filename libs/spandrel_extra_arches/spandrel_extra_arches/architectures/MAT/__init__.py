@@ -48,3 +48,6 @@ class MATArch(Architecture[MAT]):
                 minimum=512, multiple_of=512, square=True
             ),
         )
+
+
+__all__ = ["MATArch", "MAT"]

@@ -99,3 +99,6 @@ class DRUNetArch(Architecture[DRUNet]):
             size_requirements=SizeRequirements(multiple_of=8),
             call_fn=call,
         )
+
+
+__all__ = ["DRUNetArch", "DRUNet"]

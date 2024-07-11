@@ -191,3 +191,6 @@ class DDColorArch(Architecture[DDColor]):
             tiling=ModelTiling.INTERNAL,
             call_fn=_call,
         )
+
+
+__all__ = ["DDColorArch", "DDColor"]

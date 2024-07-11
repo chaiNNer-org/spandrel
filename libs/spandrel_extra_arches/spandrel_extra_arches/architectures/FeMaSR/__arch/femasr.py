@@ -12,14 +12,14 @@ from .fema_utils import CombineQuantBlock, ResBlock
 
 class VectorQuantizer(nn.Module):
     """
-    see https://github.com/MishaLaskin/vqvae/blob/d761a999e2267766400dc646d82d3ac3657771d4/models/quantizer.py
-    ____________________________________________
     Discretization bottleneck part of the VQ-VAE.
-    Inputs:
-    - n_e : number of embeddings
-    - e_dim : dimension of embedding
-    - beta : commitment cost used in loss term, beta * ||z_e(x)-sg[e]||^2
-    _____________________________________________
+
+    see https://github.com/MishaLaskin/vqvae/blob/d761a999e2267766400dc646d82d3ac3657771d4/models/quantizer.py
+
+    Args:
+        n_e : number of embeddings
+        e_dim : dimension of embedding
+        beta : commitment cost used in loss term, beta * ||z_e(x)-sg[e]||^2
     """
 
     def __init__(self, n_e, e_dim):
@@ -36,7 +36,7 @@ class VectorQuantizer(nn.Module):
             - 2 * torch.matmul(x, y.t())
         )
 
-    def forward(self, z):
+    def forward(self, z: torch.Tensor):
         """
         Args:
             z: input features to be quantized, z (continuous) -> z_q (discrete)

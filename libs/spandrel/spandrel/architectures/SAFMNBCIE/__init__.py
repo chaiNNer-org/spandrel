@@ -81,3 +81,6 @@ class SAFMNBCIEArch(Architecture[SAFMNBCIE]):
             output_channels=3,  # hard-coded in the arch
             size_requirements=SizeRequirements(multiple_of=16),
         )
+
+
+__all__ = ["SAFMNBCIEArch", "SAFMNBCIE"]

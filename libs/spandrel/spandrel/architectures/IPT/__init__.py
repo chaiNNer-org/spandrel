@@ -152,3 +152,6 @@ class IPTArch(Architecture[IPT]):
             size_requirements=SizeRequirements(minimum=patch_size),
             call_fn=call,
         )
+
+
+__all__ = ["IPTArch", "IPT"]

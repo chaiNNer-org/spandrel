@@ -881,9 +881,10 @@ class UpsampleOneStep(nn.Sequential):
 
 @store_hyperparameters()
 class ATD(nn.Module):
-    r"""ATD
-        A PyTorch impl of : `Transcending the Limit of Local Window: Advanced Super-Resolution Transformer
-                             with Adaptive Token Dictionary`.
+    r"""
+    ATD
+
+    A PyTorch impl of : `Transcending the Limit of Local Window: Advanced Super-Resolution Transformer with Adaptive Token Dictionary`.
 
     Args:
         img_size (int | tuple(int)): Input image size. Default 64

@@ -359,3 +359,6 @@ class GRLArch(Architecture[GRL]):
             input_channels=in_channels,
             output_channels=out_channels,
         )
+
+
+__all__ = ["GRLArch", "GRL"]

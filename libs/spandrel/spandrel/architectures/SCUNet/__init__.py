@@ -63,3 +63,6 @@ class SCUNetArch(Architecture[SCUNet]):
             size_requirements=SizeRequirements(minimum=40),
             tiling=ModelTiling.DISCOURAGED,
         )
+
+
+__all__ = ["SCUNetArch", "SCUNet"]

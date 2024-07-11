@@ -177,3 +177,6 @@ class DATArch(Architecture[DAT]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["DATArch", "DAT"]

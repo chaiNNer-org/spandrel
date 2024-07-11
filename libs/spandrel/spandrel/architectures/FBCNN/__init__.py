@@ -79,3 +79,6 @@ class FBCNNArch(Architecture[FBCNN]):
             output_channels=out_nc,
             call_fn=lambda model, image: model(image)[0],
         )
+
+
+__all__ = ["FBCNNArch", "FBCNN"]

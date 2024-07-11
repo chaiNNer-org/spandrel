@@ -112,3 +112,6 @@ class MixDehazeNetArch(Architecture[MixDehazeNet]):
             tiling=ModelTiling.DISCOURAGED,
             call_fn=lambda model, image: model(image) * 0.5 + 0.5,
         )
+
+
+__all__ = ["MixDehazeNetArch", "MixDehazeNet"]

@@ -141,3 +141,6 @@ class UformerArch(Architecture[Uformer]):
             output_channels=dd_in,
             size_requirements=SizeRequirements(multiple_of=128, square=True),
         )
+
+
+__all__ = ["UformerArch", "Uformer"]

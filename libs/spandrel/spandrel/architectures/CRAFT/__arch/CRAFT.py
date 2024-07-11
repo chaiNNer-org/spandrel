@@ -103,8 +103,10 @@ class DynamicPosBias(nn.Module):
 
 
 class Attention_regular(nn.Module):
-    """Regular Rectangle-Window (regular-Rwin) self-attention with dynamic relative position bias.
+    """
+    Regular Rectangle-Window (regular-Rwin) self-attention with dynamic relative position bias.
     It supports both of shifted and non-shifted window.
+
     Args:
         dim (int): Number of input channels.
         resolution (int): Input resolution.

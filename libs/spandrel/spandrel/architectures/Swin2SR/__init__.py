@@ -184,3 +184,6 @@ class Swin2SRArch(Architecture[Swin2SR]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["Swin2SRArch", "Swin2SR"]

@@ -152,3 +152,6 @@ class FeMaSRArch(Architecture[FeMaSR]):
             output_channels=in_channel,
             size_requirements=SizeRequirements(multiple_of=multiple_of),
         )
+
+
+__all__ = ["FeMaSRArch", "FeMaSR"]

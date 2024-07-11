@@ -189,3 +189,6 @@ class SwinIRArch(Architecture[SwinIR]):
             output_channels=out_nc,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["SwinIRArch", "SwinIR"]

@@ -92,3 +92,6 @@ class HVICIDNetArch(Architecture[HVICIDNet]):
             size_requirements=SizeRequirements(multiple_of=8),
             tiling=ModelTiling.DISCOURAGED,
         )
+
+
+__all__ = ["HVICIDNetArch", "HVICIDNet"]

@@ -53,3 +53,6 @@ class LaMaArch(Architecture[LaMa]):
             output_channels=out_nc,
             size_requirements=SizeRequirements(minimum=16, multiple_of=8),
         )
+
+
+__all__ = ["LaMaArch", "LaMa"]

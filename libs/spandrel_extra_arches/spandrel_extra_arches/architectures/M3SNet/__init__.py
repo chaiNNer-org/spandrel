@@ -97,3 +97,6 @@ class M3SNetArch(Architecture[M3SNet]):
             output_channels=img_channel,
             size_requirements=SizeRequirements(multiple_of=16),
         )
+
+
+__all__ = ["M3SNetArch", "M3SNet"]

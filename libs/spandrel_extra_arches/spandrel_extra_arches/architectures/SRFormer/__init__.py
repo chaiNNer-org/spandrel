@@ -182,3 +182,6 @@ class SRFormerArch(Architecture[SRFormer]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["SRFormerArch", "SRFormer"]

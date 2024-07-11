@@ -169,3 +169,6 @@ class RGTArch(Architecture[RGT]):
             output_channels=in_chans,
             size_requirements=SizeRequirements(minimum=16),
         )
+
+
+__all__ = ["RGTArch", "RGT"]

@@ -125,3 +125,6 @@ class DnCNNArch(Architecture[DnCNN]):
             size_requirements=SizeRequirements(),
             call_fn=call,
         )
+
+
+__all__ = ["DnCNNArch", "DnCNN"]
