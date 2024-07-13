@@ -33,6 +33,7 @@ from ..architectures import (
     RestoreFormer,
     RetinexFormer,
     SCUNet,
+    SeemoRe,
     SwiftSRGAN,
     Swin2SR,
     SwinIR,
@@ -84,4 +85,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(PLKSR.PLKSRArch()),
     ArchSupport.from_architecture(RetinexFormer.RetinexFormerArch()),
     ArchSupport.from_architecture(HVICIDNet.HVICIDNetArch()),
+    ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
 )
