@@ -15,8 +15,9 @@ class MATArch(Architecture[MAT]):
     def __init__(self) -> None:
         super().__init__(
             id="MAT",
-            detect=KeyCondition.has_all(
+            detect=KeyCondition.has_any(
                 "synthesis.first_stage.conv_first.conv.resample_filter",
+                "model.synthesis.first_stage.conv_first.conv.resample_filter",
             ),
         )
 
@@ -25,12 +26,12 @@ class MATArch(Architecture[MAT]):
         in_nc = 3
         out_nc = 3
 
-        state = {
-            k.replace("synthesis", "model.synthesis").replace(
-                "mapping", "model.mapping"
-            ): v
-            for k, v in state_dict.items()
-        }
+        def map_key(k: str) -> str:
+            if k.startswith(("synthesis.", "mapping.")):
+                return "model." + k
+            return k
+
+        state = {map_key(k): v for k, v in state_dict.items()}
 
         model = MAT()
 
