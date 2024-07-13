@@ -393,7 +393,7 @@ def assert_training(
     optimizer = torch.optim.AdamW(model.parameters())
     loss_fn = torch.nn.L1Loss()
 
-    output = model(lq)
+    output = model_desc._call_fn(model, lq)  # type: ignore
     assert output.shape == gt.shape, f"Expected {gt.shape}, but got {output.shape}"
     assert not contains_nan(output), "NaN detected in model output"
 

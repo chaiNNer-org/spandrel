@@ -84,7 +84,6 @@ def test_size_requirements():
 
 
 def test_train():
-    # TODO: fix training
     assert_training(MMRealSRArch(), MMRealSR(num_in_ch=3, num_out_ch=3))
 
 

@@ -21,7 +21,6 @@ def test_load():
 
 
 def test_train():
-    # TODO: fix training
     assert_training(GFPGANArch(), GFPGAN())
 
 
