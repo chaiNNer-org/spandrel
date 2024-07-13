@@ -1,8 +1,21 @@
-from spandrel_extra_arches.architectures.MAT import MAT
+from spandrel_extra_arches.architectures.MAT import MAT, MATArch
 
-from .util import ModelFile, disallowed_props, skip_if_unchanged
+from .util import (
+    ModelFile,
+    assert_loads_correctly,
+    disallowed_props,
+    skip_if_unchanged,
+)
 
 skip_if_unchanged(__file__)
+
+
+def test_load():
+    assert_loads_correctly(
+        MATArch(),
+        lambda: MAT(),
+        check_safe_tensors=False,
+    )
 
 
 def test_MAT(snapshot):
