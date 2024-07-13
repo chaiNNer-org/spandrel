@@ -26,7 +26,7 @@ import pytest
 import requests
 import safetensors.torch
 import torch
-import torch.nn.functional as F
+import torch.nn.functional as F  # noqa: N812
 from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
