@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -37,6 +38,11 @@ def test_size_requirements():
         "https://github.com/Phhofm/models/releases/download/4xRealWebPhoto_v4_drct-l/4xRealWebPhoto_v4_drct-l.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(DRCTArch(), DRCT())
 
 
 def test_community_model(snapshot):

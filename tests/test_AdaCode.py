@@ -7,6 +7,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     skip_if_unchanged,
 )
 
@@ -48,6 +49,11 @@ def test_size_requirements():
         "https://github.com/kechunl/AdaCode/releases/download/v0-pretrain_models/AdaCode_SR_X4_model_g.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(AdaCodeArch(), AdaCode())
 
 
 def test_AdaCode_SR_X2_model_g(snapshot):

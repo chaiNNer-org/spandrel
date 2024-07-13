@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -35,6 +36,11 @@ def test_size_requirements():
         name="MPRNet_model_deblurring.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(MPRNetArch(), MPRNet())
 
 
 def test_deblurring(snapshot):

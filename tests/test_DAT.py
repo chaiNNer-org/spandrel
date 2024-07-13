@@ -7,6 +7,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -46,6 +47,10 @@ def test_size_requirements():
         "https://github.com/OpenModelDB/model-hub/releases/download/dat/4x-DAT_S.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(DATArch(), DAT(), batch_size=2)
 
 
 def test_DAT_S_x4(snapshot):

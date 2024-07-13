@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -27,6 +28,10 @@ def test_size_requirements():
         "https://github.com/cszn/KAIR/releases/download/v1.0/dncnn_color_blind.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(DnCNNArch(), DnCNN())
 
 
 def test_dncnn_color_blind(snapshot):

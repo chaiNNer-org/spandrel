@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -33,6 +34,10 @@ def test_size_requirements():
         "https://github.com/cszn/KAIR/releases/download/v1.0/drunet_color.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(DRUNetArch(), DRUNet())
 
 
 def test_drunet_color(snapshot):

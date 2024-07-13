@@ -5,6 +5,7 @@ from .util import (
     ModelFile,
     TestImage,
     assert_image_inference,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -17,6 +18,11 @@ def test_load():
         GFPGANArch(),
         lambda: GFPGAN(),
     )
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(GFPGANArch(), GFPGAN())
 
 
 def test_GFPGAN_1_2(snapshot):

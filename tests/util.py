@@ -26,6 +26,7 @@ import pytest
 import requests
 import safetensors.torch
 import torch
+import torch.nn.functional as F
 from bs4 import BeautifulSoup, Tag
 from syrupy.filters import props
 
@@ -360,6 +361,59 @@ def assert_image_inference(
 
 
 T = TypeVar("T", bound=torch.nn.Module)
+
+
+def assert_training(
+    arch: Architecture[T],
+    model: T,
+    *,
+    batch_size: int = 1,
+    input_size: tuple[int, int] | None = None,
+):
+    # idea taken from traiNNer-redux
+    # https://github.com/the-database/traiNNer-redux/blob/534726a527d88ff8214ff8bb4b4304a84feb8685/tests/test_archs/test_archs.py#L152
+    model_desc = arch.load(model.state_dict())
+    assert isinstance(model_desc, ImageModelDescriptor)
+
+    def contains_nan(t: torch.Tensor) -> bool:
+        return bool(torch.isnan(t).any().item())
+
+    device = get_test_device()
+    model.to(device).train()
+
+    if input_size is None:
+        size_req = model_desc.size_requirements
+        size = max(size_req.minimum, 32)
+        input_size = (size, size)
+
+    lq_w, lq_h = input_size
+    lq = torch.rand(batch_size, model_desc.input_channels, lq_h, lq_w, device=device)
+    gt = F.interpolate(lq, scale_factor=model_desc.scale)
+
+    optimizer = torch.optim.AdamW(model.parameters())
+    loss_fn = torch.nn.L1Loss()
+
+    output = model(lq)
+    assert output.shape == gt.shape, f"Expected {gt.shape}, but got {output.shape}"
+    assert not contains_nan(output), "NaN detected in model output"
+
+    l_g_l1 = loss_fn(output, gt)
+    assert not contains_nan(l_g_l1), "NaN detected in loss"
+
+    l_g_l1.backward()
+
+    for param in model.parameters():
+        if param.grad is not None:
+            assert not contains_nan(
+                param.grad
+            ), f"NaN detected in gradients of parameter {param}"
+
+    optimizer.step()
+
+    for param in model.parameters():
+        assert not contains_nan(
+            param
+        ), f"NaN detected in parameter {param} after optimizer step"
 
 
 def _get_diff(a: Mapping[str, object], b: Mapping[str, object]) -> str | None:
