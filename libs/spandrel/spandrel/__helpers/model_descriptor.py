@@ -445,8 +445,7 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
     def purpose(self) -> Literal["SR", "FaceSR", "Restoration"]:
         return self._purpose
 
-    @torch.inference_mode()
-    def __call__(self, image: Tensor) -> Tensor:
+    def __call__(self, image: Tensor, is_training: bool = False) -> Tensor:
         """
         Takes a single image tensor as input and returns a single image tensor as output.
 
@@ -455,6 +454,8 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         The output tensor will be a 4D tensor with shape `(1, output_channels, H*scale, W*scale)`. The data type and device of the output tensor will be the same as the `image` tensor. The range of the output tensor will be ``[0, 1]``.
 
         If the width and height of the `image` tensor do not satisfy the `size_requirements` of the model, then the `image` tensor will be padded to satisfy the requirements. The additional padding will be removed from the output tensor before returning it. If the image already satisfies the requirements, then no padding will be added.
+
+        If using the call API while training a model, set `is_training` to `True`.
         """
         if len(image.shape) != 4:
             raise ValueError(
@@ -467,11 +468,15 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
         did_pad, image = pad_tensor(image, self.size_requirements)
 
         # Optimize for inference
-        if self.model.training:
+        if not is_training and self.model.training:
             self.model.eval()
 
         # call model
-        output = self._call_fn(self.model, image)
+        if is_training:
+            output = self._call_fn(self.model, image)
+        else:
+            with torch.no_grad():
+                output = self._call_fn(self.model, image)
         assert isinstance(
             output, Tensor
         ), f"Expected {type(self.model).__name__} model to return a tensor, but got {type(output)}"
