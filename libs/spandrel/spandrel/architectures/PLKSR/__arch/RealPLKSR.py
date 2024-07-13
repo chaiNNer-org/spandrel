@@ -122,9 +122,6 @@ class RealPLKSR(nn.Module):
         in_ch: int = 3
         out_ch: int = 3
 
-        self.dysample = dysample
-        self.upscaling_factor = upscaling_factor
-
         if not self.training:
             dropout = 0
 
@@ -144,8 +141,8 @@ class RealPLKSR(nn.Module):
             torch.repeat_interleave, repeats=upscaling_factor**2, dim=1
         )
 
-        if dysample and upscaling_factor != 1:
-            groups = out_ch if 3 * upscaling_factor**2 < 4 else 4
+        if dysample:
+            groups = out_ch if upscaling_factor % 2 != 0 else 4
             self.to_img = DySample(
                 in_ch * upscaling_factor**2,
                 out_ch,
@@ -158,6 +155,4 @@ class RealPLKSR(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.feats(x) + self.repeat_op(x)
-        if not self.dysample or (self.dysample and self.upscaling_factor != 1):
-            x = self.to_img(x)
-        return x
+        return self.to_img(x)
