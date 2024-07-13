@@ -38,7 +38,6 @@ def test_size_requirements():
 
 
 def test_train():
-    # TODO: fix training
     assert_training(RestoreFormerArch(), RestoreFormer())
 
 
