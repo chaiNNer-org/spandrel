@@ -159,4 +159,4 @@ class RealPLKSR(nn.Module):
         x = self.feats(x) + self.repeat_op(x)
         if not self.dysample or (self.dysample and self.upscale != 1):
             x = self.to_img(x)
-        return self.to_img(x)
+        return x
