@@ -119,6 +119,10 @@ class PLKSRArch(Architecture[_PLKSR]):
             kernel_size = state_dict["feats.1.lk.conv.weight"].shape[2]
             split_ratio = state_dict["feats.1.lk.conv.weight"].shape[0] / dim
 
+            use_dysample = "to_img.init_pos" in state_dict
+            if use_dysample:
+                more_tags.append("DySample")
+
             model = RealPLKSR(
                 dim=dim,
                 upscaling_factor=scale,
@@ -127,6 +131,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 split_ratio=split_ratio,
                 use_ea=use_ea,
                 norm_groups=4,  # un-detectable
+                dysample=use_dysample,
             )
         else:
             raise ValueError("Unknown model type")

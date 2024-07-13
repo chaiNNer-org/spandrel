@@ -51,6 +51,7 @@ def test_load():
         lambda: RealPLKSR(split_ratio=0.5),
         lambda: RealPLKSR(split_ratio=0.75),
         lambda: RealPLKSR(use_ea=False),
+        lambda: RealPLKSR(dysample=True),
     )
 
 
@@ -147,6 +148,21 @@ def test_RealPLKSR_2x(snapshot):
     file = ModelFile.from_url(
         "https://drive.google.com/file/d/1GAdf5VOqYa5ntswT9sYsKKZ2Z7OQp7gO/view",
         name="2x_realplksr_mssim_pretrain.pth",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, RealPLKSR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_RealPLKSR_DySample(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/Phhofm/models/releases/download/4xHFA2k_ludvae_realplksr_dysample/4xHFA2k_ludvae_realplksr_dysample.pth",
+        name="4xHFA2k_ludvae_realplksr_dysample.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
