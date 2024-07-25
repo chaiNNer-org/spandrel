@@ -163,6 +163,8 @@ As you may know, loading `.pth` files [poses a security risk](https://github.com
 Here are some cool projects that use Spandrel:
 
 - [AUTOMATIC1111's SD WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+- [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- [InvokeAI](https://github.com/invoke-ai/InvokeAI)
 - [chaiNNer](https://github.com/chaiNNer-org/chaiNNer)
 - [imaginAIry](https://github.com/brycedrennan/imaginAIry)
 - [dgenerate](https://github.com/Teriks/dgenerate)
