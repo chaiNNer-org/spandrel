@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -34,6 +35,10 @@ def test_size_requirements():
         name="IPT_denoise50.pth",
     )
     assert_size_requirements(file.load_model(), max_candidates=4)
+
+
+def test_train():
+    assert_training(IPTArch(), IPT())
 
 
 def test_IPT_denoise50(snapshot):

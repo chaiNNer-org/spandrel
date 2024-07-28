@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -133,6 +134,10 @@ def test_size_requirements():
         "https://github.com/ofsoundof/GRL-Image-Restoration/releases/download/v1.0.0/sr_grl_tiny_c3x4.ckpt"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(GRLArch(), GRL())
 
 
 # def test_GRL_dn_grl_tiny_c1(snapshot):

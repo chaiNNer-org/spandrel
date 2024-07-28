@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -32,6 +33,11 @@ def test_size_requirements():
         "https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(SwinIRArch(), SwinIR())
 
 
 def test_SwinIR_M_s64w8_2x(snapshot):

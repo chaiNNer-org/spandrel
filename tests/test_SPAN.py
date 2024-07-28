@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -35,6 +36,10 @@ def test_size_requirements():
         "https://github.com/OpenModelDB/model-hub/releases/download/span/4x-spanx4_ch48.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(SPANArch(), SPAN(num_in_ch=3, num_out_ch=3))
 
 
 def test_SPAN_x4_ch48(snapshot):

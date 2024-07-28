@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -30,6 +31,10 @@ def test_size_requirements():
         name="fftformer_GoPro.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(FFTformerArch(), FFTformer())
 
 
 def test_fftformer_GoPro(snapshot):
