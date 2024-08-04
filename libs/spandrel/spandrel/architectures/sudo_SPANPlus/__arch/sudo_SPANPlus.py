@@ -193,8 +193,9 @@ class Attention(nn.Module):
 
 
 class DynamicConvolution(TempModule):
-    def __init__(self,K,in_planes,out_planes,kernel_size,stride,padding=0,dilation=1,grounps=1,bias=True,temprature=30,ratio=4,init_weight=True):
+    def __init__(self,K,grounps,in_planes,out_planes,kernel_size,stride=1,padding=0,dilation=1,ratio=2,bias=True,temprature=30,init_weight=True):
         super().__init__()
+        # k = number of kernels
         self.in_planes=in_planes
         self.out_planes=out_planes
         self.kernel_size=kernel_size
@@ -420,7 +421,7 @@ class sudo_SPANPlus(nn.Module):
 
     def __init__(
         self,
-        num_in_ch: int = 3,
+        num_in_ch: int = 12,
         num_out_ch: int = 3,
         blocks: list = [4],
         feature_channels: int = 64,
@@ -442,18 +443,18 @@ class sudo_SPANPlus(nn.Module):
         self.dynamic_prio = DynamicConvolution(
             3,
             1,
-            in_channels=feature_channels,
-            out_channels=feature_channels,
+            in_planes=feature_channels,
+            out_planes=feature_channels,
             kernel_size=3,
             padding=1,
             bias=True,
         )
-        self.upsampler = DySample(feature_channels, feature_channels, upscale)
+        self.upsampler = DySample(feature_channels, feature_channels, self.upscale*2)
         self.dynamic = DynamicConvolution(
             3,
             1,
-            in_channels=feature_channels,
-            out_channels=num_out_ch,
+            in_planes=feature_channels,
+            out_planes=num_out_ch,
             kernel_size=3,
             padding=1,
             bias=True,
@@ -473,4 +474,3 @@ class sudo_SPANPlus(nn.Module):
         out = self.upsampler(out)
         out = self.dynamic(out)
         return out[:, :, : h * self.upscale, : w * self.upscale]
-
