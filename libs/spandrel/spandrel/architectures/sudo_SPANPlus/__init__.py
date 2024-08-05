@@ -19,6 +19,7 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
                 "upsampler.end_conv.weight",
             ),
         )
+
     @override
     def load(self, state_dict: StateDict) -> ImageModelDescriptor[sudo_SPANPlus]:
         # default values
@@ -29,20 +30,22 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
         upscale: int = 2
         drop_rate: float = 0.0
 
-        num_in_ch = state_dict['feats.0.sk.weight'].shape[1]
+        num_in_ch = 3
         num_out_ch = 3
         blocks = [4]
-        feature_channels = state_dict['feats.0.conv.2.weight'].shape[0]
+        # feature_channels = state_dict["feats.0.conv.2.weight"].shape[0]
         upscale = 2
         drop_rate = 0.0
-        upscale, num_out_ch = get_scale_and_output_channels(
+        """upscale, num_out_ch = get_scale_and_output_channels(
             state_dict["upsampler.end_conv.weight"].shape[0],
             num_in_ch,
-        )
+        )"""
+        upscale = 2
+        num_out_ch = 3
 
         model = sudo_SPANPlus(
-            num_in_ch = num_in_ch,
-            num_out_ch= num_out_ch,
+            num_in_ch=num_in_ch,
+            num_out_ch=num_out_ch,
             blocks=blocks,
             feature_channels=feature_channels,
             upscale=upscale,
@@ -60,5 +63,7 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
             scale=upscale,  # TODO: fix me
             input_channels=num_in_ch,  # TODO: fix me
             output_channels=num_out_ch,  # TODO: fix me
-    )
+        )
+
+
 __all__ = ["sudo_SPANPlusArch", "sudo_SPANPlus"]

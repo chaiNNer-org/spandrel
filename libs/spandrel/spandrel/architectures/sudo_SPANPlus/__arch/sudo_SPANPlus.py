@@ -1,58 +1,72 @@
 # type: ignore  # noqa: PGH003
-import itertools
-import math
-from collections.abc import Iterable
-from typing import TypeVar
-
 import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.nn.init import trunc_normal_
-from torch.nn.modules.utils import _pair
+
+upscale = 2
+
 
 """
 28-Sep-21
-https://github.com/xmu-xiaoma666/External-Attention-pytorch/blob/df156f569a4b0c658209fb67244629b879861034/model/conv/DynamicConv.py#L40
+https://github.com/TArdelean/DynamicConvolution/blob/master/dynamic_convolutions.py
+https://github.com/TArdelean/DynamicConvolution/blob/master/models/common.py
 """
 
+import itertools
+import math
+from collections.abc import Iterable
+from typing import (
+    TypeVar,
+)
+
+from torch.nn import *
+from torch.nn import init
+from torch.nn.modules.utils import _pair
+
+T = TypeVar("T", bound=Module)
 
 
-T = TypeVar("T", bound=nn.Module)
 def normal_init(module, mean=0, std=1.0, bias=0):
-    if hasattr(module, 'weight') and module.weight is not None:
+    if hasattr(module, "weight") and module.weight is not None:
         trunc_normal_(module.weight, mean, std)
-    if hasattr(module, 'bias') and module.bias is not None:
+    if hasattr(module, "bias") and module.bias is not None:
         nn.init.constant_(module.bias, bias)
 
 
 def constant_init(module, val, bias=0):
-    if hasattr(module, 'weight') and module.weight is not None:
+    if hasattr(module, "weight") and module.weight is not None:
         nn.init.constant_(module.weight, val)
-    if hasattr(module, 'bias') and module.bias is not None:
+    if hasattr(module, "bias") and module.bias is not None:
         nn.init.constant_(module.bias, bias)
+
 
 class DySample(nn.Module):
     def __init__(self, in_channels: int, out_ch: int, scale: int = 2, groups: int = 4):
         super().__init__()
 
         assert in_channels >= groups and in_channels % groups == 0
-        out_channels = 2 * groups * scale ** 2
+        out_channels = 2 * groups * scale**2
 
         self.scale = scale
         self.groups = groups
         self.end_conv = nn.Conv2d(in_channels, out_ch, kernel_size=1)
         self.offset = nn.Conv2d(in_channels, out_channels, 1)
         self.scope = nn.Conv2d(in_channels, out_channels, 1, bias=False)
-        self.register_buffer('init_pos', self._init_pos())
+        self.register_buffer("init_pos", self._init_pos())
 
         normal_init(self.end_conv, std=0.001)
         normal_init(self.offset, std=0.001)
-        constant_init(self.scope, val=0.)
+        constant_init(self.scope, val=0.0)
 
     def _init_pos(self):
         h = torch.arange((-self.scale + 1) / 2, (self.scale - 1) / 2 + 1) / self.scale
-        return (torch.stack(torch.meshgrid([h, h], indexing="ij")).transpose(1, 2)
-                .repeat(1, self.groups, 1).reshape(1, -1, 1, 1))
+        return (
+            torch.stack(torch.meshgrid([h, h], indexing="ij"))
+            .transpose(1, 2)
+            .repeat(1, self.groups, 1)
+            .reshape(1, -1, 1, 1)
+        )
 
     def forward(self, x):
         offset = self.offset(x) * self.scope(x).sigmoid() * 0.5 + self.init_pos
@@ -60,17 +74,34 @@ class DySample(nn.Module):
         offset = offset.view(B, 2, -1, H, W)
         coords_h = torch.arange(H) + 0.5
         coords_w = torch.arange(W) + 0.5
-        coords = torch.stack(torch.meshgrid([coords_w, coords_h], indexing="ij")
-                             ).transpose(1, 2).unsqueeze(1).unsqueeze(0).type(x.dtype).to(x.device)
-        normalizer = torch.tensor([W, H], dtype=x.dtype, device=x.device).view(1, 2, 1, 1, 1)
+        coords = (
+            torch.stack(torch.meshgrid([coords_w, coords_h], indexing="ij"))
+            .transpose(1, 2)
+            .unsqueeze(1)
+            .unsqueeze(0)
+            .type(x.dtype)
+            .to(x.device)
+        )
+        normalizer = torch.tensor([W, H], dtype=x.dtype, device=x.device).view(
+            1, 2, 1, 1, 1
+        )
         coords = 2 * (coords + offset) / normalizer - 1
-        coords = F.pixel_shuffle(coords.reshape(B, -1, H, W), self.scale).view(
-            B, 2, -1, self.scale * H, self.scale * W).permute(0, 2, 3, 4, 1).contiguous().flatten(0, 1)
-        return self.end_conv(F.grid_sample(x.reshape(B * self.groups, -1, H, W),
-                                            coords, mode='bilinear',
-                                            align_corners=False,
-                                            padding_mode="border")
-                              .view(B, -1, self.scale * H, self.scale * W))
+        coords = (
+            F.pixel_shuffle(coords.reshape(B, -1, H, W), self.scale)
+            .view(B, 2, -1, self.scale * H, self.scale * W)
+            .permute(0, 2, 3, 4, 1)
+            .contiguous()
+            .flatten(0, 1)
+        )
+        return self.end_conv(
+            F.grid_sample(
+                x.reshape(B * self.groups, -1, H, W),
+                coords,
+                mode="bilinear",
+                align_corners=False,
+                padding_mode="border",
+            ).view(B, -1, self.scale * H, self.scale * W)
+        )
 
 
 class Conv2dWrapper(nn.Conv2d):
@@ -156,87 +187,117 @@ class SmoothNLLLoss(nn.Module):
         return torch.mean(torch.sum(-smooth_target * prediction, dim=self.dim))
 
 
-class Attention(nn.Module):
-    def __init__(self,in_planes,ratio,K,temprature=30,init_weight=True):
+class AttentionLayer(nn.Module):
+    def __init__(self, c_dim, hidden_dim, nof_kernels):
         super().__init__()
-        self.avgpool=nn.AdaptiveAvgPool2d(1)
-        self.temprature=temprature
-        assert in_planes>ratio
-        hidden_planes=in_planes//ratio
-        self.net=nn.Sequential(
-            nn.Conv2d(in_planes,hidden_planes,kernel_size=1,bias=False),
-            nn.ReLU(),
-            nn.Conv2d(hidden_planes,K,kernel_size=1,bias=False)
+        self.global_pooling = nn.Sequential(nn.AdaptiveAvgPool2d(1), nn.Flatten())
+        self.to_scores = nn.Sequential(
+            nn.Linear(c_dim, hidden_dim),
+            nn.ReLU(inplace=True),
+            nn.Linear(hidden_dim, nof_kernels),
         )
 
-        if(init_weight):
-            self._initialize_weights()
-
-    def update_temprature(self):
-        if(self.temprature>1):
-            self.temprature-=1
-
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
-            if isinstance(m ,nn.BatchNorm2d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-
-    def forward(self,x):
-        att=self.avgpool(x) #bs,dim,1,1
-        att=self.net(att).view(x.shape[0],-1) #bs,K
-        return F.softmax(att/self.temprature,-1)
+    def forward(self, x, temperature=1):
+        out = self.global_pooling(x)
+        scores = self.to_scores(out)
+        return F.softmax(scores / temperature, dim=-1)
 
 
 class DynamicConvolution(TempModule):
-    def __init__(self,K,grounps,in_planes,out_planes,kernel_size,stride=1,padding=0,dilation=1,ratio=2,bias=True,temprature=30,init_weight=True):
+    def __init__(
+        self,
+        nof_kernels,
+        reduce,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        dilation=1,
+        groups=1,
+        bias=True,
+    ):
+        """
+        Implementation of Dynamic convolution layer
+        :param in_channels: number of input channels.
+        :param out_channels: number of output channels.
+        :param kernel_size: size of the kernel.
+        :param groups: controls the connections between inputs and outputs.
+        in_channels and out_channels must both be divisible by groups.
+        :param nof_kernels: number of kernels to use.
+        :param reduce: Refers to the size of the hidden layer in attention: hidden = in_channels // reduce
+        :param bias: If True, convolutions also have a learnable bias
+        """
         super().__init__()
-        # k = number of kernels
-        self.in_planes=in_planes
-        self.out_planes=out_planes
-        self.kernel_size=kernel_size
-        self.stride=stride
-        self.padding=padding
-        self.dilation=dilation
-        self.groups=grounps
-        self.bias=bias
-        self.K=K
-        self.init_weight=init_weight
-        self.attention=Attention(in_planes=in_planes,ratio=ratio,K=K,temprature=temprature,init_weight=init_weight)
+        self.in_channels = in_channels
+        self.out_channels = out_channels
 
-        self.weight=nn.Parameter(torch.randn(K,out_planes,in_planes//grounps,kernel_size,kernel_size),requires_grad=True)
-        if(bias):
-            self.bias=nn.Parameter(torch.randn(K,out_planes),requires_grad=True)
+        self.groups = groups
+        self.conv_args = {"stride": stride, "padding": padding, "dilation": dilation}
+        self.nof_kernels = nof_kernels
+        self.attention = AttentionLayer(
+            in_channels, max(1, in_channels // reduce), nof_kernels
+        )
+        self.kernel_size = _pair(kernel_size)
+        self.kernels_weights = nn.Parameter(
+            torch.Tensor(
+                nof_kernels, out_channels, in_channels // self.groups, *self.kernel_size
+            ),
+            requires_grad=True,
+        )
+        if bias:
+            self.kernels_bias = nn.Parameter(
+                torch.Tensor(nof_kernels, out_channels), requires_grad=True
+            )
         else:
-            self.bias=None
-        if(self.init_weight):
-            self._initialize_weights()
+            self.register_parameter("kernels_bias", None)
+        self.initialize_parameters()
 
-        #TODO 初始化
-    def _initialize_weights(self):
-        for i in range(self.K):
-            nn.init.kaiming_uniform_(self.weight[i])
+    def initialize_parameters(self):
+        for i_kernel in range(self.nof_kernels):
+            init.kaiming_uniform_(self.kernels_weights[i_kernel], a=math.sqrt(5))
+        if self.kernels_bias is not None:
+            bound = 1 / math.sqrt(self.kernels_weights[0, 0].numel())
+            nn.init.uniform_(self.kernels_bias, -bound, bound)
 
-    def forward(self,x):
-        bs,in_planels,h,w=x.shape
-        softmax_att=self.attention(x) #bs,K
-        x=x.view(1,-1,h,w)
-        weight=self.weight.view(self.K,-1) #K,-1
-        aggregate_weight=torch.mm(softmax_att,weight).view(bs*self.out_planes,self.in_planes//self.groups,self.kernel_size,self.kernel_size) #bs*out_p,in_p,k,k
+    def forward(self, x, temperature=1):
+        batch_size = x.shape[0]
 
-        if(self.bias is not None):
-            bias=self.bias.view(self.K,-1) #K,out_p
-            aggregate_bias=torch.mm(softmax_att,bias).view(-1) #bs,out_p
-            output=F.conv2d(x,weight=aggregate_weight,bias=aggregate_bias,stride=self.stride,padding=self.padding,groups=self.groups*bs,dilation=self.dilation)
+        alphas = self.attention(x, temperature)
+        agg_weights = torch.sum(
+            torch.mul(
+                self.kernels_weights.unsqueeze(0),
+                alphas.view(batch_size, -1, 1, 1, 1, 1),
+            ),
+            dim=1,
+        )
+        # Group the weights for each batch to conv2 all at once
+        agg_weights = agg_weights.view(
+            -1, *agg_weights.shape[-3:]
+        )  # batch_size*out_c X in_c X kernel_size X kernel_size
+        if self.kernels_bias is not None:
+            agg_bias = torch.sum(
+                torch.mul(
+                    self.kernels_bias.unsqueeze(0), alphas.view(batch_size, -1, 1)
+                ),
+                dim=1,
+            )
+            agg_bias = agg_bias.view(-1)
         else:
-            output=F.conv2d(x,weight=aggregate_weight,bias=None,stride=self.stride,padding=self.padding,groups=self.groups*bs,dilation=self.dilation)
+            agg_bias = None
+        x_grouped = x.view(1, -1, *x.shape[-2:])  # 1 X batch_size*out_c X H X W
 
-        output=output.view(bs,self.out_planes,h,w)
-        return output
+        out = F.conv2d(
+            x_grouped,
+            agg_weights,
+            agg_bias,
+            groups=self.groups * batch_size,
+            **self.conv_args,
+        )  # 1 X batch_size*out_C X H' x W'
+        out = out.view(batch_size, -1, *out.shape[-2:])  # batch_size X out_C X H' x W'
+
+        return out
+
 
 class FlexibleKernelsDynamicConvolution:
     def __init__(self, Base, nof_kernels, reduce):
@@ -259,7 +320,7 @@ class Conv3XC(nn.Module):
     def __init__(
         self, c_in: int, c_out: int, gain: int = 1, s: int = 1, bias: bool = True
     ):
-        super().__init__()
+        super(Conv3XC, self).__init__()
         self.weight_concat = None
         self.bias_concat = None
         self.update_params_flag = False
@@ -365,7 +426,7 @@ class Conv3XC(nn.Module):
 
 class SPAB(nn.Module):
     def __init__(self, in_channels: int, end: bool = False):
-        super().__init__()
+        super(SPAB, self).__init__()
 
         self.in_channels = in_channels
         self.c1_r = Conv3XC(in_channels, in_channels, gain=2, s=1)
@@ -393,7 +454,7 @@ class SPAB(nn.Module):
 
 class SPABS(nn.Module):
     def __init__(self, feature_channels: int, n_blocks: int = 4, drop: float = 0.0):
-        super().__init__()
+        super(SPABS, self).__init__()
         self.block_1 = SPAB(feature_channels)
 
         self.block_n = nn.Sequential(*[SPAB(feature_channels) for _ in range(n_blocks)])
@@ -421,17 +482,18 @@ class sudo_SPANPlus(nn.Module):
 
     def __init__(
         self,
-        num_in_ch: int = 12,
+        num_in_ch: int = 3,
         num_out_ch: int = 3,
         blocks: list = [4],
         feature_channels: int = 64,
         upscale: int = 2,
         drop_rate: float = 0.0,
+        upsampler: str = "dys",  # "lp", "ps", "conv"- only 1x
     ):
         super().__init__()
-        self.upscale = upscale
-        self.shrink = nn.PixelUnshuffle(upscale)
-        in_channels = num_in_ch
+
+        self.shrink = torch.nn.PixelUnshuffle(2)
+        in_channels = 12
         if not isinstance(blocks, list):
             blocks = [int(blocks)]
         if not self.training:
@@ -443,23 +505,22 @@ class sudo_SPANPlus(nn.Module):
         self.dynamic_prio = DynamicConvolution(
             3,
             1,
-            in_planes=feature_channels,
-            out_planes=feature_channels,
+            in_channels=feature_channels,
+            out_channels=feature_channels,
             kernel_size=3,
             padding=1,
             bias=True,
         )
-        self.upsampler = DySample(feature_channels, feature_channels, self.upscale*2)
+        self.upsampler = DySample(feature_channels, feature_channels, 4)
         self.dynamic = DynamicConvolution(
             3,
             1,
-            in_planes=feature_channels,
-            out_planes=num_out_ch,
+            in_channels=feature_channels,
+            out_channels=3,
             kernel_size=3,
             padding=1,
             bias=True,
         )
-
 
     def forward(self, x):
         n, c, h, w = x.shape
@@ -473,4 +534,4 @@ class sudo_SPANPlus(nn.Module):
         out = self.dynamic_prio(out)
         out = self.upsampler(out)
         out = self.dynamic(out)
-        return out[:, :, : h * self.upscale, : w * self.upscale]
+        return out[:, :, : h * 2, : w * 2]
