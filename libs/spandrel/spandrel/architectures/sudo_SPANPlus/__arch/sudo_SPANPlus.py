@@ -524,10 +524,11 @@ class sudo_SPANPlus(nn.Module):
 
     def forward(self, x):
         n, c, h, w = x.shape
-        ph = ((h - 1) // 8 + 1) * 8
-        pw = ((w - 1) // 8 + 1) * 8
-        padding = (0, pw - w, 0, ph - h)
-        x = F.pad(x, padding)
+        if h % 8 != 0 or w % 8 != 0:
+            ph = ((h - 1) // 8 + 1) * 8
+            pw = ((w - 1) // 8 + 1) * 8
+            padding = (0, pw - w, 0, ph - h)
+            x = F.pad(x, padding)
 
         x = self.shrink(x)
         out = self.feats(x)
