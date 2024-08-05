@@ -478,6 +478,7 @@ class SPABS(nn.Module):
 class sudo_SPANPlus(nn.Module):
     """Modified from 'Swift Parameter-free Attention Network for Efficient Super-Resolution':
     https://arxiv.org/abs/2311.12770
+    only 2x
     """
 
     def __init__(

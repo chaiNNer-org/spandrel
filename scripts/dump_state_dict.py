@@ -54,14 +54,12 @@ try:
     sys.path.insert(0, __file__ + "/../../libs/spandrel")
     sys.path.insert(0, __file__ + "/../../libs/spandrel_extra_arches")
 
-    import spandrel_extra_arches  # noqa: E402
     from spandrel import ModelLoader  # noqa: E402
 except ImportError:
     print("Unable to import spandrel.")
     print("Follow the contributing guide to set up editable installs.")
     raise
 
-spandrel_extra_arches.install()
 
 State = Dict[str, object]
 
