@@ -1,0 +1,37 @@
+# serializer version: 1
+# name: test_2x_nomos2_mosr
+  ImageModelDescriptor(
+    architecture=MoSRArch(
+      id='MoSR',
+      name='MoSR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=2,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
+# name: test_4x_nomos2_mosr
+  ImageModelDescriptor(
+    architecture=MoSRArch(
+      id='MoSR',
+      name='MoSR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---

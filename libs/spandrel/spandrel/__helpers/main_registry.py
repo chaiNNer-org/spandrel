@@ -27,6 +27,7 @@ from ..architectures import (
     LaMa,
     MixDehazeNet,
     MMRealSR,
+    MoSR,
     NAFNet,
     OmniSR,
     RealCUGAN,
@@ -86,4 +87,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(RetinexFormer.RetinexFormerArch()),
     ArchSupport.from_architecture(HVICIDNet.HVICIDNetArch()),
     ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
+    ArchSupport.from_architecture(MoSR.MoSRArch()),
 )
