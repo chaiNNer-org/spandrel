@@ -28,12 +28,13 @@ from textwrap import dedent
 import torch
 from dump_state_dict import dump
 
-from spandrel.architectures import SCUNet
+from spandrel.architectures import sudo_SPANPlus, SPAN
 
 
 def create_dummy() -> torch.nn.Module:
     """Edit this function"""
-    return SCUNet.SCUNet()
+    return sudo_SPANPlus.sudo_SPANPlus(num_in_ch=3,feature_channels=64,upscale=4)
+    #return SPAN.SPAN(num_in_ch=3,feature_channels=48,num_out_ch=3)
 
 
 if __name__ == "__main__":
