@@ -32,8 +32,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "torch",
-    "torchvision",
     "safetensors",
     "numpy",
     "einops",
