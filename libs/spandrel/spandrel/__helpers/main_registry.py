@@ -40,6 +40,7 @@ from ..architectures import (
     SwinIR,
     Uformer,
     sudo_SPANPlus,
+    USRNet,
 )
 from .registry import ArchRegistry, ArchSupport
 
@@ -90,4 +91,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
     ArchSupport.from_architecture(MoSR.MoSRArch()),
     ArchSupport.from_architecture(sudo_SPANPlus.sudo_SPANPlusArch()),
+    ArchSupport.from_architecture(USRNet.USRNetArch()),
 )
