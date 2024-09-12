@@ -1,5 +1,5 @@
 # Spandrel
-
+### A fork of spandrel that attempts to include https://github.com/styler00dollar/  modified spanplus, works with 2x, 3 in-ch, 3 out-ch
 [![PyPI package](https://img.shields.io/badge/pip%20install-spandrel-brightgreen)](https://pypi.org/project/spandrel/)
 [![version number](https://img.shields.io/pypi/v/spandrel?color=green&label=version)](https://github.com/chaiNNer-org/spandrel/releases)
 [![PyPi Downloads](https://img.shields.io/pypi/dw/spandrel)](https://pypi.org/project/spandrel/#files)
