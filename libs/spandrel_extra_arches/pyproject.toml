@@ -32,12 +32,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "spandrel>=0.3.2",
-    "torch",
-    "torchvision",
-    "numpy",
-    "einops",
-    "typing_extensions",
+    "spandrel>=0.3.5",
+    "numpy==1.24.4",
+    "einops==0.6.1",
+    "typing_extensions==4.6.3",
 ]
 dynamic = ["version"]
 
