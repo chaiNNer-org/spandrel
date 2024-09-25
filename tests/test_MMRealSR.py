@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -80,6 +81,10 @@ def test_size_requirements():
         "https://github.com/TencentARC/MM-RealSR/releases/download/v1.0.0/MMRealSRNet.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(MMRealSRArch(), MMRealSR(num_in_ch=3, num_out_ch=3))
 
 
 def test_MMRealSRGAN(snapshot):

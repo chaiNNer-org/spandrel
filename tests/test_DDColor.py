@@ -5,6 +5,7 @@ from .util import (
     TestImage,
     assert_image_inference,
     assert_loads_correctly,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -61,6 +62,11 @@ def test_load():
         ),
         ignore_parameters={"input_size"},
     )
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(DDColorArch(), DDColor())
 
 
 def test_DDColor_paper_tiny(snapshot):
