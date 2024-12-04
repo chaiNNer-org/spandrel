@@ -107,6 +107,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [PLKSR](https://github.com/dslisleedh/PLKSR) and [RealPLKSR](https://github.com/muslll/neosr/blob/master/neosr/archs/realplksr_arch.py) | [Models](https://drive.google.com/drive/u/1/folders/1lIkZ00y9cRQpLU9qmCIB2XtS-2ZoqKq8)
 - [SeemoRe](https://github.com/eduardzamfir/seemoredetails) | [Models](https://drive.google.com/drive/folders/15jtvcS4jL_6QqEwaRodEN8FBrqVPrO2u?usp=share_link)
 - [MoSR](https://github.com/umzi2/MoSR) | [Models](https://drive.google.com/drive/u/0/folders/1HPy7M4Zzq8oxhdsQ2cnfqy73klmQWp_r)
+- [SPANPlus](https://github.com/umzi2/spanplus) | [Models](https://drive.google.com/drive/u/0/folders/1UQbK4i5yU-41m5yrjP33V994msMvSEA2?hl=ru)
 
 #### Face Restoration
 
