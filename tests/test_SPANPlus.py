@@ -32,14 +32,16 @@ def test_load():
 
 def test_size_requirements():
     file = ModelFile.from_url(
-        "https://github.com/TNTwise/SPAN-ncnn-vulkan/releases/download/20240626-224116/2x_spanplus.pth"
+        "https://drive.google.com/file/d/1EytA9KNFrIJljhHNBgpjhWAwS1FFRu7X/view?usp=drive_link",
+        name="2x_spanplus.pth",
     )
     assert_size_requirements(file.load_model())
 
 
 def test_SPANPlus_x2_ch48(snapshot):
     file = ModelFile.from_url(
-        "https://github.com/TNTwise/SPAN-ncnn-vulkan/releases/download/20240626-224116/2x_spanplus.pth"
+        "https://drive.google.com/file/d/1EytA9KNFrIJljhHNBgpjhWAwS1FFRu7X/view?usp=drive_link",
+        name="2x_spanplus.pth",
     )
     model = file.load_model()
     assert model == snapshot(exclude=disallowed_props)
