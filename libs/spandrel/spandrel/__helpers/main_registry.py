@@ -18,7 +18,6 @@ from ..architectures import (
     SAFMN,
     SAFMNBCIE,
     SPAN,
-    SPANPlus,
     Compact,
     DnCNN,
     DRUNet,
@@ -35,7 +34,9 @@ from ..architectures import (
     RestoreFormer,
     RetinexFormer,
     SCUNet,
+    Sebica,
     SeemoRe,
+    SPANPlus,
     SwiftSRGAN,
     Swin2SR,
     SwinIR,
@@ -90,4 +91,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
     ArchSupport.from_architecture(MoSR.MoSRArch()),
     ArchSupport.from_architecture(SPANPlus.SPANPlusArch()),
+    ArchSupport.from_architecture(Sebica.SebicaArch()),
 )
