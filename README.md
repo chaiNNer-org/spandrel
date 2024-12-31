@@ -108,6 +108,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [SeemoRe](https://github.com/eduardzamfir/seemoredetails) | [Models](https://drive.google.com/drive/folders/15jtvcS4jL_6QqEwaRodEN8FBrqVPrO2u?usp=share_link)
 - [MoSR](https://github.com/umzi2/MoSR) | [Models](https://drive.google.com/drive/u/0/folders/1HPy7M4Zzq8oxhdsQ2cnfqy73klmQWp_r)
 - [SPANPlus](https://github.com/umzi2/spanplus) | [Models](https://drive.google.com/drive/u/0/folders/1UQbK4i5yU-41m5yrjP33V994msMvSEA2?hl=ru)
+- [Sebica](https://github.com/idiosyncracies/Sebica/) | [Models](https://github.com/idiosyncracies/Sebica/tree/main/logs/ckpts)
 
 #### Face Restoration
 
