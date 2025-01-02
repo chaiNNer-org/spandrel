@@ -1,0 +1,21 @@
+# serializer version: 1
+# name: test_2x_umzi_mahou_rtmosr
+  ImageModelDescriptor(
+    architecture=RTMoSRArch(
+      id='RTMoSR',
+      name='Real Time MoSR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=2,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '32nf',
+      '2nc',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---

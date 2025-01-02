@@ -33,6 +33,7 @@ from ..architectures import (
     RealCUGAN,
     RestoreFormer,
     RetinexFormer,
+    RTMoSR,
     SCUNet,
     Sebica,
     SeemoRe,
@@ -92,4 +93,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(MoSR.MoSRArch()),
     ArchSupport.from_architecture(SPANPlus.SPANPlusArch()),
     ArchSupport.from_architecture(Sebica.SebicaArch()),
+    ArchSupport.from_architecture(RTMoSR.RTMoSRArch()),
 )
