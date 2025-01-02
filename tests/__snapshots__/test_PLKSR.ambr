@@ -11,7 +11,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '12nb',
@@ -33,7 +33,7 @@
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '28nb',
@@ -55,7 +55,7 @@
     scale=3,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '28nb',
@@ -77,7 +77,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '28nb',
@@ -166,7 +166,7 @@
     scale=2,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '28nb',
@@ -189,7 +189,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=False,
+    supports_half=True,
     tags=list([
       '64dim',
       '28nb',
