@@ -118,10 +118,12 @@ class PLKSRArch(Architecture[_PLKSR]):
             n_blocks = total_feat_layers - 3
             kernel_size = state_dict["feats.1.lk.conv.weight"].shape[2]
             split_ratio = state_dict["feats.1.lk.conv.weight"].shape[0] / dim
-
+            use_layer_norm = "feats.1.layer_norm.bias" in state_dict
             use_dysample = "to_img.init_pos" in state_dict
             if use_dysample:
                 more_tags.append("DySample")
+            if use_layer_norm:
+                more_tags.append("LayerNorm")
 
             model = RealPLKSR(
                 dim=dim,
@@ -132,6 +134,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 use_ea=use_ea,
                 norm_groups=4,  # un-detectable
                 dysample=use_dysample,
+                layer_norm=use_layer_norm
             )
         else:
             raise ValueError("Unknown model type")

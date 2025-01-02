@@ -52,6 +52,7 @@ def test_load():
         lambda: RealPLKSR(split_ratio=0.75),
         lambda: RealPLKSR(use_ea=False),
         lambda: RealPLKSR(dysample=True),
+        lambda: RealPLKSR(layer_norm=True),
     )
 
 
@@ -65,6 +66,12 @@ def test_size_requirements():
     file = ModelFile.from_url(
         "https://drive.google.com/file/d/1PA3QElJYlgpPYKl0zQ9_D1pnuYfC1vtt/view",
         name="PLKSR_X2_DIV2K.pth",
+    )
+    assert_size_requirements(file.load_model())
+
+    file = ModelFile.from_url(
+        "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/4x_DF2K_Redux_RealPLKSRLayerNorm_50k.safetensors",
+        name="4x_DF2K_Redux_RealPLKSRLayerNorm_50k.safetensors",
     )
     assert_size_requirements(file.load_model())
 
@@ -171,4 +178,30 @@ def test_RealPLKSR_DySample(snapshot):
         file,
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
+
+
+def test_RealPLKSR_LayerNorm_4x(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/4x_DF2K_Redux_RealPLKSRLayerNorm_50k.safetensors",
+        name="4x_DF2K_Redux_RealPLKSRLayerNorm_50k.safetensors",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, RealPLKSR)
+    assert_image_inference(
+        file, model, [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64]
+    )
+
+
+def test_RealPLKSR_LayerNorm_2x(snapshot):
+    file = ModelFile.from_url(
+        "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/2x_DF2K_Redux_RealPLKSRLayerNorm_450k.safetensors",
+        name="2x_DF2K_Redux_RealPLKSRLayerNorm_450k.safetensors",
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, RealPLKSR)
+    assert_image_inference(
+        file, model, [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64]
     )
