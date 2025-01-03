@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import math
-from typing import Literal, Sequence, Union
+from collections.abc import Sequence
+from typing import Literal, Union
 
 from typing_extensions import override
 
@@ -41,6 +42,7 @@ class PLKSRArch(Architecture[_PLKSR]):
         kernel_size = 17
         split_ratio = 0.25
         use_ea = True
+        supports_half = True
 
         dim = state_dict["feats.0.weight"].shape[0]
 
@@ -118,10 +120,14 @@ class PLKSRArch(Architecture[_PLKSR]):
             n_blocks = total_feat_layers - 3
             kernel_size = state_dict["feats.1.lk.conv.weight"].shape[2]
             split_ratio = state_dict["feats.1.lk.conv.weight"].shape[0] / dim
-
+            use_layer_norm = "feats.1.layer_norm.bias" in state_dict
             use_dysample = "to_img.init_pos" in state_dict
             if use_dysample:
                 more_tags.append("DySample")
+            if use_layer_norm:
+                more_tags.append("LayerNorm")
+            else:
+                supports_half = False
 
             model = RealPLKSR(
                 dim=dim,
@@ -132,6 +138,7 @@ class PLKSRArch(Architecture[_PLKSR]):
                 use_ea=use_ea,
                 norm_groups=4,  # un-detectable
                 dysample=use_dysample,
+                layer_norm=use_layer_norm,
             )
         else:
             raise ValueError("Unknown model type")
@@ -142,7 +149,7 @@ class PLKSRArch(Architecture[_PLKSR]):
             architecture=self,
             purpose="Restoration" if scale == 1 else "SR",
             tags=[f"{dim}dim", f"{n_blocks}nb", f"{kernel_size}ks", *more_tags],
-            supports_half=False,
+            supports_half=supports_half,
             supports_bfloat16=True,
             scale=scale,
             input_channels=3,
