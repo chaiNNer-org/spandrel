@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -39,6 +40,10 @@ def test_size_requirements():
         "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(ESRGANArch(), ESRGAN())
 
 
 def test_ESRGAN_community(snapshot):

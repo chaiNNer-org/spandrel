@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -53,6 +54,10 @@ def test_size_requirements():
         name="103_ATD_light_SRx4_finetune.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(ATDArch(), ATD())
 
 
 def test_101_ATD_light_SRx2_scratch(snapshot):

@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -41,6 +42,10 @@ def test_size_requirements():
         "https://github.com/Phhofm/models/raw/main/2xHFA2kAVCOmniSR/2xHFA2kAVCOmniSR.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(OmniSRArch(), OmniSR())
 
 
 def test_OmniSR_official_x4(snapshot):
