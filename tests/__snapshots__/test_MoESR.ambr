@@ -13,6 +13,10 @@
     supports_bfloat16=True,
     supports_half=True,
     tags=list([
+      '64dim',
+      '9nbs',
+      '4nb',
+      'pixelshuffledirect',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
