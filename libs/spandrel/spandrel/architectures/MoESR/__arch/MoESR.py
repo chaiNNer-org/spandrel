@@ -90,7 +90,7 @@ class UniUpsample(nn.Sequential):
             torch.tensor(
                 [
                     1,  # Block version, if you change something, please number from the end so that you can distinguish between authorized changes and third parties
-                    list(SampleMods.__args__).index(upsample),  # UpSample method index
+                    list(SampleMods.__args__).index(upsample),  # pyright: ignore  # UpSample method index
                     scale,
                     in_dim,
                     out_dim,
