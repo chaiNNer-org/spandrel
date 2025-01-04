@@ -1,0 +1,23 @@
+# serializer version: 1
+# name: test_4x_df2k_moesr
+  ImageModelDescriptor(
+    architecture=MoESRArch(
+      id='MoESR',
+      name='MoESR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=2, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+      '64dim',
+      '9nbs',
+      '4nb',
+      'pixelshuffledirect',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
