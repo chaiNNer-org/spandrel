@@ -14,6 +14,7 @@ from ..architectures import (
     HAT,
     IPT,
     PLKSR,
+    RCAN,
     RGT,
     SAFMN,
     SAFMNBCIE,
@@ -88,4 +89,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(HVICIDNet.HVICIDNetArch()),
     ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
     ArchSupport.from_architecture(MoSR.MoSRArch()),
+    ArchSupport.from_architecture(RCAN.RCANArch()),
 )
