@@ -25,6 +25,10 @@ def test_load():
         lambda: RCAN(norm=False),
         lambda: RCAN(kernel_size=7),
         lambda: RCAN(reduction=8),
+        lambda: RCAN(scale=1, unshuffle_mod=True),
+        lambda: RCAN(scale=1, unshuffle_mod=True, n_feats=32),
+        lambda: RCAN(scale=2, unshuffle_mod=True),
+        lambda: RCAN(scale=2, unshuffle_mod=True, n_colors=1),
     )
 
 

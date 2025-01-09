@@ -1,11 +1,10 @@
-from __future__ import annotations
-
 import math
 from collections.abc import Callable
 
 import torch
 from torch import Tensor, nn
 
+from spandrel.architectures.__arch_helpers.padding import pad_to_multiple
 from spandrel.util import store_hyperparameters
 
 
@@ -256,9 +255,12 @@ class RCAN(nn.Module):
         reduction: int = 16,
         res_scale: float = 1,
         act_mode: str = "relu",
+        unshuffle_mod: bool = False,
         conv: Callable[..., nn.Conv2d] = default_conv,
     ) -> None:
         super().__init__()
+
+        self.scale = scale
 
         if norm:
             # RGB mean for DIV2K
@@ -273,7 +275,21 @@ class RCAN(nn.Module):
             self.add_mean = nn.Identity()
 
         # define head module
-        modules_head = [conv(n_colors, n_feats, kernel_size)]
+        unshuffle_mod = unshuffle_mod and scale < 4
+        self.downscale_factor = 1
+        if unshuffle_mod:
+            self.downscale_factor = 4 // scale
+            scale = 4
+            modules_head = [
+                nn.PixelUnshuffle(self.downscale_factor),
+                conv(
+                    n_colors * self.downscale_factor * self.downscale_factor,
+                    n_feats,
+                    kernel_size,
+                ),
+            ]
+        else:
+            modules_head = [conv(n_colors, n_feats, kernel_size)]
 
         # define body module
         modules_body: list[nn.Module] = [
@@ -301,7 +317,12 @@ class RCAN(nn.Module):
         self.body = nn.Sequential(*modules_body)
         self.tail = nn.Sequential(*modules_tail)
 
+    def check_img_size(self, x: Tensor) -> Tensor:
+        return pad_to_multiple(x, self.downscale_factor, mode="reflect")
+
     def forward(self, x: Tensor) -> Tensor:
+        _b, _c, h, w = x.shape
+        x = self.check_img_size(x)
         x *= self.rgb_range
         x = self.sub_mean(x)
         x = self.head(x)
@@ -311,4 +332,4 @@ class RCAN(nn.Module):
 
         x = self.tail(res)
         x = self.add_mean(x)
-        return x / self.rgb_range
+        return (x / self.rgb_range)[:, :, : h * self.scale, : w * self.scale]
