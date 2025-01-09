@@ -135,6 +135,7 @@
     tags=list([
       '64nf',
       '23nb',
+      'unshuffle',
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
   )
