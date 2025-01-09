@@ -62,12 +62,17 @@ class RCANArch(Architecture[RCAN]):
             unshuffle_mod=unshuffle_mod,
         )
 
+        tags = [f"{n_feats}nf", f"{n_resgroups}nrg", f"{n_resblocks}nrb"]
+
+        if unshuffle_mod:
+            tags.append("unshuffle")
+
         return ImageModelDescriptor(
             model,
             state_dict,
             architecture=self,
             purpose="Restoration" if scale == 1 else "SR",
-            tags=[f"{n_feats}nf", f"{n_resgroups}nrg", f"{n_resblocks}nrb"],
+            tags=tags,
             supports_half=True,
             supports_bfloat16=True,
             scale=scale,
