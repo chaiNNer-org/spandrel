@@ -12,15 +12,15 @@ class RCANArch(Architecture[RCAN]):
             id="RCAN",
             detect=KeyCondition.has_any(
                 KeyCondition.has_all(
-                    # "head.0.weight",
-                    # "tail.1.weight",
-                    # "body.0.body.0.body.0.weight",
+                    "head.0.weight",
+                    "tail.1.weight",
+                    "body.0.body.0.body.0.weight",
                     "body.0.body.0.body.3.conv_du.0.weight",
                 ),
                 KeyCondition.has_all(
-                    # "head.1.weight",
-                    # "tail.1.weight",
-                    # "body.0.body.0.body.0.weight",
+                    "head.1.weight",
+                    "tail.1.weight",
+                    "body.0.body.0.body.0.weight",
                     "body.0.body.0.body.3.conv_du.0.weight",
                 ),
             ),
