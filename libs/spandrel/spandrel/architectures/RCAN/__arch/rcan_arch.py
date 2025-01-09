@@ -277,7 +277,7 @@ class RCAN(nn.Module):
             self.add_mean = nn.Identity()
 
         # define head module
-        unshuffle_mod = unshuffle_mod and scale < 4
+        unshuffle_mod = unshuffle_mod and scale <= 2
         self.downscale_factor = 1
         if unshuffle_mod:
             self.downscale_factor = 4 // scale
