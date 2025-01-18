@@ -1,0 +1,22 @@
+# serializer version: 1
+# name: test_rcan_bix4
+  ImageModelDescriptor(
+    architecture=RCANArch(
+      id='RCAN',
+      name='RCAN',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      '64nf',
+      '10nrg',
+      '20nrb',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---

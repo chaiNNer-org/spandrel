@@ -108,6 +108,7 @@ Spandrel currently supports a limited amount of network architectures. If the ar
 - [SeemoRe](https://github.com/eduardzamfir/seemoredetails) | [Models](https://drive.google.com/drive/folders/15jtvcS4jL_6QqEwaRodEN8FBrqVPrO2u?usp=share_link)
 - [MoSR](https://github.com/umzi2/MoSR) | [Models](https://drive.google.com/drive/u/0/folders/1HPy7M4Zzq8oxhdsQ2cnfqy73klmQWp_r)
 - [MoESR](https://github.com/umzi2/MoESR) | [Models](https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/4x_DF2K_MoESR_500k.safetensors)
+- [RCAN](https://github.com/yulunzhang/RCAN) | [Models](https://www.dropbox.com/s/qm9vc0p0w9i4s0n/models_ECCV2018RCAN.zip?dl=0)
 
 #### Face Restoration
 

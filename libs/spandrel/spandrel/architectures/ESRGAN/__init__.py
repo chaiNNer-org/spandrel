@@ -216,6 +216,7 @@ class ESRGANArch(Architecture[ESRGAN]):
         if shuffle_factor:
             in_nc //= shuffle_factor**2
             scale //= shuffle_factor
+            tags.append("unshuffle")
 
         return ImageModelDescriptor(
             model,
