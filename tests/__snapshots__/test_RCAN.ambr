@@ -11,7 +11,7 @@
     scale=4,
     size_requirements=SizeRequirements(minimum=0, multiple_of=1, square=False),
     supports_bfloat16=True,
-    supports_half=True,
+    supports_half=False,
     tags=list([
       '64nf',
       '10nrg',
