@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -29,6 +30,10 @@ def test_size_requirements():
         name="HVI-CIDNet_lolv1_w_perc.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(HVICIDNetArch(), HVICIDNet())
 
 
 def test_LOLv1(snapshot):

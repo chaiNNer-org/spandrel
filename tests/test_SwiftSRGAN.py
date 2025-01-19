@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -38,6 +39,10 @@ def test_size_requirements():
         name="swift_srgan_4x.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(SwiftSRGANArch(), SwiftSRGAN())
 
 
 def test_SwiftSRGAN_2x(snapshot):
