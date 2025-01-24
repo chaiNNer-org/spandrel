@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch import nn
 from torch.nn.init import trunc_normal_
 
-from spandrel.util import store_hyperparameters
+from ....util import store_hyperparameters
 
 
 class LayerNorm(nn.Module):

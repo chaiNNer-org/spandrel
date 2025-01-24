@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import store_hyperparameters
+from ....util import store_hyperparameters
 
 
 class CSA(nn.Module):

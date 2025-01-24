@@ -4,8 +4,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import store_hyperparameters
-from spandrel.util.timm import to_2tuple
+from ....util import store_hyperparameters
+from ....util.timm import to_2tuple
 
 
 class LSAB(nn.Module):
@@ -244,9 +244,9 @@ class SwinTransformerBlock(nn.Module):
         self.window_size = window_size
         self.shift_size = shift_size
         self.mlp_ratio = mlp_ratio
-        assert (
-            0 <= self.shift_size < self.window_size
-        ), "shift_size must in 0-window_size"
+        assert 0 <= self.shift_size < self.window_size, (
+            "shift_size must in 0-window_size"
+        )
 
         self.attn = WindowAttention(
             dim,

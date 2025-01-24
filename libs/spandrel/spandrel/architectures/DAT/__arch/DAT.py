@@ -10,8 +10,8 @@ from einops import rearrange
 from einops.layers.torch import Rearrange
 from torch.nn import functional as F
 
-from spandrel.util import store_hyperparameters
-from spandrel.util.timm import DropPath, trunc_normal_
+from ....util import store_hyperparameters
+from ....util.timm import DropPath, trunc_normal_
 
 
 def img2windows(img, H_sp, W_sp):
@@ -328,12 +328,12 @@ class Adaptive_Spatial_Attention(nn.Module):
         self.patches_resolution = reso
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
 
-        assert (
-            0 <= self.shift_size[0] < self.split_size[0]
-        ), "shift_size must in 0-split_size0"
-        assert (
-            0 <= self.shift_size[1] < self.split_size[1]
-        ), "shift_size must in 0-split_size1"
+        assert 0 <= self.shift_size[0] < self.split_size[0], (
+            "shift_size must in 0-split_size0"
+        )
+        assert 0 <= self.shift_size[1] < self.split_size[1], (
+            "shift_size must in 0-split_size1"
+        )
 
         self.branch_num = 2
 
@@ -863,7 +863,7 @@ class Upsample(nn.Sequential):
             m.append(nn.PixelShuffle(3))
         else:
             raise ValueError(
-                f"scale {scale} is not supported. " "Supported scales: 2^n and 3."
+                f"scale {scale} is not supported. Supported scales: 2^n and 3."
             )
         super().__init__(*m)
 

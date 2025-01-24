@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from typing import Literal
+import sys
 
 import torch
 import torch.nn.functional as F
 from torch import nn as nn
 
-from spandrel.util import store_hyperparameters
+from ....util import store_hyperparameters
 
 
 def _make_pair(value):
@@ -190,13 +191,8 @@ class Conv3XC(nn.Module):
         self.eval_conv.bias.data = self.bias_concat.contiguous()  # type: ignore
 
     def forward(self, x):
-        if self.training:
-            pad = 1
-            x_pad = F.pad(x, (pad, pad, pad, pad), "constant", 0)
-            out = self.conv(x_pad) + self.sk(x)
-        else:
-            self.update_params()
-            out = self.eval_conv(x)
+        self.update_params()
+        out = self.eval_conv(x)
 
         if self.has_relu:
             out = F.leaky_relu(out, negative_slope=0.05)
@@ -258,7 +254,8 @@ class SPAN(nn.Module):
         self.in_channels = num_in_ch
         self.out_channels = num_out_ch
         self.img_range = img_range
-        self.mean = torch.Tensor(rgb_mean).view(1, 3, 1, 1)
+        self.mean_half = torch.Tensor(rgb_mean).view(1, 3, 1, 1).cuda().half()
+        self.mean_float = torch.Tensor(rgb_mean).view(1, 3, 1, 1).cuda().float()
 
         self.no_norm: torch.Tensor | None
         if not norm:
@@ -288,6 +285,12 @@ class SPAN(nn.Module):
         return self.no_norm is None
 
     def forward(self, x):
+        self.device = x.device
+        self.dtype = x.dtype
+        if self.dtype == torch.float16:
+            self.mean = self.mean_half
+        else:
+            self.mean = self.mean_float
         if self.is_norm:
             self.mean = self.mean.type_as(x)
             x = (x - self.mean) * self.img_range
