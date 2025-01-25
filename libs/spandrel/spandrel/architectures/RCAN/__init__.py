@@ -1,6 +1,6 @@
 import math
 
-from ...util import KeyCondition, get_pixelshuffle_params, get_seq_len
+from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
 from .__arch.rcan_arch import RCAN
@@ -73,7 +73,7 @@ class RCANArch(Architecture[RCAN]):
             architecture=self,
             purpose="Restoration" if scale == 1 else "SR",
             tags=tags,
-            supports_half=True,
+            supports_half=False,
             supports_bfloat16=True,
             scale=scale,
             input_channels=n_colors,
