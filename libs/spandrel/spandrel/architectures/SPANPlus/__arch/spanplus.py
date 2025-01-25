@@ -65,8 +65,48 @@ class Conv3XC(nn.Module):
         if self.training is False:
             self.eval_conv.weight.requires_grad = False
             self.eval_conv.bias.requires_grad = False
+            self.update_params()
+
+    def update_params(self):
+        w1 = self.conv[0].weight.data.clone().detach()
+        b1 = self.conv[0].bias.data.clone().detach()
+        w2 = self.conv[1].weight.data.clone().detach()
+        b2 = self.conv[1].bias.data.clone().detach()
+        w3 = self.conv[2].weight.data.clone().detach()
+        b3 = self.conv[2].bias.data.clone().detach()
+
+        w = (
+            F.conv2d(w1.flip(2, 3).permute(1, 0, 2, 3), w2, padding=2, stride=1)
+            .flip(2, 3)
+            .permute(1, 0, 2, 3)
+        )
+        b = (w2 * b1.reshape(1, -1, 1, 1)).sum((1, 2, 3)) + b2
+
+        self.weight_concat = (
+            F.conv2d(w.flip(2, 3).permute(1, 0, 2, 3), w3, padding=0, stride=1)
+            .flip(2, 3)
+            .permute(1, 0, 2, 3)
+        )
+        self.bias_concat = (w3 * b.reshape(1, -1, 1, 1)).sum((1, 2, 3)) + b3
+
+        sk_w = self.sk.weight.data.clone().detach()
+        sk_b = self.sk.bias.data.clone().detach()
+        target_kernel_size = 3
+
+        H_pixels_to_pad = (target_kernel_size - 1) // 2
+        W_pixels_to_pad = (target_kernel_size - 1) // 2
+        sk_w = F.pad(
+            sk_w, [H_pixels_to_pad, H_pixels_to_pad, W_pixels_to_pad, W_pixels_to_pad]
+        )
+
+        self.weight_concat = self.weight_concat + sk_w
+        self.bias_concat = self.bias_concat + sk_b
+
+        self.eval_conv.weight.data = self.weight_concat
+        self.eval_conv.bias.data = self.bias_concat
 
     def forward(self, x):
+        self.update_params()
         if self.training:
             x_pad = F.pad(x, (1, 1, 1, 1), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
@@ -116,6 +156,8 @@ class SPABS(nn.Module):
             feature_channels * 4, feature_channels, kernel_size=1, bias=True
         )
         self.dropout = nn.Dropout2d(drop)
+        if self.training:
+            trunc_normal_(self.conv_cat.weight, std=0.02)
 
     def forward(self, x):
         out_b1 = self.block_1(x)
@@ -150,12 +192,12 @@ class SPANPlus(nn.Module):
         self.dynamic_conv_mod = dynamic_conv_mod
         self.unshuffle_mod = unshuffle_mod
         self.upscale = upscale
-
         in_channels = num_in_ch
         out_channels = num_out_ch if upsampler == "dys" else num_in_ch
         if unshuffle_mod:
             in_channels = 12
-            self.shrink = nn.PixelUnshuffle(upscale)
+            self.shrink = nn.PixelUnshuffle(2)
+            upscale = upscale**2
 
         drop_rate = 0
         self.feats = nn.Sequential(
@@ -198,10 +240,11 @@ class SPANPlus(nn.Module):
                 padding=1,
                 bias=True,
             )
+        if unshuffle_mod:
+            self.upscale = 2
 
     def forward(self, x):
         n, c, h, w = x.shape
-        out = self.feats(x)
 
         if self.unshuffle_mod:
             if h % 8 != 0 or w % 8 != 0:
@@ -214,11 +257,11 @@ class SPANPlus(nn.Module):
         out = self.feats(x)
 
         if self.dynamic_conv_mod:
-            out = self.dynamic(out)
+            out = self.dynamic_prio(out)
 
         out = self.upsampler(out)
 
         if self.dynamic_conv_mod:
-            out = self.dynamic_prio(out)
+            out = self.dynamic(out)
 
         return out[:, :, : h * self.upscale, : w * self.upscale]

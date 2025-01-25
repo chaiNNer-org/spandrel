@@ -45,6 +45,7 @@ class SPANPlusArch(Architecture[SPANPlus]):
 
         if num_in_ch == 12:
             unshuffle_mod = True
+            upscale = 2
 
         dynamic_conv_mod = "dynamic.attention.to_scores.0.weight" in state_dict
 
