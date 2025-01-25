@@ -2,8 +2,10 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.nn.init import trunc_normal_
-from ....util import store_hyperparameters
+
+from ....architectures.__arch_helpers.dynamic_conv import DynamicConvolution
 from ....architectures.__arch_helpers.dysample import DySample
+from ....util import store_hyperparameters
 
 
 class Conv3XC(nn.Module):
@@ -141,29 +143,82 @@ class SPANPlus(nn.Module):
         upscale: int = 4,
         drop_rate: float = 0.0,
         upsampler: str = "dys",  # "lp", "ps"
+        unshuffle_mod: bool = False,
+        dynamic_conv_mod: bool = False,
     ):
         super(SPANPlus, self).__init__()
+        self.dynamic_conv_mod = dynamic_conv_mod
+        self.unshuffle_mod = unshuffle_mod
+        self.upscale = upscale
 
         in_channels = num_in_ch
         out_channels = num_out_ch if upsampler == "dys" else num_in_ch
+        if unshuffle_mod:
+            in_channels = 12
+            self.shrink = nn.PixelUnshuffle(upscale)
+
         drop_rate = 0
         self.feats = nn.Sequential(
             *[Conv3XC(in_channels, feature_channels, gain=2, s=1)]
             + [SPABS(feature_channels, n_blocks, drop_rate) for n_blocks in blocks]
         )
+
         if upsampler == "ps":
             self.upsampler = nn.Sequential(
                 nn.Conv2d(feature_channels, out_channels * (upscale**2), 3, padding=1),
                 nn.PixelShuffle(upscale),
             )
         elif upsampler == "dys":
-            self.upsampler = DySample(feature_channels, out_channels, upscale)
+            if dynamic_conv_mod:
+                self.upsampler = DySample(feature_channels, feature_channels, upscale)
+            else:
+                self.upsampler = DySample(feature_channels, out_channels, upscale)
         else:
             raise NotImplementedError(
                 f'upsampler: {upsampler} not supported, choose one of these options: \
                 ["ps", "dys"]'
             )
 
+        if dynamic_conv_mod:
+            self.dynamic = DynamicConvolution(
+                3,
+                1,
+                in_channels=feature_channels,
+                out_channels=3,
+                kernel_size=3,
+                padding=1,
+                bias=True,
+            )
+            self.dynamic_prio = DynamicConvolution(
+                3,
+                1,
+                in_channels=feature_channels,
+                out_channels=feature_channels,
+                kernel_size=3,
+                padding=1,
+                bias=True,
+            )
+
     def forward(self, x):
+        n, c, h, w = x.shape
         out = self.feats(x)
-        return self.upsampler(out)
+
+        if self.unshuffle_mod:
+            if h % 8 != 0 or w % 8 != 0:
+                ph = ((h - 1) // 8 + 1) * 8
+                pw = ((w - 1) // 8 + 1) * 8
+                padding = (0, pw - w, 0, ph - h)
+                x = F.pad(x, padding)
+
+            x = self.shrink(x)
+        out = self.feats(x)
+
+        if self.dynamic_conv_mod:
+            out = self.dynamic(out)
+
+        out = self.upsampler(out)
+
+        if self.dynamic_conv_mod:
+            out = self.dynamic_prio(out)
+
+        return out[:, :, : h * self.upscale, : w * self.upscale]

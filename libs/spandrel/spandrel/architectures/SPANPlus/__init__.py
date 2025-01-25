@@ -1,8 +1,8 @@
+from sympy import true
 from typing_extensions import override
 
-from ...util import KeyCondition, get_seq_len
-
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
+from ...util import KeyCondition, get_seq_len
 from .__arch.spanplus import SPANPlus
 
 
@@ -22,6 +22,7 @@ class SPANPlusArch(Architecture[SPANPlus]):
     def load(self, state_dict: StateDict) -> ImageModelDescriptor[SPANPlus]:
         num_in_ch: int = 3
         num_out_ch: int = 3
+        unshuffle_mod: bool = False
         feature_channels: int = 48
         upscale: int = 4
         n_feats = get_seq_len(state_dict, "feats") - 1
@@ -42,13 +43,20 @@ class SPANPlusArch(Architecture[SPANPlus]):
             num_out_ch = state_dict["upsampler.end_conv.weight"].shape[0]
             upscale = int((state_dict["upsampler.offset.weight"].shape[0] // 8) ** 0.5)
 
+        if num_in_ch == 12:
+            unshuffle_mod = True
+
+        dynamic_conv_mod = "dynamic.attention.to_scores.0.weight" in state_dict
+
         model = SPANPlus(
-            num_in_ch=num_in_ch,
-            num_out_ch=num_out_ch,
+            num_in_ch=3,
+            num_out_ch=3,
             feature_channels=feature_channels,
             upscale=upscale,
             blocks=blocks,
             upsampler=upsampler,
+            unshuffle_mod=unshuffle_mod,
+            dynamic_conv_mod=dynamic_conv_mod,
         )
 
         return ImageModelDescriptor(
@@ -60,8 +68,8 @@ class SPANPlusArch(Architecture[SPANPlus]):
             supports_half=True,
             supports_bfloat16=True,
             scale=upscale,
-            input_channels=num_in_ch,
-            output_channels=num_out_ch,
+            input_channels=3,
+            output_channels=3,
         )
 
 

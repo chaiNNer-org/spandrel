@@ -1,17 +1,19 @@
 # type: ignore  # noqa: PGH003
-import torch
-import torch.nn.functional as F
-from torch import nn
-from torch.nn.init import trunc_normal_
-from torch.nn.modules.utils import _pair
-from torch.nn import init, Module
-from ...__arch_helpers.dysample import DySample
 import itertools
 import math
 from collections.abc import Iterable
 from typing import (
     TypeVar,
 )
+
+import torch
+import torch.nn.functional as F
+from torch import nn
+from torch.nn import Module, init
+from torch.nn.init import trunc_normal_
+from torch.nn.modules.utils import _pair
+
+from ...__arch_helpers.dysample import DySample
 
 upscale = 2
 
@@ -412,6 +414,7 @@ class Conv3XC(nn.Module):
         self.eval_conv.bias.data = self.bias_concat
 
     def forward(self, x):
+        self.update_params()
         if self.training:
             x_pad = F.pad(x, (1, 1, 1, 1), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
