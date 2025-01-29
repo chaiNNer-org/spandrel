@@ -106,6 +106,8 @@ class Conv3XC(nn.Module):
         self.eval_conv.bias.data = self.bias_concat
 
     def forward(self, x):
+        if self.weight_concat is None:
+            self.update_params()
         if self.training:
             x_pad = F.pad(x, (1, 1, 1, 1), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
