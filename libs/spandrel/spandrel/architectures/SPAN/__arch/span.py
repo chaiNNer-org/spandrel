@@ -150,8 +150,7 @@ class Conv3XC(nn.Module):
         if not self.training:
             self.eval_conv.weight.requires_grad = False
             self.eval_conv.bias.requires_grad = False  # type: ignore
-            self.update_params()
-
+            
     def update_params(self):
         w1 = self.conv[0].weight.data.clone().detach()
         b1 = self.conv[0].bias.data.clone().detach()
@@ -191,7 +190,8 @@ class Conv3XC(nn.Module):
         self.eval_conv.bias.data = self.bias_concat.contiguous()  # type: ignore
 
     def forward(self, x):
-        self.update_params()
+        if self.weight_concat is None:
+            self.update_params()
         out = self.eval_conv(x)
 
         if self.has_relu:
