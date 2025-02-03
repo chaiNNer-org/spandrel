@@ -81,7 +81,7 @@ class DySample(nn.Module):
         )
         output = (
             F.grid_sample(
-                x.reshape(B * self.groups, -1, H, W), coords
+                x.reshape(B * self.groups, -1, H, W), coords, mode="bilinear", padding_mode="border", align_corners=False
             )
             .to(x.dtype)
             .view(B, -1, self.scale * H, self.scale * W)
