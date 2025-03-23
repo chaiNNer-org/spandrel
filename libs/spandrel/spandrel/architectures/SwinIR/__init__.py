@@ -20,7 +20,10 @@ class SwinIRArch(Architecture[SwinIR]):
             id="SwinIR",
             detect=KeyCondition.has_all(
                 "layers.0.residual_group.blocks.0.norm1.weight",
-                "conv_first.weight",
+                KeyCondition.has_any(
+                    "conv_first.weight",
+                    "conv_first.1.weight",
+                ),
                 "layers.0.residual_group.blocks.0.mlp.fc1.bias",
                 "layers.0.residual_group.blocks.0.attn.relative_position_index",
             ),

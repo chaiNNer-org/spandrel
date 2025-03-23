@@ -1,4 +1,27 @@
 # serializer version: 1
+# name: test_SwinIR_DiffBIR_General
+  ImageModelDescriptor(
+    architecture=SwinIRArch(
+      id='SwinIR',
+      name='SwinIR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=8,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=1, square=False),
+    supports_bfloat16=True,
+    supports_half=False,
+    tags=list([
+      'medium',
+      's64w8',
+      '64nf',
+      '180dim',
+      '1conv',
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
 # name: test_SwinIR_L_4x
   ImageModelDescriptor(
     architecture=SwinIRArch(

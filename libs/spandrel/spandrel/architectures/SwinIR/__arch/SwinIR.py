@@ -842,7 +842,7 @@ class SwinIR(nn.Module):
     ):
         super().__init__()
         self.start_unshuffle = start_unshuffle
-        num_in_ch = in_chans
+        num_in_ch = in_chans * self.start_unshuffle**2
         num_out_ch = in_chans
         num_feat = 64
         self.img_range = img_range
