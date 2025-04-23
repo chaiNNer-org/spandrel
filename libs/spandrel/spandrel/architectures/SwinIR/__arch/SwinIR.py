@@ -1025,8 +1025,6 @@ class SwinIR(nn.Module):
         x = (x - self.mean) * self.img_range
 
         if self.start_unshuffle > 1:
-            up = torch.nn.Upsample(scale_factor=self.start_unshuffle, mode="bicubic")
-            x = up(x)
             x = torch.nn.functional.pixel_unshuffle(x, self.start_unshuffle)
 
         if self.upsampler == "pixelshuffle":

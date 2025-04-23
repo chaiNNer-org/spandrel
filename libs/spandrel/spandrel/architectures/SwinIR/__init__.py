@@ -177,20 +177,23 @@ class SwinIRArch(Architecture[SwinIR]):
             f"{num_feat}nf",
             f"{embed_dim}dim",
             f"{resi_connection}",
+            f"{start_unshuffle}unshuf",
         ]
+
+        real_upscale = upscale // start_unshuffle
 
         return ImageModelDescriptor(
             model,
             state_dict,
             architecture=self,
-            purpose="Restoration" if upscale == 1 else "SR",
+            purpose="Restoration" if real_upscale == 1 else "SR",
             tags=tags,
             supports_half=False,  # Too much weirdness to support this at the moment
             supports_bfloat16=True,
-            scale=upscale,
+            scale=real_upscale,
             input_channels=in_nc,
             output_channels=out_nc,
-            size_requirements=SizeRequirements(minimum=16),
+            size_requirements=SizeRequirements(minimum=16, multiple_of=start_unshuffle**2),
         )
 
 
