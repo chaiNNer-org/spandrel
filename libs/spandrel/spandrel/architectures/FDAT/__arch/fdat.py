@@ -1,127 +1,151 @@
-# type: ignore
-# Standalone version of the LHAN architecture.
-# Original source was adapted for the NeoSR framework. This version removes all NeoSR-specific dependencies.
+# https://github.com/stinkybread/fdat/blob/main/fdat.py
 
 import math
+from typing import Literal
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as F  # noqa: N812
+from torch import Tensor, nn
+from torch.nn.init import trunc_normal_
 
+from spandrel.architectures.__arch_helpers.dysample import DySample
 from spandrel.util import store_hyperparameters
+from spandrel.util.timm import DropPath
+
+SampleMods = Literal[
+    "conv",
+    "pixelshuffledirect",
+    "pixelshuffle",
+    "nearest+conv",
+    "dysample",
+]
+
+SampleMods3 = Literal[SampleMods, "transpose+conv"]
 
 
-# --- Helper Functions ---
-def _no_grad_trunc_normal_(tensor, mean, std, a, b):
-    """
-    Fills the input Tensor with values drawn from a truncated
-    normal distribution. The values are effectively drawn from the
-    normal distribution :math:`N(mean, std^2)` with values outside
-    :math:`[a, b]` redrawn until they are within the bounds.
-    """
+class UniUpsampleV3(nn.Sequential):
+    def __init__(
+        self,
+        upsample: SampleMods3,
+        scale: int = 2,
+        in_dim: int = 64,
+        out_dim: int = 3,
+        mid_dim: int = 64,  # Only pixelshuffle and DySample
+        group: int = 4,  # Only DySample
+    ) -> None:
+        m = []
 
-    def norm_cdf(x):
-        return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
+        if scale == 1 or upsample == "conv":
+            m.append(nn.Conv2d(in_dim, out_dim, 3, 1, 1))
+        elif upsample == "pixelshuffledirect":
+            m.extend(
+                [nn.Conv2d(in_dim, out_dim * scale**2, 3, 1, 1), nn.PixelShuffle(scale)]
+            )
+        elif upsample == "pixelshuffle":
+            m.extend([nn.Conv2d(in_dim, mid_dim, 3, 1, 1), nn.LeakyReLU(inplace=True)])
+            if (scale & (scale - 1)) == 0:  # scale = 2^n
+                for _ in range(int(math.log2(scale))):
+                    m.extend(
+                        [nn.Conv2d(mid_dim, 4 * mid_dim, 3, 1, 1), nn.PixelShuffle(2)]
+                    )
+            elif scale == 3:
+                m.extend([nn.Conv2d(mid_dim, 9 * mid_dim, 3, 1, 1), nn.PixelShuffle(3)])
+            else:
+                raise ValueError(
+                    f"scale {scale} is not supported. Supported scales: 2^n and 3."
+                )
+            m.append(nn.Conv2d(mid_dim, out_dim, 3, 1, 1))
+        elif upsample == "nearest+conv":
+            if (scale & (scale - 1)) == 0:
+                for _ in range(int(math.log2(scale))):
+                    m.extend(
+                        (
+                            nn.Conv2d(in_dim, in_dim, 3, 1, 1),
+                            nn.Upsample(scale_factor=2),
+                            nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                        )
+                    )
+                m.extend(
+                    (
+                        nn.Conv2d(in_dim, in_dim, 3, 1, 1),
+                        nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                    )
+                )
+            elif scale == 3:
+                m.extend(
+                    (
+                        nn.Conv2d(in_dim, in_dim, 3, 1, 1),
+                        nn.Upsample(scale_factor=scale),
+                        nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                        nn.Conv2d(in_dim, in_dim, 3, 1, 1),
+                        nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                    )
+                )
+            else:
+                raise ValueError(
+                    f"scale {scale} is not supported. Supported scales: 2^n and 3."
+                )
+            m.append(nn.Conv2d(in_dim, out_dim, 3, 1, 1))
+        elif upsample == "dysample":
+            if mid_dim != in_dim:
+                m.extend(
+                    [nn.Conv2d(in_dim, mid_dim, 3, 1, 1), nn.LeakyReLU(inplace=True)]
+                )
+                dys_dim = mid_dim
+            else:
+                dys_dim = in_dim
+            m.append(DySample(dys_dim, out_dim, scale, group))
+        elif upsample == "transpose+conv":
+            if scale == 2:
+                m.append(nn.ConvTranspose2d(in_dim, out_dim, 4, 2, 1))
+            elif scale == 3:
+                m.append(nn.ConvTranspose2d(in_dim, out_dim, 3, 3, 0))
+            elif scale == 4:
+                m.extend(
+                    [
+                        nn.ConvTranspose2d(in_dim, in_dim, 4, 2, 1),
+                        nn.GELU(),
+                        nn.ConvTranspose2d(in_dim, out_dim, 4, 2, 1),
+                    ]
+                )
+            else:
+                raise ValueError(
+                    f"scale {scale} is not supported. Supported scales: 2, 3, 4"
+                )
+            m.append(nn.Conv2d(out_dim, out_dim, 3, 1, 1))
+        else:
+            raise ValueError(
+                f"An invalid Upsample was selected. Please choose one of {SampleMods}"
+            )
+        super().__init__(*m)
 
-    with torch.no_grad():
-        low, up = norm_cdf((a - mean) / std), norm_cdf((b - mean) / std)
-        tensor.uniform_(2 * low - 1, 2 * up - 1)
-        tensor.erfinv_()
-        tensor.mul_(std * math.sqrt(2.0))
-        tensor.add_(mean)
-        tensor.clamp_(min=a, max=b)
-        return tensor
-
-
-def trunc_normal_(tensor, mean=0.0, std=1.0, a=-2.0, b=2.0):
-    """Truncated normal initializer."""
-    return _no_grad_trunc_normal_(tensor, mean, std, a, b)
-
-
-# --- Core Components ---
-class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample."""
-
-    def __init__(self, drop_prob=None):
-        super().__init__()
-        self.drop_prob = drop_prob
-
-    def forward(self, x):
-        if self.drop_prob == 0.0 or not self.training:
-            return x
-        keep_prob = 1 - self.drop_prob
-        shape = (x.shape[0],) + (1,) * (x.ndim - 1)
-        random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
-        random_tensor.floor_()  # binarize
-        return x.div(keep_prob) * random_tensor
-
-
-class SimpleLayerNorm(nn.Module):
-    """A simplified LayerNorm implementation."""
-
-    def __init__(self, dim: int, eps: float = 1e-6) -> None:
-        super().__init__()
-        self.weight = nn.Parameter(torch.ones(dim))
-        self.bias = nn.Parameter(torch.zeros(dim))
-        self.eps = eps
-
-    def forward(self, x):
-        return F.layer_norm(x, (x.size(-1),), self.weight, self.bias, self.eps)
-
-
-# --- Upsamplers ---
-class PixelShuffleUpsampler(nn.Module):
-    def __init__(self, c_in, c_out, sf):
-        super().__init__()
-        self.conv_pre = nn.Conv2d(c_in, c_out * (sf**2), 3, 1, 1)
-        self.ps = nn.PixelShuffle(sf)
-        self.conv_post = nn.Conv2d(c_out, c_out, 3, 1, 1)
-
-    def forward(self, x):
-        return self.conv_post(self.ps(self.conv_pre(x)))
-
-
-class NearestConvUpsampler(nn.Module):
-    def __init__(self, c_in, c_out, sf):
-        super().__init__()
-        self.up = nn.Upsample(scale_factor=sf, mode="nearest")
-        self.conv = nn.Sequential(
-            nn.Conv2d(c_in, c_in, 3, 1, 1), nn.GELU(), nn.Conv2d(c_in, c_out, 3, 1, 1)
+        self.register_buffer(
+            "MetaUpsample",
+            torch.tensor(
+                [
+                    3,  # Block version, if you change something, please number from the end so that you can distinguish between authorized changes and third parties
+                    list(SampleMods3.__args__).index(upsample),  # UpSample method index
+                    scale,
+                    in_dim,
+                    out_dim,
+                    mid_dim,
+                    group,
+                ],
+                dtype=torch.uint8,
+            ),
         )
 
-    def forward(self, x):
-        return self.conv(self.up(x))
 
-
-class TransposeConvUpsampler(nn.Module):
-    def __init__(self, c_in, c_out, sf):
-        super().__init__()
-        if sf == 2:
-            self.up = nn.ConvTranspose2d(c_in, c_out, 4, 2, 1)
-        elif sf == 3:
-            self.up = nn.ConvTranspose2d(c_in, c_out, 3, 3, 0)
-        elif sf == 4:
-            self.up = nn.Sequential(
-                nn.ConvTranspose2d(c_in, c_in, 4, 2, 1),
-                nn.GELU(),
-                nn.ConvTranspose2d(c_in, c_out, 4, 2, 1),
-            )
-        else:
-            raise ValueError(f"Unsupported scale factor: {sf}")
-        self.refine = nn.Conv2d(c_out, c_out, 3, 1, 1)
-
-    def forward(self, x):
-        return self.refine(self.up(x))
-
-
-# --- LHAN Components ---
+# --- fdat Components ---
 class FastSpatialWindowAttention(nn.Module):
-    def __init__(self, dim, window_size=8, num_heads=4, qkv_bias=False):
+    def __init__(self, dim, window_size=8, num_heads=4, qkv_bias=False) -> None:
         super().__init__()
         self.dim, self.ws, self.nh = dim, window_size, num_heads
         self.scale = (dim // num_heads) ** -0.5
-        self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
-        self.proj = nn.Linear(dim, dim)
+        self.qkv, self.proj = (
+            nn.Linear(dim, dim * 3, bias=qkv_bias),
+            nn.Linear(dim, dim),
+        )
         self.bias = nn.Parameter(
             torch.zeros(num_heads, window_size * window_size, window_size * window_size)
         )
@@ -168,12 +192,14 @@ class FastSpatialWindowAttention(nn.Module):
 
 
 class FastChannelAttention(nn.Module):
-    def __init__(self, dim, num_heads=4, qkv_bias=False):
+    def __init__(self, dim, num_heads=4, qkv_bias=False) -> None:
         super().__init__()
         self.nh = num_heads
         self.temp = nn.Parameter(torch.ones(num_heads, 1, 1))
-        self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
-        self.proj = nn.Linear(dim, dim)
+        self.qkv, self.proj = (
+            nn.Linear(dim, dim * 3, bias=qkv_bias),
+            nn.Linear(dim, dim),
+        )
 
     def forward(self, x, H, W):  # H, W are unused but kept for API consistency
         B, N, C = x.shape
@@ -190,7 +216,7 @@ class FastChannelAttention(nn.Module):
 
 
 class SimplifiedAIM(nn.Module):
-    def __init__(self, dim, reduction_ratio=8):
+    def __init__(self, dim, reduction_ratio=8) -> None:
         super().__init__()
         self.sg = nn.Sequential(nn.Conv2d(dim, 1, 1, bias=False), nn.Sigmoid())
         self.cg = nn.Sequential(
@@ -220,12 +246,14 @@ class SimplifiedAIM(nn.Module):
 
 
 class SimplifiedFFN(nn.Module):
-    def __init__(self, dim, expansion_ratio=2.0, drop=0.0):
+    def __init__(self, dim, expansion_ratio=2.0, drop=0.0) -> None:
         super().__init__()
         hd = int(dim * expansion_ratio)
-        self.fc1 = nn.Linear(dim, hd, bias=False)
-        self.act = nn.GELU()
-        self.fc2 = nn.Linear(hd, dim, bias=False)
+        self.fc1, self.act, self.fc2 = (
+            nn.Linear(dim, hd, False),
+            nn.GELU(),
+            nn.Linear(hd, dim, False),
+        )
         self.drop = nn.Dropout(drop)
         self.smix = nn.Conv2d(hd, hd, 3, 1, 1, groups=hd, bias=False)
 
@@ -241,10 +269,10 @@ class SimplifiedFFN(nn.Module):
 
 
 class SimplifiedDATBlock(nn.Module):
-    def __init__(self, dim, nh, ws, ffn_exp, aim_re, btype, dp, qkv_b=False):
+    def __init__(self, dim, nh, ws, ffn_exp, aim_re, btype, dp, qkv_b=False) -> None:
         super().__init__()
         self.btype = btype
-        self.n1, self.n2 = SimpleLayerNorm(dim), SimpleLayerNorm(dim)
+        self.n1, self.n2 = nn.LayerNorm(dim), nn.LayerNorm(dim)
         self.attn = (
             FastSpatialWindowAttention(dim, ws, nh, qkv_b)
             if btype == "spatial"
@@ -277,7 +305,7 @@ class SimplifiedDATBlock(nn.Module):
 
 
 class SimplifiedResidualGroup(nn.Module):
-    def __init__(self, dim, depth, nh, ws, ffn_exp, aim_re, pattern, dp_rates):
+    def __init__(self, dim, depth, nh, ws, ffn_exp, aim_re, pattern, dp_rates) -> None:
         super().__init__()
         self.blocks = nn.ModuleList(
             [
@@ -289,8 +317,8 @@ class SimplifiedResidualGroup(nn.Module):
         )
         self.conv = nn.Conv2d(dim, dim, 3, 1, 1, bias=False)
 
-    def forward(self, x, H, W):
-        B, C, _, _ = x.shape
+    def forward(self, x: Tensor) -> Tensor:
+        B, C, H, W = x.shape
         x_seq = x.view(B, C, H * W).transpose(1, 2).contiguous()
         for block in self.blocks:
             x_seq = block(x_seq, H, W)
@@ -298,40 +326,40 @@ class SimplifiedResidualGroup(nn.Module):
 
 
 @store_hyperparameters()
-class LHAN(nn.Module):
+class FDAT(nn.Module):
     hyperparameters = {}
 
     def __init__(
         self,
         *,
-        num_in_ch=3,
-        num_out_ch=3,
-        upscaling_factor=4,
-        embed_dim=120,
-        num_groups=4,
-        depth_per_group=3,
-        num_heads=4,
-        window_size=8,
-        ffn_expansion_ratio=2.0,
-        aim_reduction_ratio=8,
-        group_block_pattern=["spatial", "channel"],
-        drop_path_rate=0.1,
-        upsampler_type="pixelshuffle",
-        img_range=1.0,
-    ):
+        num_in_ch: int = 3,
+        num_out_ch: int = 3,
+        scale: int = 4,
+        embed_dim: int = 120,
+        num_groups: int = 4,
+        depth_per_group: int = 3,
+        num_heads: int = 4,
+        window_size: int = 8,
+        ffn_expansion_ratio: float = 2.0,
+        aim_reduction_ratio: int = 8,
+        group_block_pattern: list[str] | None = None,
+        drop_path_rate: float = 0.1,
+        mid_dim: int = 64,
+        upsampler_type: SampleMods3 = "pixelshuffle",
+        img_range: float = 1.0,
+    ) -> None:
+        if group_block_pattern is None:
+            group_block_pattern = ["spatial", "channel"]
         super().__init__()
-        self.img_range = img_range
-        self.upscale = upscaling_factor
+        self.img_range, self.upscale = img_range, scale
         self.mean = torch.zeros(1, 1, 1, 1)
-
         self.conv_first = nn.Conv2d(num_in_ch, embed_dim, 3, 1, 1, bias=True)
-
         ad = depth_per_group * len(group_block_pattern)
         td = num_groups * ad
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, td)]
 
-        self.groups = nn.ModuleList(
-            [
+        self.groups = nn.Sequential(
+            *[
                 SimplifiedResidualGroup(
                     embed_dim,
                     ad,
@@ -347,19 +375,12 @@ class LHAN(nn.Module):
         )
 
         self.conv_after = nn.Conv2d(embed_dim, embed_dim, 3, 1, 1, bias=False)
-
-        upsampler_map = {
-            "pixelshuffle": PixelShuffleUpsampler,
-            "nearest_conv": NearestConvUpsampler,
-            "transpose_conv": TransposeConvUpsampler,
-        }
-        self.upsampler = upsampler_map[upsampler_type](
-            embed_dim, num_out_ch, upscaling_factor
+        self.upsampler = UniUpsampleV3(
+            upsampler_type, scale, embed_dim, num_out_ch, mid_dim, 4
         )
-
         self.apply(self._init_weights)
 
-    def _init_weights(self, m):
+    def _init_weights(self, m: nn.Module) -> None:
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
             if m.bias is not None:
@@ -368,23 +389,15 @@ class LHAN(nn.Module):
             trunc_normal_(m.weight, std=0.02)
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
-        elif isinstance(m, (SimpleLayerNorm, nn.LayerNorm, nn.GroupNorm)):
+        elif isinstance(m, nn.LayerNorm | nn.GroupNorm):
             if hasattr(m, "bias") and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
             if hasattr(m, "weight") and m.weight is not None:
                 nn.init.constant_(m.weight, 1.0)
 
-    def forward(self, x):
-        B, C, H, W = x.shape
-        self.mean = self.mean.type_as(x)
-        x_norm = (x - self.mean) * self.img_range
-
-        x_shallow = self.conv_first(x_norm)
-        x_deep = x_shallow
-        for group in self.groups:
-            x_deep = group(x_deep, H, W)
-
+    def forward(self, x: Tensor) -> Tensor:
+        x_shallow = self.conv_first(x)
+        x_deep = self.groups(x_shallow)
         x_deep = self.conv_after(x_deep)
         x_out = self.upsampler(x_deep + x_shallow)
-
-        return x_out / self.img_range + self.mean
+        return x_out
