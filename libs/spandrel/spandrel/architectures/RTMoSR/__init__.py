@@ -39,16 +39,22 @@ class RTMoSRArch(Architecture[RTMoSR]):
         ffn = state_dict["body.0.fc1.conv1.weight"].shape[0] / dim / 2"""
         n_blocks = get_seq_len(state_dict, "body")
         upscaling_factor = int(
-            math.sqrt(state_dict["to_img.0.conv2.weight"].shape[0] / 3)
+            math.sqrt(state_dict["to_img.0.conv1.b1"].shape[0] / 3)
         )
         ffn_expansion = state_dict["body.0.fc1.conv1.k0"].shape[0] / 128
-        dim = state_dict["to_feat.conv1.b1"].shape[0]
-        unshuffle = "to_feat.1" in state_dict.keys()
+        dim = state_dict["body.0.norm.scale"].shape[0]
+        unshuffle = "to_feat.1.alpha" in state_dict.keys()
+        if unshuffle:
+            w = state_dict["to_feat.1.conv1.k0"].shape[1]
+            if w == 48:
+                upscaling_factor = 1
+            else:
+                upscaling_factor = math.isqrt(state_dict["to_feat.1.weight"].shape[1] // 3)
         model = RTMoSR(
             scale=upscaling_factor,
             dim=dim,
             ffn_expansion=ffn_expansion,
-            n_blocks=n_blocks,
+            n_blocks= n_blocks,
             unshuffle_mod=unshuffle,
         )
 
