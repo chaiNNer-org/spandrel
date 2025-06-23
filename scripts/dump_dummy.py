@@ -27,13 +27,12 @@ from textwrap import dedent
 
 import torch
 from dump_state_dict import dump
-
-from spandrel.architectures import SCUNet
+from libs.spandrel.spandrel.architectures import RTMoSR
 
 
 def create_dummy() -> torch.nn.Module:
     """Edit this function"""
-    return SCUNet.SCUNet()
+    return RTMoSR.RTMoSR()
 
 
 if __name__ == "__main__":

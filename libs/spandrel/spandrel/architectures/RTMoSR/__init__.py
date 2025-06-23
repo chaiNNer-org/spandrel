@@ -2,13 +2,12 @@ import math
 
 from typing_extensions import override
 
-from ...util import KeyCondition, get_seq_len
-
 from ...__helpers.model_descriptor import (
     Architecture,
     ImageModelDescriptor,
     StateDict,
 )
+from ...util import KeyCondition, get_seq_len
 from .__arch.RTMoSR import RTMoSR
 
 
@@ -39,13 +38,17 @@ class RTMoSRArch(Architecture[RTMoSR]):
             dim = state_dict["to_feat.weight"].shape[0]
         ffn = state_dict["body.0.fc1.conv1.weight"].shape[0] / dim / 2"""
         n_blocks = get_seq_len(state_dict, "body")
-        scale = 1
-        dim=32
+        upscaling_factor = int(
+            math.sqrt(state_dict["to_img.0.conv2.weight"].shape[0] / 3)
+        )
+        ffn_expansion = state_dict["body.0.fc1.conv1.k0"].shape[0] / 128
+        dim = state_dict["to_feat.conv1.b1"].shape[0]
+        unshuffle = "to_feat.1" in state_dict.keys()
         model = RTMoSR(
-            scale=scale,
+            scale=upscaling_factor,
             dim=dim,
-            ffn_expansion=2,
-            n_blocks=2,
+            ffn_expansion=ffn_expansion,
+            n_blocks=n_blocks,
             unshuffle_mod=unshuffle,
         )
 
@@ -53,11 +56,11 @@ class RTMoSRArch(Architecture[RTMoSR]):
             model,
             state_dict,
             architecture=self,
-            purpose="Restoration" if scale == 1 else "SR",
+            purpose="Restoration" if upscaling_factor == 1 else "SR",
             tags=[f"{dim}nf", f"{n_blocks}nc"],
             supports_half=True,
             supports_bfloat16=True,
-            scale=scale,
+            scale=upscaling_factor,
             input_channels=in_nc,
             output_channels=out_nc,
         )

@@ -6,12 +6,6 @@ from torch.nn.init import trunc_normal_
 from ....util import store_hyperparameters
 
 
-import torch
-import torch.nn.functional as F
-from torch import nn
-from torch.nn.init import trunc_normal_
-
-
 class CSELayer(nn.Module):
     def __init__(self, num_channels: int = 48, reduction_ratio: int = 2):
         super(CSELayer, self).__init__()
@@ -313,11 +307,6 @@ class OmniShift(nn.Module):
         self.conv5x5_reparam.weight = nn.Parameter(combined_weight)
         self.conv5x5_reparam.bias = nn.Parameter(combined_bias)
 
-    def train(self, mode: bool = True):
-        super().train(mode)
-        if not mode:
-            self.reparam_5x5()
-
     def forward(self, x):
         if self.training:
             out = self.forward_train(x)
@@ -375,9 +364,11 @@ class GatedCNNBlock(nn.Module):
         x = self.act(self.fc2(self.act(g) * torch.cat((i, c), dim=1)))
         return x + shortcut
 
+
 @store_hyperparameters()
 class RTMoSR(nn.Module):
     hyperparameters = {}
+
     def __init__(
         self,
         *,
@@ -439,5 +430,3 @@ class RTMoSR(nn.Module):
         return self.to_img(out)[
             :, :, : h * self.scale, : w * self.scale
         ] + F.interpolate(x, scale_factor=self.scale)
-
-
