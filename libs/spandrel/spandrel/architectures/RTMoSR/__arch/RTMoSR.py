@@ -427,6 +427,4 @@ class RTMoSR(nn.Module):
         out = self.check_img_size(x, (h, w))
         out = self.to_feat(out)
         out = self.body(out)
-        return self.to_img(out)[
-            :, :, : h * self.scale, : w * self.scale
-        ] + F.interpolate(x, scale_factor=self.scale)
+        return self.to_img(out) + F.interpolate(x, scale_factor=self.scale)

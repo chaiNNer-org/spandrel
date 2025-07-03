@@ -202,10 +202,9 @@ image = cv2.imread("test_images/image.png")
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 image = torch.from_numpy(image).permute(2, 0, 1).unsqueeze(0).float() / 255.
 ncnn_model = UpscaleNCNNImage(
-    modelPath=conversion_path,
-    modelName=f"{scale}x_{model_name}.ncnn",
+    modelPath=cwd,
+    modelName=f"{model_str}.ncnn",
 )
 output = ncnn_model.renderImage("test_images/image.png")
-output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
 output_path = f"test_images/{model_name}_ncnn_output.png"
 ncnn_model.saveImage(output, output_path)
