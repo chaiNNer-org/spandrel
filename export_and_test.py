@@ -110,6 +110,7 @@ with torch.inference_mode():
     mod = torch.jit.trace( model,
         ex_input)
     mod.save(pt_path)
+
     torch.onnx.export(
         model,
         ex_input,
