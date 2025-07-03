@@ -48,8 +48,10 @@ class RTMoSRArch(Architecture[RTMoSR]):
             w = state_dict["to_feat.1.conv1.k0"].shape[1]
             if w == 48:
                 upscaling_factor = 1
+            elif w == 12:
+                upscaling_factor = 2
             else:
-                upscaling_factor = math.isqrt(state_dict["to_feat.1.weight"].shape[1] // 3)
+                upscaling_factor = 4
         model = RTMoSR(
             scale=upscaling_factor,
             dim=dim,

@@ -10,7 +10,18 @@ try:
     model_str = sys.argv[1]
 except:
     model_str = input("Paste model path/name here: ")
+
+if "https://" in model_str:
+    from urllib.request import urlretrieve
+    model_base_name = model_str.split("/")[-1]
+    urlretrieve(model_str, model_base_name)
+    model_str = model_base_name
+
+
 conversion_path = "converted_models/"
+s = torch.load(model_str, map_location="cpu")  # Ensure the model can be loaded
+print(s.keys())
+print(s["to_feat.1.conv1.k0"].shape[1])
 model = ModelLoader().load_from_file(model_str)
 if not os.path.exists(conversion_path): os.mkdir(conversion_path)
 model_name = os.path.basename(model_str)
@@ -39,10 +50,11 @@ with torch.inference_mode():
     )
 image = cv2.imread("test_images/image.png")
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-image = torch.from_numpy(image).permute(2, 0, 1).unsqueeze(0)
+image = torch.from_numpy(image).permute(2, 0, 1).unsqueeze(0).float() / 255.
 with torch.no_grad():
     output = model(image)
-output = output.squeeze(0).permute(1, 2, 0).numpy()
+output = output.squeeze(0).permute(1, 2, 0).numpy() * 255.
+output = output.clip(0, 255).astype('uint8')
 output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
 cv2.imwrite(f"test_images/{model_name}_output.png", output)
 
@@ -54,6 +66,8 @@ input_name = ort_session.get_inputs()[0].name
 output_name = ort_session.get_outputs()[0].name
 ort_inputs = {input_name: image.numpy()}
 ort_outs = ort_session.run([output_name], ort_inputs)
-ort_output = ort_outs[0].squeeze(0).transpose(1, 2, 0)
+ort_output = ort_outs[0].squeeze(0).transpose(1, 2, 0) * 255.
 ort_output = cv2.cvtColor(ort_output, cv2.COLOR_RGB2BGR)
 cv2.imwrite(f"test_images/{model_name}_onnx_output.png", ort_output)
+print("ONNX inference completed and output saved.")
+
