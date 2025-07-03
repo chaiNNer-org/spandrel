@@ -95,8 +95,6 @@ if "https://" in model_str:
 
 conversion_path = "converted_models/"
 s = torch.load(model_str, map_location="cpu")  # Ensure the model can be loaded
-print(s.keys())
-print(s["to_feat.1.conv1.k0"].shape[1])
 model = ModelLoader().load_from_file(model_str)
 if not os.path.exists(conversion_path): os.mkdir(conversion_path)
 model_name = os.path.basename(model_str)
