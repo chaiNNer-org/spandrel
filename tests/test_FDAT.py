@@ -57,7 +57,6 @@ def test_load():
     )
 
 
-# TODO
 def test_size_requirements():
     file = ModelFile.from_url(
         "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/2x_DF2K_FDAT_M_500k_fp16.safetensors",
@@ -66,7 +65,6 @@ def test_size_requirements():
     assert_size_requirements(file.load_model())
 
 
-# TODO
 def test_rcan_bix4(snapshot):
     file = ModelFile.from_url(
         "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/2x_DF2K_FDAT_M_500k_fp16.safetensors",
