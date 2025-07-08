@@ -41,6 +41,19 @@ def test_load():
         lambda: FDAT(ffn_expansion_ratio=1.5),
         lambda: FDAT(aim_reduction_ratio=7),
         lambda: FDAT(mid_dim=48),
+        lambda: FDAT(
+            scale=2,
+            embed_dim=96,
+            num_groups=2,
+            depth_per_group=2,
+            num_heads=3,
+            window_size=8,
+            ffn_expansion_ratio=1.5,
+            aim_reduction_ratio=8,
+            group_block_pattern=None,
+            upsampler_type="pixelshuffle",
+            img_range=1.0,
+        ),
     )
 
 
