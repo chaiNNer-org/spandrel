@@ -11,7 +11,12 @@ class FDATArch(Architecture[FDAT]):
         super().__init__(
             id="FDAT",
             detect=KeyCondition.has_all(
-                "groups.0.blocks.0.n1.weight", "upsampler.MetaUpsample"
+                "conv_first.weight",
+                "groups.0.blocks.0.attn.bias",
+                "groups.0.blocks.0.inter.cg.1.weight",
+                "groups.0.blocks.0.ffn.fc1.weight",
+                "groups.0.blocks.0.n1.weight",
+                "upsampler.MetaUpsample",
             ),
         )
 
