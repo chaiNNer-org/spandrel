@@ -1,5 +1,7 @@
 # https://github.com/stinkybread/fdat/blob/main/fdat.py
 
+from __future__ import annotations
+
 import math
 from typing import Literal
 
@@ -559,7 +561,7 @@ class SimplifiedFFN(nn.Module):
         self.smix = nn.Conv2d(hd, hd, 3, 1, 1, groups=hd, bias=False)
 
     def forward(self, x, H, W):
-        B, L, C = x.shape
+        B, L, _C = x.shape
         x = self.drop(self.act(self.fc1(x)))
         x_s = (
             self.smix(x.transpose(1, 2).view(B, x.shape[-1], H, W))
