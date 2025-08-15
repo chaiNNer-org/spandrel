@@ -415,7 +415,7 @@ class SCUNet(nn.Module):
         # self.apply(self._init_weights)
 
     def check_image_size(self, x):
-        return pad_to_multiple(x, 64, mode="reflect")
+        return x
 
     def forward(self, x0):
         h, w = x0.size()[-2:]

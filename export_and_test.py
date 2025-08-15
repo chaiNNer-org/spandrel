@@ -92,9 +92,7 @@ if "https://" in model_str:
     urlretrieve(model_str, model_base_name)
     model_str = model_base_name
 
-
 conversion_path = "converted_models/"
-s = torch.load(model_str, map_location="cpu")  # Ensure the model can be loaded
 model = ModelLoader().load_from_file(model_str)
 if not os.path.exists(conversion_path): os.mkdir(conversion_path)
 model_name = os.path.basename(model_str)
@@ -106,7 +104,7 @@ model.load_state_dict(state_dict, strict=True)
 pt_path = os.path.join(f'{conversion_path}',f'{scale}x_{model_name}.pt')
 print("Exporting...")
 with torch.inference_mode():
-    ex_input = torch.rand(1, 3, 32, 32)
+    ex_input = torch.rand(1, 3, 64, 64)
     mod = torch.jit.trace( model,
         ex_input)
     mod.save(pt_path)
@@ -203,6 +201,7 @@ image = torch.from_numpy(image).permute(2, 0, 1).unsqueeze(0).float() / 255.
 ncnn_model = UpscaleNCNNImage(
     modelPath=cwd,
     modelName=f"{model_str}.ncnn",
+    vulkan=True,
 )
 output = ncnn_model.renderImage("test_images/image.png")
 output_path = f"test_images/{model_name}_ncnn_output.png"
