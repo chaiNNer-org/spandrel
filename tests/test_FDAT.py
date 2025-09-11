@@ -23,6 +23,7 @@ def test_load():
         lambda: FDAT(upsampler_type="pixelshuffle", scale=3),
         lambda: FDAT(upsampler_type="pixelshuffle", scale=8),
         lambda: FDAT(upsampler_type="pixelshuffle", scale=1, num_in_ch=1, num_out_ch=1),
+        lambda: FDAT(upsampler_type="transpose+conv", scale=1),
         lambda: FDAT(upsampler_type="transpose+conv", scale=2),
         lambda: FDAT(upsampler_type="transpose+conv", scale=3),
         lambda: FDAT(
@@ -54,6 +55,8 @@ def test_load():
             upsampler_type="pixelshuffle",
             img_range=1.0,
         ),
+        lambda: FDAT(scale=2, unshuffle_mod=True),
+        lambda: FDAT(scale=1, unshuffle_mod=True),
     )
 
 
@@ -65,7 +68,7 @@ def test_size_requirements():
     assert_size_requirements(file.load_model())
 
 
-def test_rcan_bix4(snapshot):
+def test_fdat_m(snapshot):
     file = ModelFile.from_url(
         "https://github.com/the-database/traiNNer-redux/releases/download/pretrained-models/2x_DF2K_FDAT_M_500k_fp16.safetensors",
         name="2x_DF2K_FDAT_M_500k_fp16.safetensors",

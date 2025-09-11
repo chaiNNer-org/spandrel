@@ -1,5 +1,4 @@
 # https://github.com/stinkybread/fdat/blob/main/fdat.py
-
 from __future__ import annotations
 
 import math
@@ -11,7 +10,9 @@ import torch.nn.functional as F  # noqa: N812
 from einops import rearrange
 from torch import Tensor, nn
 from torch.nn.init import trunc_normal_
+from torch.nn.modules.module import _IncompatibleKeys  # type: ignore
 
+from spandrel.__helpers.model_descriptor import StateDict
 from spandrel.util import store_hyperparameters
 from spandrel.util.timm import DropPath
 
@@ -650,13 +651,24 @@ class FDAT(nn.Module):
         mid_dim: int = 64,
         upsampler_type: SampleMods3 = "transpose+conv",
         img_range: float = 1.0,
+        unshuffle_mod: bool = False,
     ) -> None:
         if group_block_pattern is None:
             group_block_pattern = ["spatial", "channel"]
         super().__init__()
         self.img_range, self.upscale = img_range, scale
         self.mean = torch.zeros(1, 1, 1, 1)
-        self.conv_first = nn.Conv2d(num_in_ch, embed_dim, 3, 1, 1, bias=True)
+        self.pad = 0
+        if unshuffle_mod and scale < 3:
+            unshuffle = 4 // scale
+            scale = 4
+            self.conv_first = nn.Sequential(
+                nn.PixelUnshuffle(unshuffle),
+                nn.Conv2d(num_in_ch * unshuffle**2, embed_dim, 3, 1, 1, bias=True),
+            )
+            self.pad = unshuffle
+        else:
+            self.conv_first = nn.Conv2d(num_in_ch, embed_dim, 3, 1, 1, bias=True)
         ad = depth_per_group * len(group_block_pattern)
         td = num_groups * ad
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, td)]
@@ -683,6 +695,15 @@ class FDAT(nn.Module):
         )
         self.apply(self._init_weights)
 
+    def load_state_dict(
+        self,
+        state_dict: StateDict,
+        *args,  # noqa: ANN002
+        **kwargs,
+    ) -> _IncompatibleKeys:
+        state_dict["upsampler.MetaUpsample"] = self.upsampler.MetaUpsample
+        return super().load_state_dict(state_dict, *args, **kwargs)
+
     def _init_weights(self, m: nn.Module) -> None:
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
@@ -698,9 +719,18 @@ class FDAT(nn.Module):
             if hasattr(m, "weight") and m.weight is not None:
                 nn.init.constant_(m.weight, 1.0)
 
+    def check_img_size(self, x: Tensor, h: int, w: int) -> Tensor:
+        if self.pad == 0:
+            return x
+        mod_pad_h = (self.pad - h % self.pad) % self.pad
+        mod_pad_w = (self.pad - w % self.pad) % self.pad
+        return F.pad(x, (0, mod_pad_w, 0, mod_pad_h), "reflect")
+
     def forward(self, x: Tensor) -> Tensor:
+        _b, _c, h, w = x.shape
+        x = self.check_img_size(x, h, w)
         x_shallow = self.conv_first(x)
         x_deep = self.groups(x_shallow)
         x_deep = self.conv_after(x_deep)
         x_out = self.upsampler(x_deep + x_shallow)
-        return x_out
+        return x_out[:, :, : h * self.upscale, : w * self.upscale]

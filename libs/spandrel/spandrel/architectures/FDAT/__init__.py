@@ -10,13 +10,23 @@ class FDATArch(Architecture[FDAT]):
     def __init__(self):
         super().__init__(
             id="FDAT",
-            detect=KeyCondition.has_all(
-                "conv_first.weight",
-                "groups.0.blocks.0.attn.bias",
-                "groups.0.blocks.0.inter.cg.1.weight",
-                "groups.0.blocks.0.ffn.fc1.weight",
-                "groups.0.blocks.0.n1.weight",
-                "upsampler.MetaUpsample",
+            detect=KeyCondition.has_any(
+                KeyCondition.has_all(
+                    "conv_first.weight",
+                    "groups.0.blocks.0.attn.bias",
+                    "groups.0.blocks.0.inter.cg.1.weight",
+                    "groups.0.blocks.0.ffn.fc1.weight",
+                    "groups.0.blocks.0.n1.weight",
+                    "upsampler.MetaUpsample",
+                ),
+                KeyCondition.has_all(
+                    "conv_first.1.weight",
+                    "groups.0.blocks.0.attn.bias",
+                    "groups.0.blocks.0.inter.cg.1.weight",
+                    "groups.0.blocks.0.ffn.fc1.weight",
+                    "groups.0.blocks.0.n1.weight",
+                    "upsampler.MetaUpsample",
+                ),
             ),
         )
 
@@ -26,7 +36,16 @@ class FDATArch(Architecture[FDAT]):
         ].tolist()
         upsampler_type = list(SampleMods3.__args__)[upsampler_index]
 
-        num_in_ch = state_dict["conv_first.weight"].shape[1]
+        if "conv_first.1.weight" in state_dict:
+            num_in_ch = num_out_ch
+            scale = 4 // (
+                math.isqrt(state_dict["conv_first.1.weight"].shape[1] // num_in_ch)
+            )
+            unshuffle_mod = True
+        else:
+            unshuffle_mod = False
+            num_in_ch = state_dict["conv_first.weight"].shape[1]
+
         num_groups = get_seq_len(state_dict, "groups")
         group_block_pattern = ["spatial", "channel"]
         depth_per_group = get_seq_len(state_dict, "groups.0.blocks") // len(
@@ -58,6 +77,7 @@ class FDATArch(Architecture[FDAT]):
             upsampler_type=upsampler_type,
             mid_dim=mid_dim,
             img_range=img_range,
+            unshuffle_mod=unshuffle_mod,
         )
 
         sizes = {96: "tiny", 108: "light", 120: "medium", 180: "large"}
@@ -75,6 +95,9 @@ class FDATArch(Architecture[FDAT]):
 
         if size_tag:
             tags.append(size_tag)
+
+        if unshuffle_mod:
+            tags.append("unshuffle")
 
         return ImageModelDescriptor(
             model,
