@@ -10,8 +10,8 @@ import torch.nn as nn
 from einops import rearrange
 from einops.layers.torch import Rearrange
 
-from spandrel.util import store_hyperparameters
-from spandrel.util.timm import DropPath, trunc_normal_
+from ....util import store_hyperparameters
+from ....util.timm import DropPath, trunc_normal_
 
 from ...__arch_helpers.padding import pad_to_multiple
 
@@ -415,7 +415,7 @@ class SCUNet(nn.Module):
         # self.apply(self._init_weights)
 
     def check_image_size(self, x):
-        return pad_to_multiple(x, 64, mode="reflect")
+        return x
 
     def forward(self, x0):
         h, w = x0.size()[-2:]

@@ -1,6 +1,7 @@
+from sympy import false
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_scale_and_output_channels
+from ...util import KeyCondition, get_scale_and_output_channels
 
 from ...__helpers.model_descriptor import Architecture, ImageModelDescriptor, StateDict
 from .__arch.sudo_SPANPlus import sudo_SPANPlus
@@ -16,7 +17,8 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
                 "feats.1.conv_2.sk.weight",
                 "feats.1.conv_2.eval_conv.weight",
                 "feats.1.conv_cat.weight",
-                "upsampler.end_conv.weight",
+                "dynamic.kernels_weights",
+                "dynamic.attention.to_scores.0.weight",
             ),
         )
 
@@ -30,10 +32,10 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
         upscale: int = 2
         drop_rate: float = 0.0
 
-        num_in_ch = 3
-        num_out_ch = 3
-        blocks = [4]
-        feature_channels = state_dict["feats.0.conv.2.weight"].shape[0] # maybe this will work
+        num_in_ch = state_dict["feats.0.conv.0.weight"].shape[1]
+        feature_channels = state_dict["feats.0.conv.2.weight"].shape[
+            0
+        ]  # maybe this will work
         upscale = 2
         drop_rate = 0.0
         """upscale, num_out_ch = get_scale_and_output_channels(
@@ -43,6 +45,8 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
         upscale = 2
         num_out_ch = 3
 
+        downsample = num_in_ch != num_out_ch
+
         model = sudo_SPANPlus(
             num_in_ch=num_in_ch,
             num_out_ch=num_out_ch,
@@ -50,6 +54,7 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
             feature_channels=feature_channels,
             upscale=upscale,
             drop_rate=drop_rate,
+            downsample=downsample,
         )
 
         return ImageModelDescriptor(
@@ -61,9 +66,11 @@ class sudo_SPANPlusArch(Architecture[sudo_SPANPlus]):  # noqa: N801
             supports_half=True,
             supports_bfloat16=True,
             scale=upscale,  # TODO: fix me
-            input_channels=num_in_ch,  # TODO: fix me
-            output_channels=num_out_ch,  # TODO: fix me
+            input_channels=3,  # TODO: fix me
+            output_channels=3,  # TODO: fix me
         )
 
 
 __all__ = ["sudo_SPANPlusArch", "sudo_SPANPlus"]
+
+from ...util import KeyCondition, get_scale_and_output_channels

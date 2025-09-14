@@ -33,14 +33,18 @@ from ..architectures import (
     RealCUGAN,
     RestoreFormer,
     RetinexFormer,
+    RTMoSR,
     SCUNet,
+    Sebica,
     SeemoRe,
+    SPANPlus,
     SwiftSRGAN,
     Swin2SR,
     SwinIR,
     Uformer,
     sudo_SPANPlus,
-#    USRNet,
+    RCAN,
+    #    USRNet,
 )
 from .registry import ArchRegistry, ArchSupport
 
@@ -90,6 +94,10 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(HVICIDNet.HVICIDNetArch()),
     ArchSupport.from_architecture(SeemoRe.SeemoReArch()),
     ArchSupport.from_architecture(MoSR.MoSRArch()),
+    ArchSupport.from_architecture(SPANPlus.SPANPlusArch()),
+    ArchSupport.from_architecture(Sebica.SebicaArch()),
+    ArchSupport.from_architecture(RTMoSR.RTMoSRArch()),
     ArchSupport.from_architecture(sudo_SPANPlus.sudo_SPANPlusArch()),
-#    ArchSupport.from_architecture(USRNet.USRNetArch()),
+    ArchSupport.from_architecture(RCAN.RCANArch()),
+    #    ArchSupport.from_architecture(USRNet.USRNetArch()),
 )

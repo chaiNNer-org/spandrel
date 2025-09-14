@@ -2,7 +2,7 @@ from typing import Literal
 
 import torch.nn as nn
 
-from spandrel.util import store_hyperparameters
+from ....util import store_hyperparameters
 
 from ...__arch_helpers.dpir_basic_block import conv, sequential
 
@@ -71,9 +71,9 @@ class DnCNN(nn.Module):
         # ------------------------------------
         """
         super().__init__()
-        assert (
-            "R" in act_mode or "L" in act_mode
-        ), "Examples of activation function: R, L, BR, BL, IR, IL"
+        assert "R" in act_mode or "L" in act_mode, (
+            "Examples of activation function: R, L, BR, BL, IR, IL"
+        )
         bias = True
 
         self.mode = mode

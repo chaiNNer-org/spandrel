@@ -14,8 +14,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spandrel.util import store_hyperparameters
-from spandrel.util.timm import to_2tuple, trunc_normal_
+from ....util import store_hyperparameters
+from ....util.timm import to_2tuple, trunc_normal_
 
 
 # Shuffle operation for Categorization and UnCategorization operations.
@@ -29,9 +29,9 @@ def index_reverse(index):
 
 def feature_shuffle(x, index):
     dim = index.dim()
-    assert (
-        x.shape[:dim] == index.shape
-    ), f"x ({x.shape}) and index ({index.shape}) shape incompatible"
+    assert x.shape[:dim] == index.shape, (
+        f"x ({x.shape}) and index ({index.shape}) shape incompatible"
+    )
 
     for _ in range(x.dim() - index.dim()):
         index = index.unsqueeze(-1)

@@ -1,6 +1,6 @@
 import torch.nn as nn
-
-from spandrel.util import store_hyperparameters
+import torch
+from ....util import store_hyperparameters
 
 from ...__arch_helpers.dpir_basic_block import (
     ResBlock,
@@ -110,7 +110,13 @@ class DRUNet(nn.Module):
         self.m_tail = conv(nc[0], out_nc, bias=False, mode="C")
 
     def forward(self, x0):
-        x1 = self.m_head(x0)
+        _, _, H, W = x0.shape  # noqa: N806
+
+        noise_level = 15 / 255  # default from repo
+        noise_map = torch.zeros(1, 1, H, W).to(x0) + noise_level
+
+        x1 = torch.cat([x0, noise_map], dim=1)
+        x1 = self.m_head(x1)
         x2 = self.m_down1(x1)
         x3 = self.m_down2(x2)
         x4 = self.m_down3(x3)

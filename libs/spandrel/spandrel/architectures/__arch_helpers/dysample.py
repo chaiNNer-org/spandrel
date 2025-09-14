@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+
 class DySample(nn.Module):
     """Adapted from 'Learning to Upsample by Learning to Sample':
     https://arxiv.org/abs/2308.15085
@@ -61,12 +62,11 @@ class DySample(nn.Module):
             .transpose(1, 2)
             .unsqueeze(1)
             .unsqueeze(0)
-            .type(x.dtype)
             .to(x.device, non_blocking=True)
         )
         normalizer = torch.tensor(
             [W, H],
-            dtype=x.dtype,
+            dtype=torch.float32,
             device=x.device,
             pin_memory=False,  # pin_memory was originally True
         ).view(1, 2, 1, 1, 1)
@@ -78,16 +78,17 @@ class DySample(nn.Module):
             .permute(0, 2, 3, 4, 1)
             .contiguous()
             .flatten(0, 1)
+            .float()
         )
-        output = F.grid_sample(
-            x.reshape(B * self.groups, -1, H, W),
-            coords,
-            mode="bilinear",
-            align_corners=False,
-            padding_mode="border",
-        ).view(B, -1, self.scale * H, self.scale * W)
+        output = (
+            F.grid_sample(
+                x.reshape(B * self.groups, -1, H, W).float(), coords.float(), mode="bilinear", padding_mode="border", align_corners=False
+            )
+            .to(x.dtype)
+            .view(B, -1, self.scale * H, self.scale * W)
+        )
 
         if self.end_convolution:
-            output = self.end_conv(output)
+            output = self.end_conv(output.to(x.dtype)).to(x.dtype)
 
-        return output
+        return output.to(x.dtype)

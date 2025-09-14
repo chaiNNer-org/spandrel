@@ -6,7 +6,7 @@ from typing import Sequence
 import torch
 from typing_extensions import override
 
-from spandrel.util import KeyCondition, get_seq_len
+from ...util import KeyCondition, get_seq_len
 
 from ...__helpers.model_descriptor import (
     Architecture,
@@ -103,7 +103,7 @@ class IPTArch(Architecture[IPT]):
         for i in range(scale_count):
             s = 1
             for j in range(5):
-                key = f"tail.{i}.0.{j*2}.weight"
+                key = f"tail.{i}.0.{j * 2}.weight"
                 if key in state_dict:
                     shape = state_dict[key].shape
                     s *= math.isqrt(shape[0] // shape[1])

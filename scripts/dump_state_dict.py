@@ -50,15 +50,6 @@ from typing import Any, Dict, Generic, Iterable, Mapping, TypeVar
 
 from torch import Tensor
 
-try:
-    sys.path.insert(0, __file__ + "/../../libs/spandrel")
-    sys.path.insert(0, __file__ + "/../../libs/spandrel_extra_arches")
-
-    from spandrel import ModelLoader  # noqa: E402
-except ImportError:
-    print("Unable to import spandrel.")
-    print("Follow the contributing guide to set up editable installs.")
-    raise
 
 
 State = Dict[str, object]
@@ -169,7 +160,7 @@ def dump(state: dict[str, Any], comment: str, file: str = "dump.yml"):
 
     print(f"Dumped {len(state)} keys to {file}")
 
-
+import torch
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("file", help="Path to model file")
@@ -177,7 +168,7 @@ def main() -> None:
     args = ap.parse_args()
     file = args.file
     print(f"Input file: {file}")
-    state = ModelLoader().load_state_dict_from_file(file)
+    state = torch.load(file, map_location='cpu')
     dump(state, comment=file, file=args.output)
 
 
