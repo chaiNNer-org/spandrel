@@ -328,12 +328,12 @@ class Adaptive_Spatial_Attention(nn.Module):
         self.patches_resolution = reso
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
 
-        assert (
-            0 <= self.shift_size[0] < self.split_size[0]
-        ), "shift_size must in 0-split_size0"
-        assert (
-            0 <= self.shift_size[1] < self.split_size[1]
-        ), "shift_size must in 0-split_size1"
+        assert 0 <= self.shift_size[0] < self.split_size[0], (
+            "shift_size must in 0-split_size0"
+        )
+        assert 0 <= self.shift_size[1] < self.split_size[1], (
+            "shift_size must in 0-split_size1"
+        )
 
         self.branch_num = 2
 
@@ -389,11 +389,11 @@ class Adaptive_Spatial_Attention(nn.Module):
             nn.Conv2d(dim // 16, 1, kernel_size=1),
         )
 
-    def calculate_mask(self, H, W):
+    def calculate_mask(self, H, W, dtype=None):
         # The implementation builds on Swin Transformer code https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py
         # calculate attention mask for shift window
-        img_mask_0 = torch.zeros((1, H, W, 1))  # 1 H W 1 idx=0
-        img_mask_1 = torch.zeros((1, H, W, 1))  # 1 H W 1 idx=1
+        img_mask_0 = torch.zeros((1, H, W, 1), dtype=dtype)  # 1 H W 1 idx=0
+        img_mask_1 = torch.zeros((1, H, W, 1), dtype=dtype)  # 1 H W 1 idx=1
         h_slices_0 = (
             slice(0, -self.split_size[0]),
             slice(-self.split_size[0], -self.shift_size[0]),
@@ -516,7 +516,7 @@ class Adaptive_Spatial_Attention(nn.Module):
             qkv_1 = qkv_1.view(3, B, _L, C // 2)
 
             if self.patches_resolution != _H or self.patches_resolution != _W:
-                mask_tmp = self.calculate_mask(_H, _W)
+                mask_tmp = self.calculate_mask(_H, _W, dtype=x.dtype)
                 x1_shift = self.attns[0](qkv_0, _H, _W, mask=mask_tmp[0].to(x.device))
                 x2_shift = self.attns[1](qkv_1, _H, _W, mask=mask_tmp[1].to(x.device))
             else:
@@ -863,7 +863,7 @@ class Upsample(nn.Sequential):
             m.append(nn.PixelShuffle(3))
         else:
             raise ValueError(
-                f"scale {scale} is not supported. " "Supported scales: 2^n and 3."
+                f"scale {scale} is not supported. Supported scales: 2^n and 3."
             )
         super().__init__(*m)
 
