@@ -193,7 +193,9 @@ class SwinIRArch(Architecture[SwinIR]):
             scale=real_upscale,
             input_channels=in_nc,
             output_channels=out_nc,
-            size_requirements=SizeRequirements(minimum=16, multiple_of=start_unshuffle**2),
+            size_requirements=SizeRequirements(
+                minimum=16, multiple_of=start_unshuffle**2
+            ),
         )
 
 
