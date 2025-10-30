@@ -8,6 +8,7 @@ from spandrel.util import KeyCondition, get_pixelshuffle_params, get_seq_len
 from ...__helpers.model_descriptor import (
     Architecture,
     ImageModelDescriptor,
+    ModelTiling,
     SizeRequirements,
     StateDict,
 )
@@ -196,6 +197,7 @@ class SwinIRArch(Architecture[SwinIR]):
             size_requirements=SizeRequirements(
                 minimum=16, multiple_of=start_unshuffle**2
             ),
+            tiling=ModelTiling.DISCOURAGED,
         )
 
 
