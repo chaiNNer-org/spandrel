@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_rcan_bix4
+# name: test_fdat_m
   ImageModelDescriptor(
     architecture=FDATArch(
       id='FDAT',
