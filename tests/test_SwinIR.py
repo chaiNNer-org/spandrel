@@ -88,3 +88,18 @@ def test_SwinIR_L_4x(snapshot):
         model,
         [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
     )
+
+
+# Model is from https://github.com/XPixelGroup/DiffBIR
+def test_SwinIR_DiffBIR_General(snapshot):
+    file = ModelFile.from_url(
+        "https://huggingface.co/lxq007/DiffBIR/resolve/main/general_swinir_v1.ckpt"
+    )
+    model = file.load_model()
+    assert model == snapshot(exclude=disallowed_props)
+    assert isinstance(model.model, SwinIR)
+    assert_image_inference(
+        file,
+        model,
+        [TestImage.SR_16, TestImage.SR_32, TestImage.SR_64],
+    )
