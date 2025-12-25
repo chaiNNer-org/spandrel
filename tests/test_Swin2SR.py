@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -48,6 +49,11 @@ def test_size_requirements():
         "https://github.com/mv-lab/swin2sr/releases/download/v0.0.1/Swin2SR_Jpeg_dynamic.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(Swin2SRArch(), Swin2SR())
 
 
 def test_Swin2SR_2x(snapshot):

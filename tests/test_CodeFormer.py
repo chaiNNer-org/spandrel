@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -29,6 +30,11 @@ def test_size_requirements():
     )
     # TODO: this currently doesn't ensure that 1024x1024 is invalid
     assert_size_requirements(file.load_model(), max_size=512)
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(CodeFormerArch(), CodeFormer())
 
 
 def test_CodeFormer(snapshot):
