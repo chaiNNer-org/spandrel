@@ -543,11 +543,11 @@ class UnetUpsampler(torch.nn.Module):
                                     else None
                                 ),  # type: ignore
                                 nn.Conv2d(
-                                    dim_in,
-                                    dim_out,
+                                    dim_in,  # type: ignore
+                                    dim_out,  # type: ignore
                                     kernel_size=3,
                                     stride=2,
-                                    padding=1,  # type: ignore
+                                    padding=1,
                                 ),
                             ]
                         ),
@@ -615,8 +615,8 @@ class UnetUpsampler(torch.nn.Module):
         self.final_to_rgb = nn.Conv2d(dim, channels, 1)
         self.resize_mode = resize_mode
         self.style_to_conv_modulations = nn.Linear(
-            style_network.dim_out,
-            sum(style_embed_split_dims),  # type: ignore
+            style_network.dim_out,  # type: ignore
+            sum(style_embed_split_dims),
         )
         self.style_embed_split_dims = style_embed_split_dims
 
