@@ -110,9 +110,9 @@ Of course, the copy this code, we first have to find it! Unfortunately, project 
 
 In the case of DITN, the file is called [`models/DITN_Real.py`](https://github.com/yongliuy/DITN/blob/3438e429c0538ee5061a7cfca587df0c4097703f/models/DITN_Real.py#L197).
 
-Once you have found the file, create a new directory `libs/spandrel/architectures/<arch name>/__arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
+Once you have found the file, create a new directory `libs/spandrel/spandrel/architectures/<arch name>/__arch/` and copy the file into it. This directory will contain all code that we will copy. Since we respect the copy right of the original authors, we will also copy the `LICENSE` file of the repo into this directory.
 
-In the case of DITN, we copy `models/DITN_Real.py` to `libs/spandrel/architectures/DITN/__arch/DITN_Real.py` and add the `LICENSE` file of the repo.
+In the case of DITN, we copy `models/DITN_Real.py` to `libs/spandrel/spandrel/architectures/DITN/__arch/DITN_Real.py` and add the `LICENSE` file of the repo.
 
 The main model file might also reference other files in the repo. You have to copy those files into your `__arch/` directory as well.
 
@@ -146,7 +146,7 @@ The model files might have dependencies to external packages. We generally try t
 
 We allow models to have the following external dependencies: `torch`, `torchvision`, `numpy`, and `einops`.
 
-`timm` is a special dependency for us, because we have vendored the most important code from `timm`. So instead of using the `timm` package, we should use the vendored code from `libs/spandrel/architectures/__arch_helpers/timm/`.
+`timm` is a special dependency for us, because we have vendored the most important code from `timm`. So instead of using the `timm` package, we should use the vendored code from `libs/spandrel/spandrel/architectures/__arch_helpers/timm/`.
 
 In the case of DITN, its model file has no external dependencies, except for `torch` and `einops`, so we are done.
 
@@ -156,7 +156,7 @@ With the architecture code in place, we can start integrating it into spandrel. 
 
 We will worry about parameter detection later, for now, we'll just return a dummy model.
 
-Create a file `libs/spandrel/architectures/<arch name>/__init__.py` and add the following code:
+Create a file `libs/spandrel/spandrel/architectures/<arch name>/__init__.py` and add the following code:
 
 ```python
 from ...__helpers.model_descriptor import ImageModelDescriptor, StateDict
