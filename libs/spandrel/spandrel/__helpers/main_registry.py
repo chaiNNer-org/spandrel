@@ -9,6 +9,7 @@ from ..architectures import (
     DRCT,
     ESRGAN,
     FBCNN,
+    FDAT,
     GFPGAN,
     GRL,
     HAT,
@@ -92,4 +93,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(MoSR.MoSRArch()),
     ArchSupport.from_architecture(MoESR.MoESRArch()),
     ArchSupport.from_architecture(RCAN.RCANArch()),
+    ArchSupport.from_architecture(FDAT.FDATArch()),
 )
