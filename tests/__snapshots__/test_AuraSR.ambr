@@ -1,0 +1,19 @@
+# serializer version: 1
+# name: test_AuraSR_v1
+  ImageModelDescriptor(
+    architecture=AuraSRArch(
+      id='AuraSR',
+      name='AuraSR',
+    ),
+    input_channels=3,
+    output_channels=3,
+    purpose='SR',
+    scale=4,
+    size_requirements=SizeRequirements(minimum=16, multiple_of=8, square=False),
+    supports_bfloat16=True,
+    supports_half=True,
+    tags=list([
+    ]),
+    tiling=<ModelTiling.SUPPORTED: 1>,
+  )
+# ---
