@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from spandrel.__helpers.size_req import SizeRequirements
 from spandrel.util import KeyCondition, get_seq_len
 
