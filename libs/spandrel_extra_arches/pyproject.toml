@@ -7,7 +7,7 @@ name = "spandrel_extra_arches"
 authors = [{ name = "chaiNNer team" }]
 description = "Implements extra model architectures for spandrel"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 keywords = [
     "spandrel",
     "pytorch architecture",
@@ -22,8 +22,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
