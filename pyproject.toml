@@ -5,11 +5,9 @@ backend-path = ["."]
 
 [project]
 name = "spandrel"
-version = "0.4.1"
+version = "0.4.2"
 description = "Spandrel is a library for loading and running pre-trained PyTorch models. It automatically detects the model architecture and hyperparameters from model files, and provides a unified interface for running models."
-authors = [
-    {name = "ChaiNNer", email = "chaiNNer@chaiNNer.org"},
-]
+authors = [{ name = "ChaiNNer", email = "chaiNNer@chaiNNer.org" }]
 
 [tool.setuptools]
 package-dir = { spandrel = "libs/spandrel/spandrel", spandrel_extra_arches = "libs/spandrel_extra_arches/spandrel_extra_arches" }
@@ -57,7 +55,10 @@ pythonpath = ["libs/spandrel", "libs/spandrel_extra_arches"]
 
 [tool.pydoctor]
 project-name = "spandrel"
-add-package = ["libs/spandrel/spandrel", "libs/spandrel_extra_arches/spandrel_extra_arches"]
+add-package = [
+    "libs/spandrel/spandrel",
+    "libs/spandrel_extra_arches/spandrel_extra_arches",
+]
 project-url = "https://github.com/chaiNNer-org/spandrel"
 docformat = "restructuredtext"
 warnings-as-errors = false
