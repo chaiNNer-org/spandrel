@@ -9,8 +9,8 @@ pyright==1.1.342
 # test
 pytest==9.0.2
 syrupy==5.1.0
-numpy==1.24.4 # opencv needs a 1.x version of Numpy
-opencv-python==4.8.1.78
+numpy==1.26.4
+opencv-python==4.9.0.80
 requests
 beautifulsoup4
 
