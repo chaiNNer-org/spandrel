@@ -9,6 +9,10 @@
     "exclude": [
         "**/__pycache__"
     ],
+    "ignore": [
+        "libs/spandrel/spandrel/architectures",
+        "libs/spandrel_extra_arches/spandrel_extra_arches/architectures"
+    ],
     "typeCheckingMode": "strict",
     "reportMissingTypeStubs": "warning",
     "useLibraryCodeForTypes": false,
