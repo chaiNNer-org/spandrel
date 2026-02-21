@@ -10,8 +10,8 @@
     purpose='SR',
     scale=4,
     size_requirements=SizeRequirements(minimum=16, multiple_of=8, square=False),
-    supports_bfloat16=True,
-    supports_half=True,
+    supports_bfloat16=False,
+    supports_half=False,
     tags=list([
     ]),
     tiling=<ModelTiling.SUPPORTED: 1>,
