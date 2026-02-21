@@ -37,7 +37,7 @@ jobs:
       - run: sh scripts/install.sh
       - name: Cache models
         id: cache-models
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: tests/models
           key: update-2026-02-20
