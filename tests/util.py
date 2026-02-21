@@ -92,8 +92,8 @@ def convert_google_drive_link(url: str) -> str:
         for i in form.find_all("input"):
             assert isinstance(i, Tag)
             if "name" in i.attrs and "value" in i.attrs:
-                params[i.attrs["name"]] = i.attrs["value"]
-        url = base_url + "?" + urlencode(params)
+                params[str(i.attrs["name"])] = str(i.attrs["value"])
+        url = str(base_url) + "?" + urlencode(params)
 
     return url
 
@@ -197,6 +197,7 @@ def expect_error(snapshot):
 
 def read_image(path: str | Path) -> np.ndarray:
     image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+    assert image is not None, f"Failed to read image: {path}"
     return image
 
 
