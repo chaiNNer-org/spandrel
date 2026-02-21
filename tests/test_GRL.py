@@ -261,7 +261,7 @@ def test_GRL_sr_grl_tiny_c3x4(snapshot):
 
 def test_GRL_bsr_grl_base(snapshot):
     file = ModelFile.from_url(
-        "https://drive.google.com/file/d/1JdzeTFiBVSia7PmSvr5VduwDdLnirxAG/view",
+        "https://drive.google.com/file/d/1O79Drqj5SOExn-34eI72F2Ox1mCcRi78/view",
         name="bsr_grl_base.safetensors",
     )
     model = file.load_model()

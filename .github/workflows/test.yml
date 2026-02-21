@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,7 +40,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: tests/models
-          key: update-2023-11-29
+          key: update-2026-02-20
       - run: pytest tests
       - name: Remove models downloaded from GitHub
         run: python scripts/remove_github_files.py
