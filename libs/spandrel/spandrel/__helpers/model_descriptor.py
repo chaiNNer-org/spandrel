@@ -436,7 +436,9 @@ class ImageModelDescriptor(ModelBase[T], Generic[T]):
 
         self._purpose: Literal["SR", "FaceSR", "Restoration"] = purpose
 
-        self._call_fn = call_fn or (lambda model, image: model(image))
+        self._call_fn: Callable[[T, Tensor], Tensor] = call_fn or (
+            lambda model, image: model(image)
+        )
 
     @property
     @override

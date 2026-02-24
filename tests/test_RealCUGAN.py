@@ -12,6 +12,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -60,6 +61,13 @@ def test_size_requirements():
         name="sudo_shuffle_cugan_9.584.969.pth",
     )
     assert_size_requirements(file.load_model(), max_candidates=128, max_size=128)
+
+
+def test_train():
+    assert_training(RealCUGANArch(), UpCunet2x())
+    assert_training(RealCUGANArch(), UpCunet2x_fast())
+    assert_training(RealCUGANArch(), UpCunet3x())
+    assert_training(RealCUGANArch(), UpCunet4x())
 
 
 def test_RealCUGAN_2x(snapshot):
