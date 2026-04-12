@@ -5,6 +5,7 @@ from ..architectures import (
     CRAFT,
     DAT,
     DCTLSA,
+    DIS,
     DITN,
     DRCT,
     ESRGAN,
@@ -96,4 +97,5 @@ MAIN_REGISTRY.add(
     ArchSupport.from_architecture(RCAN.RCANArch()),
     ArchSupport.from_architecture(FDAT.FDATArch()),
     ArchSupport.from_architecture(AuraSR.AuraSRArch()),
+    ArchSupport.from_architecture(DIS.DISArch()),
 )
