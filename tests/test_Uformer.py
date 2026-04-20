@@ -1,6 +1,6 @@
 from spandrel.architectures.Uformer import Uformer, UformerArch
 
-from .util import assert_loads_correctly, skip_if_unchanged
+from .util import assert_loads_correctly, assert_training, skip_if_unchanged
 
 skip_if_unchanged(__file__)
 
@@ -28,3 +28,8 @@ def test_load():
         lambda: Uformer(embed_dim=4, modulator=True),
         lambda: Uformer(embed_dim=4, cross_modulator=True),
     )
+
+
+def test_train():
+    # TODO: fix training
+    assert_training(UformerArch(), Uformer())

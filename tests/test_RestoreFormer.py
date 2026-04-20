@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -34,6 +35,10 @@ def test_size_requirements():
         "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/RestoreFormer.pth"
     )
     assert_size_requirements(file.load_model(), max_size=128)
+
+
+def test_train():
+    assert_training(RestoreFormerArch(), RestoreFormer())
 
 
 def test_RestoreFormer(snapshot):

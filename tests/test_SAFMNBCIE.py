@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -33,6 +34,10 @@ def test_size_requirements():
         "https://github.com/sunny2109/SAFMN/releases/download/v0.1.1/SAFMN_BCIE.pth",
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(SAFMNBCIEArch(), SAFMNBCIE(dim=8))
 
 
 def test_SAFMN_BCIE(snapshot):

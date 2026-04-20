@@ -6,6 +6,7 @@ from .util import (
     assert_image_inference,
     assert_loads_correctly,
     assert_size_requirements,
+    assert_training,
     disallowed_props,
     skip_if_unchanged,
 )
@@ -37,6 +38,10 @@ def test_size_requirements():
         "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/2x-AniScale.pth"
     )
     assert_size_requirements(file.load_model())
+
+
+def test_train():
+    assert_training(CompactArch(), Compact())
 
 
 def test_Compact_realesr_general_x4v3(snapshot):
