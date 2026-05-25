@@ -100,10 +100,6 @@ class Conv3XC(nn.Module):
         self.weight_concat = None
         self.bias_concat = None
         self.update_params_flag = False
-        # (dtype, device) the eval_conv fusion was last computed for; re-fused
-        # in forward() when it changes (e.g. .half()/.float()/.cuda() after the
-        # first forward) so the fused weights always match the active dtype.
-        self._fused_key: tuple | None = None
         self.stride = s
         self.has_relu = relu
         gain = gain1
@@ -199,21 +195,20 @@ class Conv3XC(nn.Module):
             x_pad = F.pad(x, (pad, pad, pad, pad), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
         else:
-            # Fuse the re-param branches into eval_conv only when needed instead
-            # of every forward (the original behaviour was pure wasted work).
-            # update_params reads the unchanging conv[0..2] weights, so it is
-            # idempotent for a given dtype/device; re-run it only when those
-            # change so a later .half()/.float()/.cuda() can't reuse a stale,
-            # wrong-precision fusion.
-            key = (self.conv[0].weight.dtype, self.conv[0].weight.device)
-            if self._fused_key != key:
-                self.update_params()
-                self._fused_key = key
             out = self.eval_conv(x)
 
         if self.has_relu:
             out = F.leaky_relu(out, negative_slope=0.05)
         return out
+
+    def train(self, mode: bool = True):
+        # Fuse the re-param branches into eval_conv when switching to eval,
+        # instead of recomputing it on every forward. Keeps eval forward a
+        # single conv and re-fuses on any later .eval()/.train() transition.
+        super().train(mode)
+        if not mode:
+            self.update_params()
+        return self
 
 
 class SPAB(nn.Module):
