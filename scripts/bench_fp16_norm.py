@@ -10,7 +10,7 @@ Loads a .pth via spandrel.ModelLoader and reports, per resolution/dtype:
 Used to validate the PLKSR / NAFNet / SPAN fp16 normalization speedups.
 
 Example:
-  python bench_spandrel.py \\
+  python scripts/bench_fp16_norm.py \\
     --model plksr=weights/real-plksr/1xDeJPG_realplksr_otf.pth \\
     --model span=weights/span/2x_ModernSpanimationV2.pth \\
     --frame input/720.mp4 --res 360p 720p 1080p --dtype fp16 fp32 \\
@@ -143,13 +143,13 @@ def vmaf(model, src, width, height, n, in_nc):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", action="append", required=True, help="name=path")
-    ap.add_argument("--res", nargs="+", default=["360p", "720p", "1080p"])
-    ap.add_argument("--dtype", nargs="+", default=["fp16", "fp32"])
+    ap.add_argument("--res", nargs="+", default=["360p", "720p", "1080p"], choices=list(RES))
+    ap.add_argument("--dtype", nargs="+", default=["fp16", "fp32"], choices=list(DTYPES))
     ap.add_argument("--frame", default="input/720.mp4")
     ap.add_argument("--seconds", type=float, default=5.0)
     ap.add_argument("--cap", type=int, default=500)
     ap.add_argument("--vmaf", action="store_true")
-    ap.add_argument("--vmaf-res", default="720p")
+    ap.add_argument("--vmaf-res", default="720p", choices=list(RES))
     ap.add_argument("--vmaf-frames", type=int, default=48)
     ap.add_argument("--json", default=None)
     args = ap.parse_args()

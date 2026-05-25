@@ -46,7 +46,8 @@ class FastGroupNorm(nn.GroupNorm):
         d = d * torch.rsqrt(var + self.eps)
         x = d.reshape(x.shape).to(x.dtype)
         if self.weight is not None:
-            x = x * self.weight.view(1, c, 1, 1) + self.bias.view(1, c, 1, 1)
+            shape = (1, c) + (1,) * (x.ndim - 2)
+            x = x * self.weight.view(shape) + self.bias.view(shape)
         return x
 
 
