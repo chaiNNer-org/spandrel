@@ -41,4 +41,13 @@ class LayerNorm2d(nn.Module):
         self.eps = eps
 
     def forward(self, x):
-        return LayerNormFunction.apply(x, self.weight, self.bias, self.eps)
+        # Compute statistics in fp32. In fp16 the original path overflowed
+        # ((x-mu)**2 exceeds 65504) and eps=1e-6 fell below fp16 resolution,
+        # giving sqrt(~0) -> garbage output. fp32 stats keep fp16 numerically
+        # sound (and this is ONNX-exportable, unlike the custom autograd op).
+        c = x.shape[1]
+        xf = x.float()
+        mu = xf.mean(1, keepdim=True)
+        var = (xf - mu).pow(2).mean(1, keepdim=True)
+        y = ((xf - mu) / torch.sqrt(var + self.eps)).to(x.dtype)
+        return self.weight.view(1, c, 1, 1) * y + self.bias.view(1, c, 1, 1)

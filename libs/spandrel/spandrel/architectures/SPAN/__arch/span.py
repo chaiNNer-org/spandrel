@@ -195,7 +195,13 @@ class Conv3XC(nn.Module):
             x_pad = F.pad(x, (pad, pad, pad, pad), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
         else:
-            self.update_params()
+            # Fuse the re-param branches into eval_conv exactly once (after the
+            # checkpoint is loaded). update_params only reads the unchanging
+            # conv[0..2] weights, so it is idempotent -- recomputing it every
+            # forward (the original behaviour) was pure wasted work.
+            if not getattr(self, "_fused_eval", False):
+                self.update_params()
+                self._fused_eval = True
             out = self.eval_conv(x)
 
         if self.has_relu:
