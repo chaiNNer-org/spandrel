@@ -195,12 +195,20 @@ class Conv3XC(nn.Module):
             x_pad = F.pad(x, (pad, pad, pad, pad), "constant", 0)
             out = self.conv(x_pad) + self.sk(x)
         else:
-            self.update_params()
             out = self.eval_conv(x)
 
         if self.has_relu:
             out = F.leaky_relu(out, negative_slope=0.05)
         return out
+
+    def train(self, mode: bool = True):
+        # Fuse the re-param branches into eval_conv when switching to eval,
+        # instead of recomputing it on every forward. Keeps eval forward a
+        # single conv and re-fuses on any later .eval()/.train() transition.
+        super().train(mode)
+        if not mode:
+            self.update_params()
+        return self
 
 
 class SPAB(nn.Module):
