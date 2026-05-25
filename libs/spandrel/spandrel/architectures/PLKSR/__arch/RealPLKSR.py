@@ -23,17 +23,24 @@ class LayerNorm(nn.Module):
 
 
 class FastGroupNorm(nn.GroupNorm):
-    """GroupNorm with fp32-accumulated statistics.
+    """GroupNorm with an fp32-accumulated inference fast path.
 
     PyTorch's native fp16 ``group_norm`` kernel is ~6-8x slower than a manual
-    reduction for these shapes and forces a contiguous copy every call. This
-    computes the per-group mean/variance with fp32 accumulation (matching the
-    native numerics) while keeping the elementwise normalize in the input
+    reduction for these shapes and forces a contiguous copy every call. In eval
+    this computes the per-group mean/variance with fp32 accumulation (matching
+    the native numerics) while keeping the elementwise normalize in the input
     dtype. Drop-in for ``nn.GroupNorm``: identical parameters and state_dict
     keys, and ONNX-exportable (ReduceMean / Sub / Rsqrt / Mul).
+
+    Training defers to ``F.group_norm`` so the fused native backward (faster,
+    less memory) is used -- the manual path is an inference-only optimization.
     """
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.training:
+            return nn.functional.group_norm(
+                x, self.num_groups, self.weight, self.bias, self.eps
+            )
         n, c = x.shape[0], x.shape[1]
         g = self.num_groups
         xr = x.reshape(n, g, -1)
